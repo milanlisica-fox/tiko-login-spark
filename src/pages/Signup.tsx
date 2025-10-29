@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Eye, EyeOff, ArrowRight } from "lucide-react";
 import { toast } from "sonner";
 import TikoLogo from "@/components/TikoLogo";
+import confetti from "canvas-confetti";
 
 const Signup = () => {
   const navigate = useNavigate();
@@ -22,6 +23,51 @@ const Signup = () => {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value,
+    });
+  };
+
+  const triggerConfetti = () => {
+    // Create a burst of confetti from multiple angles
+    const count = 200;
+    const defaults = {
+      origin: { y: 0.7 },
+      colors: ['#00D4FF', '#FFB800', '#1C1C1C', '#FFFFFF'],
+    };
+
+    function fire(particleRatio: number, opts: any) {
+      confetti({
+        ...defaults,
+        ...opts,
+        particleCount: Math.floor(count * particleRatio),
+      });
+    }
+
+    // Fire confetti in multiple bursts for a more dramatic effect
+    fire(0.25, {
+      spread: 26,
+      startVelocity: 55,
+    });
+
+    fire(0.2, {
+      spread: 60,
+    });
+
+    fire(0.35, {
+      spread: 100,
+      decay: 0.91,
+      scalar: 0.8,
+    });
+
+    fire(0.1, {
+      spread: 120,
+      startVelocity: 25,
+      decay: 0.92,
+      scalar: 1.2,
+    });
+
+    fire(0.1, {
+      spread: 120,
+      startVelocity: 45,
     });
   };
 
@@ -48,6 +94,9 @@ const Signup = () => {
       return;
     }
 
+    // Trigger confetti animation immediately on successful validation
+    triggerConfetti();
+    
     setIsLoading(true);
 
     // Simulate signup
@@ -141,7 +190,7 @@ const Signup = () => {
                 <Button
                   type="submit"
                   disabled={isLoading}
-                  className="w-full h-14 rounded-full bg-accent hover:bg-accent/90 text-accent-foreground font-semibold text-lg shadow-lg hover:shadow-xl transition-all"
+                  className="w-full h-14 rounded-full bg-accent hover:bg-accent/90 text-accent-foreground font-semibold text-lg shadow-lg hover:shadow-xl transition-all transform hover:scale-105 active:scale-95"
                 >
                   Sign up
                   <ArrowRight className="ml-2" size={20} />
