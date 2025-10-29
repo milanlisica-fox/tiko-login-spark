@@ -10,6 +10,7 @@ import Briefs from "./pages/Briefs";
 import Projects from "./pages/Projects";
 import Tracker from "./pages/Tracker";
 import Calculator from "./pages/Calculator";
+import UserProfile from "./pages/UserProfile";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -28,6 +29,7 @@ const App = () => (
           <Route path="/dashboard/projects" element={<Projects />} />
           <Route path="/dashboard/tracker" element={<Tracker />} />
           <Route path="/dashboard/calculator" element={<Calculator />} />
+          <Route path="/dashboard/profile" element={<UserProfile />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
