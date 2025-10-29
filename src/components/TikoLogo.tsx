@@ -1,6 +1,6 @@
 const TikoLogo = () => {
   return (
-    <div className="flex flex-col items-center">
+    <div className="flex items-end">
       <div className="bg-primary p-6 rounded-2xl shadow-xl">
         <div className="text-center">
           <div className="text-2xl font-bold text-secondary mb-1">Samsung</div>
@@ -15,7 +15,7 @@ const TikoLogo = () => {
           </div>
         </div>
       </div>
-      <div className="mt-6 text-left max-w-xs">
+      <div className="mt-6 text-left max-w-xs ml-5">
         <p className="text-accent text-2xl font-semibold leading-tight">
           Your<br />
           ticket to<br />

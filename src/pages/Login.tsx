@@ -47,12 +47,12 @@ const Login = () => {
           
           <div className="relative z-10 grid md:grid-cols-2 gap-12 items-center">
             {/* Left side - Logo and tagline */}
-            <div className="flex items-center justify-center">
+            <div className="flex items-center justify-center animate-fade-up-left">
               <TikoLogo />
             </div>
 
             {/* Right side - Login form */}
-            <div className="flex flex-col justify-center max-w-md mx-auto w-full">
+            <div className="flex flex-col justify-center max-w-md mx-auto w-full animate-fade-up">
               <h1 className="text-5xl font-bold text-card-foreground mb-8">
                 Welcome back!
               </h1>
