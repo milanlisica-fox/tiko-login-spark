@@ -221,7 +221,10 @@ export default function BriefsPage() {
                   <p className="text-lg leading-[23.94px] text-black">Kickstart your next project with clarity and ease</p>
                 </div>
                 <div className="flex gap-3 h-12">
-                  <button className="px-6 py-[18px] bg-[#f1f1f3] backdrop-blur-sm rounded-[28px] flex items-center justify-center gap-2.5 hover:bg-[#e5e5e5] transition">
+                  <button 
+                    onClick={() => navigate("/dashboard/calculator")}
+                    className="px-6 py-[18px] bg-[#f1f1f3] backdrop-blur-sm rounded-[28px] flex items-center justify-center gap-2.5 hover:bg-[#e5e5e5] transition"
+                  >
                     <Calculator size={16} />
                     <span className="text-[13px] font-semibold leading-[18.62px] text-black whitespace-nowrap">Quick calculator</span>
                   </button>
@@ -302,6 +305,7 @@ export default function BriefsPage() {
 }
 
 function TemplateSelectionScreen({ onCancel, onCreateBrief }: { onCancel: () => void; onCreateBrief: () => void }) {
+  const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState<"All" | "Popular" | "Recent" | "New">("All");
 
   const allTemplates = [
@@ -347,7 +351,10 @@ function TemplateSelectionScreen({ onCancel, onCreateBrief }: { onCancel: () => 
         
         {/* Action Buttons */}
         <div className="flex gap-2.5 items-center">
-          <button className="px-6 py-[18px] bg-[#f1f1f3] backdrop-blur-sm rounded-[28px] flex items-center justify-center gap-2.5 hover:bg-[#e5e5e5] transition h-10">
+          <button 
+            onClick={() => navigate("/dashboard/calculator")}
+            className="px-6 py-[18px] bg-[#f1f1f3] backdrop-blur-sm rounded-[28px] flex items-center justify-center gap-2.5 hover:bg-[#e5e5e5] transition h-10"
+          >
             <Calculator size={16} />
             <span className="text-base font-semibold leading-[23.94px] text-black whitespace-nowrap">Quick calculator</span>
           </button>
