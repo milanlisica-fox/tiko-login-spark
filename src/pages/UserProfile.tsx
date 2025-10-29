@@ -73,7 +73,7 @@ export default function UserProfilePage() {
   const navItems = useMemo(
     () => [
       { name: "Central", icon: Home, path: "/dashboard" },
-      { name: "Briefs", icon: FileText, path: "/dashboard/briefs", hasNotification: true },
+      { name: "Briefs", icon: FileText, path: "/dashboard/briefs" },
       { name: "Projects", icon: Folder, path: "/dashboard/projects" },
       { name: "Tracker", icon: BarChart2, path: "/dashboard/tracker" },
     ],
@@ -164,9 +164,6 @@ export default function UserProfilePage() {
                   <span className={`text-sm leading-[19.6px] ${isActive ? "font-semibold" : "font-normal"} text-black`}>
                     {item.name}
                   </span>
-                  {item.hasNotification && (
-                    <div className="absolute left-[13px] top-0.5 w-2 h-2 bg-[#ff4337] border-2 border-[#f7f7f7] rounded-full" />
-                  )}
                 </button>
               );
             })}
@@ -287,8 +284,8 @@ export default function UserProfilePage() {
               onClick={() => navigate("/dashboard/profile")}
               className="flex items-center gap-2 hover:opacity-80 transition cursor-pointer"
             >
-              <div className="w-10 h-10 rounded-full bg-gray-200 overflow-hidden">
-                <div className="w-full h-full bg-gradient-to-br from-blue-200 to-blue-300" />
+              <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white font-bold text-sm">
+                HB
               </div>
               <div className="flex flex-col">
                 <p className="text-sm font-bold leading-[18.62px] text-[#646464]">Henry Bray</p>
@@ -306,26 +303,10 @@ export default function UserProfilePage() {
             <div className="flex gap-[24px] items-center">
               {/* Avatar */}
               <div 
-                className="h-[120px] w-[121.739px] rounded-full overflow-hidden relative shrink-0 cursor-pointer group"
+                className="h-[120px] w-[120px] rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white font-bold text-[48px] cursor-pointer group relative shrink-0"
                 onClick={() => setIsPhotoDialogOpen(true)}
               >
-                {/* Base avatar images */}
-                <div className="absolute inset-0">
-                  <img alt="" className="block max-w-none size-full" src={avatarHoverImg1} />
-                </div>
-                <div className="h-[41.104px] w-[32.443px] absolute top-[calc(50%-20.552px)] left-[calc(50%-16.2215px)]">
-                  <img alt="" className="block max-w-none size-full" src={avatarHoverImg2} />
-                </div>
-                <div className="h-[41.104px] w-[32.232px] absolute top-[calc(50%-20.552px)] left-[calc(50%+16.116px)]">
-                  <img alt="" className="block max-w-none size-full" src={avatarHoverImg3} />
-                </div>
-                <div className="absolute inset-[34.15%_27.36%_48.72%_55.51%]">
-                  <img alt="" className="block max-w-none size-full" src={avatarHoverImg4} />
-                </div>
-                <div className="absolute inset-[34.15%_56.44%_48.72%_26.42%]">
-                  <img alt="" className="block max-w-none size-full" src={avatarHoverImg5} />
-                </div>
-                
+                HB
                 {/* Hover overlay with "Add photo" text */}
                 <div className="absolute inset-0 bg-[rgba(131,110,110,0.7)] flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200 rounded-full">
                   <p 
@@ -558,22 +539,8 @@ export default function UserProfilePage() {
                 {/* Avatar Preview and Actions */}
                 <div className="flex flex-col gap-[40px] items-center">
                   {/* Large Avatar Preview */}
-                  <div className="h-[160px] w-[162.319px] rounded-full overflow-hidden relative shrink-0">
-                    <div className="absolute inset-0">
-                      <img alt="" className="block max-w-none size-full" src={dialogAvatarImg1} />
-                    </div>
-                    <div className="absolute inset-[32.79%_50.83%_32.96%_22.52%]">
-                      <img alt="" className="block max-w-none size-full" src={dialogAvatarImg2} />
-                    </div>
-                    <div className="absolute inset-[32.79%_21.17%_32.96%_52.35%]">
-                      <img alt="" className="block max-w-none size-full" src={dialogAvatarImg3} />
-                    </div>
-                    <div className="absolute inset-[34.15%_27.36%_48.72%_55.51%]">
-                      <img alt="" className="block max-w-none size-full" src={dialogAvatarImg4} />
-                    </div>
-                    <div className="absolute inset-[34.15%_56.44%_48.72%_26.42%]">
-                      <img alt="" className="block max-w-none size-full" src={dialogAvatarImg5} />
-                    </div>
+                  <div className="h-[160px] w-[160px] rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white font-bold text-[64px] relative shrink-0">
+                    HB
                   </div>
 
                   {/* Upload and Remove Buttons */}

@@ -9,6 +9,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { format } from "date-fns";
 import confetti from "canvas-confetti";
 
@@ -67,7 +68,7 @@ export default function BriefsPage() {
   const navItems = useMemo(
     () => [
       { name: "Central", icon: Home, path: "/dashboard" },
-      { name: "Briefs", icon: FileText, path: "/dashboard/briefs", hasNotification: true },
+      { name: "Briefs", icon: FileText, path: "/dashboard/briefs" },
       { name: "Projects", icon: Folder, path: "/dashboard/projects" },
       { name: "Tracker", icon: BarChart2, path: "/dashboard/tracker" },
     ],
@@ -122,9 +123,6 @@ export default function BriefsPage() {
                   <span className={`text-sm leading-[19.6px] ${isActive ? "font-semibold" : "font-normal"} text-black`}>
                     {item.name}
                   </span>
-                  {item.hasNotification && (
-                    <div className="absolute left-[13px] top-0.5 w-2 h-2 bg-[#ff4337] border-2 border-[#f7f7f7] rounded-full" />
-                  )}
                 </button>
               );
             })}
@@ -164,7 +162,7 @@ export default function BriefsPage() {
               </>
             ) : (
               <>
-                <Home size={20} className="text-black" />
+                <FileText size={20} className="text-black" />
                 <span className="text-sm leading-[19.6px] text-black">{activeName}</span>
               </>
             )}
@@ -260,8 +258,8 @@ export default function BriefsPage() {
               onClick={() => navigate("/dashboard/profile")}
               className="flex items-center gap-2 hover:opacity-80 transition cursor-pointer"
             >
-              <div className="w-10 h-10 rounded-full bg-gray-200 overflow-hidden">
-                <div className="w-full h-full bg-gradient-to-br from-blue-200 to-blue-300" />
+              <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white font-bold text-sm">
+                HB
               </div>
               <div className="flex flex-col">
                 <p className="text-sm font-bold leading-[18.62px] text-[#646464]">Henry Bray</p>
@@ -330,10 +328,34 @@ export default function BriefsPage() {
               {/* Stats row */}
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
                 {[
-                  { title: "Draft briefs", value: 5 },
-                  { title: "In review", value: 4 },
-                  { title: "SOW Ready to sign", value: 3 },
-                ].map((card, idx) => (
+                  { 
+                    title: "Draft briefs", 
+                    value: 5,
+                    icon: (
+                      <svg width="40" height="44" viewBox="0 0 40 44" fill="none" xmlns="http://www.w3.org/2000/svg" className="absolute right-5 top-5">
+                        <path d="M33.3775 0H6.62252C2.96358 0 0 2.96358 0 6.62252V36.7881C0 40.447 2.96358 43.4106 6.62252 43.4106H33.3775C37.0364 43.4106 40 40.447 40 36.7881V6.62252C40 2.96358 37.0364 0 33.3775 0ZM29.8758 34.3295H10.1159C8.75829 34.3295 7.66556 33.2285 7.66556 31.8791C7.66556 30.5215 8.76656 29.4288 10.1159 29.4288H29.8758C31.2334 29.4288 32.3262 30.5298 32.3262 31.8791C32.3262 33.2368 31.2252 34.3295 29.8758 34.3295ZM29.8758 24.1557H10.1159C8.75829 24.1557 7.66556 23.0547 7.66556 21.7053C7.66556 20.3477 8.76656 19.255 10.1159 19.255H29.8758C31.2334 19.255 32.3262 20.356 32.3262 21.7053C32.3262 23.0629 31.2252 24.1557 29.8758 24.1557ZM29.8758 13.9818H10.1159C8.75829 13.9818 7.66556 12.8808 7.66556 11.5315C7.66556 10.1739 8.76656 9.08115 10.1159 9.08115H29.8758C31.2334 9.08115 32.3262 10.1822 32.3262 11.5315C32.3262 12.8891 31.2252 13.9818 29.8758 13.9818Z" fill="#FFB546"/>
+                      </svg>
+                    )
+                  },
+                  { 
+                    title: "In review", 
+                    value: 4,
+                    icon: (
+                      <svg width="50" height="32" viewBox="0 0 50 32" fill="none" xmlns="http://www.w3.org/2000/svg" className="absolute right-5 top-5">
+                        <path d="M24.9632 32C35.1852 32 44.1478 26.6294 49.1935 18.5562C50.1707 16.9932 50.1707 15.0095 49.1935 13.4438C44.1478 5.37061 35.1852 0 24.9632 0C14.7412 0 5.77867 5.37061 0.732901 13.4438C-0.2443 15.0068 -0.2443 16.9905 0.732901 18.5562C5.77867 26.6294 14.7412 32 24.9632 32Z" fill="#E5E5E5"/>
+                      </svg>
+                    )
+                  },
+                  { 
+                    title: "SOW Ready to sign", 
+                    value: 3,
+                    icon: (
+                      <svg width="45" height="40" viewBox="0 0 45 40" fill="none" xmlns="http://www.w3.org/2000/svg" className="absolute right-5 top-5">
+                        <path d="M23.8229 40H5.80935C2.59694 40 0 37.4332 0 34.2582V31.8843C0 30.5935 0.795591 29.4362 2.0115 28.9614L14.9212 22.908C17.5932 21.8546 17.5932 18.1306 14.9362 17.0623L1.99648 10.8902C0.795576 10.4154 0 9.25816 0 7.96736V5.74184C0 2.56677 2.59694 0 5.80935 0H23.8229C25.0838 0 26.3147 0.400603 27.3205 1.15728L42.692 15.4154C45.7693 17.7151 45.7693 22.27 42.692 24.5697L27.3205 38.8279C26.3147 39.5846 25.0838 39.9852 23.8229 39.9852V40Z" fill="#03B3E2"/>
+                      </svg>
+                    )
+                  },
+                ].map((card) => (
                   <div key={card.title} className="bg-white rounded-xl p-6 relative overflow-hidden">
                     <div className="flex items-start justify-between pb-1">
                       <div className="flex flex-col gap-1">
@@ -341,7 +363,7 @@ export default function BriefsPage() {
                       </div>
                     </div>
                     <p className="text-[40px] font-medium leading-[45.6px] text-black">{card.value}</p>
-                    <div className="absolute right-5 top-5 w-[45px] h-10 opacity-80 bg-[#f1f1f3] rounded" />
+                    {card.icon}
                   </div>
                 ))}
               </div>
@@ -350,21 +372,114 @@ export default function BriefsPage() {
               <div className="space-y-4">
                 <h2 className="text-base font-semibold leading-[21.28px] text-black">To action on</h2>
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                  {[1, 2, 3, 4].map((i) => (
+                  {[
+                    {
+                      title: "W Summer Festival 2025",
+                      content: " Develop visual guide for  the Summer Campaign Festival 2025. Create full set of campaign visuals, formats, and variations, for digital, print media.",
+                      badgeIcon: (
+                        <svg width="14" height="12" viewBox="0 0 14 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                          <path d="M7.14686 12H1.7428C0.779082 12 0 11.23 0 10.2774V9.56528C0 9.17804 0.238677 8.83086 0.603451 8.68843L4.47636 6.8724C5.27796 6.55638 5.27795 5.43917 4.48085 5.11869L0.598943 3.26706C0.238673 3.12463 0 2.77745 0 2.39021V1.72255C0 0.770031 0.779082 0 1.7428 0H7.14686C7.52514 0 7.89441 0.120181 8.19614 0.347184L12.8076 4.62463C13.7308 5.31454 13.7308 6.68101 12.8076 7.37092L8.19614 11.6484C7.89441 11.8754 7.52514 11.9955 7.14686 11.9955V12Z" fill="#03B3E2"/>
+                        </svg>
+                      ),
+                      notificationBadge: (
+                        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg" className="absolute -top-1 -right-1">
+                          <rect x="1" y="1" width="10" height="10" rx="5" fill="#FF4337"/>
+                          <rect x="1" y="1" width="10" height="10" rx="5" stroke="#F9F9F9" strokeWidth="2"/>
+                        </svg>
+                      ),
+                      statusBadge: (
+                        <span className="text-xs py-[2px] px-2 rounded-[12px]" style={{ width: '61px', height: '20px', backgroundColor: '#0177C70D', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                          <span style={{ fontSize: '12px', lineHeight: '15.96px', fontWeight: 400, color: '#0177C7', width: '45px', height: '16px' }}>Creation</span>
+                        </span>
+                      ),
+                    },
+                    {
+                      title: "Fold Toolkit Q3 2025",
+                      content: "Visual guide for the Fold Toolkit Q3 2025. Create full set of campaign visuals, formats, and variations for digital and print media, ensuring consistent visual identity across all touchpoints.",
+                      badgeIcon: (
+                        <svg width="16" height="10" viewBox="0 0 16 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+                          <path d="M7.80101 10C10.9954 10 13.7962 8.32168 15.373 5.7988C15.6784 5.31037 15.6784 4.69046 15.373 4.2012C13.7962 1.67832 10.9954 0 7.80101 0C4.60663 0 1.80583 1.67832 0.229031 4.2012C-0.0763438 4.68963 -0.0763438 5.30954 0.229031 5.7988C1.80583 8.32168 4.60663 10 7.80101 10Z" fill="#E5E5E5"/>
+                        </svg>
+                      ),
+                      notificationBadge: (
+                        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg" className="absolute -top-1 -right-1">
+                          <rect x="1" y="1" width="10" height="10" rx="5" fill="#FF4337"/>
+                          <rect x="1" y="1" width="10" height="10" rx="5" stroke="#F9F9F9" strokeWidth="2"/>
+                        </svg>
+                      ),
+                      statusBadge: (
+                        <span className="text-xs py-[2px] px-2 rounded-[12px]" style={{ width: '50px', height: '20px', backgroundColor: '#00C3B10F', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                          <span style={{ fontSize: '12px', lineHeight: '15.96px', fontWeight: 400, color: '#00C3B1', width: '34px', height: '16px' }}>Resize</span>
+                        </span>
+                      ),
+                    },
+                    {
+                      title: "Buds3 Campaign Toolkit",
+                      content: "Develop visual guide for Buds 3 Campaign. Create full set of assets and design templates to support marketing rollout across multiple channels.",
+                      badgeIcon: (
+                        <svg width="14" height="12" viewBox="0 0 14 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                          <path d="M7.14686 12H1.7428C0.779082 12 0 11.23 0 10.2774V9.56528C0 9.17804 0.238677 8.83086 0.603451 8.68843L4.47636 6.8724C5.27796 6.55638 5.27795 5.43917 4.48085 5.11869L0.598943 3.26706C0.238673 3.12463 0 2.77745 0 2.39021V1.72255C0 0.770031 0.779082 0 1.7428 0H7.14686C7.52514 0 7.89441 0.120181 8.19614 0.347184L12.8076 4.62463C13.7308 5.31454 13.7308 6.68101 12.8076 7.37092L8.19614 11.6484C7.89441 11.8754 7.52514 11.9955 7.14686 11.9955V12Z" fill="#03B3E2"/>
+                        </svg>
+                      ),
+                      notificationBadge: (
+                        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg" className="absolute -top-1 -right-1">
+                          <rect x="1" y="1" width="10" height="10" rx="5" fill="#FF4337"/>
+                          <rect x="1" y="1" width="10" height="10" rx="5" stroke="#F9F9F9" strokeWidth="2"/>
+                        </svg>
+                      ),
+                      statusBadge: (
+                        <span className="text-xs py-[2px] px-2 rounded-[12px]" style={{ width: '50px', height: '20px', backgroundColor: '#00C3B10F', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                          <span style={{ fontSize: '12px', lineHeight: '15.96px', fontWeight: 400, color: '#00C3B1', width: '34px', height: '16px' }}>Resize</span>
+                        </span>
+                      ),
+                    },
+                    {
+                      title: "Adapt AI Toolkit Q3 2025",
+                      content: "Adapt all AI master campaign assets into formats optimized for print and add localized variations for different markets, ensuring visual consistency and high production quality across all deliverables."                      ,
+                      badgeIcon: (
+                        <svg width="14" height="12" viewBox="0 0 14 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                          <path d="M7.14686 12H1.7428C0.779082 12 0 11.23 0 10.2774V9.56528C0 9.17804 0.238677 8.83086 0.603451 8.68843L4.47636 6.8724C5.27796 6.55638 5.27795 5.43917 4.48085 5.11869L0.598943 3.26706C0.238673 3.12463 0 2.77745 0 2.39021V1.72255C0 0.770031 0.779082 0 1.7428 0H7.14686C7.52514 0 7.89441 0.120181 8.19614 0.347184L12.8076 4.62463C13.7308 5.31454 13.7308 6.68101 12.8076 7.37092L8.19614 11.6484C7.89441 11.8754 7.52514 11.9955 7.14686 11.9955V12Z" fill="#03B3E2"/>
+                        </svg>
+                      ),
+                      notificationBadge: (
+                        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg" className="absolute -top-1 -right-1">
+                          <rect x="1" y="1" width="10" height="10" rx="5" fill="#FF4337"/>
+                          <rect x="1" y="1" width="10" height="10" rx="5" stroke="#F9F9F9" strokeWidth="2"/>
+                        </svg>
+                      ),
+                      statusBadge: (
+                        <span className="text-xs py-[2px] px-2 rounded-[12px]" style={{ width: '75px', height: '20px', backgroundColor: '#8092DC0D', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                          <span style={{ fontSize: '12px', lineHeight: '15.96px', fontWeight: 400, color: '#8092DC', width: '59px', height: '16px' }}>Adaptation</span>
+                        </span>
+                      ),
+                    },
+                  ].map((card, i) => (
                     <div key={i} className="bg-white rounded-xl p-5 flex flex-col gap-3 border border-[#ececec]">
                       <div className="flex items-center justify-between">
-                        <h3 className="text-sm font-bold leading-[18.62px] text-black">Performance campaign Q{i}</h3>
-                        <span className="text-xs text-[#848487]">•••</span>
+                        <h3 className="text-sm font-bold leading-[18.62px] text-black">{card.title}</h3>
+                        <div className="relative">
+                          {card.badgeIcon}
+                          {card.notificationBadge}
+                        </div>
                       </div>
-                      <p className="text-sm leading-[18.62px] text-[#646464]">Optimise for signups across paid social and display. Add UTM plan.</p>
+                      <p className="text-sm leading-[18.62px] text-[#646464]">{card.content}</p>
                       <div className="flex items-center justify-between pt-1">
-                        <span className="text-xs px-2 py-1 rounded-[999px] bg-[#f9f9f9] text-[#646464]">Draft</span>
+                        {card.statusBadge}
                         <div className="flex -space-x-2">
-                          {[0,1,2].map((a) => (
-                            <div key={a} className="w-6 h-6 rounded-full bg-gray-200 ring-2 ring-white overflow-hidden">
-                              <div className="w-full h-full bg-gradient-to-br from-blue-200 to-blue-300" />
-                            </div>
-                          ))}
+                          {[0,1,2].map((a) => {
+                            const seed = `avatar_${i}_${a}`;
+                            return (
+                              <Avatar key={a} className="w-6 h-6 border-2 border-white">
+                                <AvatarImage 
+                                  src={`https://api.dicebear.com/7.x/personas/png?seed=${seed}&size=64`} 
+                                  alt={`Avatar ${a + 1}`}
+                                />
+                                <AvatarFallback className="text-xs bg-gradient-to-br from-blue-200 to-blue-300">
+                                  {String.fromCharCode(65 + a)}
+                                </AvatarFallback>
+                              </Avatar>
+                            );
+                          })}
                         </div>
                       </div>
                       <div className="h-px bg-[#ececec]" />
@@ -1348,15 +1463,68 @@ function AIResponseScreen({ userInput, onBack, onCancel }: { userInput: string; 
 function AllBriefsSection() {
   const [activeTab, setActiveTab] = useState<"All" | "Drafts" | "In review">("All");
 
-  const briefs = Array.from({ length: 8 }).map((_, i) => ({
-    id: i + 1,
-    title: i % 2 === 0 ? "Brand awareness push" : "Product launch paid social",
-    desc: "Short description about the campaign objective and key deliverables.",
-    status: i % 3 === 0 ? "In review" : "Draft",
-    comments: 7 + (i % 6),
-    due: i % 2 === 0 ? "Dec 05" : "Nov 28",
-    owners: 2 + (i % 3),
-  }));
+  const briefs = [
+    {
+      id: 1,
+      title: "W Summer Festival 2025",
+      desc: "Develop visual guide for  the Summer Campaign Festival 2025. Create full set of campaign visuals, formats, and variations, for digital, print media.",
+      badge: "Creation",
+      date: "27 AUG",
+      comments: 23,
+      avatars: 2,
+      status: "Draft",
+      icon: (
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3.58249 0H7.87085C9.84785 0 11.4533 1.60548 11.4533 3.58249V8.41751C11.4533 10.3945 9.84785 12 7.87085 12H3.58249C1.60549 12 0 10.3945 0 8.41751V3.58249C0 1.60548 1.60549 0 3.58249 0Z" fill="#FFB546"/>
+        </svg>
+      ),
+    },
+    {
+      id: 2,
+      title: "Watch Radio Campaign Q4 2025",
+      desc: "Develop visual guide for  the Summer Campaign Festival 2025. Create full set of campaign visuals, formats, and variations, for digital, print media.",
+      badge: "Adaptation",
+      date: "3 Sept",
+      comments: 4,
+      avatars: 3,
+      status: "Draft",
+      icon: (
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3.58249 0H7.87085C9.84785 0 11.4533 1.60548 11.4533 3.58249V8.41751C11.4533 10.3945 9.84785 12 7.87085 12H3.58249C1.60549 12 0 10.3945 0 8.41751V3.58249C0 1.60548 1.60549 0 3.58249 0Z" fill="#FFB546"/>
+        </svg>
+      ),
+    },
+    {
+      id: 3,
+      title: "W Summer Festival 2025",
+      desc: "Develop visual guide for  the Summer Campaign Festival 2025. Create full set of campaign visuals, formats, and variations, for digital, print media.",
+      badge: "Creation",
+      date: "28 Aug",
+      comments: 4,
+      avatars: 3,
+      status: "In review",
+      icon: (
+        <svg width="16" height="10" viewBox="0 0 16 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M7.80101 10C10.9954 10 13.7962 8.32168 15.373 5.7988C15.6784 5.31037 15.6784 4.69046 15.373 4.2012C13.7962 1.67832 10.9954 0 7.80101 0C4.60663 0 1.80583 1.67832 0.229031 4.2012C-0.0763438 4.68963 -0.0763438 5.30954 0.229031 5.7988C1.80583 8.32168 4.60663 10 7.80101 10Z" fill="#E5E5E5"/>
+        </svg>
+      ),
+    },
+    {
+      id: 4,
+      title: "Fold Toolkit Q3 2025",
+      desc: "Develop visual guide for  the Summer Campaign Festival 2025. Create full set of campaign visuals, formats, and variations, for digital, print media.",
+      badge: "Resize",
+      date: "30 Aug",
+      comments: 2,
+      avatars: 4,
+      status: "Draft",
+      icon: (
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3.58249 0H7.87085C9.84785 0 11.4533 1.60548 11.4533 3.58249V8.41751C11.4533 10.3945 9.84785 12 7.87085 12H3.58249C1.60549 12 0 10.3945 0 8.41751V3.58249C0 1.60548 1.60549 0 3.58249 0Z" fill="#FFB546"/>
+        </svg>
+      ),
+    },
+  ];
 
   const filtered = briefs.filter((b) =>
     activeTab === "All" ? true : activeTab === "Drafts" ? b.status === "Draft" : b.status === "In review"
@@ -1379,36 +1547,88 @@ function AllBriefsSection() {
         ))}
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        {filtered.map((b) => (
-          <div key={b.id} className="bg-white rounded-xl p-5 flex flex-col gap-3 border border-[#ececec]">
-            <div className="flex items-center justify-between">
-              <h3 className="text-sm font-bold leading-[18.62px] text-black">{b.title}</h3>
-              <span className="text-xs text-[#848487]">•••</span>
-            </div>
-            <p className="text-sm leading-[18.62px] text-[#646464]">{b.desc}</p>
-            <div className="flex items-center justify-between pt-1">
-              <span className="text-xs px-2 py-1 rounded-[999px] bg-[#f9f9f9] text-[#646464]">{b.status}</span>
-              <div className="flex -space-x-2">
-                {Array.from({ length: b.owners }).map((_, a) => (
-                  <div key={a} className="w-6 h-6 rounded-full bg-gray-200 ring-2 ring-white overflow-hidden">
-                    <div className="w-full h-full bg-gradient-to-br from-blue-200 to-blue-300" />
-                  </div>
-                ))}
+        {filtered.map((b) => {
+          // Badge styling based on type
+          const getBadgeStyle = (badge: string) => {
+            switch (badge) {
+              case "Creation":
+                return {
+                  width: '61px',
+                  height: '20px',
+                  backgroundColor: '#0177C70D',
+                  color: '#0177C7',
+                };
+              case "Adaptation":
+                return {
+                  width: '75px',
+                  height: '20px',
+                  backgroundColor: '#8092DC0D',
+                  color: '#8092DC',
+                };
+              case "Resize":
+                return {
+                  width: '50px',
+                  height: '20px',
+                  backgroundColor: '#00C3B10F',
+                  color: '#00C3B1',
+                };
+              default:
+                return {
+                  width: 'auto',
+                  height: '20px',
+                  backgroundColor: '#f9f9f9',
+                  color: '#646464',
+                };
+            }
+          };
+
+          const badgeStyle = getBadgeStyle(b.badge);
+
+          return (
+            <div key={b.id} className="bg-white rounded-xl p-5 flex flex-col gap-3 border border-[#ececec]">
+              <div className="flex items-center justify-between">
+                <h3 className="text-sm font-bold leading-[18.62px] text-black">{b.title}</h3>
+                <div className="flex items-center">{b.icon}</div>
+              </div>
+              <p className="text-sm leading-[18.62px] text-[#646464]">{b.desc}</p>
+              <div className="flex items-center justify-between pt-1">
+                <span 
+                  className="text-xs py-[2px] px-2 rounded-[12px] flex items-center justify-center"
+                  style={badgeStyle}
+                >
+                  {b.badge}
+                </span>
+                <div className="flex -space-x-2">
+                  {Array.from({ length: b.avatars }).map((_, a) => {
+                    const seed = `brief_${b.id}_avatar_${a}`;
+                    return (
+                      <Avatar key={a} className="w-6 h-6 border-2 border-white">
+                        <AvatarImage 
+                          src={`https://api.dicebear.com/7.x/personas/png?seed=${seed}&size=64`} 
+                          alt={`Avatar ${a + 1}`}
+                        />
+                        <AvatarFallback className="text-xs bg-gradient-to-br from-blue-200 to-blue-300">
+                          {String.fromCharCode(65 + a)}
+                        </AvatarFallback>
+                      </Avatar>
+                    );
+                  })}
+                </div>
+              </div>
+              <div className="h-px bg-[#ececec]" />
+              <div className="flex items-center justify-between text-xs text-[#848487]">
+                <div className="flex items-center gap-1">
+                  <span>💬</span>
+                  <span>{b.comments}</span>
+                </div>
+                <div className="flex items-center gap-1">
+                  <span>📅</span>
+                  <span>{b.date}</span>
+                </div>
               </div>
             </div>
-            <div className="h-px bg-[#ececec]" />
-            <div className="flex items-center justify-between text-xs text-[#848487]">
-              <div className="flex items-center gap-1">
-                <span>💬</span>
-                <span>{b.comments}</span>
-              </div>
-              <div className="flex items-center gap-1">
-                <span>📅</span>
-                <span>{b.due}</span>
-              </div>
-            </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
     </div>
   );
