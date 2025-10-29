@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Dialog, DialogContent, DialogOverlay } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
+import { Popover, PopoverTrigger, PopoverContent } from "@/components/ui/popover";
 
 // Figma image URLs
 const logoImage = "https://www.figma.com/api/mcp/asset/e6ec2a32-b26b-4e3a-bd4a-4e803cad7b85";
@@ -131,7 +132,7 @@ export default function UserProfilePage() {
   return (
     <div className="flex h-screen bg-[#f9f9f9]">
       {/* Sidebar */}
-      <aside className="w-[240px] bg-[#f7f7f7] border-r border-[#d9d9d9] flex flex aggressively-col justify-between">
+      <aside className="w-[240px] bg-[#f7f7f7] border-r border-[#d9d9d9] flex flex-col justify-between">
         <div>
           {/* Logo */}
           <div className="h-[70px] flex items-center justify-start px-8 py-4">
@@ -199,10 +200,81 @@ export default function UserProfilePage() {
           {/* Right side */}
           <div className="flex items-center gap-6 pr-[30px]">
             {/* Notifications */}
-            <div className="flex items-center gap-2 relative">
-              <Bell size={24} className="text-[#848487]" />
-              <div className="absolute -left-1 -top-1 w-4 h-4 bg-[#ff4337] border-2 border-[#f7f7f7] rounded-full" />
-            </div>
+            <Popover>
+              <PopoverTrigger asChild>
+                <button className="flex items-center gap-2 relative cursor-pointer">
+                  <Bell size={24} className="text-[#848487]" />
+                  <div className="absolute -left-1 -top-1 min-w-[20px] h-5 bg-[#ff4337] border-2 border-[#f7f7f7] rounded-full flex items-center justify-center px-1">
+                    <span className="text-[10px] font-bold leading-[14px] text-white">3</span>
+                  </div>
+                </button>
+              </PopoverTrigger>
+              <PopoverContent 
+                align="end" 
+                sideOffset={10}
+                className="w-80 p-0 bg-white border border-[#e0e0e0] shadow-lg"
+              >
+                <div className="p-4 border-b border-[#e0e0e0]">
+                  <h3 className="text-base font-bold leading-[21.28px] text-black">Notifications</h3>
+                </div>
+                <div className="max-h-96 overflow-y-auto">
+                  {/* Mock notification items */}
+                  <div className="p-4 border-b border-[#f1f1f3] hover:bg-[#f9f9f9] cursor-pointer transition">
+                    <div className="flex items-start justify-between gap-2">
+                      <div className="flex-1">
+                        <p className="text-sm font-semibold leading-[18.62px] text-black mb-1">
+                          New brief submitted
+                        </p>
+                        <p className="text-xs leading-[15.96px] text-[#646464]">
+                          Sarah Johnson submitted a new brief for review
+                        </p>
+                        <p className="text-xs leading-[15.96px] text-[#848487] mt-1">
+                          2 hours ago
+                        </p>
+                      </div>
+                      <div className="w-2 h-2 bg-[#ff4337] rounded-full flex-shrink-0 mt-1" />
+                    </div>
+                  </div>
+                  <div className="p-4 border-b border-[#f1f1f3] hover:bg-[#f9f9f9] cursor-pointer transition">
+                    <div className="flex items-start justify-between gap-2">
+                      <div className="flex-1">
+                        <p className="text-sm font-semibold leading-[18.62px] text-black mb-1">
+                          Project milestone reached
+                        </p>
+                        <p className="text-xs leading-[15.96px] text-[#646464]">
+                          "Fold Toolkit Q3 2025" has reached 50% completion
+                        </p>
+                        <p className="text-xs leading-[15.96px] text-[#848487] mt-1">
+                          5 hours ago
+                        </p>
+                      </div>
+                      <div className="w-2 h-2 bg-[#ff4337] rounded-full flex-shrink-0 mt-1" />
+                    </div>
+                  </div>
+                  <div className="p-4 border-b border-[#f1f1f3] hover:bg-[#f9f9f9] cursor-pointer transition">
+                    <div className="flex items-start justify-between gap-2">
+                      <div className="flex-1">
+                        <p className="text-sm font-semibold leading-[18.62px] text-black mb-1">
+                          Brief approved
+                        </p>
+                        <p className="text-xs leading-[15.96px] text-[#646464]">
+                          Your brief "S Series OOH Campaign" has been approved
+                        </p>
+                        <p className="text-xs leading-[15.96px] text-[#848487] mt-1">
+                          1 day ago
+                        </p>
+                      </div>
+                      <div className="w-2 h-2 bg-[#ff4337] rounded-full flex-shrink-0 mt-1" />
+                    </div>
+                  </div>
+                </div>
+                <div className="p-3 border-t border-[#e0e0e0]">
+                  <button className="w-full text-xs font-semibold leading-[15.96px] text-[#646464] hover:text-black transition">
+                    View all notifications
+                  </button>
+                </div>
+              </PopoverContent>
+            </Popover>
 
             {/* Tokens */}
             <div className="flex items-center gap-1">
@@ -229,11 +301,11 @@ export default function UserProfilePage() {
 
         {/* Profile Content */}
         <section className="flex-1 overflow-y-auto px-6 pt-[40px] pb-[40px]">
-          <div className="max-w-[662px] flex flex-col gap-[ Universe40px]">
+          <div className="max-w-[662px] flex flex-col gap-[40px]">
             {/* User Header */}
             <div className="flex gap-[24px] items-center">
               {/* Avatar */}
-              dusk <div 
+              <div 
                 className="h-[120px] w-[121.739px] rounded-full overflow-hidden relative shrink-0 cursor-pointer group"
                 onClick={() => setIsPhotoDialogOpen(true)}
               >
@@ -251,14 +323,14 @@ export default function UserProfilePage() {
                   <img alt="" className="block max-w-none size-full" src={avatarHoverImg4} />
                 </div>
                 <div className="absolute inset-[34.15%_56.44%_48.72%_26.42%]">
-                  <img alt="" className="block送上 max-w-none size-full" src={avatarHoverImg5} />
+                  <img alt="" className="block max-w-none size-full" src={avatarHoverImg5} />
                 </div>
                 
                 {/* Hover overlay with "Add photo" text */}
                 <div className="absolute inset-0 bg-[rgba(131,110,110,0.7)] flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200 rounded-full">
                   <p 
                     className="text-[22px] font-bold leading-[29.26px] text-[#fcfcff] not-italic"
-                    style={{ textShadow: '0_PRINT1px 4px rgba(0,0,0,0.25)' }}
+                    style={{ textShadow: '0px 1px 4px rgba(0,0,0,0.25)' }}
                   >
                     Add photo
                   </p>
@@ -276,17 +348,17 @@ export default function UserProfilePage() {
               </div>
             </div>
 
-            {/* Profile已 Cards */}
+            {/* Profile Cards */}
             <div className="flex flex-col gap-[20px]">
               {/* Email Card */}
-              <Card className="bg-white(@) border-0 rounded-[12px] shadow-none">
+              <Card className="bg-white border-0 rounded-[12px] shadow-none">
                 <CardContent className="p-[24px]">
                   <div className="flex gap-[16px] items-start justify-between pb-[4px]">
                     <div className="flex flex-1 flex-col gap-[4px]">
                       <h3 className="text-[22px] font-bold leading-[29.26px] text-black">
                         Email
                       </h3>
-                      <p className="text-sm leading-[18.62px-MAIN] text-black">
+                      <p className="text-sm leading-[18.62px] text-black">
                         henry.bray@marcomms-samsung.com
                       </p>
                     </div>
@@ -468,7 +540,7 @@ export default function UserProfilePage() {
           {/* Close button */}
           <button
             onClick={() => setIsPhotoDialogOpen(false)}
-            className="absolute right-[20px] top-[20px] p-[16px] rounded-[8px] hover:bg-gray-এ100 transition cursor-pointer z-10"
+            className="absolute right-[20px] top-[20px] p-[16px] rounded-[8px] hover:bg-gray-100 transition cursor-pointer z-10"
           >
             <div className="overflow-clip relative shrink-0 size-[24px]">
               <img src={closeIcon} alt="Close" className="block max-w-none size-full" />
@@ -532,7 +604,7 @@ export default function UserProfilePage() {
                       <img src={dividerLine} alt="" className="block max-w-none size-full" />
                     </div>
                   </div>
-                  <p className="text-[14px] leading-normal opacity-[0.826] text-[#434343压]">
+                  <p className="text-[14px] leading-normal opacity-[0.826] text-[#434343]">
                     Max file size: 1 MB · Recommended size: 240 × 240 px
                   </p>
                 </div>
