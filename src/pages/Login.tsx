@@ -1,99 +1,120 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Eye, EyeOff, ArrowRight } from "lucide-react";
+import { toast } from "sonner";
+import TikoLogo from "@/components/TikoLogo";
 
 const Login = () => {
   const navigate = useNavigate();
+  const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [showPassword, setShowPassword] = useState(false);
-  const [error, setError] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
+    
     if (!email || !password) {
-      setError("Please fill in both fields");
+      toast.error("Please fill in all fields");
       return;
     }
-    setError("");
-    navigate("/dashboard");
+
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      toast.error("Please enter a valid email address");
+      return;
+    }
+
+    setIsLoading(true);
+    
+    // Simulate login
+    setTimeout(() => {
+      toast.success("Welcome back!");
+      navigate("/dashboard");
+      setIsLoading(false);
+    }, 1000);
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-primary">
-      <div className="flex w-[90%] max-w-5xl bg-secondary text-foreground rounded-[40px] shadow-2xl overflow-hidden">
-        {/* Left side */}
-        <div className="flex flex-col justify-center items-center w-1/2 bg-secondary p-10">
-          <div className="flex flex-col items-center">
-            <div className="bg-primary p-6 rounded-xl text-secondary-foreground font-bold text-3xl text-center">
-              <p className="text-2xl font-semibold text-left text-secondary-foreground mb-2">
-                Samsung
-              </p>
-              <p className="text-accent text-5xl font-bold leading-tight">
-                TIKO
-              </p>
-              <p className="text-xs mt-2 text-secondary-foreground font-normal">
-                Powered by Iris • Open • Suite
-              </p>
+    <div className="min-h-screen bg-background flex items-center justify-center p-4 overflow-hidden">
+      <div className="w-full max-w-7xl relative">
+        {/* Organic shape container */}
+        <div className="bg-card rounded-[5rem] shadow-2xl p-8 md:p-16 relative overflow-hidden">
+          {/* Irregular shape effect */}
+          <div className="absolute -right-32 -top-32 w-96 h-96 bg-card-foreground/5 rounded-full blur-3xl" />
+          <div className="absolute -left-32 -bottom-32 w-96 h-96 bg-primary/10 rounded-full blur-3xl" />
+          
+          <div className="relative z-10 grid md:grid-cols-2 gap-12 items-center">
+            {/* Left side - Logo and tagline */}
+            <div className="flex items-center justify-center">
+              <TikoLogo />
             </div>
-            <p className="text-accent text-xl mt-8 font-medium text-center">
-              Your ticket to effortless momentum
-            </p>
+
+            {/* Right side - Login form */}
+            <div className="flex flex-col justify-center max-w-md mx-auto w-full">
+              <h1 className="text-5xl font-bold text-card-foreground mb-8">
+                Welcome back!
+              </h1>
+
+              <form onSubmit={handleLogin} className="space-y-4">
+                <div>
+                  <Input
+                    type="email"
+                    placeholder="Email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    className="h-14 rounded-full bg-input text-secondary px-6 text-base border-0 focus-visible:ring-2 focus-visible:ring-accent"
+                  />
+                </div>
+
+                <div className="relative">
+                  <Input
+                    type={showPassword ? "text" : "password"}
+                    placeholder="Password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    className="h-14 rounded-full bg-input text-secondary px-6 pr-12 text-base border-0 focus-visible:ring-2 focus-visible:ring-accent"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute right-5 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-secondary transition-colors"
+                  >
+                    {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                  </button>
+                </div>
+
+                <div className="flex justify-end">
+                  <Link
+                    to="/forgot-password"
+                    className="text-sm text-card-foreground/70 hover:text-card-foreground transition-colors"
+                  >
+                    Forgot password?
+                  </Link>
+                </div>
+
+                <Button
+                  type="submit"
+                  disabled={isLoading}
+                  className="w-full h-14 rounded-full bg-accent hover:bg-accent/90 text-accent-foreground font-semibold text-lg shadow-lg hover:shadow-xl transition-all"
+                >
+                  Login
+                  <ArrowRight className="ml-2" size={20} />
+                </Button>
+
+                <p className="text-center text-card-foreground/70 text-sm">
+                  Don't have an account?{" "}
+                  <Link
+                    to="/signup"
+                    className="text-card-foreground font-semibold hover:text-accent transition-colors"
+                  >
+                    Sign up
+                  </Link>
+                </p>
+              </form>
+            </div>
           </div>
-        </div>
-
-        {/* Right side */}
-        <div className="flex flex-col justify-center w-1/2 bg-secondary p-12">
-          <h2 className="text-3xl font-bold mb-6">Welcome back!</h2>
-
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div>
-              <input
-                type="email"
-                placeholder="Email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className="w-full rounded-full px-4 py-3 bg-input text-secondary outline-none"
-              />
-            </div>
-
-            <div className="relative">
-              <input
-                type={showPassword ? "text" : "password"}
-                placeholder="Password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className="w-full rounded-full px-4 py-3 bg-input text-secondary outline-none"
-              />
-              <span
-                onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-4 top-3.5 cursor-pointer text-muted"
-              >
-                {showPassword ? "🙈" : "👁️"}
-              </span>
-            </div>
-
-            <div className="text-right text-sm text-muted-foreground">
-              <Link to="/forgot-password" className="hover:underline">
-                Forgot password?
-              </Link>
-            </div>
-
-            {error && <p className="text-destructive text-sm">{error}</p>}
-
-            <button
-              type="submit"
-              className="w-full bg-accent text-accent-foreground font-bold rounded-full py-3 hover:bg-accent/90 transition-all"
-            >
-              Login →
-            </button>
-
-            <p className="text-center text-sm mt-3 text-muted-foreground">
-              Don't have an account?{" "}
-              <Link to="/signup" className="font-semibold text-foreground hover:underline">
-                Sign up
-              </Link>
-            </p>
-          </form>
         </div>
       </div>
     </div>
