@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Eye, EyeOff, ArrowRight } from "lucide-react";
 import { toast } from "sonner";
 import TikoLogo from "@/components/TikoLogo";
+import { motion } from "framer-motion";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -37,15 +38,43 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background flex items-center justify-center p-4 overflow-hidden">
+    <motion.div 
+      className="min-h-screen flex items-center justify-center p-4 overflow-hidden relative"
+      initial={{ backgroundColor: "hsl(0, 0%, 0%)" }}
+      animate={{ backgroundColor: "hsl(var(--primary))" }}
+      transition={{ delay: 2, duration: 1 }}
+    >
       <div className="w-full max-w-7xl relative">
-        {/* Organic shape container */}
-        <div className="bg-card rounded-[5rem] shadow-2xl p-8 md:p-16 relative overflow-hidden">
+        <motion.div 
+          className="bg-card rounded-[5rem] shadow-2xl p-8 md:p-16 relative overflow-hidden"
+          initial={{ 
+            width: "100vw",
+            height: "100vh",
+            borderRadius: "0rem",
+            position: "fixed",
+            top: 0,
+            left: 0,
+          }}
+          animate={{ 
+            width: "100%",
+            height: "auto",
+            borderRadius: "5rem",
+            position: "relative",
+            top: "auto",
+            left: "auto",
+          }}
+          transition={{ delay: 2, duration: 1, ease: "easeInOut" }}
+        >
           {/* Irregular shape effect */}
           <div className="absolute -right-32 -top-32 w-96 h-96 bg-card-foreground/5 rounded-full blur-3xl" />
           <div className="absolute -left-32 -bottom-32 w-96 h-96 bg-primary/10 rounded-full blur-3xl" />
           
-          <div className="relative z-10 grid md:grid-cols-2 gap-12 items-center">
+          <motion.div 
+            className="relative z-10 grid md:grid-cols-2 gap-12 items-center"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1, ease: "easeOut" }}
+          >
             {/* Left side - Logo and tagline */}
             <div className="flex items-center justify-center">
               <TikoLogo />
@@ -94,14 +123,26 @@ const Login = () => {
                   </Link>
                 </div>
 
-                <Button
-                  type="submit"
-                  disabled={isLoading}
-                  className="w-full h-14 rounded-full bg-accent hover:bg-accent/90 text-accent-foreground font-semibold text-lg shadow-lg hover:shadow-xl transition-all animate-gentle-bounce"
+                <motion.div
+                  initial={{ scale: 1 }}
+                  animate={{ scale: 1 }}
+                  transition={{ 
+                    delay: 3.2,
+                    duration: 0.6,
+                    repeat: 1,
+                    repeatType: "reverse",
+                    ease: "easeInOut"
+                  }}
                 >
-                  Login
-                  <ArrowRight className="ml-2" size={20} />
-                </Button>
+                  <Button
+                    type="submit"
+                    disabled={isLoading}
+                    className="w-full h-14 rounded-full bg-accent hover:bg-accent/90 text-accent-foreground font-semibold text-lg shadow-lg hover:shadow-xl transition-all"
+                  >
+                    Login
+                    <ArrowRight className="ml-2" size={20} />
+                  </Button>
+                </motion.div>
 
                 <p className="text-center text-card-foreground/70 text-sm">
                   Don't have an account?{" "}
@@ -114,10 +155,10 @@ const Login = () => {
                 </p>
               </form>
             </div>
-          </div>
-        </div>
+          </motion.div>
+        </motion.div>
       </div>
-    </div>
+    </motion.div>
   );
 };
 
