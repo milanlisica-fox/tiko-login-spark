@@ -36,11 +36,18 @@ const imgFrame15 = "https://www.figma.com/api/mcp/asset/73cdd6a7-1b90-41e6-92b7-
 const imgLine10 = "https://www.figma.com/api/mcp/asset/72de3633-cbde-4f52-a617-6480a78ffab1";
 const imgLineStroke = "https://www.figma.com/api/mcp/asset/7526d27e-2d12-451f-8734-7948c58e1bb8";
 
+// AI Response screen images from Figma
+const imgLine11 = "https://www.figma.com/api/mcp/asset/eb5e3b99-c1d1-4c7f-8b76-b1d1f7328087";
+const imgLine12 = "https://www.figma.com/api/mcp/asset/b0c33ab4-8352-4301-888e-175517ef6274";
+const imgFrame14_v2 = "https://www.figma.com/api/mcp/asset/d26c3cfb-b903-4bcb-acad-deab88e4291e";
+const imgFrame15_v2 = "https://www.figma.com/api/mcp/asset/47ce8115-0573-4c9b-87da-8910dfe4fced";
+
 export default function BriefsPage() {
   const navigate = useNavigate();
   const location = useLocation();
   const [isCreatingBrief, setIsCreatingBrief] = useState(false);
-  const [briefView, setBriefView] = useState<"templates" | "form" | "deliverables">("templates");
+  const [briefView, setBriefView] = useState<"templates" | "form" | "deliverables" | "ai-response">("templates");
+  const [aiInputText, setAiInputText] = useState("");
 
   const navItems = useMemo(
     () => [
@@ -129,9 +136,13 @@ export default function BriefsPage() {
         <header className="h-[70px] bg-[#f9f9f9] border-b border-[#e0e0e0] flex items-center justify-between px-4 relative">
           {/* Breadcrumb */}
           <div className="flex items-center gap-2 px-4 py-4 rounded-lg">
-            {isCreatingBrief && (briefView === "form" || briefView === "deliverables") ? (
+            {isCreatingBrief && (briefView === "form" || briefView === "deliverables" || briefView === "ai-response") ? (
               <>
-                <button onClick={() => briefView === "deliverables" ? setBriefView("form") : setBriefView("templates")} className="flex items-center gap-2">
+                <button onClick={() => {
+                  if (briefView === "ai-response") setBriefView("deliverables");
+                  else if (briefView === "deliverables") setBriefView("form");
+                  else setBriefView("templates");
+                }} className="flex items-center gap-2">
                   <ArrowLeft size={20} className="text-black" />
                 </button>
                 <span className="text-sm leading-[19.6px] text-black">New brief</span>
@@ -185,10 +196,20 @@ export default function BriefsPage() {
                 onCancel={() => setBriefView("templates")} 
                 onNext={() => setBriefView("deliverables")}
               />
-            ) : (
+            ) : briefView === "deliverables" ? (
               <DeliverablesSelectionScreen 
                 onCancel={() => setBriefView("form")}
                 onBack={() => setBriefView("form")}
+                onNavigateToAiResponse={(inputText) => {
+                  setAiInputText(inputText);
+                  setBriefView("ai-response");
+                }}
+              />
+            ) : (
+              <AIResponseScreen 
+                userInput={aiInputText}
+                onBack={() => setBriefView("deliverables")}
+                onCancel={() => setBriefView("form")}
               />
             )
           ) : (
@@ -601,9 +622,17 @@ function NewBriefForm({ onCancel, onNext }: { onCancel: () => void; onNext: () =
   );
 }
 
-function DeliverablesSelectionScreen({ onCancel, onBack }: { onCancel: () => void; onBack: () => void }) {
+function DeliverablesSelectionScreen({ onCancel, onBack, onNavigateToAiResponse }: { onCancel: () => void; onBack: () => void; onNavigateToAiResponse: (inputText: string) => void }) {
   const [selectedDeliverables, setSelectedDeliverables] = useState<string[]>([]);
   const [tokenEstimate, setTokenEstimate] = useState(0);
+  const [chatInput, setChatInput] = useState("");
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (chatInput.trim()) {
+      onNavigateToAiResponse(chatInput.trim());
+    }
+  };
 
   // Mock data from Figma
   const mockBriefData = {
@@ -635,7 +664,7 @@ function DeliverablesSelectionScreen({ onCancel, onBack }: { onCancel: () => voi
       {/* Main Content Area */}
       <div className="flex-1 flex overflow-hidden">
         {/* Left Panel */}
-        <div className="flex flex-col gap-[10px] p-6 w-[564px] shrink-0 overflow-y-auto">
+        <div className="flex flex-col gap-[10px] p-6 w-[564px] shrink-0 overflow-y-auto relative">
           <div className="flex flex-col gap-4">
             <p className="text-sm leading-[18.62px] text-[#424242] w-full">
               Great! Next up are the deliverables. You can either browse and select the ones you need, or start detailing them below. TIKO will summarise the deliverables and prompt you to make sure you include everything you need for this project.
@@ -695,6 +724,32 @@ function DeliverablesSelectionScreen({ onCancel, onBack }: { onCancel: () => voi
             <p className="text-sm leading-[18.62px] text-[#424242] w-full">
               Prefer to describe it instead? Or not sure which deliverables you need yet? <br />
               <span className="font-bold">Continue describing your brief below</span>
+            </p>
+          </div>
+
+          {/* AI Chat Input at Bottom - Centered */}
+          <div className="mt-auto pt-4 flex flex-col items-center gap-2">
+            <form onSubmit={handleSubmit} className="w-[516px] bg-white border border-[#e0e0e0] rounded-[23px] p-1 flex items-center justify-between">
+              <div className="flex gap-[7px] items-center flex-1">
+                <div className="h-10 w-[35.514px] shrink-0">
+                  <img src={imgFrame14} alt="" className="w-full h-full" />
+                </div>
+                <input
+                  type="text"
+                  value={chatInput}
+                  onChange={(e) => setChatInput(e.target.value)}
+                  placeholder="Type here..."
+                  className="flex-1 text-sm leading-[18.62px] text-[#848487] bg-transparent border-none outline-none placeholder-[#848487]"
+                />
+              </div>
+              <button type="submit" className="w-10 h-10 shrink-0 relative cursor-pointer hover:opacity-80 transition">
+                <img src={imgFrame15} alt="Submit" className="w-full h-full" />
+              </button>
+            </form>
+
+            {/* Help Text */}
+            <p className="text-[12px] leading-[15.96px] text-[#424242] text-center w-[347px]">
+              Need a hand? <span className="font-bold">Talk to your Iris account manager</span>
             </p>
           </div>
         </div>
@@ -770,12 +825,205 @@ function DeliverablesSelectionScreen({ onCancel, onBack }: { onCancel: () => voi
           </div>
         </div>
       </div>
+    </div>
+  );
+}
 
-      {/* AI Chat Input at Bottom */}
-      <div className="absolute bottom-[26px] left-[288px] w-[516px] bg-white border border-[#e0e0e0] rounded-[23px] p-1 flex items-center justify-between">
+function AIResponseScreen({ userInput, onBack, onCancel }: { userInput: string; onBack: () => void; onCancel: () => void }) {
+  // Mock data from Figma - same brief data
+  const mockBriefData = {
+    projectTitle: "Q7B7 Toolkit",
+    launchDate: "July 23, 2025",
+    projectLead: "Henry Bray",
+    objective: "To create a product toolkit that provides clear guidance to help partners effectively amplify the campaign message. The toolkit should enable consistent execution, align with campaign objectives, and make it easy for users to activate the campaign across channels.",
+  };
+
+  // Mock deliverables list from Figma
+  const deliverablesList = [
+    {
+      kvType: "Q7 KV",
+      variants: [
+        { variant: "Clean", size: "1:1, 16:9, 9:16, PT, LS, Ex Pt, Ex LS" },
+        { variant: "80/20", size: "PDF, PT EXT, LS EXT" },
+        { variant: "70/30", size: "1:1, 16:9, 9:16, PT, LS, Ex Pt, Ex LS" },
+      ],
+    },
+    {
+      kvType: "B7 KV",
+      variants: [
+        { variant: "Clean", size: "1:1, 16:9, 9:16, PT, LS, Ex Pt, Ex LS" },
+        { variant: "80/20", size: "PDF, PT EXT, LS EXT" },
+        { variant: "70/30", size: "1:1, 16:9, 9:16, PT, LS, Ex Pt, Ex LS" },
+      ],
+    },
+    {
+      kvType: "Combo KV (Q7 &B7)",
+      variants: [
+        { variant: "Clean", size: "1:1, 16:9, 9:16, PT, LS, Ex Pt, Ex LS" },
+        { variant: "80/20", size: "PDF, PT EXT, LS EXT" },
+        { variant: "70/30", size: "1:1, 16:9, 9:16, PT, LS, Ex Pt, Ex LS" },
+      ],
+    },
+    {
+      kvType: "Family KV (Q7, B7 & B7R) - (Bespoke KV)",
+      variants: [
+        { variant: "Clean", size: "1:1, 16:9, 9:16, PT, LS, Ex Pt, Ex LS" },
+        { variant: "80/20", size: "PDF, PT EXT, LS EXT" },
+        { variant: "70/30", size: "1:1, 16:9, 9:16, PT, LS, Ex Pt, Ex LS" },
+      ],
+    },
+    {
+      kvType: "B7 & B7R KV (Bespoke KV)",
+      variants: [
+        { variant: "Clean", size: "1:1, 16:9, 9:16, PT, LS, Ex Pt, Ex LS" },
+        { variant: "80/20", size: "PDF, PT EXT, LS EXT" },
+        { variant: "70/30", size: "1:1, 16:9, 9:16, PT, LS, Ex Pt, Ex LS" },
+      ],
+    },
+  ];
+
+  return (
+    <div className="flex flex-col w-full relative h-[calc(100vh-70px)]">
+      {/* Main Content Area */}
+      <div className="flex-1 flex overflow-hidden">
+        {/* Left Panel */}
+        <div className="flex flex-col gap-6 p-6 w-[564px] shrink-0 overflow-y-auto">
+          {/* User Message Bubble */}
+          <div className="bg-[#efeff0] rounded-xl p-4">
+            <p className="text-sm leading-[18.62px] text-[#424242] whitespace-pre-wrap">
+              {userInput || "For this project we need to create like at least 5 different KVs i.e. Q7, B7, Combo, Family and B7&B7R key visual. For each of these we need a clean variant and 80/20, 70/30 variant. For the size you can use default sizes (suggest best ones) for the clean dna 70/30 and for 80/20 we need PDF, PT EXT, LS EXT."}
+            </p>
+          </div>
+
+          {/* AI Response */}
+          <div className="flex flex-col gap-6 px-6 py-4 h-[638px] overflow-y-auto">
+            <p className="text-sm leading-[18.62px] text-[#424242]">
+              Thanks for the input, review here the list of deliverables.
+            </p>
+
+            {/* Deliverables List */}
+            <div className="flex flex-col gap-3 w-[516px]">
+              {/* Header */}
+              <div className="flex gap-2 items-center text-sm font-bold leading-[18.62px] text-black">
+                <p className="flex-1">KV Type</p>
+                <p className="w-[60px]">Variant</p>
+                <p className="w-[200px]">Size</p>
+              </div>
+
+              {/* Divider */}
+              <div className="h-px bg-[#e0e0e0]" />
+
+              {/* Deliverables Items */}
+              {deliverablesList.map((item, idx) => (
+                <div key={idx} className="flex flex-col gap-2">
+                  {item.variants.map((variant, vIdx) => (
+                    <div key={vIdx}>
+                      <div className="flex gap-2 items-center text-[12px] leading-[15.96px] text-black">
+                        <p className={`flex-1 ${vIdx === 0 ? "font-bold" : ""}`}>
+                          {vIdx === 0 ? item.kvType : " "}
+                        </p>
+                        <p className="w-[60px] font-normal">{variant.variant}</p>
+                        <p className="w-[200px] font-normal">{variant.size}</p>
+                      </div>
+                      {vIdx < item.variants.length - 1 && (
+                        <div className="h-px bg-[#e0e0e0] mt-2" />
+                      )}
+                    </div>
+                  ))}
+                  {idx < deliverablesList.length - 1 && (
+                    <div className="h-px bg-[#e0e0e0] mt-2" />
+                  )}
+                </div>
+              ))}
+            </div>
+
+            {/* File Format Note */}
+            <p className="text-sm leading-[18.62px] text-[#424242]">
+              The format of the file is missing here.<br />
+              The recommended file type for these is <span className="font-bold">JPEG</span> and <span className="font-bold">PSD</span>.<br />
+              <br />
+              Would you like to add those?
+            </p>
+          </div>
+        </div>
+
+        {/* Vertical Divider */}
+        <div className="w-px bg-[#e0e0e0] shrink-0" />
+
+        {/* Right Panel - Same as Deliverables Screen */}
+        <div className="flex flex-col gap-[10px] p-[10px] pr-10 w-[601px] shrink-0 overflow-hidden">
+          {/* Brief Preview */}
+          <div className="bg-white flex-1 flex flex-col gap-8 p-6 rounded-xl min-h-0 overflow-y-auto">
+            <div className="flex flex-col gap-4">
+              <div className="flex items-center justify-center">
+                <p className="text-[22px] font-bold leading-[29.26px] text-black">
+                  {mockBriefData.projectTitle}
+                </p>
+              </div>
+
+              <div className="flex flex-col gap-6">
+                <div className="flex flex-col gap-2">
+                  <p className="text-sm leading-[18.62px] text-[#09090a]">
+                    <span className="font-bold">Launch date: </span>
+                    <span className="font-normal">{mockBriefData.launchDate}</span>
+                  </p>
+                </div>
+
+                <div className="flex flex-col gap-2">
+                  <p className="text-sm leading-[18.62px] text-[#09090a]">
+                    <span className="font-bold">Project lead: </span>
+                    <span className="font-normal">{mockBriefData.projectLead}</span>
+                  </p>
+                </div>
+
+                <p className="text-sm leading-[18.62px] text-[#09090a]">
+                  <span className="font-bold">Objective: </span>
+                  <span className="font-normal">{mockBriefData.objective}</span>
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {/* Separator */}
+          <div className="h-[9px] relative w-full shrink-0">
+            <div className="absolute h-px left-[-9px] top-[4px] w-[600px] bg-[#e0e0e0]" />
+          </div>
+
+          {/* Footer */}
+          <div className="flex flex-col gap-1 items-end shrink-0">
+            {/* Token Estimate */}
+            <div className="flex gap-2 items-center pb-2">
+              <img src={tokenIcon} alt="" className="h-5 w-5" />
+              <span className="text-[13px] leading-[18.62px] text-black">10</span>
+              <span className="text-[13px] leading-[18.62px] text-[#848487]">Tokens estimate</span>
+            </div>
+
+            {/* Action Buttons */}
+            <div className="flex items-center justify-between w-full">
+              <button
+                onClick={onCancel}
+                className="px-2 py-[18px] bg-transparent rounded-[28px] flex items-center justify-center hover:bg-[#f1f1f3] transition h-8"
+              >
+                <span className="text-[13px] font-semibold leading-[18.62px] text-black">Discard</span>
+              </button>
+              <div className="flex gap-1 items-center">
+                <button className="px-4 py-[18px] bg-[#f1f1f3] backdrop-blur-sm rounded-[28px] flex items-center justify-center hover:bg-[#e5e5e5] transition h-8">
+                  <span className="text-[13px] font-semibold leading-[18.62px] text-black">Save draft</span>
+                </button>
+                <button className="px-4 py-[18px] bg-[#ffb546] backdrop-blur-sm rounded-[28px] flex items-center justify-center hover:opacity-90 transition h-8">
+                  <span className="text-[13px] font-semibold leading-[18.62px] text-black">Generate brief</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* AI Chat Input at Bottom - Centered */}
+      <div className="absolute bottom-[26px] left-[264px] w-[516px] bg-white border border-[#e0e0e0] rounded-[23px] p-1 flex items-center justify-between">
         <div className="flex gap-[7px] items-center flex-1">
           <div className="h-10 w-[35.514px] shrink-0">
-            <img src={imgFrame14} alt="" className="w-full h-full" />
+            <img src={imgFrame14_v2} alt="" className="w-full h-full" />
           </div>
           <input
             type="text"
@@ -784,12 +1032,12 @@ function DeliverablesSelectionScreen({ onCancel, onBack }: { onCancel: () => voi
           />
         </div>
         <div className="w-10 h-10 shrink-0 relative">
-          <img src={imgFrame15} alt="" className="w-full h-full" />
+          <img src={imgFrame15_v2} alt="" className="w-full h-full" />
         </div>
       </div>
 
       {/* Help Text */}
-      <p className="absolute bottom-[22px] left-[546.5px] text-[12px] leading-[15.96px] text-[#424242] text-center translate-x-[-50%] translate-y-[100%] w-[347px]">
+      <p className="absolute bottom-[22px] left-[522px] text-[12px] leading-[15.96px] text-[#424242] text-center translate-x-[-50%] translate-y-[100%] w-[347px]">
         Need a hand? <span className="font-bold">Talk to your Iris account manager</span>
       </p>
     </div>
