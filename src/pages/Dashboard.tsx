@@ -48,7 +48,7 @@ export default function TikoDashboard() {
         <div>
           {/* Logo */}
           <div className="h-[70px] flex items-center justify-start px-8 py-4">
-            <div className="flex items-center gap-1.5">
+            <div className="main-logo flex items-center gap-1.5">
               <img src={logoImage} alt="TIKO" className="h-8" />
               <img src={logoDot} alt="" className="w-[14.6px] h-[14.6px]" />
             </div>
@@ -273,21 +273,21 @@ export default function TikoDashboard() {
                   <div className="flex-[1_0_0] bg-[#f9f9f9] rounded-[12px] p-[20px] flex flex-col gap-[10px] relative overflow-clip">
                     <p className="text-sm font-bold leading-[18.62px] text-black">Draft briefs</p>
                     <p className="text-[40px] font-medium leading-[45.6px] text-black">5</p>
-                    <img src={briefsVector1} alt="" className="absolute left-[186px] top-[20px] w-[45px] h-10" />
+                    <img src={briefsVector1} alt="" className="absolute right-[-20px] top-[20px] w-[45px] h-10" />
                   </div>
 
                   {/* In review */}
                   <div className="flex-[1_0_0] bg-[#f9f9f9] rounded-[12px] p-[20px] flex flex-col gap-[10px] relative overflow-clip">
                     <p className="text-sm font-bold leading-[18.62px] text-black">In review</p>
                     <p className="text-[40px] font-medium leading-[45.6px] text-black">4</p>
-                    <img src={briefsVector2} alt="" className="absolute left-[186px] top-[20px] w-[45px] h-10" />
+                    <img src={briefsVector2} alt="" className="absolute right-[-20px] top-[20px] w-[45px] h-10" />
                   </div>
 
                   {/* SOW Ready to sign */}
                   <div className="flex-[1_0_0] bg-[#f9f9f9] rounded-[12px] p-[20px] flex flex-col gap-[10px] relative overflow-clip">
                     <p className="text-sm font-bold leading-[18.62px] text-black">SOW Ready to sign</p>
                     <p className="text-[40px] font-medium leading-[45.6px] text-black">3</p>
-                    <img src={briefsVector3} alt="" className="absolute left-[186px] top-[20px] w-[45px] h-10" />
+                    <img src={briefsVector3} alt="" className="absolute right-[-20px] top-[20px] w-[45px] h-10" />
                   </div>
                 </div>
               </div>
@@ -315,7 +315,7 @@ export default function TikoDashboard() {
                 <div className="bg-[#f9f9f9] rounded-xl p-5 flex flex-col gap-2.5 relative overflow-hidden">
                   <p className="text-sm font-bold leading-[18.62px] text-black">In progress</p>
                   <p className="text-[40px] font-medium leading-[45.6px] text-black">10</p>
-                  <img src={projectsVector} alt="" className="absolute right-[-36px] top-[-36px] w-[212px] h-[189px]" />
+                  <img src={projectsVector} alt="" className="absolute right-[-46px] top-[-36px] w-[212px] h-[189px]" />
                 </div>
               </div>
             </div>

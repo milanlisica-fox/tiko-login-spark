@@ -94,7 +94,7 @@ export default function BriefsPage() {
         <div>
           {/* Logo */}
           <div className="h-[70px] flex items-center justify-start px-8 py-4">
-            <div className="flex items-center gap-1.5">
+            <div className="main-logo flex items-center gap-1.5">
               <img src={logoImage} alt="TIKO" className="h-8" />
               <img src={logoDot} alt="" className="w-[14.6px] h-[14.6px]" />
             </div>
@@ -515,11 +515,11 @@ function TemplateSelectionScreen({ onCancel, onCreateBrief }: { onCancel: () => 
             <button
               key={template.id}
               onClick={() => handleTemplateClick(template.id)}
-              className="border border-[#e0e0e0] rounded-xl p-4 text-left hover:bg-[#f9f9f9] transition relative w-full group"
+              className="hover-brief relative overflow-hidden border border-[#e0e0e0] rounded-xl p-4 text-left hover:bg-[#f9f9f9] transition relative w-full group"
             >
               <div className="flex items-center justify-between">
                 <h3 className="text-lg font-bold leading-[23.94px] text-black">{template.title}</h3>
-                <div className={`absolute right-4 top-1/2 -translate-y-1/2 ${template.hasRotation ? "rotate-[50.525deg]" : ""}`}>
+                <div className={`brief-icon absolute right-4 top-1/2 -translate-y-1/2 ${template.hasRotation ? "rotate-[50.525deg]" : ""}`}>
                   <img
                     src={template.icon}
                     alt=""

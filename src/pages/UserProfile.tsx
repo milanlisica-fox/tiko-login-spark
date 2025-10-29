@@ -136,7 +136,7 @@ export default function UserProfilePage() {
         <div>
           {/* Logo */}
           <div className="h-[70px] flex items-center justify-start px-8 py-4">
-            <div className="flex items-center gap-1.5">
+            <div className="main-logo flex items-center gap-1.5">
               <img src={logoImage} alt="TIKO" className="h-8" />
               <img src={logoDot} alt="" className="w-[14.6px] h-[14.6px]" />
             </div>
