@@ -1,6 +1,6 @@
 import { useMemo } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { Home, FileText, Folder, BarChart2, LogOut, Bell, ChevronDown, ArrowRight, Coins, ChevronRight } from "lucide-react";
+import { Home, FileText, Folder, BarChart2, LogOut, Bell, ChevronDown, ArrowRight, Coins, ChevronRight, Trophy, Award } from "lucide-react";
 import { toast } from "sonner";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -45,7 +45,9 @@ export default function TrackerPage() {
   const teamsData = [
     {
       id: 1,
-      title: "Card Title",
+      title: "Omni & Digital",
+      icon: Trophy,
+      iconColor: "text-yellow-500",
       budget: "3,100",
       spent: "2,847",
       remaining: "253",
@@ -54,7 +56,9 @@ export default function TrackerPage() {
     },
     {
       id: 2,
-      title: "Card Title",
+      title: "Marcomms",
+      icon: Award,
+      iconColor: "text-gray-400",
       budget: "3,100",
       spent: "2,847",
       remaining: "253",
@@ -63,7 +67,9 @@ export default function TrackerPage() {
     },
     {
       id: 3,
-      title: "Card Title",
+      title: "IMG",
+      icon: Award,
+      iconColor: "text-amber-600",
       budget: "3,100",
       spent: "2,847",
       remaining: "253",
@@ -220,10 +226,10 @@ export default function TrackerPage() {
               </div>
               <Button
                 variant="outline"
-                className="h-10 px-6 border border-[#d9d9d9] bg-white hover:bg-gray-50"
+                className="h-10 px-6 border border-[#d9d9d9] bg-white hover:bg-gray-50 text-black"
               >
-                All insights
-                <ChevronRight size={20} className="ml-2" />
+                <span className="text-black">All insights</span>
+                <ChevronRight size={20} className="ml-2 text-black" />
               </Button>
             </div>
 
@@ -231,10 +237,15 @@ export default function TrackerPage() {
             <div className="space-y-4">
               <h2 className="text-[22px] font-bold leading-[29.26px] text-black">Teams' Leaderboard</h2>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-                {teamsData.map((team) => (
+                {teamsData.map((team) => {
+                  const IconComponent = team.icon;
+                  return (
                   <Card key={team.id} className="border border-[#ececec] bg-white">
                     <CardHeader className="pb-3">
-                      <CardTitle className="text-base font-bold leading-[21.28px]">{team.title}</CardTitle>
+                      <div className="flex items-center gap-2">
+                        <IconComponent size={20} className={team.iconColor} />
+                        <CardTitle className="text-base font-bold leading-[21.28px] text-black">{team.title}</CardTitle>
+                      </div>
                     </CardHeader>
                     <CardContent className="space-y-6">
                       <div className="space-y-4">
@@ -286,7 +297,8 @@ export default function TrackerPage() {
                       </div>
                     </CardContent>
                   </Card>
-                ))}
+                  );
+                })}
               </div>
             </div>
 
@@ -298,7 +310,7 @@ export default function TrackerPage() {
                 {/* Brief Quality Score Chart */}
                 <Card className="lg:col-span-1 border border-[#ececec] bg-white">
                   <CardHeader className="pb-3">
-                    <CardTitle className="text-base font-bold leading-[21.28px]">Brief quality score</CardTitle>
+                    <CardTitle className="text-base font-bold leading-[21.28px] text-black">Brief quality score - All categories</CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-6">
                     <ChartContainer config={qualityScoreConfig} className="h-[200px] w-full">
@@ -354,7 +366,7 @@ export default function TrackerPage() {
                 {/* Spend by Type Chart */}
                 <Card className="lg:col-span-2 border border-[#ececec] bg-white">
                   <CardHeader className="pb-3">
-                    <CardTitle className="text-base font-bold leading-[21.28px]">Spend by type</CardTitle>
+                    <CardTitle className="text-base font-bold leading-[21.28px] text-black">Token distribution</CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-6">
                     <ChartContainer config={spendConfig} className="h-[250px] w-full">
