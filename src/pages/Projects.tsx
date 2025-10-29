@@ -16,7 +16,7 @@ interface Project {
   name: string;
   team: string;
   progress: number;
-  status: "Complete" | "In progress" | "For review";
+  priority: "High" | "Medium" | "Low";
   hasWarning?: boolean;
   owners: string[];
 }
@@ -55,7 +55,7 @@ export default function ProjectsPage() {
       name: "Fold Toolkit Q3 2025",
       team: "Digital team",
       progress: 34,
-      status: "In progress",
+      priority: "High",
       owners: ["AB", "CD"],
     },
     {
@@ -63,7 +63,7 @@ export default function ProjectsPage() {
       name: "Watch Radio Campaign Q3 2025",
       team: "Digital team",
       progress: 31,
-      status: "In progress",
+      priority: "High",
       hasWarning: true,
       owners: ["EF", "GH"],
     },
@@ -72,7 +72,7 @@ export default function ProjectsPage() {
       name: "S Series OOH Campaign Q2 2025",
       team: "Marcomms",
       progress: 100,
-      status: "Complete",
+      priority: "Low",
       owners: ["IJ", "KL", "MN"],
     },
     {
@@ -80,7 +80,7 @@ export default function ProjectsPage() {
       name: "A Series Promotional Campaign Q3 2025",
       team: "Marcomms",
       progress: 84,
-      status: "In progress",
+      priority: "High",
       owners: ["OP", "QR", "ST"],
     },
     {
@@ -88,7 +88,7 @@ export default function ProjectsPage() {
       name: "Fold Toolkit Q3 2025",
       team: "Digital team",
       progress: 38,
-      status: "For review",
+      priority: "Medium",
       owners: ["UV", "WX"],
     },
     {
@@ -96,7 +96,7 @@ export default function ProjectsPage() {
       name: "S Series OOH Campaign Q2 2025",
       team: "Marcomms",
       progress: 100,
-      status: "Complete",
+      priority: "Low",
       hasWarning: true,
       owners: ["YZ", "AA", "BB"],
     },
@@ -105,7 +105,7 @@ export default function ProjectsPage() {
       name: "A Series Promotional Campaign Q3 2025",
       team: "Marcomms",
       progress: 84,
-      status: "In progress",
+      priority: "High",
       owners: ["CC", "DD"],
     },
     {
@@ -113,7 +113,7 @@ export default function ProjectsPage() {
       name: "Watch Radio Campaign Q3 2025",
       team: "Digital team",
       progress: 31,
-      status: "In progress",
+      priority: "High",
       owners: ["EE", "FF"],
     },
     {
@@ -121,7 +121,7 @@ export default function ProjectsPage() {
       name: "Fold Toolkit Q3 2025",
       team: "Digital team",
       progress: 38,
-      status: "For review",
+      priority: "Medium",
       owners: ["GG"],
     },
     {
@@ -129,7 +129,7 @@ export default function ProjectsPage() {
       name: "Fold Toolkit Q3 2025",
       team: "Digital team",
       progress: 34,
-      status: "In progress",
+      priority: "High",
       owners: ["HH", "II"],
     },
     {
@@ -137,7 +137,7 @@ export default function ProjectsPage() {
       name: "S Series OOH Campaign Q2 2025",
       team: "Marcomms",
       progress: 100,
-      status: "Complete",
+      priority: "Low",
       owners: ["JJ", "KK", "LL"],
     },
     {
@@ -145,29 +145,42 @@ export default function ProjectsPage() {
       name: "Fold Toolkit Q3 2025",
       team: "Digital team",
       progress: 38,
-      status: "For review",
+      priority: "Medium",
       owners: ["MM"],
     },
   ];
 
   // Calculate stats
   const stats = useMemo(() => {
-    const complete = projects.filter((p) => p.status === "Complete").length;
-    const inProgress = projects.filter((p) => p.status === "In progress").length;
-    const forReview = projects.filter((p) => p.status === "For review").length;
+    const complete = projects.filter((p) => p.progress === 100).length;
+    const inProgress = projects.filter((p) => p.progress > 0 && p.progress < 100).length;
+    const forReview = projects.filter((p) => p.priority === "High" && p.progress < 50).length;
     return { complete, inProgress, forReview };
   }, []);
 
-  const getStatusBadgeVariant = (status: Project["status"]) => {
-    switch (status) {
-      case "Complete":
-        return "default";
-      case "In progress":
+  const getPriorityBadgeVariant = (priority: Project["priority"]) => {
+    switch (priority) {
+      case "High":
+        return "destructive";
+      case "Medium":
         return "secondary";
-      case "For review":
-        return "outline";
+      case "Low":
+        return "default";
       default:
         return "default";
+    }
+  };
+
+  const getProgressBarColor = (priority: Project["priority"]) => {
+    switch (priority) {
+      case "High":
+        return "#ff4337"; // Red for high priority
+      case "Medium":
+        return "#ffb546"; // Amber/orange for medium priority
+      case "Low":
+        return "#0177c7"; // Blue for low priority
+      default:
+        return "#0177c7";
     }
   };
 
@@ -266,8 +279,8 @@ export default function ProjectsPage() {
         </header>
 
         {/* Projects Content */}
-        <section className="flex-1 overflow-y-auto px-6 pt-[40px] pb-[40px]">
-          <div className="max-w-[1152px] mx-auto space-y-[30px]">
+        <section className="flex-1 overflow-y-auto pl-[264px] pr-6 pt-[40px] pb-[40px]">
+          <div className="space-y-[30px]">
             {/* Header */}
             <div className="flex flex-col gap-1">
               <h1 className="text-[32px] font-bold leading-[38.4px] text-black">Work at a glance</h1>
@@ -328,13 +341,13 @@ export default function ProjectsPage() {
                         </div>
                       </div>
 
-                      {/* Status Badge */}
+                      {/* Priority Badge */}
                       <div className="min-w-[158px]">
                         <Badge
-                          variant={getStatusBadgeVariant(project.status)}
+                          variant={getPriorityBadgeVariant(project.priority)}
                           className="text-xs font-normal px-2 py-1"
                         >
-                          {project.status}
+                          {project.priority}
                         </Badge>
                       </div>
 
@@ -343,8 +356,11 @@ export default function ProjectsPage() {
                         <div className="flex items-center gap-2">
                           <div className="relative h-2 flex-1 bg-[#f1f1f3] rounded-full overflow-hidden">
                             <div
-                              className="h-full bg-[#0177c7] rounded-full transition-all"
-                              style={{ width: `${project.progress}%` }}
+                              className="h-full rounded-full transition-all"
+                              style={{ 
+                                width: `${project.progress}%`,
+                                backgroundColor: getProgressBarColor(project.priority)
+                              }}
                             />
                           </div>
                         </div>
