@@ -38,23 +38,32 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen bg-primary flex items-center justify-center p-4 overflow-hidden relative">
-      {/* Layer 1: Black overlay that shrinks */}
-      <motion.div
-        className="absolute inset-0 bg-card z-10"
-        initial={{ 
-          borderRadius: "0rem",
-        }}
-        animate={{ 
-          scale: 0,
-          borderRadius: "5rem",
-        }}
-        transition={{ delay: 2, duration: 1, ease: "easeInOut" }}
-      />
-
-      {/* Layer 2: Content */}
-      <div className="w-full max-w-7xl relative z-20">
-        <div className="bg-card rounded-[5rem] shadow-2xl p-8 md:p-16 relative overflow-hidden">
+    <div className="min-h-screen bg-primary flex items-center justify-center p-4 overflow-hidden">
+      <div className="w-full max-w-7xl relative">
+        <motion.div 
+          className="bg-card shadow-2xl p-8 md:p-16 relative overflow-hidden"
+          initial={{ 
+            width: "100vw",
+            height: "100vh",
+            borderRadius: "0rem",
+            position: "fixed",
+            top: 0,
+            left: 0,
+            margin: 0,
+            padding: "2rem"
+          }}
+          animate={{ 
+            width: "100%",
+            height: "auto",
+            borderRadius: "5rem",
+            position: "relative",
+            top: "auto",
+            left: "auto",
+            margin: "auto",
+            padding: "2rem 4rem"
+          }}
+          transition={{ delay: 2, duration: 1, ease: "easeInOut" }}
+        >
           {/* Irregular shape effect */}
           <div className="absolute -right-32 -top-32 w-96 h-96 bg-card-foreground/5 rounded-full blur-3xl" />
           <div className="absolute -left-32 -bottom-32 w-96 h-96 bg-primary/10 rounded-full blur-3xl" />
@@ -146,7 +155,7 @@ const Login = () => {
               </form>
             </div>
           </motion.div>
-        </div>
+        </motion.div>
       </div>
     </div>
   );
