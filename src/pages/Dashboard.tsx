@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useMemo } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import { Home, FileText, Folder, BarChart2, LogOut, Bell, ChevronDown, ArrowRight, Calculator, Coins } from "lucide-react";
 import { toast } from "sonner";
 
@@ -14,14 +14,25 @@ const projectsVector = "https://www.figma.com/api/mcp/asset/5e2d54d4-2d3d-4c1e-9
 
 export default function TikoDashboard() {
   const navigate = useNavigate();
-  const [active, setActive] = useState("Central");
+  const location = useLocation();
 
-  const navItems = [
-    { name: "Central", icon: Home },
-    { name: "Briefs", icon: FileText, hasNotification: true },
-    { name: "Projects", icon: Folder },
-    { name: "Tracker", icon: BarChart2 },
-  ];
+  const navItems = useMemo(
+    () => [
+      { name: "Central", icon: Home, path: "/dashboard" },
+      { name: "Briefs", icon: FileText, path: "/dashboard/briefs", hasNotification: true },
+      { name: "Projects", icon: Folder, path: "/dashboard/projects" },
+      { name: "Tracker", icon: BarChart2, path: "/dashboard/tracker" },
+    ],
+    []
+  );
+
+  const active = useMemo(() => {
+    if (location.pathname.startsWith("/dashboard/briefs")) return "Briefs";
+    if (location.pathname === "/dashboard") return "Central";
+    if (location.pathname.startsWith("/dashboard/projects")) return "Projects";
+    if (location.pathname.startsWith("/dashboard/tracker")) return "Tracker";
+    return "Central";
+  }, [location.pathname]);
 
   const handleLogout = () => {
     toast.success("Logged out successfully");
@@ -54,7 +65,7 @@ export default function TikoDashboard() {
               return (
                 <button
                   key={item.name}
-                  onClick={() => setActive(item.name)}
+                  onClick={() => navigate(item.path)}
                   className={`w-full flex items-center gap-2 px-4 py-4 rounded-lg transition relative ${
                     isActive ? "bg-white" : "bg-transparent hover:bg-white/50"
                   }`}
