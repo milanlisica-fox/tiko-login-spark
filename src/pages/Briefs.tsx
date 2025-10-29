@@ -31,6 +31,7 @@ const arrowRightIcon = "https://www.figma.com/api/mcp/asset/aded2578-385a-4338-9
 // New brief form images from Figma
 const briefLoadingIcon = "https://www.figma.com/api/mcp/asset/72b9b00c-3cef-4290-a604-5a85dae49da4";
 const tokenIcon = "https://www.figma.com/api/mcp/asset/9b4ee3b2-4fab-4d57-a716-36af1bfb4291";
+const createBriefArrowIcon = "https://www.figma.com/api/mcp/asset/33c5c1d3-721c-423d-8e72-cd89fd07637c";
 
 // Deliverables screen images from Figma
 const imgFrame14 = "https://www.figma.com/api/mcp/asset/fe99575b-8465-4231-a868-ebd338d7488e";
@@ -50,6 +51,18 @@ export default function BriefsPage() {
   const [isCreatingBrief, setIsCreatingBrief] = useState(false);
   const [briefView, setBriefView] = useState<"templates" | "form" | "deliverables" | "ai-response">("templates");
   const [aiInputText, setAiInputText] = useState("");
+
+  // Check if we should show the form directly from navigation state
+  useEffect(() => {
+    const state = location.state as { createBrief?: boolean; showForm?: boolean } | null;
+    if (state?.createBrief && state?.showForm) {
+      setIsCreatingBrief(true);
+      setBriefView("form");
+    } else if (state?.createBrief) {
+      setIsCreatingBrief(true);
+      setBriefView("templates");
+    }
+  }, [location.state]);
 
   const navItems = useMemo(
     () => [
@@ -235,10 +248,10 @@ export default function BriefsPage() {
                   </button>
                   <button 
                     onClick={() => setIsCreatingBrief(true)}
-                    className="px-6 py-[18px] bg-[#ffb546] backdrop-blur-sm rounded-[28px] flex items-center justify-center gap-2.5 hover:opacity-90 transition"
+                    className="backdrop-blur-[6px] backdrop-filter bg-[#ffb546] px-[24px] py-[18px] rounded-[28px] flex items-center justify-center gap-[10px] hover:opacity-90 transition"
                   >
-                    <span className="text-[13px] font-semibold leading-[18.62px] text-black whitespace-nowrap">Create brief</span>
-                    <ArrowRight size={13} />
+                    <span className="text-[16px] font-semibold leading-[23.94px] text-black whitespace-nowrap">Create brief</span>
+                    <img src={createBriefArrowIcon} alt="" className="h-[14px] w-[15.567px]" />
                   </button>
                 </div>
               </div>
@@ -365,10 +378,10 @@ function TemplateSelectionScreen({ onCancel, onCreateBrief }: { onCancel: () => 
           </button>
           <button 
             onClick={onCreateBrief}
-            className="px-6 py-[18px] bg-[#ffb546] backdrop-blur-sm rounded-[28px] flex items-center justify-center gap-2.5 hover:opacity-90 transition h-10"
+            className="backdrop-blur-[6px] backdrop-filter bg-[#ffb546] px-[24px] py-[18px] rounded-[28px] flex items-center justify-center gap-[10px] hover:opacity-90 transition"
           >
-            <span className="text-base font-semibold leading-[23.94px] text-black whitespace-nowrap">Create brief</span>
-            <img src={arrowRightIcon} alt="" className="h-[14px] w-[15.567px]" />
+            <span className="text-[16px] font-semibold leading-[23.94px] text-black whitespace-nowrap">Create brief</span>
+            <img src={createBriefArrowIcon} alt="" className="h-[14px] w-[15.567px]" />
           </button>
         </div>
       </div>
@@ -469,53 +482,43 @@ function NewBriefForm({ onCancel, onNext }: { onCancel: () => void; onNext: () =
     setFormData((prev) => ({ ...prev, [field]: value }));
   };
 
-  const handleGenerateBrief = () => {
-    console.log("Generate brief button clicked");
-    setShowConfirmation(true);
-    console.log("showConfirmation should be true");
-  };
 
   const handleViewAllBriefs = () => {
     setShowConfirmation(false);
-    onCancel();
     navigate("/dashboard/briefs");
   };
 
   useEffect(() => {
     if (showConfirmation) {
-      // Trigger confetti animation
-      const duration = 3000;
-      const animationEnd = Date.now() + duration;
-      const defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 9999 };
+      // Trigger confetti animation - single smooth burst
+      const count = 200;
+      const defaults = { 
+        startVelocity: 30, 
+        spread: 360, 
+        ticks: 100, 
+        zIndex: 9999,
+        gravity: 0.8,
+        decay: 0.94
+      };
 
       function randomInRange(min: number, max: number) {
         return Math.random() * (max - min) + min;
       }
 
-      const interval = setInterval(function() {
-        const timeLeft = animationEnd - Date.now();
-
-        if (timeLeft <= 0) {
-          return clearInterval(interval);
-        }
-
-        const particleCount = 50 * (timeLeft / duration);
-        confetti({
-          ...defaults,
-          particleCount,
-          origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 }
-        });
-        confetti({
-          ...defaults,
-          particleCount,
-          origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 }
-        });
-      }, 250);
-
-      // Cleanup function
-      return () => {
-        clearInterval(interval);
-      };
+      // Single burst from both sides
+      confetti({
+        ...defaults,
+        particleCount: count,
+        origin: { x: randomInRange(0.2, 0.4), y: 0.5 },
+        colors: ['#ffb546', '#03B3E2', '#ff4337', '#646464', '#848487']
+      });
+      
+      confetti({
+        ...defaults,
+        particleCount: count,
+        origin: { x: randomInRange(0.6, 0.8), y: 0.5 },
+        colors: ['#ffb546', '#03B3E2', '#ff4337', '#646464', '#848487']
+      });
     }
   }, [showConfirmation]);
 
@@ -543,7 +546,7 @@ function NewBriefForm({ onCancel, onNext }: { onCancel: () => void; onNext: () =
                 value={formData.projectTitle}
                 onChange={(e) => handleChange("projectTitle", e.target.value)}
                 placeholder="e.g. Spring Campaign 2025"
-                className="border-[#e0e0e0] rounded-[85px] px-5 py-2.5 h-auto"
+                className="border-[#e0e0e0] rounded-[85px] px-5 py-2.5 h-auto bg-[#f9f9f9]"
               />
             </div>
 
@@ -588,7 +591,7 @@ function NewBriefForm({ onCancel, onNext }: { onCancel: () => void; onNext: () =
                 </p>
               </div>
               <Select value={formData.projectLead} onValueChange={(value) => handleChange("projectLead", value)}>
-                <SelectTrigger className="border-[#e0e0e0] rounded-[85px] px-5 py-2.5 h-auto">
+                <SelectTrigger className="border-[#e0e0e0] rounded-[85px] px-5 py-2.5 h-auto bg-[#f9f9f9] [&>span]:text-[#848487] data-[placeholder]:text-[#848487]">
                   <SelectValue placeholder="Choose a lead" />
                 </SelectTrigger>
                 <SelectContent>
@@ -613,7 +616,7 @@ function NewBriefForm({ onCancel, onNext }: { onCancel: () => void; onNext: () =
                 value={formData.objective}
                 onChange={(e) => handleChange("objective", e.target.value)}
                 placeholder="e.g. Increase signups by 20% through targeted ads"
-                className="border-[#e0e0e0] rounded-lg px-5 py-2.5 min-h-[74px] resize-none"
+                className="border-[#e0e0e0] rounded-lg px-5 py-2.5 min-h-[74px] resize-none bg-[#f9f9f9]"
                 rows={3}
               />
             </div>
@@ -677,14 +680,10 @@ function NewBriefForm({ onCancel, onNext }: { onCancel: () => void; onNext: () =
               </button>
               <button 
                 type="button"
-                onClick={(e) => {
-                  e.preventDefault();
-                  e.stopPropagation();
-                  handleGenerateBrief();
-                }}
-                className="px-4 py-[18px] bg-[#f9f9f9] backdrop-blur-sm rounded-[28px] flex items-center justify-center gap-2.5 hover:bg-[#e5e5e5] transition h-8"
+                onClick={() => setShowConfirmation(true)}
+                className="px-4 py-[18px] bg-[#ffb546] backdrop-blur-sm rounded-[28px] flex items-center justify-center gap-2.5 hover:opacity-90 transition h-8"
               >
-                <span className="text-[13px] font-semibold leading-[18.62px] text-[#848487]">Generate brief</span>
+                <span className="text-[13px] font-semibold leading-[18.62px] text-black">Generate brief</span>
               </button>
             </div>
           </div>
@@ -693,7 +692,7 @@ function NewBriefForm({ onCancel, onNext }: { onCancel: () => void; onNext: () =
 
       {/* Confirmation Dialog */}
       <Dialog open={showConfirmation} onOpenChange={setShowConfirmation}>
-        <DialogContent className="sm:max-w-md bg-white border border-[#e0e0e0] rounded-xl p-8 [&>button]:hidden z-[9999]">
+        <DialogContent className="sm:max-w-md !bg-white border border-[#e0e0e0] rounded-xl p-8 [&>button]:hidden">
           <DialogHeader className="flex flex-col gap-4 items-center text-center">
             <DialogTitle className="text-[32px] font-bold leading-[38.4px] text-black">
               Brief successfully submitted!
@@ -717,9 +716,11 @@ function NewBriefForm({ onCancel, onNext }: { onCancel: () => void; onNext: () =
 }
 
 function DeliverablesSelectionScreen({ onCancel, onBack, onNavigateToAiResponse }: { onCancel: () => void; onBack: () => void; onNavigateToAiResponse: (inputText: string) => void }) {
+  const navigate = useNavigate();
   const [selectedDeliverables, setSelectedDeliverables] = useState<string[]>([]);
   const [tokenEstimate, setTokenEstimate] = useState(0);
   const [chatInput, setChatInput] = useState("");
+  const [showConfirmation, setShowConfirmation] = useState(false);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -752,6 +753,45 @@ function DeliverablesSelectionScreen({ onCancel, onBack, onNavigateToAiResponse 
       setTokenEstimate(prev => prev + tokens);
     }
   };
+
+  const handleViewAllBriefs = () => {
+    setShowConfirmation(false);
+    navigate("/dashboard/briefs");
+  };
+
+  useEffect(() => {
+    if (showConfirmation) {
+      // Trigger confetti animation - single smooth burst
+      const count = 200;
+      const defaults = { 
+        startVelocity: 30, 
+        spread: 360, 
+        ticks: 100, 
+        zIndex: 9999,
+        gravity: 0.8,
+        decay: 0.94
+      };
+
+      function randomInRange(min: number, max: number) {
+        return Math.random() * (max - min) + min;
+      }
+
+      // Single burst from both sides
+      confetti({
+        ...defaults,
+        particleCount: count,
+        origin: { x: randomInRange(0.2, 0.4), y: 0.5 },
+        colors: ['#ffb546', '#03B3E2', '#ff4337', '#646464', '#848487']
+      });
+      
+      confetti({
+        ...defaults,
+        particleCount: count,
+        origin: { x: randomInRange(0.6, 0.8), y: 0.5 },
+        colors: ['#ffb546', '#03B3E2', '#ff4337', '#646464', '#848487']
+      });
+    }
+  }, [showConfirmation]);
 
   return (
     <div className="flex flex-col w-full relative h-[calc(100vh-70px)]">
@@ -911,7 +951,11 @@ function DeliverablesSelectionScreen({ onCancel, onBack, onNavigateToAiResponse 
                 <button className="px-4 py-[18px] bg-[#f1f1f3] backdrop-blur-sm rounded-[28px] flex items-center justify-center hover:bg-[#e5e5e5] transition h-8">
                   <span className="text-[13px] font-semibold leading-[18.62px] text-black">Save draft</span>
                 </button>
-                <button className="px-4 py-[18px] bg-[#ffb546] backdrop-blur-sm rounded-[28px] flex items-center justify-center hover:opacity-90 transition h-8">
+                <button 
+                  type="button"
+                  onClick={() => setShowConfirmation(true)}
+                  className="px-4 py-[18px] bg-[#ffb546] backdrop-blur-sm rounded-[28px] flex items-center justify-center hover:opacity-90 transition h-8"
+                >
                   <span className="text-[13px] font-semibold leading-[18.62px] text-black">Generate brief</span>
                 </button>
               </div>
@@ -919,11 +963,76 @@ function DeliverablesSelectionScreen({ onCancel, onBack, onNavigateToAiResponse 
           </div>
         </div>
       </div>
+
+      {/* Confirmation Dialog */}
+      <Dialog open={showConfirmation} onOpenChange={setShowConfirmation}>
+        <DialogContent className="sm:max-w-md !bg-white border border-[#e0e0e0] rounded-xl p-8 [&>button]:hidden">
+          <DialogHeader className="flex flex-col gap-4 items-center text-center">
+            <DialogTitle className="text-[32px] font-bold leading-[38.4px] text-black">
+              Brief successfully submitted!
+            </DialogTitle>
+            <DialogDescription className="text-sm leading-[18.62px] text-[#424242]">
+              Your brief status has been updated to Review. We will get back to you soon.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="flex justify-center pt-4">
+            <button
+              type="button"
+              onClick={handleViewAllBriefs}
+              className="px-6 py-[18px] bg-[#ffb546] backdrop-blur-sm rounded-[28px] flex items-center justify-center gap-2.5 hover:opacity-90 transition"
+            >
+              <span className="text-sm font-semibold leading-[18.62px] text-black">View all briefs</span>
+            </button>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
 
 function AIResponseScreen({ userInput, onBack, onCancel }: { userInput: string; onBack: () => void; onCancel: () => void }) {
+  const navigate = useNavigate();
+  const [showConfirmation, setShowConfirmation] = useState(false);
+  
+  const handleViewAllBriefs = () => {
+    setShowConfirmation(false);
+    navigate("/dashboard/briefs");
+  };
+
+  useEffect(() => {
+    if (showConfirmation) {
+      // Trigger confetti animation - single smooth burst
+      const count = 200;
+      const defaults = { 
+        startVelocity: 30, 
+        spread: 360, 
+        ticks: 100, 
+        zIndex: 9999,
+        gravity: 0.8,
+        decay: 0.94
+      };
+
+      function randomInRange(min: number, max: number) {
+        return Math.random() * (max - min) + min;
+      }
+
+      // Single burst from both sides
+      confetti({
+        ...defaults,
+        particleCount: count,
+        origin: { x: randomInRange(0.2, 0.4), y: 0.5 },
+        colors: ['#ffb546', '#03B3E2', '#ff4337', '#646464', '#848487']
+      });
+      
+      confetti({
+        ...defaults,
+        particleCount: count,
+        origin: { x: randomInRange(0.6, 0.8), y: 0.5 },
+        colors: ['#ffb546', '#03B3E2', '#ff4337', '#646464', '#848487']
+      });
+    }
+  }, [showConfirmation]);
+
   // Mock data from Figma - same brief data
   const mockBriefData = {
     projectTitle: "Q7B7 Toolkit",
@@ -1104,7 +1213,11 @@ function AIResponseScreen({ userInput, onBack, onCancel }: { userInput: string; 
                 <button className="px-4 py-[18px] bg-[#f1f1f3] backdrop-blur-sm rounded-[28px] flex items-center justify-center hover:bg-[#e5e5e5] transition h-8">
                   <span className="text-[13px] font-semibold leading-[18.62px] text-black">Save draft</span>
                 </button>
-                <button className="px-4 py-[18px] bg-[#ffb546] backdrop-blur-sm rounded-[28px] flex items-center justify-center hover:opacity-90 transition h-8">
+                <button 
+                  type="button"
+                  onClick={() => setShowConfirmation(true)}
+                  className="px-4 py-[18px] bg-[#ffb546] backdrop-blur-sm rounded-[28px] flex items-center justify-center hover:opacity-90 transition h-8"
+                >
                   <span className="text-[13px] font-semibold leading-[18.62px] text-black">Generate brief</span>
                 </button>
               </div>
@@ -1112,6 +1225,29 @@ function AIResponseScreen({ userInput, onBack, onCancel }: { userInput: string; 
           </div>
         </div>
       </div>
+
+      {/* Confirmation Dialog */}
+      <Dialog open={showConfirmation} onOpenChange={setShowConfirmation}>
+        <DialogContent className="sm:max-w-md !bg-white border border-[#e0e0e0] rounded-xl p-8 [&>button]:hidden">
+          <DialogHeader className="flex flex-col gap-4 items-center text-center">
+            <DialogTitle className="text-[32px] font-bold leading-[38.4px] text-black">
+              Brief successfully submitted!
+            </DialogTitle>
+            <DialogDescription className="text-sm leading-[18.62px] text-[#424242]">
+              Your brief status has been updated to Review. We will get back to you soon.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="flex justify-center pt-4">
+            <button
+              type="button"
+              onClick={handleViewAllBriefs}
+              className="px-6 py-[18px] bg-[#ffb546] backdrop-blur-sm rounded-[28px] flex items-center justify-center gap-2.5 hover:opacity-90 transition"
+            >
+              <span className="text-sm font-semibold leading-[18.62px] text-black">View all briefs</span>
+            </button>
+          </div>
+        </DialogContent>
+      </Dialog>
 
       {/* AI Chat Input at Bottom - Centered */}
       <div className="absolute bottom-[26px] left-[264px] w-[516px] bg-white border border-[#e0e0e0] rounded-[23px] p-1 flex items-center justify-between">

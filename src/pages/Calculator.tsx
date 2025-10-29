@@ -24,6 +24,7 @@ const imgGroup1 = "https://www.figma.com/api/mcp/asset/b69bb386-15dd-4f1e-be68-8
 const imgGroup2 = "https://www.figma.com/api/mcp/asset/d6d594a8-9b54-4879-9845-da876b8858de";
 const imgCloseIconNew = "https://www.figma.com/api/mcp/asset/3e214e68-a6bb-45d0-9e83-b4607c7d9ce4";
 const imgDividerLine = "https://www.figma.com/api/mcp/asset/0ca49fc0-92af-4787-9156-c3fcac336f4c";
+const createBriefArrowIcon = "https://www.figma.com/api/mcp/asset/33c5c1d3-721c-423d-8e72-cd89fd07637c";
 
 interface AssetItem {
   id: string;
@@ -393,12 +394,12 @@ export default function CalculatorPage() {
               {/* Create Brief Button */}
               <button
                 onClick={handleCreateBrief}
-                className="mt-auto w-full px-6 py-[18px] bg-[#f9f9f9] rounded-[28px] flex items-center justify-center gap-2.5 hover:bg-[#e5e5e5] transition mt-6"
+                className="mt-auto w-full backdrop-blur-[6px] backdrop-filter bg-[#ffb546] px-[24px] py-[18px] rounded-[28px] flex items-center justify-center gap-[10px] hover:opacity-90 transition mt-6"
               >
-                <span className="text-[13px] font-semibold leading-[18.62px] text-[#848487]">
-                  Create Brief
+                <span className="text-[16px] font-semibold leading-[23.94px] text-black">
+                  Create brief
                 </span>
-                <img src={imgVector} alt="" className="w-[15.567px] h-[14px]" />
+                <img src={createBriefArrowIcon} alt="" className="h-[14px] w-[15.567px]" />
               </button>
             </div>
           </div>

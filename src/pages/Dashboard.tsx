@@ -11,6 +11,7 @@ const briefsVector1 = "https://www.figma.com/api/mcp/asset/c3d9cf0a-062c-4d11-83
 const briefsVector2 = "https://www.figma.com/api/mcp/asset/862d739b-abb1-4a57-a57c-854b7c9d2dce";
 const briefsVector3 = "https://www.figma.com/api/mcp/asset/c97bed00-0373-4dd4-9c22-a0b5fd884097";
 const projectsVector = "https://www.figma.com/api/mcp/asset/5e2d54d4-2d3d-4c1e-99a9-d369def9bc84";
+const createBriefArrowIcon = "https://www.figma.com/api/mcp/asset/33c5c1d3-721c-423d-8e72-cd89fd07637c";
 
 export default function TikoDashboard() {
   const navigate = useNavigate();
@@ -155,17 +156,22 @@ export default function TikoDashboard() {
               </div>
 
               <div className="flex gap-3 h-12">
-                <button className="px-6 py-[18px] bg-[#f1f1f3] backdrop-blur-sm rounded-[28px] flex items-center justify-center gap-2.5 hover:bg-[#e5e5e5] transition">
-                  <Calculator size={16} />
+                <button 
+                  onClick={() => navigate("/dashboard/calculator")}
+                  className="px-6 py-[18px] bg-[#f1f1f3] backdrop-blur-sm rounded-[28px] flex items-center justify-center gap-2.5 hover:bg-[#e5e5e5] transition"
+                >
                   <span className="text-[13px] font-semibold leading-[18.62px] text-black whitespace-nowrap">
                     Quick calculator
                   </span>
                 </button>
-                <button className="px-6 py-[18px] bg-[#ffb546] backdrop-blur-sm rounded-[28px] flex items-center justify-center gap-2.5 hover:opacity-90 transition">
-                  <span className="text-[13px] font-semibold leading-[18.62px] text-black whitespace-nowrap">
+                <button 
+                  onClick={() => navigate("/dashboard/briefs", { state: { createBrief: true, showForm: true } })}
+                  className="backdrop-blur-[6px] backdrop-filter bg-[#ffb546] px-[24px] py-[18px] rounded-[28px] flex items-center justify-center gap-[10px] hover:opacity-90 transition"
+                >
+                  <span className="text-[16px] font-semibold leading-[23.94px] text-black whitespace-nowrap">
                     Create brief
                   </span>
-                  <ArrowRight size={13} />
+                  <img src={createBriefArrowIcon} alt="" className="h-[14px] w-[15.567px]" />
                 </button>
               </div>
             </div>
@@ -191,24 +197,24 @@ export default function TikoDashboard() {
 
                 <div className="flex gap-4">
                   {/* Draft briefs */}
-                  <div className="flex-1 bg-[#f9f9f9] rounded-xl p-5 flex flex-col gap-2.5 relative">
+                  <div className="flex-[1_0_0] bg-[#f9f9f9] rounded-[12px] p-[20px] flex flex-col gap-[10px] relative overflow-clip">
                     <p className="text-sm font-bold leading-[18.62px] text-black">Draft briefs</p>
                     <p className="text-[40px] font-medium leading-[45.6px] text-black">5</p>
-                    <img src={briefsVector1} alt="" className="absolute right-5 top-5 w-[45px] h-10" />
+                    <img src={briefsVector1} alt="" className="absolute left-[186px] top-[20px] w-[45px] h-10" />
                   </div>
 
                   {/* In review */}
-                  <div className="flex-1 bg-[#f9f9f9] rounded-xl p-5 flex flex-col gap-2.5 relative">
+                  <div className="flex-[1_0_0] bg-[#f9f9f9] rounded-[12px] p-[20px] flex flex-col gap-[10px] relative overflow-clip">
                     <p className="text-sm font-bold leading-[18.62px] text-black">In review</p>
                     <p className="text-[40px] font-medium leading-[45.6px] text-black">4</p>
-                    <img src={briefsVector2} alt="" className="absolute right-5 top-5 w-[45px] h-10" />
+                    <img src={briefsVector2} alt="" className="absolute left-[186px] top-[20px] w-[45px] h-10" />
                   </div>
 
                   {/* SOW Ready to sign */}
-                  <div className="flex-1 bg-[#f9f9f9] rounded-xl p-5 flex flex-col gap-2.5 relative">
+                  <div className="flex-[1_0_0] bg-[#f9f9f9] rounded-[12px] p-[20px] flex flex-col gap-[10px] relative overflow-clip">
                     <p className="text-sm font-bold leading-[18.62px] text-black">SOW Ready to sign</p>
                     <p className="text-[40px] font-medium leading-[45.6px] text-black">3</p>
-                    <img src={briefsVector3} alt="" className="absolute right-5 top-5 w-[45px] h-10" />
+                    <img src={briefsVector3} alt="" className="absolute left-[186px] top-[20px] w-[45px] h-10" />
                   </div>
                 </div>
               </div>
@@ -222,7 +228,10 @@ export default function TikoDashboard() {
                       Never miss a thing, keep things moving
                     </p>
                   </div>
-                  <button className="flex items-center gap-2 px-2 py-1 rounded-[28px] backdrop-blur-sm hover:bg-gray-50 transition">
+                  <button 
+                    onClick={() => navigate("/dashboard/projects")}
+                    className="flex items-center gap-2 px-2 py-1 rounded-[28px] backdrop-blur-sm hover:bg-gray-50 transition"
+                  >
                     <span className="text-xs font-semibold leading-[23.94px] text-[#848487]">
                       View all projects
                     </span>
