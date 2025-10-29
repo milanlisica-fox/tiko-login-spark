@@ -15,7 +15,7 @@ interface Project {
   name: string;
   team: string;
   progress: number;
-  status: "low" | "medium" | "high";
+  priority: "High" | "Medium" | "Low";
   hasWarning?: boolean;
   owners: string[];
 }
@@ -54,7 +54,7 @@ export default function ProjectsPage() {
       name: "Fold Toolkit Q3 2025",
       team: "Digital team",
       progress: 34,
-      status: "medium",
+      priority: "High",
       owners: ["AB", "CD"],
     },
     {
@@ -62,7 +62,7 @@ export default function ProjectsPage() {
       name: "Watch Radio Campaign Q3 2025",
       team: "Digital team",
       progress: 31,
-      status: "high",
+      priority: "High",
       hasWarning: true,
       owners: ["EF", "GH"],
     },
@@ -71,7 +71,7 @@ export default function ProjectsPage() {
       name: "S Series OOH Campaign Q2 2025",
       team: "Marcomms",
       progress: 100,
-      status: "low",
+      priority: "Low",
       owners: ["IJ", "KL", "MN"],
     },
     {
@@ -79,7 +79,7 @@ export default function ProjectsPage() {
       name: "A Series Promotional Campaign Q3 2025",
       team: "Marcomms",
       progress: 84,
-      status: "medium",
+      priority: "High",
       owners: ["OP", "QR", "ST"],
     },
     {
@@ -87,7 +87,7 @@ export default function ProjectsPage() {
       name: "Fold Toolkit Q3 2025",
       team: "Digital team",
       progress: 38,
-      status: "high",
+      priority: "Medium",
       owners: ["UV", "WX"],
     },
     {
@@ -95,7 +95,7 @@ export default function ProjectsPage() {
       name: "S Series OOH Campaign Q2 2025",
       team: "Marcomms",
       progress: 100,
-      status: "low",
+      priority: "Low",
       hasWarning: true,
       owners: ["YZ", "AA", "BB"],
     },
@@ -104,7 +104,7 @@ export default function ProjectsPage() {
       name: "A Series Promotional Campaign Q3 2025",
       team: "Marcomms",
       progress: 84,
-      status: "medium",
+      priority: "High",
       owners: ["CC", "DD"],
     },
     {
@@ -112,7 +112,7 @@ export default function ProjectsPage() {
       name: "Watch Radio Campaign Q3 2025",
       team: "Digital team",
       progress: 31,
-      status: "medium",
+      priority: "High",
       owners: ["EE", "FF"],
     },
     {
@@ -120,7 +120,7 @@ export default function ProjectsPage() {
       name: "Fold Toolkit Q3 2025",
       team: "Digital team",
       progress: 38,
-      status: "high",
+      priority: "Medium",
       owners: ["GG"],
     },
     {
@@ -128,7 +128,7 @@ export default function ProjectsPage() {
       name: "Fold Toolkit Q3 2025",
       team: "Digital team",
       progress: 34,
-      status: "medium",
+      priority: "High",
       owners: ["HH", "II"],
     },
     {
@@ -136,7 +136,7 @@ export default function ProjectsPage() {
       name: "S Series OOH Campaign Q2 2025",
       team: "Marcomms",
       progress: 100,
-      status: "low",
+      priority: "Low",
       owners: ["JJ", "KK", "LL"],
     },
     {
@@ -144,36 +144,39 @@ export default function ProjectsPage() {
       name: "Fold Toolkit Q3 2025",
       team: "Digital team",
       progress: 38,
-      status: "high",
+      priority: "Medium",
       owners: ["MM"],
     },
   ];
 
   // Calculate stats
   const stats = useMemo(() => {
-    return { complete: 15, inProgress: 10, forReview: 3 };
+    const complete = projects.filter((p) => p.progress === 100).length;
+    const inProgress = projects.filter((p) => p.progress > 0 && p.progress < 100).length;
+    const forReview = projects.filter((p) => p.priority === "High" && p.progress < 50).length;
+    return { complete, inProgress, forReview };
   }, []);
 
-  const getStatusColor = (status: Project["status"]) => {
-    switch (status) {
-      case "high":
-        return "#FF4337";
-      case "medium":
-        return "#8092DC";
-      case "low":
-        return "#0177C7";
+  const getPriorityColor = (priority: Project["priority"]) => {
+    switch (priority) {
+      case "High":
+        return "#FF4337"; // Red for high priority
+      case "Medium":
+        return "#8092DC"; // Purple/blue for medium priority
+      case "Low":
+        return "#0177C7"; // Blue for low priority
       default:
         return "#0177C7";
     }
   };
 
-  const getProgressColor = (progress: number) => {
+  const getProgressBarColor = (progress: number) => {
     if (progress < 33) {
-      return "#FF4337";
+      return "#FF4337"; // Red for low progress
     } else if (progress >= 33 && progress <= 70) {
-      return "#FFB546";
+      return "#FFB546"; // Amber/orange for medium progress
     } else {
-      return "#00C3B1";
+      return "#00C3B1"; // Teal/green for high progress
     }
   };
 
@@ -258,7 +261,10 @@ export default function ProjectsPage() {
             </div>
 
             {/* User Profile */}
-            <div className="flex items-center gap-2">
+            <button
+              onClick={() => navigate("/dashboard/profile")}
+              className="flex items-center gap-2 hover:opacity-80 transition cursor-pointer"
+            >
               <div className="w-10 h-10 rounded-full bg-gray-200 overflow-hidden">
                 <div className="w-full h-full bg-gradient-to-br from-blue-200 to-blue-300" />
               </div>
@@ -267,7 +273,7 @@ export default function ProjectsPage() {
                 <p className="text-xs leading-[15.96px] text-[#646464]">Marcomms</p>
               </div>
               <ChevronDown size={24} className="text-[#646464] rotate-90" />
-            </div>
+            </button>
           </div>
         </header>
 
@@ -359,18 +365,18 @@ export default function ProjectsPage() {
                         </div>
                       </div>
 
-                      {/* Status - 10% */}
+                      {/* Priority/Status - 10% */}
                       <div className="w-[10%]">
                         <div className="flex items-center gap-2">
                           <div 
                             className="w-2 h-2 rounded-full" 
-                            style={{ backgroundColor: getStatusColor(project.status) }}
+                            style={{ backgroundColor: getPriorityColor(project.priority) }}
                           />
                           <span 
-                            className="text-xs font-normal capitalize"
-                            style={{ color: getStatusColor(project.status) }}
+                            className="text-xs font-normal"
+                            style={{ color: getPriorityColor(project.priority) }}
                           >
-                            {project.status}
+                            {project.priority}
                           </span>
                         </div>
                       </div>
@@ -383,7 +389,7 @@ export default function ProjectsPage() {
                               className="h-full rounded-full transition-all"
                               style={{ 
                                 width: `${project.progress}%`,
-                                backgroundColor: getProgressColor(project.progress)
+                                backgroundColor: getProgressBarColor(project.progress)
                               }}
                             />
                           </div>

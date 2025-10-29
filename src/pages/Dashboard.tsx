@@ -124,7 +124,10 @@ export default function TikoDashboard() {
             </div>
 
             {/* User Profile */}
-            <div className="flex items-center gap-2">
+            <button
+              onClick={() => navigate("/dashboard/profile")}
+              className="flex items-center gap-2 hover:opacity-80 transition cursor-pointer"
+            >
               <div className="w-10 h-10 rounded-full bg-gray-200 overflow-hidden">
                 <div className="w-full h-full bg-gradient-to-br from-blue-200 to-blue-300" />
               </div>
@@ -133,7 +136,7 @@ export default function TikoDashboard() {
                 <p className="text-xs leading-[15.96px] text-[#646464]">Marcomms</p>
               </div>
               <ChevronDown size={24} className="text-[#646464] rotate-90" />
-            </div>
+            </button>
           </div>
         </header>
 
