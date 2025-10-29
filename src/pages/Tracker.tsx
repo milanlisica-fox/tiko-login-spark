@@ -1,13 +1,12 @@
 import { useMemo } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { Home, FileText, Folder, BarChart2, LogOut, Bell, ChevronDown, ArrowRight, Coins, ChevronRight, Trophy, Award } from "lucide-react";
+import { Home, FileText, Folder, BarChart2, LogOut, Bell, ChevronDown, ArrowRight, Coins, ChevronRight, Trophy, Award, Zap, ArrowUp, Heart } from "lucide-react";
 import { toast } from "sonner";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
-import { LineChart, Line, AreaChart, Area, BarChart, Bar, XAxis, YAxis, CartesianGrid, ResponsiveContainer } from "recharts";
+import { AreaChart, Area, BarChart, Bar, XAxis, YAxis, CartesianGrid, ResponsiveContainer } from "recharts";
 
 // Figma image URLs
 const logoImage = "https://www.figma.com/api/mcp/asset/e6ec2a32-b26b-4e3a-bd4a-4e803cad7b85";
@@ -48,33 +47,33 @@ export default function TrackerPage() {
       title: "Omni & Digital",
       icon: Trophy,
       iconColor: "text-yellow-500",
-      budget: "3,100",
-      spent: "2,847",
-      remaining: "253",
-      progress: 92,
-      owners: ["A", "B", "C"],
+      overallScore: 95,
+      briefQualityScore: 95,
+      tokenEfficiency: 96,
+      progressBarColor: "#0177c7", // blue
+      isMyTeam: false,
     },
     {
       id: 2,
       title: "Marcomms",
       icon: Award,
       iconColor: "text-gray-400",
-      budget: "3,100",
-      spent: "2,847",
-      remaining: "253",
-      progress: 88,
-      owners: ["D", "E", "F"],
+      overallScore: 94,
+      briefQualityScore: 94,
+      tokenEfficiency: 95,
+      progressBarColor: "#8092DC", // purple
+      isMyTeam: true,
     },
     {
       id: 3,
       title: "IMG",
       icon: Award,
       iconColor: "text-amber-600",
-      budget: "3,100",
-      spent: "2,847",
-      remaining: "253",
-      progress: 79,
-      owners: ["G", "H", "I"],
+      overallScore: 92,
+      briefQualityScore: 92,
+      tokenEfficiency: 93,
+      progressBarColor: "#00c3b1", // teal/green
+      isMyTeam: false,
     },
   ];
 
@@ -82,7 +81,7 @@ export default function TrackerPage() {
   const qualityScoreData = [
     { quarter: "Q4 2024", score: 85 },
     { quarter: "Q1 2025", score: 87 },
-    { quarter: "Q2 2025", score: 89 },
+    { quarter: "Q2 2025", score: 90 },
   ];
 
   const qualityScoreConfig = {
@@ -94,24 +93,24 @@ export default function TrackerPage() {
 
   // Mock data for spend by type chart
   const spendByTypeData = [
-    { type: "Mobile", spent: 1600, committed: 1100, remaining: 3200 },
-    { type: "Tablet", spent: 590, committed: 510, remaining: 1850 },
-    { type: "Wearable", spent: 580, committed: 510, remaining: 1850 },
-    { type: "Ecosystem", spent: 1650, committed: 1100, remaining: 3200 },
+    { type: "Mobile", spent: 1200, committed: 750, remaining: 2350, total: 4300 },
+    { type: "Tablet", spent: 750, committed: 600, remaining: 1400, total: 2750 },
+    { type: "Wearable", spent: 400, committed: 400, remaining: 1310, total: 2100 },
+    { type: "Ecosystem", spent: 400, committed: 250, remaining: 1000, total: 1650 },
   ];
 
   const spendConfig = {
     spent: {
-      label: "Spent",
-      color: "#0177c7",
+      label: "Tokens Spent",
+      color: "#00c3b1",
     },
     committed: {
-      label: "Committed",
+      label: "Tokens Committed",
       color: "#03b3e2",
     },
     remaining: {
-      label: "Remaining",
-      color: "#00c3b1",
+      label: "Tokens Remaining",
+      color: "#0177c7",
     },
   };
 
@@ -215,8 +214,8 @@ export default function TrackerPage() {
         </header>
 
         {/* Tracker Content */}
-        <section className="flex-1 overflow-y-auto px-6 pt-[40px] pb-[40px]">
-          <div className="max-w-[1152px] mx-auto space-y-10">
+        <section className="flex-1 overflow-y-auto pt-[40px] pb-[40px]">
+          <div className="w-[90%] mx-auto space-y-10">
             {/* Header */}
             <div className="flex items-center justify-between">
               <div className="flex flex-col gap-1">
@@ -243,60 +242,61 @@ export default function TrackerPage() {
                 {teamsData.map((team) => {
                   const IconComponent = team.icon;
                   return (
-                  <Card key={team.id} className="border border-[#ececec] bg-white">
-                    <CardHeader className="pb-3">
-                      <div className="flex items-center gap-2">
-                        <IconComponent size={20} className={team.iconColor} />
+                  <Card key={team.id} className="border border-[#ececec] bg-white relative">
+                    {team.isMyTeam && (
+                      <div className="absolute top-4 right-4">
+                        <Badge variant="secondary" className="bg-[#f1f1f3] text-black border-none text-xs">
+                          My team
+                        </Badge>
+                      </div>
+                    )}
+                    <CardHeader className="pb-3 pt-6">
+                      <div className="flex flex-col items-center gap-2">
+                        <IconComponent size={24} className={team.iconColor} />
                         <CardTitle className="text-base font-bold leading-[21.28px] text-black">{team.title}</CardTitle>
                       </div>
                     </CardHeader>
-                    <CardContent className="space-y-6">
-                      <div className="space-y-4">
-                        <div className="flex justify-between items-center">
-                          <span className="text-sm text-[#646464]">Budget</span>
-                          <span className="text-lg font-bold">{team.budget}</span>
+                    <CardContent className="space-y-4">
+                      {/* Overall Score */}
+                      <div className="space-y-2">
+                        <div className="flex items-center justify-between">
+                          <span className="text-sm leading-[18.62px] text-black">Overall score</span>
+                          <span className="text-[32px] font-bold leading-[38.4px] text-black">{team.overallScore}%</span>
                         </div>
-                        
-                        {/* Progress bar */}
-                        <div className="space-y-2">
-                          <div className="relative h-4 w-full bg-[#f1f1f3] rounded-full overflow-hidden">
-                            <div 
-                              className="h-full bg-[#00c3b1] rounded-full transition-all"
-                              style={{ width: `${team.progress}%` }}
-                            />
-                          </div>
-                          <div className="flex justify-between text-xs text-[#646464]">
-                            <span>Spent: {team.spent}</span>
-                            <span>Remaining: {team.remaining}</span>
-                          </div>
-                        </div>
-
-                        <div className="space-y-2">
-                          <div className="flex justify-between items-center">
-                            <span className="text-xs text-[#646464]">Spent</span>
-                            <span className="text-sm font-bold">{team.spent}</span>
-                          </div>
-                          <div className="flex justify-between items-center">
-                            <span className="text-xs text-[#646464]">Remaining</span>
-                            <span className="text-sm font-bold">{team.remaining}</span>
-                          </div>
+                        <div className="relative h-4 w-full bg-[#f1f1f3] rounded-full overflow-hidden">
+                          <div 
+                            className="h-full rounded-full transition-all"
+                            style={{ 
+                              width: `${team.overallScore}%`,
+                              backgroundColor: team.progressBarColor
+                            }}
+                          />
                         </div>
                       </div>
 
-                      {/* Owners */}
-                      <div className="flex items-center gap-2 pt-4 border-t border-[#ececec]">
-                        <div className="flex -space-x-2">
-                          {team.owners.map((owner, idx) => (
-                            <Avatar key={idx} className="w-6 h-6 border-2 border-white">
-                              <AvatarFallback className="text-xs bg-gradient-to-br from-blue-200 to-blue-300">
-                                {owner}
-                              </AvatarFallback>
-                            </Avatar>
-                          ))}
+                      {/* Brief Quality Score */}
+                      <div className="flex items-center justify-between">
+                        <span className="text-sm leading-[18.62px] text-black">Brief Quality Score</span>
+                        <span className="text-sm leading-[18.62px] text-black font-normal">{team.briefQualityScore}%</span>
+                      </div>
+
+                      {/* Token Efficiency */}
+                      <div className="flex items-center justify-between">
+                        <span className="text-sm leading-[18.62px] text-black">Token Efficiency</span>
+                        <span className="text-sm leading-[18.62px] text-black font-normal">{team.tokenEfficiency}%</span>
+                      </div>
+
+                      {/* Small Icons */}
+                      <div className="flex items-center gap-2 pt-2">
+                        <div className="w-6 h-6 rounded-full bg-[#e3f2fd] flex items-center justify-center">
+                          <Zap size={12} className="text-[#03b3e2]" />
                         </div>
-                        <span className="text-xs text-[#646464] ml-1">
-                          {team.owners.length} owners
-                        </span>
+                        <div className="w-6 h-6 rounded-full bg-[#fff3e0] flex items-center justify-center">
+                          <ArrowUp size={12} className="text-[#ff9800]" />
+                        </div>
+                        <div className="w-6 h-6 rounded-full bg-[#fce4ec] flex items-center justify-center">
+                          <Heart size={12} className="text-[#e91e63]" />
+                        </div>
                       </div>
                     </CardContent>
                   </Card>
@@ -318,25 +318,28 @@ export default function TrackerPage() {
                   <CardContent className="space-y-6">
                     <ChartContainer config={qualityScoreConfig} className="h-[200px] w-full">
                       <ResponsiveContainer width="100%" height="100%">
-                        <AreaChart data={qualityScoreData}>
+                        <AreaChart data={qualityScoreData} margin={{ left: 10, right: 10, top: 10, bottom: 20 }}>
                           <defs>
                             <linearGradient id="qualityGradient" x1="0" y1="0" x2="0" y2="1">
                               <stop offset="5%" stopColor="#0177c7" stopOpacity={0.3} />
                               <stop offset="95%" stopColor="#0177c7" stopOpacity={0} />
                             </linearGradient>
                           </defs>
-                          <CartesianGrid strokeDasharray="3 3" stroke="#e0e0e0" vertical={false} />
+                          <CartesianGrid strokeDasharray="3 3" stroke="#e0e0e0" vertical={true} />
                           <XAxis 
                             dataKey="quarter" 
                             axisLine={false}
                             tickLine={false}
                             tick={{ fill: "#646464", fontSize: 12 }}
+                            label={{ value: "Quarter", position: "insideBottom", offset: -5, style: { fill: "#646464", fontSize: 12 } }}
                           />
                           <YAxis 
                             axisLine={false}
                             tickLine={false}
                             domain={[70, 95]}
+                            ticks={[70, 75, 80, 85, 90, 95]}
                             tick={{ fill: "#646464", fontSize: 12 }}
+                            label={{ value: "Quality score (%)", angle: -90, position: "insideLeft", offset: 15, style: { fill: "#646464", fontSize: 12, textAnchor: "middle" } }}
                           />
                           <ChartTooltip content={<ChartTooltipContent />} />
                           <Area
@@ -350,19 +353,15 @@ export default function TrackerPage() {
                       </ResponsiveContainer>
                     </ChartContainer>
 
-                    <Badge variant="secondary" className="w-fit bg-[#f1f1f3] text-black border-none">
-                      Improved
-                    </Badge>
-
                     {/* Insight Card */}
-                    <Card className="bg-gradient-to-br from-blue-50 to-cyan-50 border-blue-200">
-                      <CardContent className="p-4">
-                        <p className="text-xs font-semibold text-blue-900 mb-2">Insight</p>
-                        <p className="text-sm text-blue-800 leading-relaxed">
-                          Brief quality score has improved to 89% with consistent upward trend
-                        </p>
-                      </CardContent>
-                    </Card>
+                    <div className="flex flex-col" style={{ gap: '4px', paddingTop: '8px', paddingRight: '16px', paddingBottom: '8px', paddingLeft: '16px', borderRadius: '12px', backgroundColor: '#F1F1F380' }}>
+                      <p style={{ fontSize: '12px', lineHeight: '15.96px', fontWeight: 700, color: '#00C3B1' }}>
+                        Insight
+                      </p>
+                      <p style={{ fontSize: '12px', lineHeight: '18px', fontWeight: 400, color: '#000000' }}>
+                        Brief quality score has improved to 89% with consistent upward trend
+                      </p>
+                    </div>
                   </CardContent>
                 </Card>
 
@@ -375,11 +374,13 @@ export default function TrackerPage() {
                     <ChartContainer config={spendConfig} className="h-[250px] w-full">
                       <ResponsiveContainer width="100%" height="100%">
                         <BarChart data={spendByTypeData} layout="vertical" margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
-                          <CartesianGrid strokeDasharray="3 3" stroke="#e0e0e0" horizontal={true} vertical={false} />
+                          <CartesianGrid strokeDasharray="3 3" stroke="#e0e0e0" horizontal={true} vertical={true} />
                           <XAxis 
                             type="number"
                             axisLine={false}
                             tickLine={false}
+                            domain={[0, 4500]}
+                            ticks={[0, 500, 1000, 1500, 2000, 2500, 3000, 3500, 4000, 4500]}
                             tick={{ fill: "#646464", fontSize: 12 }}
                           />
                           <YAxis 
@@ -390,27 +391,65 @@ export default function TrackerPage() {
                             tick={{ fill: "#646464", fontSize: 12 }}
                             width={80}
                           />
-                          <ChartTooltip content={<ChartTooltipContent />} />
-                          <Bar dataKey="spent" stackId="a" fill="#0177c7" radius={[0, 4, 4, 0]} />
-                          <Bar dataKey="committed" stackId="a" fill="#03b3e2" radius={[0, 0, 0, 0]} />
-                          <Bar dataKey="remaining" stackId="a" fill="#00c3b1" radius={[4, 0, 0, 4]} />
+                          <ChartTooltip 
+                            cursor={false}
+                            content={({ active, payload }) => {
+                              if (!active || !payload || payload.length === 0) return null;
+                              
+                              const data = payload[0].payload;
+                              const total = data.total || (data.spent + data.committed + data.remaining);
+                              
+                              return (
+                                <div className="bg-white border border-gray-200 rounded-lg shadow-md min-w-[140px]" style={{ padding: '10px 12px' }}>
+                                  <div className="text-xs font-medium mb-3" style={{ color: '#646464', paddingTop: '2px' }}>{data.type}</div>
+                                  <div className="space-y-2">
+                                    {payload.map((entry, index) => {
+                                      const value = entry.value as number;
+                                      return (
+                                        <div key={index} className="flex items-center justify-between gap-3">
+                                          <div className="flex items-center gap-1.5">
+                                            <div 
+                                              className="w-2.5 h-2.5" 
+                                              style={{ 
+                                                backgroundColor: entry.color || entry.fill,
+                                                borderRadius: '2px'
+                                              }} 
+                                            />
+                                            <span className="text-xs" style={{ color: '#646464' }}>
+                                              {entry.name === 'spent' ? 'Tokens Spent' : entry.name === 'committed' ? 'Tokens Committed' : 'Tokens Remaining'}
+                                            </span>
+                                          </div>
+                                          <span className="text-xs font-medium" style={{ color: '#000000' }}>
+                                            {value.toLocaleString()}
+                                          </span>
+                                        </div>
+                                      );
+                                    })}
+                                  </div>
+                                </div>
+                              );
+                            }}
+                          />
+                          <Bar dataKey="remaining" stackId="a" fill="#0177c7" radius={[6, 6, 6, 6]} />
+                          <Bar dataKey="committed" stackId="a" fill="#03b3e2" radius={[6, 6, 6, 6]} />
+                          <Bar dataKey="spent" stackId="a" fill="#00c3b1" radius={[6, 6, 6, 6]} />
                         </BarChart>
                       </ResponsiveContainer>
                     </ChartContainer>
 
                     {/* Legend */}
-                    <div className="flex items-center gap-6 text-xs">
+                    <div className="flex items-center justify-center gap-6 text-xs">
                       <div className="flex items-center gap-2">
-                        <div className="w-3 h-3 rounded-sm bg-[#0177c7]" />
-                        <span className="text-[#646464]">Spent</span>
+                        <div className="w-3 h-3 bg-[#00c3b1]" style={{ borderRadius: '2px' }} />
+                        <span className="text-[#646464]">Tokens Spent</span>
                       </div>
                       <div className="flex items-center gap-2">
-                        <div className="w-3 h-3 rounded-sm bg-[#03b3e2]" />
-                        <span className="text-[#646464]">Committed</span>
+                        <div className="w-3 h-3 bg-[#03b3e2]" style={{ borderRadius: '2px' }} />
+                        <span className="text-[#646464]">Tokens Committed</span>
                       </div>
                       <div className="flex items-center gap-2">
-                        <div className="w-3 h-3 rounded-sm bg-[#00c3b1]" />
-                        <span className="text-[#646464]">Remaining</span>
+                        <div className="w-3 h-3 bg-[#0177c7]" style={{ borderRadius: '2px' }} />
+                        <span className="text-[#646464]">Tokens Remaining</span>
                       </div>
                     </div>
                   </CardContent>

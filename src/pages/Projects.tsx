@@ -2,8 +2,7 @@ import { useMemo } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Home, FileText, Folder, BarChart2, LogOut, Bell, ChevronDown, ArrowRight, Coins, AlertTriangle } from "lucide-react";
 import { toast } from "sonner";
-import { Badge } from "@/components/ui/badge";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 
 // Figma image URLs
@@ -158,29 +157,26 @@ export default function ProjectsPage() {
     return { complete, inProgress, forReview };
   }, []);
 
-  const getPriorityBadgeVariant = (priority: Project["priority"]) => {
+  const getPriorityColor = (priority: Project["priority"]) => {
     switch (priority) {
       case "High":
-        return "destructive";
+        return "#FF4337"; // Red for high priority
       case "Medium":
-        return "secondary";
+        return "#8092DC"; // Purple/blue for medium priority
       case "Low":
-        return "default";
+        return "#0177C7"; // Blue for low priority
       default:
-        return "default";
+        return "#0177C7";
     }
   };
 
-  const getProgressBarColor = (priority: Project["priority"]) => {
-    switch (priority) {
-      case "High":
-        return "#ff4337"; // Red for high priority
-      case "Medium":
-        return "#ffb546"; // Amber/orange for medium priority
-      case "Low":
-        return "#0177c7"; // Blue for low priority
-      default:
-        return "#0177c7";
+  const getProgressBarColor = (progress: number) => {
+    if (progress < 33) {
+      return "#FF4337"; // Red for low progress
+    } else if (progress >= 33 && progress <= 70) {
+      return "#FFB546"; // Amber/orange for medium progress
+    } else {
+      return "#00C3B1"; // Teal/green for high progress
     }
   };
 
@@ -282,31 +278,40 @@ export default function ProjectsPage() {
         </header>
 
         {/* Projects Content */}
-        <section className="flex-1 overflow-y-auto pl-[264px] pr-6 pt-[40px] pb-[40px]">
-          <div className="space-y-[30px]">
+        <section className="flex-1 overflow-y-auto pt-[40px] pb-[40px]">
+          <div className="w-[90%] mx-auto space-y-[30px]">
             {/* Header */}
-            <div className="flex flex-col gap-1">
-              <h1 className="text-[32px] font-bold leading-[38.4px] text-black">Work at a glance</h1>
-              <p className="text-base leading-[24px] text-black">
-                A clear view of your team's active projects and priorities.
-              </p>
+            <div className="flex items-start justify-between gap-4">
+              <div className="flex flex-col gap-1">
+                <h1 className="text-[32px] font-bold leading-[38.4px] text-black">Work at a glance</h1>
+                <p className="text-base leading-[24px] text-black">
+                  A clear view of your team's active projects and priorities.
+                </p>
+              </div>
+              <Button
+                variant="outline"
+                className="h-10 px-6 border border-[#d9d9d9] bg-white hover:bg-gray-50 gap-2"
+              >
+                <span className="text-sm font-normal leading-[24px] text-black">See all projects</span>
+                <ArrowRight size={20} className="text-black" />
+              </Button>
             </div>
 
             {/* Stats Cards */}
-            <div className="grid grid-cols-3 gap-0">
-              <div className="bg-white border-r border-[#ececec] rounded-tl-xl rounded-bl-xl p-[40px]">
+            <div className="grid grid-cols-3 gap-4 w-full">
+              <div className="bg-white rounded-[60px] h-[118px] p-[40px] flex flex-col justify-center">
                 <div className="flex flex-col gap-[24px]">
                   <h3 className="text-base leading-[24px] text-black font-normal">Complete</h3>
                   <p className="text-[46px] leading-[46px] font-medium text-black">{stats.complete}</p>
                 </div>
               </div>
-              <div className="bg-white border-r border-[#ececec] p-[40px]">
+              <div className="bg-white rounded-[60px] h-[118px] p-[40px] flex flex-col justify-center">
                 <div className="flex flex-col gap-[24px]">
                   <h3 className="text-base leading-[24px] text-black font-normal">In progress</h3>
                   <p className="text-[46px] leading-[46px] font-medium text-black">{stats.inProgress}</p>
                 </div>
               </div>
-              <div className="bg-white rounded-tr-xl rounded-br-xl p-[40px]">
+              <div className="bg-white rounded-[60px] h-[118px] p-[40px] flex flex-col justify-center">
                 <div className="flex flex-col gap-[24px]">
                   <h3 className="text-base leading-[24px] text-black font-normal">For review</h3>
                   <p className="text-[46px] leading-[46px] font-medium text-black">{stats.forReview}</p>
@@ -320,49 +325,71 @@ export default function ProjectsPage() {
                 {projects.map((project, index) => (
                   <div key={project.id}>
                     <div className="flex items-center py-[12px] px-[8px] gap-4">
-                      {/* Project Name */}
-                      <div className="flex items-center gap-2 min-w-[421px]">
+                      {/* Project Name - 35% */}
+                      <div className="flex items-center gap-2 w-[35%]">
                         <div className="flex flex-col gap-[4px]">
-                          <p className="text-sm font-normal leading-[19px] text-black">{project.name}</p>
+                          <p className={`text-sm leading-[19px] text-black ${project.hasWarning ? "font-bold" : "font-normal"}`}>
+                            {project.name}
+                          </p>
                           <p className="text-xs leading-[16px] text-[#646464]">{project.team}</p>
                         </div>
+                      </div>
+
+                      {/* Sign - Exclamation point in circle - 5% */}
+                      <div className="flex items-center justify-center w-[5%]">
                         {project.hasWarning && (
-                          <AlertTriangle size={18} className="text-amber-500 flex-shrink-0" />
+                          <div className="w-8 h-8 rounded-full bg-amber-100 flex items-center justify-center">
+                            <AlertTriangle size={16} className="text-amber-600" />
+                          </div>
                         )}
                       </div>
 
-                      {/* Owners */}
-                      <div className="flex items-center gap-2 min-w-[205px]">
+                      {/* Owners - 20% */}
+                      <div className="flex items-center justify-center gap-2 w-[20%]">
                         <div className="flex -space-x-2">
-                          {project.owners.map((owner, idx) => (
-                            <Avatar key={idx} className="w-6 h-6 border-2 border-white">
-                              <AvatarFallback className="text-xs bg-gradient-to-br from-blue-200 to-blue-300">
-                                {owner}
-                              </AvatarFallback>
-                            </Avatar>
-                          ))}
+                          {project.owners.map((owner, idx) => {
+                            // Generate a unique seed for each avatar based on owner and project
+                            const seed = `${owner}_${project.id}_${idx}`;
+                            return (
+                              <Avatar key={idx} className="w-6 h-6 border-2 border-white">
+                                <AvatarImage 
+                                  src={`https://api.dicebear.com/7.x/personas/png?seed=${seed}&size=64`} 
+                                  alt={owner}
+                                />
+                                <AvatarFallback className="text-xs bg-gradient-to-br from-blue-200 to-blue-300">
+                                  {owner}
+                                </AvatarFallback>
+                              </Avatar>
+                            );
+                          })}
                         </div>
                       </div>
 
-                      {/* Priority Badge */}
-                      <div className="min-w-[158px]">
-                        <Badge
-                          variant={getPriorityBadgeVariant(project.priority)}
-                          className="text-xs font-normal px-2 py-1"
-                        >
-                          {project.priority}
-                        </Badge>
+                      {/* Priority/Status - 10% */}
+                      <div className="w-[10%]">
+                        <div className="flex items-center gap-2">
+                          <div 
+                            className="w-2 h-2 rounded-full" 
+                            style={{ backgroundColor: getPriorityColor(project.priority) }}
+                          />
+                          <span 
+                            className="text-xs font-normal"
+                            style={{ color: getPriorityColor(project.priority) }}
+                          >
+                            {project.priority}
+                          </span>
+                        </div>
                       </div>
 
-                      {/* Timeline/Progress */}
-                      <div className="flex-1 min-w-[272px]">
+                      {/* Timeline/Progress - 30% */}
+                      <div className="w-[30%]">
                         <div className="flex items-center gap-2">
                           <div className="relative h-2 flex-1 bg-[#f1f1f3] rounded-full overflow-hidden">
                             <div
                               className="h-full rounded-full transition-all"
                               style={{ 
                                 width: `${project.progress}%`,
-                                backgroundColor: getProgressBarColor(project.priority)
+                                backgroundColor: getProgressBarColor(project.progress)
                               }}
                             />
                           </div>
@@ -375,17 +402,6 @@ export default function ProjectsPage() {
                   </div>
                 ))}
               </div>
-            </div>
-
-            {/* See all projects button */}
-            <div className="flex justify-end">
-              <Button
-                variant="outline"
-                className="h-10 px-6 border border-[#d9d9d9] bg-white hover:bg-gray-50 gap-2"
-              >
-                <span className="text-sm font-normal leading-[24px] text-black">See all projects</span>
-                <ArrowRight size={20} className="text-black" />
-              </Button>
             </div>
           </div>
         </section>

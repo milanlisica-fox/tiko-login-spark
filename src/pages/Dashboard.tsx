@@ -112,7 +112,9 @@ export default function TikoDashboard() {
             {/* Notifications */}
             <div className="flex items-center gap-2 relative">
               <Bell size={24} className="text-[#848487]" />
-              <div className="absolute -left-1 -top-1 w-4 h-4 bg-[#ff4337] border-2 border-[#f7f7f7] rounded-full" />
+              <div className="absolute -left-1 -top-1 min-w-[20px] h-5 bg-[#ff4337] border-2 border-[#f7f7f7] rounded-full flex items-center justify-center px-1">
+                <span className="text-[10px] font-bold leading-[14px] text-white">3</span>
+              </div>
             </div>
 
             {/* Tokens */}
@@ -171,7 +173,7 @@ export default function TikoDashboard() {
             {/* Briefs and Projects Row */}
             <div className="flex gap-5">
               {/* Briefs Section */}
-              <div className="flex-1 bg-white rounded-xl p-6 flex flex-col gap-4">
+              <div className="flex-[0.7] bg-white rounded-xl p-6 flex flex-col gap-4">
                 <div className="flex items-start justify-between pb-1">
                   <div className="flex flex-col gap-1">
                     <h2 className="text-[22px] font-bold leading-[29.26px] text-black">Briefs</h2>
@@ -212,7 +214,7 @@ export default function TikoDashboard() {
               </div>
 
               {/* Projects Section */}
-              <div className="w-[418px] bg-white rounded-xl p-6 flex flex-col gap-4">
+              <div className="flex-[0.3] bg-white rounded-xl p-6 flex flex-col gap-4">
                 <div className="flex items-start justify-between pb-1">
                   <div className="flex flex-col gap-1">
                     <h2 className="text-[22px] font-bold leading-[29.26px] text-black">Projects</h2>
@@ -255,19 +257,19 @@ export default function TikoDashboard() {
 
               <div className="flex gap-4">
                 {/* Token Summary */}
-                <div className="flex-1 bg-[#f9f9f9] rounded-xl px-8 py-6 flex flex-col gap-8">
+                <div className="flex-1 bg-[#f9f9f9] rounded-xl px-8 py-6 flex flex-col gap-8 min-w-0">
                   <h3 className="text-lg font-bold leading-[23.94px] text-black">Token summary</h3>
                   
                   <div className="flex flex-col gap-6">
                     {/* Horizontal bars */}
                     <div className="flex items-center h-[87px] gap-0">
-                      <div className="h-full bg-[#0177c7] rounded-[12.718px] flex items-center justify-center w-[129px]">
+                      <div className="h-full bg-[#0177c7] rounded-[12.718px] flex items-center justify-center flex-[0.2672] min-w-[60px]">
                         <span className="text-base font-bold leading-[21.28px] text-white">3,100</span>
                       </div>
-                      <div className="h-full bg-[#03b3e2] rounded-[12.718px] flex items-center justify-center w-[71px]">
+                      <div className="h-full bg-[#03b3e2] rounded-[12.718px] flex items-center justify-center flex-[0.1466] min-w-[60px]">
                         <span className="text-base font-bold leading-[21.28px] text-white">1,700</span>
                       </div>
-                      <div className="h-full bg-[#00c3b1] rounded-[12.718px] flex items-center justify-center flex-1 min-w-[280px]">
+                      <div className="h-full bg-[#00c3b1] rounded-[12.718px] flex items-center justify-center flex-[0.5862] min-w-[60px]">
                         <span className="text-base font-bold leading-[21.28px] text-white">6,800</span>
                       </div>
                     </div>
@@ -296,22 +298,22 @@ export default function TikoDashboard() {
                 </div>
 
                 {/* Brief Quality Score */}
-                <div className="flex-1 bg-[#f9f9f9] rounded-xl px-8 py-6 flex flex-col gap-8">
+                <div className="flex-1 bg-[#f9f9f9] rounded-xl px-8 py-6 flex flex-col gap-8 min-w-0">
                   <h3 className="text-lg font-bold leading-[23.94px] text-black">Brief quality score</h3>
                   
                   <div className="flex flex-col gap-6">
                     {/* Horizontal bars */}
                     <div className="flex items-center h-[87px] gap-0">
-                      <div className="h-full bg-[#0177c7] rounded-[12.718px] flex items-center justify-center w-[151px]">
+                      <div className="h-full bg-[#0177c7] rounded-[12.718px] flex items-center justify-center flex-[0.3152] min-w-[40px]">
                         <span className="text-base font-bold leading-[21.28px] text-white">52</span>
                       </div>
-                      <div className="h-full bg-[#03b3e2] rounded-[12.718px] flex items-center justify-center w-[193px]">
+                      <div className="h-full bg-[#03b3e2] rounded-[12.718px] flex items-center justify-center flex-[0.4061] min-w-[40px]">
                         <span className="text-base font-bold leading-[21.28px] text-white">67</span>
                       </div>
-                      <div className="h-full bg-[#8092dc] rounded-[12.718px] flex items-center justify-center w-[93px]">
+                      <div className="h-full bg-[#8092dc] rounded-[12.718px] flex items-center justify-center flex-[0.1879] min-w-[40px]">
                         <span className="text-base font-bold leading-[21.28px] text-white">31</span>
                       </div>
-                      <div className="h-full bg-[#00c3b1] rounded-[12.718px] flex items-center justify-center w-[43px]">
+                      <div className="h-full bg-[#00c3b1] rounded-[12.718px] flex items-center justify-center flex-[0.0909] min-w-[40px]">
                         <span className="text-base font-bold leading-[21.28px] text-white">15</span>
                       </div>
                     </div>
