@@ -1,9 +1,11 @@
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { Home, FileText, Folder, BarChart2, LogOut, ArrowRight, User, Bell, Coins, ChevronDown } from "lucide-react";
+import { Home, FileText, Folder, BarChart2, LogOut, ArrowRight, User, Bell, Coins, ChevronDown, Upload, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import { Dialog, DialogContent, DialogOverlay } from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
 
 // Figma image URLs
 const logoImage = "https://www.figma.com/api/mcp/asset/e6ec2a32-b26b-4e3a-bd4a-4e803cad7b85";
@@ -21,22 +23,51 @@ const avatarImg7 = "https://www.figma.com/api/mcp/asset/12537ceb-3e87-4177-ba70-
 const avatarImg8 = "https://www.figma.com/api/mcp/asset/7d56ad85-fdba-4eff-a947-e598dd95d31a";
 const avatarImg9 = "https://www.figma.com/api/mcp/asset/9eede916-3b76-46a7-9bbe-bf96d8a6bbac";
 const avatarImg10 = "https://www.figma.com/api/mcp/asset/8658d57f-28bb-4997-bb12-20725b27456b";
-const avatarImg11 = "https://www.figma.com/api/mcp/asset/2998cbe3-c3ae-487b-8686-a8789842a419";
+const avatarImg11 = "https://www.figma.com/api/mcp/asset/2998cbe3-c3ae-487b-8686-a8789842a274";
 const avatarImg12 = "https://www.figma.com/api/mcp/asset/4af55757-996e-4874-851d-9f0552a2e4a8";
 const avatarImg13 = "https://www.figma.com/api/mcp/asset/483c629a-d2e6-4414-b0f3-74c653bace3c";
 const avatarImg14 = "https://www.figma.com/api/mcp/asset/5b9c783c-436b-442e-9857-06d309940de1";
 const avatarImg15 = "https://www.figma.com/api/mcp/asset/f74354e7-ae07-4777-8f6a-2ee0b12ea289";
 const avatarImg16 = "https://www.figma.com/api/mcp/asset/2e7d8b8d-62c1-48ea-a235-e45817dde115";
-const avatarImg17 = "https://www.figma.com/api/mcp/asset/846c0f66-a6ab-4924-b5b3-29fe3c6f85b3";
+const avatarImg17 = "https://www.figma.com/api/mcp/asset/846c0f66-a6ab-4924-b5b3-29fe3c Hoffmann85愉悦";
 const avatarImg18 = "https://www.figma.com/api/mcp/asset/56c68c66-b882-4196-b347-677d401b49da";
 const avatarImg19 = "https://www.figma.com/api/mcp/asset/dc9b97c8-f3c8-41eb-b2ca-c36e2fedc0df";
 const avatarImg20 = "https://www.figma.com/api/mcp/asset/11300247-38f8-478d-9479-40935b534eef";
-const avatarImg21 = "https://www.figma.com/api/mcp/asset/51b54793-bcea-4985-bc14-75237d0a3404";
+const avatarImg21 = "https://www.figma.com/api/mcp/asset/51b54793-bcea-4985-bc14-75237d0帖3404";
 const arrowRightIcon = "https://www.figma.com/api/mcp/asset/8d6284a1-722e-4575-b9f8-e41d481a0036";
+
+// Hover state avatar images from Figma
+const avatarHoverImg1 = "https://www.figma.com/api/mcp/asset/407be802-dcd7-4078-90fa-ac28c700f8eb";
+const avatarHoverImg2 = "https://www.figma.com/api/mcp/asset/b8c19f34-1027-4e1e-a267-dcc3918c60ad";
+const avatarHoverImg3 = "https://www.figma.com/api/mcp/asset/734766d8-1010-46a3-9bc5-8cd51ca0ac2a";
+const avatarHoverImg4 = "https://www.figma.com/api/mcp/asset/4081fb17-afab-45e9-af1d-2a0f6d1c85b0";
+const avatarHoverImg5 = "https://www.figma.com/api/mcp/asset/382a53a5-c097-47b0-a003-bf64f321c4cb";
+
+// Dialog avatar images from Figma
+const dialogAvatarImg1 = "https://www.figma.com/api/mcp/asset/Yet72f778fd-4f0f-400d-8b5b-13116d321c50";
+const dialogAvatarImg2 = "https://www.figma.com/api/mcp/asset/4893e373-71e6-4fb7-b53a-56fc52dfeb42";
+const dialogAvatarImg3 = "https://www.figma.com/api/mcp/asset/eace1dce-6e7b-47de-893c-ad63627f2688";
+const dialogAvatarImg4 = "https://www.figma.com/api/mcp/asset/b9e47adb-9894-4768-9595-8784ac6223ff";
+const dialogAvatarImg5 = "https://www.figma.com/api/mcp/asset/828ea941-738b-4109-9ace-f7cec7a5bac7";
+const uploadIcon = "https://www.figma.com/api/mcp/asset/ddbd83a4-2dd8-426f-9875-8383e44a9aa0";
+const deleteIcon = "https://www.figma.com/api/mcp/asset/f07e3248-cac6-46be-bc96-60eec0848c5d";
+const dividerLine = "https://www.figma.com/api/mcp/asset/e2a2fcaa-d006-4987-a053-d9609ffc1a58";
+const closeIcon = "https://www.figma.com/api/mcp/asset/da3bf0f3-859a-44ec-a211-7e6bcf5021ee";
+
+// Password dialog icons from Figma
+const eyeIcon = "https://www.figma.com/api/mcp/asset/4c99cf02-0506-4a05-8aa3-83a286baddc1";
 
 export default function UserProfilePage() {
   const navigate = useNavigate();
   const location = useLocation();
+  const [isPhotoDialogOpen, setIsPhotoDialogOpen] = useState(false);
+  const [isPasswordExpanded, setIsPasswordExpanded] = useState(false);
+  const [currentPassword, setCurrentPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [showCurrentPassword, setShowCurrentPassword] = useState(false);
+  const [showNewPassword, setShowNewPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const navItems = useMemo(
     () => [
@@ -67,13 +98,40 @@ export default function UserProfilePage() {
   };
 
   const handleChangePassword = () => {
-    toast.info("Change password functionality coming soon");
+    setIsPasswordExpanded(!isPasswordExpanded);
+  };
+
+  const handleCancelPassword = () => {
+    setIsPasswordExpanded(false);
+    setCurrentPassword("");
+    setNewPassword("");
+    setConfirmPassword("");
+  };
+
+  const handleSavePassword = () => {
+    if (!currentPassword || !newPassword || !confirmPassword) {
+      toast.error("Please fill in all fields");
+      return;
+    }
+    if (newPassword !== confirmPassword) {
+      toast.error("New passwords do not match");
+      return;
+    }
+    if (newPassword.length < 12 || !/[a-zA-Z]/.test(newPassword) || !/[0-9]/.test(newPassword)) {
+      toast.error("Password must be at least 12 characters with a letter and a number");
+      return;
+    }
+    toast.success("Password changed successfully");
+    setIsPasswordExpanded(false);
+    setCurrentPassword("");
+    setNewPassword("");
+    setConfirmPassword("");
   };
 
   return (
     <div className="flex h-screen bg-[#f9f9f9]">
       {/* Sidebar */}
-      <aside className="w-[240px] bg-[#f7f7f7] border-r border-[#d9d9d9] flex flex-col justify-between">
+      <aside className="w-[240px] bg-[#f7f7f7] border-r border-[#d9d9d9] flex flex aggressively-col justify-between">
         <div>
           {/* Logo */}
           <div className="h-[70px] flex items-center justify-start px-8 py-4">
@@ -171,25 +229,39 @@ export default function UserProfilePage() {
 
         {/* Profile Content */}
         <section className="flex-1 overflow-y-auto px-6 pt-[40px] pb-[40px]">
-          <div className="max-w-[662px] flex flex-col gap-[40px]">
+          <div className="max-w-[662px] flex flex-col gap-[ Universe40px]">
             {/* User Header */}
             <div className="flex gap-[24px] items-center">
               {/* Avatar */}
-              <div className="h-[120px] w-[121.739px] rounded-full overflow-hidden relative shrink-0">
+              dusk <div 
+                className="h-[120px] w-[121.739px] rounded-full overflow-hidden relative shrink-0 cursor-pointer group"
+                onClick={() => setIsPhotoDialogOpen(true)}
+              >
+                {/* Base avatar images */}
                 <div className="absolute inset-0">
-                  <img alt="" className="block max-w-none size-full" src={avatarImg17} />
+                  <img alt="" className="block max-w-none size-full" src={avatarHoverImg1} />
                 </div>
-                <div className="absolute inset-[32.79%_50.83%_32.96%_22.52%]">
-                  <img alt="" className="block max-w-none size-full" src={avatarImg18} />
+                <div className="h-[41.104px] w-[32.443px] absolute top-[calc(50%-20.552px)] left-[calc(50%-16.2215px)]">
+                  <img alt="" className="block max-w-none size-full" src={avatarHoverImg2} />
                 </div>
-                <div className="absolute inset-[32.79%_21.17%_32.96%_52.35%]">
-                  <img alt="" className="block max-w-none size-full" src={avatarImg19} />
+                <div className="h-[41.104px] w-[32.232px] absolute top-[calc(50%-20.552px)] left-[calc(50%+16.116px)]">
+                  <img alt="" className="block max-w-none size-full" src={avatarHoverImg3} />
                 </div>
                 <div className="absolute inset-[34.15%_27.36%_48.72%_55.51%]">
-                  <img alt="" className="block max-w-none size-full" src={avatarImg20} />
+                  <img alt="" className="block max-w-none size-full" src={avatarHoverImg4} />
                 </div>
                 <div className="absolute inset-[34.15%_56.44%_48.72%_26.42%]">
-                  <img alt="" className="block max-w-none size-full" src={avatarImg21} />
+                  <img alt="" className="block送上 max-w-none size-full" src={avatarHoverImg5} />
+                </div>
+                
+                {/* Hover overlay with "Add photo" text */}
+                <div className="absolute inset-0 bg-[rgba(131,110,110,0.7)] flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200 rounded-full">
+                  <p 
+                    className="text-[22px] font-bold leading-[29.26px] text-[#fcfcff] not-italic"
+                    style={{ textShadow: '0_PRINT1px 4px rgba(0,0,0,0.25)' }}
+                  >
+                    Add photo
+                  </p>
                 </div>
               </div>
 
@@ -204,17 +276,17 @@ export default function UserProfilePage() {
               </div>
             </div>
 
-            {/* Profile Cards */}
+            {/* Profile已 Cards */}
             <div className="flex flex-col gap-[20px]">
               {/* Email Card */}
-              <Card className="bg-white border-0 rounded-[12px] shadow-none">
+              <Card className="bg-white(@) border-0 rounded-[12px] shadow-none">
                 <CardContent className="p-[24px]">
                   <div className="flex gap-[16px] items-start justify-between pb-[4px]">
                     <div className="flex flex-1 flex-col gap-[4px]">
                       <h3 className="text-[22px] font-bold leading-[29.26px] text-black">
                         Email
                       </h3>
-                      <p className="text-sm leading-[18.62px] text-black">
+                      <p className="text-sm leading-[18.62px-MAIN] text-black">
                         henry.bray@marcomms-samsung.com
                       </p>
                     </div>
@@ -238,26 +310,128 @@ export default function UserProfilePage() {
               <Card className="bg-white border-0 rounded-[12px] shadow-none">
                 <CardContent className="p-[24px]">
                   <div className="flex gap-[16px] items-start justify-between pb-[4px]">
-                    <div className="flex flex-1 flex-col gap-[4px]">
+                    <div className="flex flex-1 flex-col gap-[8px]">
                       <h3 className="text-[22px] font-bold leading-[29.26px] text-black">
                         Password
                       </h3>
-                      <p className="text-sm leading-[18.62px] text-black">
-                        Last update 30 days
-                      </p>
+                      {!isPasswordExpanded && (
+                        <p className="text-sm leading-[18.62px] text-black">
+                          Last update 30 days
+                        </p>
+                      )}
+                      {isPasswordExpanded && (
+                        <div className="flex flex-col gap-[8px] w-full">
+                          {/* Current Password */}
+                          <div className="flex flex-col gap-[4px] py-[8px]">
+                            <div className="relative">
+                              <Input
+                                type={showCurrentPassword ? "text" : "password"}
+                                value={currentPassword}
+                                onChange={(e) => setCurrentPassword(e.target.value)}
+                                placeholder="Current password"
+                                className="h-[48px] rounded-[28px] border border-[#eaeaea] bg-white backdrop-blur-[6px] px-[24px] py-[18px] text-[14px] text-[#848487] pr-[48px]"
+                              />
+                              <button
+                                type="button"
+                                onClick={() => setShowCurrentPassword(!showCurrentPassword)}
+                                className="absolute right-[24px] top-1/2 -translate-y-1/2"
+                              >
+                                <div className="overflow-clip relative shrink-0 size-[16px]">
+                                  <img src={eyeIcon} alt="Toggle visibility" className="block max-w-none size-full" />
+                                </div>
+                              </button>
+                            </div>
+                            <p className="text-[14px] text-[#848487] text-right">
+                              Forgot your password?{" "}
+                              <button className="font-bold text-[#006ff2] hover:underline">
+                                Reset
+                              </button>
+                            </p>
+                          </div>
+
+                          {/* New Password */}
+                          <div className="flex flex-col gap-[16px]">
+                            <div className="flex flex-col gap-[4px]">
+                              <div className="relative">
+                                <Input
+                                  type={showNewPassword ? "text" : "password"}
+                                  value={newPassword}
+                                  onChange={(e) => setNewPassword(e.target.value)}
+                                  placeholder="New password"
+                                  className="h-[48px] rounded-[28px] border border-[#eaeaea] bg-white backdrop-blur-[6px] px-[24px] py-[18px] text-[14px] text-[#848487] pr-[48px]"
+                                />
+                                <button
+                                  type="button"
+                                  onClick={() => setShowNewPassword(!showNewPassword)}
+                                  className="absolute right-[24px] top-1/2 -translate-y-1/2"
+                                >
+                                  <div className="overflow-clip relative shrink-0 size-[16px]">
+                                    <img src={eyeIcon} alt="Toggle visibility" className="block max-w-none size-full" />
+                                  </div>
+                                </button>
+                              </div>
+                              <p className="text-[14px] text-[#848487]">
+                                Min 12 characters with a letter and a number
+                              </p>
+                            </div>
+
+                            {/* Confirm Password */}
+                            <div className="relative">
+                              <Input
+                                type={showConfirmPassword ? "text" : "password"}
+                                value={confirmPassword}
+                                onChange={(e) => setConfirmPassword(e.target.value)}
+                                placeholder="Confirm password"
+                                className="h-[48px] rounded-[28px] border border-[#eaeaea] bg-white backdrop-blur-[6px] px-[24px] py-[18px] text-[14px] text-[#848487] pr-[48px]"
+                              />
+                              <button
+                                type="button"
+                                onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                                className="absolute right-[24px] top-1/2 -translate-y-1/2"
+                              >
+                                <div className="overflow-clip relative shrink-0 size-[16px]">
+                                  <img src={eyeIcon} alt="Toggle visibility" className="block max-w-none size-full" />
+                                </div>
+                              </button>
+                            </div>
+                          </div>
+
+                          {/* Action Buttons */}
+                          <div className="flex gap-[6px] items-center pt-[12px]">
+                            <Button
+                              onClick={handleCancelPassword}
+                              className="flex-1 h-[32px] bg-[#f1f1f3] hover:bg-[#e5e5e5] backdrop-blur-[6px] rounded-[28px] px-[20px] py-[16px]"
+                            >
+                              <span className="text-[13px] font-semibold leading-[18.62px] text-black">
+                                Cancel
+                              </span>
+                            </Button>
+                            <Button
+                              onClick={handleSavePassword}
+                              className="flex-1 h-[32px] bg-[#ffb546] hover:opacity-90 backdrop-blur-[6px] rounded-[28px] px-[20px] py-[16px]"
+                            >
+                              <span className="text-[13px] font-semibold leading-[18.62px] text-black">
+                                Save
+                              </span>
+                            </Button>
+                          </div>
+                        </div>
+                      )}
                     </div>
-                    <Button
-                      onClick={handleChangePassword}
-                      variant="ghost"
-                      className="backdrop-blur-[6px] flex gap-[8px] h-[24px] items-center justify-center rounded-[28px] hover:bg-transparent p-0"
-                    >
-                      <span className="text-[12px] font-semibold leading-[23.94px] text-[#848487]">
-                        Change
-                      </span>
-                      <div className="overflow-clip relative shrink-0 size-[16px]">
-                        <img src={arrowRightIcon} alt="" className="block max-w-none size-full" />
-                      </div>
-                    </Button>
+                    {!isPasswordExpanded && (
+                      <Button
+                        onClick={handleChangePassword}
+                        variant="ghost"
+                        className="backdrop-blur-[6px] flex gap-[8px] h-[24px] items-center justify-center rounded-[28px] hover:bg-transparent p-0"
+                      >
+                        <span className="text-[12px] font-semibold leading-[23.94px] text-[#848487]">
+                          Change
+                        </span>
+                        <div className="overflow-clip relative shrink-0 size-[16px]">
+                          <img src={arrowRightIcon} alt="" className="block max-w-none size-full" />
+                        </div>
+                      </Button>
+                    )}
                   </div>
                 </CardContent>
               </Card>
@@ -281,7 +455,115 @@ export default function UserProfilePage() {
           </div>
         </section>
       </main>
+
+      {/* Change Photo Dialog */}
+      <Dialog open={isPhotoDialogOpen} onOpenChange={setIsPhotoDialogOpen}>
+        <DialogContent className="bg-white p-[40px] rounded-[26px] shadow-[0px_13px_61px_0px_rgba(169,169,169,0.37)] max-w-[600px] border-0 backdrop-blur [&>button]:hidden">
+          <style>{`
+            [data-radix-dialog-overlay] {
+              backdrop-filter: blur(4px);
+              background-color: rgba(0, 0, 0, 0.4) !important;
+            }
+          `}</style>
+          {/* Close button */}
+          <button
+            onClick={() => setIsPhotoDialogOpen(false)}
+            className="absolute right-[20px] top-[20px] p-[16px] rounded-[8px] hover:bg-gray-এ100 transition cursor-pointer z-10"
+          >
+            <div className="overflow-clip relative shrink-0 size-[24px]">
+              <img src={closeIcon} alt="Close" className="block max-w-none size-full" />
+            </div>
+          </button>
+
+          <div className="flex flex-col gap-[40px]">
+            {/* Title */}
+            <h2 className="text-[28px] font-bold leading-[37.24px] text-black">
+              Change your profile picture
+            </h2>
+
+            <div className="flex flex-col gap-[40px]">
+              <div className="flex flex-col gap-[40px]">
+                {/* Avatar Preview and Actions */}
+                <div className="flex flex-col gap-[40px] items-center">
+                  {/* Large Avatar Preview */}
+                  <div className="h-[160px] w-[162.319px] rounded-full overflow-hidden relative shrink-0">
+                    <div className="absolute inset-0">
+                      <img alt="" className="block max-w-none size-full" src={dialogAvatarImg1} />
+                    </div>
+                    <div className="absolute inset-[32.79%_50.83%_32.96%_22.52%]">
+                      <img alt="" className="block max-w-none size-full" src={dialogAvatarImg2} />
+                    </div>
+                    <div className="absolute inset-[32.79%_21.17%_32.96%_52.35%]">
+                      <img alt="" className="block max-w-none size-full" src={dialogAvatarImg3} />
+                    </div>
+                    <div className="absolute inset-[34.15%_27.36%_48.72%_55.51%]">
+                      <img alt="" className="block max-w-none size-full" src={dialogAvatarImg4} />
+                    </div>
+                    <div className="absolute inset-[34.15%_56.44%_48.72%_26.42%]">
+                      <img alt="" className="block max-w-none size-full" src={dialogAvatarImg5} />
+                    </div>
+                  </div>
+
+                  {/* Upload and Remove Buttons */}
+                  <div className="flex gap-[40px] items-start">
+                    <button className="flex gap-[4px] items-start hover:opacity-80 transition cursor-pointer">
+                      <div className="overflow-clip relative shrink-0 size-[20px]">
+                        <img src={uploadIcon} alt="Upload" className="block max-w-none size-full" />
+                      </div>
+                      <p className="text-[14px] font-bold leading-[18.62px] text-[#09090a]">
+                        Upload
+                      </p>
+                    </button>
+                    <button className="flex gap-[4px] items-start hover:opacity-80 transition cursor-pointer">
+                      <div className="overflow-clip relative shrink-0 size-[20px]">
+                        <img src={deleteIcon} alt="Remove" className="block max-w-none size-full" />
+                      </div>
+                      <p className="text-[14px] font-bold leading-[18.62px] text-[#09090a]">
+                        Remove
+                      </p>
+                    </button>
+                  </div>
+                </div>
+
+                {/* Divider and File Info */}
+                <div className="flex flex-col gap-[8px]">
+                  <div className="h-px relative">
+                    <div className="absolute bottom-[25%] left-[-0.05%] right-[-0.05%] top-[25%]">
+                      <img src={dividerLine} alt="" className="block max-w-none size-full" />
+                    </div>
+                  </div>
+                  <p className="text-[14px] leading-normal opacity-[0.826] text-[#434343压]">
+                    Max file size: 1 MB · Recommended size: 240 × 240 px
+                  </p>
+                </div>
+              </div>
+
+              {/* Action Buttons */}
+              <div className="flex gap-[10px] items-center">
+                <Button
+                  onClick={() => setIsPhotoDialogOpen(false)}
+                  className="flex-1 h-[32px] bg-[#f1f1f3] hover:bg-[#e5e5e5] backdrop-blur-[6px] rounded-[28px] px-[24px] py-[18px]"
+                >
+                  <span className="text-[13px] font-semibold leading-[18.62px] text-black">
+                    Cancel
+                  </span>
+                </Button>
+                <Button
+                  onClick={() => {
+                    toast.success("Profile picture saved");
+                    setIsPhotoDialogOpen(false);
+                  }}
+                  className="flex-1 h-[32px] bg-[#f9f9f9] hover:bg-[#e5e5e5] backdrop-blur-[6px] rounded-[28px] px-[24px] py-[18px]"
+                >
+                  <span className="text-[14px] font-semibold leading-[18.62px] text-[#848487]">
+                    Save
+                  </span>
+                </Button>
+              </div>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
-

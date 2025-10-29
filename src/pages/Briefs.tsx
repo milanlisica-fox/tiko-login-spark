@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Home, FileText, Folder, BarChart2, LogOut, Bell, ChevronDown, ArrowRight, Calculator, Coins, X, Calendar as CalendarIcon, ArrowLeft, Plus, ChevronDown as ChevronDownIcon } from "lucide-react";
 import { toast } from "sonner";
@@ -8,7 +8,9 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { format } from "date-fns";
+import confetti from "canvas-confetti";
 
 // Reuse images from Dashboard for consistent visuals
 const logoImage = "https://www.figma.com/api/mcp/asset/e6ec2a32-b26b-4e3a-bd4a-4e803cad7b85";
@@ -450,12 +452,14 @@ function TemplateSelectionScreen({ onCancel, onCreateBrief }: { onCancel: () => 
 }
 
 function NewBriefForm({ onCancel, onNext }: { onCancel: () => void; onNext: () => void }) {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     projectTitle: "",
     dueDate: undefined as Date | undefined,
     projectLead: "",
     objective: "",
   });
+  const [showConfirmation, setShowConfirmation] = useState(false);
 
   const handleNext = () => {
     onNext();
@@ -464,6 +468,56 @@ function NewBriefForm({ onCancel, onNext }: { onCancel: () => void; onNext: () =
   const handleChange = (field: string, value: string | Date | undefined) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
   };
+
+  const handleGenerateBrief = () => {
+    console.log("Generate brief button clicked");
+    setShowConfirmation(true);
+    console.log("showConfirmation should be true");
+  };
+
+  const handleViewAllBriefs = () => {
+    setShowConfirmation(false);
+    onCancel();
+    navigate("/dashboard/briefs");
+  };
+
+  useEffect(() => {
+    if (showConfirmation) {
+      // Trigger confetti animation
+      const duration = 3000;
+      const animationEnd = Date.now() + duration;
+      const defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 9999 };
+
+      function randomInRange(min: number, max: number) {
+        return Math.random() * (max - min) + min;
+      }
+
+      const interval = setInterval(function() {
+        const timeLeft = animationEnd - Date.now();
+
+        if (timeLeft <= 0) {
+          return clearInterval(interval);
+        }
+
+        const particleCount = 50 * (timeLeft / duration);
+        confetti({
+          ...defaults,
+          particleCount,
+          origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 }
+        });
+        confetti({
+          ...defaults,
+          particleCount,
+          origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 }
+        });
+      }, 250);
+
+      // Cleanup function
+      return () => {
+        clearInterval(interval);
+      };
+    }
+  }, [showConfirmation]);
 
   return (
     <div className="flex gap-0 w-full">
@@ -621,13 +675,43 @@ function NewBriefForm({ onCancel, onNext }: { onCancel: () => void; onNext: () =
               <button className="px-4 py-[18px] bg-[#f9f9f9] backdrop-blur-sm rounded-[28px] flex items-center justify-center gap-2.5 hover:bg-[#e5e5e5] transition h-8">
                 <span className="text-[13px] font-semibold leading-[18.62px] text-[#848487]">Save draft</span>
               </button>
-              <button className="px-4 py-[18px] bg-[#f9f9f9] backdrop-blur-sm rounded-[28px] flex items-center justify-center gap-2.5 hover:bg-[#e5e5e5] transition h-8">
+              <button 
+                type="button"
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  handleGenerateBrief();
+                }}
+                className="px-4 py-[18px] bg-[#f9f9f9] backdrop-blur-sm rounded-[28px] flex items-center justify-center gap-2.5 hover:bg-[#e5e5e5] transition h-8"
+              >
                 <span className="text-[13px] font-semibold leading-[18.62px] text-[#848487]">Generate brief</span>
               </button>
             </div>
           </div>
         </div>
       </div>
+
+      {/* Confirmation Dialog */}
+      <Dialog open={showConfirmation} onOpenChange={setShowConfirmation}>
+        <DialogContent className="sm:max-w-md bg-white border border-[#e0e0e0] rounded-xl p-8 [&>button]:hidden z-[9999]">
+          <DialogHeader className="flex flex-col gap-4 items-center text-center">
+            <DialogTitle className="text-[32px] font-bold leading-[38.4px] text-black">
+              Brief successfully submitted!
+            </DialogTitle>
+            <DialogDescription className="text-sm leading-[18.62px] text-[#424242]">
+              Your brief status has been updated to Review. We will get back to you soon.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="flex justify-center pt-4">
+            <button
+              onClick={handleViewAllBriefs}
+              className="px-6 py-[18px] bg-[#ffb546] backdrop-blur-sm rounded-[28px] flex items-center justify-center gap-2.5 hover:opacity-90 transition"
+            >
+              <span className="text-sm font-semibold leading-[18.62px] text-black">View all briefs</span>
+            </button>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
