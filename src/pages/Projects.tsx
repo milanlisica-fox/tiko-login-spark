@@ -2,8 +2,7 @@ import { useMemo } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Home, FileText, Folder, BarChart2, LogOut, Bell, ChevronDown, ArrowRight, Coins, AlertTriangle } from "lucide-react";
 import { toast } from "sonner";
-import { Badge } from "@/components/ui/badge";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 
 // Figma image URLs
@@ -16,7 +15,7 @@ interface Project {
   name: string;
   team: string;
   progress: number;
-  status: "Complete" | "In progress" | "For review";
+  status: "low" | "medium" | "high";
   hasWarning?: boolean;
   owners: string[];
 }
@@ -55,7 +54,7 @@ export default function ProjectsPage() {
       name: "Fold Toolkit Q3 2025",
       team: "Digital team",
       progress: 34,
-      status: "In progress",
+      status: "medium",
       owners: ["AB", "CD"],
     },
     {
@@ -63,7 +62,7 @@ export default function ProjectsPage() {
       name: "Watch Radio Campaign Q3 2025",
       team: "Digital team",
       progress: 31,
-      status: "In progress",
+      status: "high",
       hasWarning: true,
       owners: ["EF", "GH"],
     },
@@ -72,7 +71,7 @@ export default function ProjectsPage() {
       name: "S Series OOH Campaign Q2 2025",
       team: "Marcomms",
       progress: 100,
-      status: "Complete",
+      status: "low",
       owners: ["IJ", "KL", "MN"],
     },
     {
@@ -80,7 +79,7 @@ export default function ProjectsPage() {
       name: "A Series Promotional Campaign Q3 2025",
       team: "Marcomms",
       progress: 84,
-      status: "In progress",
+      status: "medium",
       owners: ["OP", "QR", "ST"],
     },
     {
@@ -88,7 +87,7 @@ export default function ProjectsPage() {
       name: "Fold Toolkit Q3 2025",
       team: "Digital team",
       progress: 38,
-      status: "For review",
+      status: "high",
       owners: ["UV", "WX"],
     },
     {
@@ -96,7 +95,7 @@ export default function ProjectsPage() {
       name: "S Series OOH Campaign Q2 2025",
       team: "Marcomms",
       progress: 100,
-      status: "Complete",
+      status: "low",
       hasWarning: true,
       owners: ["YZ", "AA", "BB"],
     },
@@ -105,7 +104,7 @@ export default function ProjectsPage() {
       name: "A Series Promotional Campaign Q3 2025",
       team: "Marcomms",
       progress: 84,
-      status: "In progress",
+      status: "medium",
       owners: ["CC", "DD"],
     },
     {
@@ -113,7 +112,7 @@ export default function ProjectsPage() {
       name: "Watch Radio Campaign Q3 2025",
       team: "Digital team",
       progress: 31,
-      status: "In progress",
+      status: "medium",
       owners: ["EE", "FF"],
     },
     {
@@ -121,7 +120,7 @@ export default function ProjectsPage() {
       name: "Fold Toolkit Q3 2025",
       team: "Digital team",
       progress: 38,
-      status: "For review",
+      status: "high",
       owners: ["GG"],
     },
     {
@@ -129,7 +128,7 @@ export default function ProjectsPage() {
       name: "Fold Toolkit Q3 2025",
       team: "Digital team",
       progress: 34,
-      status: "In progress",
+      status: "medium",
       owners: ["HH", "II"],
     },
     {
@@ -137,7 +136,7 @@ export default function ProjectsPage() {
       name: "S Series OOH Campaign Q2 2025",
       team: "Marcomms",
       progress: 100,
-      status: "Complete",
+      status: "low",
       owners: ["JJ", "KK", "LL"],
     },
     {
@@ -145,29 +144,36 @@ export default function ProjectsPage() {
       name: "Fold Toolkit Q3 2025",
       team: "Digital team",
       progress: 38,
-      status: "For review",
+      status: "high",
       owners: ["MM"],
     },
   ];
 
   // Calculate stats
   const stats = useMemo(() => {
-    const complete = projects.filter((p) => p.status === "Complete").length;
-    const inProgress = projects.filter((p) => p.status === "In progress").length;
-    const forReview = projects.filter((p) => p.status === "For review").length;
-    return { complete, inProgress, forReview };
+    return { complete: 15, inProgress: 10, forReview: 3 };
   }, []);
 
-  const getStatusBadgeVariant = (status: Project["status"]) => {
+  const getStatusColor = (status: Project["status"]) => {
     switch (status) {
-      case "Complete":
-        return "default";
-      case "In progress":
-        return "secondary";
-      case "For review":
-        return "outline";
+      case "high":
+        return "#FF4337";
+      case "medium":
+        return "#8092DC";
+      case "low":
+        return "#0177C7";
       default:
-        return "default";
+        return "#0177C7";
+    }
+  };
+
+  const getProgressColor = (progress: number) => {
+    if (progress < 33) {
+      return "#FF4337";
+    } else if (progress >= 33 && progress <= 70) {
+      return "#FFB546";
+    } else {
+      return "#00C3B1";
     }
   };
 
@@ -266,31 +272,40 @@ export default function ProjectsPage() {
         </header>
 
         {/* Projects Content */}
-        <section className="flex-1 overflow-y-auto px-6 pt-[40px] pb-[40px]">
-          <div className="max-w-[1152px] mx-auto space-y-[30px]">
+        <section className="flex-1 overflow-y-auto pt-[40px] pb-[40px]">
+          <div className="w-[90%] mx-auto space-y-[30px]">
             {/* Header */}
-            <div className="flex flex-col gap-1">
-              <h1 className="text-[32px] font-bold leading-[38.4px] text-black">Work at a glance</h1>
-              <p className="text-base leading-[24px] text-black">
-                A clear view of your team's active projects and priorities.
-              </p>
+            <div className="flex items-start justify-between gap-4">
+              <div className="flex flex-col gap-1">
+                <h1 className="text-[32px] font-bold leading-[38.4px] text-black">Work at a glance</h1>
+                <p className="text-base leading-[24px] text-black">
+                  A clear view of your team's active projects and priorities.
+                </p>
+              </div>
+              <Button
+                variant="outline"
+                className="h-10 px-6 border border-[#d9d9d9] bg-white hover:bg-gray-50 gap-2"
+              >
+                <span className="text-sm font-normal leading-[24px] text-black">See all projects</span>
+                <ArrowRight size={20} className="text-black" />
+              </Button>
             </div>
 
             {/* Stats Cards */}
-            <div className="grid grid-cols-3 gap-0">
-              <div className="bg-white border-r border-[#ececec] rounded-tl-xl rounded-bl-xl p-[40px]">
+            <div className="grid grid-cols-3 gap-4 w-full">
+              <div className="bg-white rounded-[60px] h-[118px] p-[40px] flex flex-col justify-center">
                 <div className="flex flex-col gap-[24px]">
                   <h3 className="text-base leading-[24px] text-black font-normal">Complete</h3>
                   <p className="text-[46px] leading-[46px] font-medium text-black">{stats.complete}</p>
                 </div>
               </div>
-              <div className="bg-white border-r border-[#ececec] p-[40px]">
+              <div className="bg-white rounded-[60px] h-[118px] p-[40px] flex flex-col justify-center">
                 <div className="flex flex-col gap-[24px]">
                   <h3 className="text-base leading-[24px] text-black font-normal">In progress</h3>
                   <p className="text-[46px] leading-[46px] font-medium text-black">{stats.inProgress}</p>
                 </div>
               </div>
-              <div className="bg-white rounded-tr-xl rounded-br-xl p-[40px]">
+              <div className="bg-white rounded-[60px] h-[118px] p-[40px] flex flex-col justify-center">
                 <div className="flex flex-col gap-[24px]">
                   <h3 className="text-base leading-[24px] text-black font-normal">For review</h3>
                   <p className="text-[46px] leading-[46px] font-medium text-black">{stats.forReview}</p>
@@ -304,47 +319,72 @@ export default function ProjectsPage() {
                 {projects.map((project, index) => (
                   <div key={project.id}>
                     <div className="flex items-center py-[12px] px-[8px] gap-4">
-                      {/* Project Name */}
-                      <div className="flex items-center gap-2 min-w-[421px]">
+                      {/* Project Name - 35% */}
+                      <div className="flex items-center gap-2 w-[35%]">
                         <div className="flex flex-col gap-[4px]">
-                          <p className="text-sm font-normal leading-[19px] text-black">{project.name}</p>
+                          <p className={`text-sm leading-[19px] text-black ${project.hasWarning ? "font-bold" : "font-normal"}`}>
+                            {project.name}
+                          </p>
                           <p className="text-xs leading-[16px] text-[#646464]">{project.team}</p>
                         </div>
+                      </div>
+
+                      {/* Sign - Exclamation point in circle - 5% */}
+                      <div className="flex items-center justify-center w-[5%]">
                         {project.hasWarning && (
-                          <AlertTriangle size={18} className="text-amber-500 flex-shrink-0" />
+                          <div className="w-8 h-8 rounded-full bg-amber-100 flex items-center justify-center">
+                            <AlertTriangle size={16} className="text-amber-600" />
+                          </div>
                         )}
                       </div>
 
-                      {/* Owners */}
-                      <div className="flex items-center gap-2 min-w-[205px]">
+                      {/* Owners - 20% */}
+                      <div className="flex items-center justify-center gap-2 w-[20%]">
                         <div className="flex -space-x-2">
-                          {project.owners.map((owner, idx) => (
-                            <Avatar key={idx} className="w-6 h-6 border-2 border-white">
-                              <AvatarFallback className="text-xs bg-gradient-to-br from-blue-200 to-blue-300">
-                                {owner}
-                              </AvatarFallback>
-                            </Avatar>
-                          ))}
+                          {project.owners.map((owner, idx) => {
+                            // Generate a unique seed for each avatar based on owner and project
+                            const seed = `${owner}_${project.id}_${idx}`;
+                            return (
+                              <Avatar key={idx} className="w-6 h-6 border-2 border-white">
+                                <AvatarImage 
+                                  src={`https://api.dicebear.com/7.x/personas/png?seed=${seed}&size=64`} 
+                                  alt={owner}
+                                />
+                                <AvatarFallback className="text-xs bg-gradient-to-br from-blue-200 to-blue-300">
+                                  {owner}
+                                </AvatarFallback>
+                              </Avatar>
+                            );
+                          })}
                         </div>
                       </div>
 
-                      {/* Status Badge */}
-                      <div className="min-w-[158px]">
-                        <Badge
-                          variant={getStatusBadgeVariant(project.status)}
-                          className="text-xs font-normal px-2 py-1"
-                        >
-                          {project.status}
-                        </Badge>
+                      {/* Status - 10% */}
+                      <div className="w-[10%]">
+                        <div className="flex items-center gap-2">
+                          <div 
+                            className="w-2 h-2 rounded-full" 
+                            style={{ backgroundColor: getStatusColor(project.status) }}
+                          />
+                          <span 
+                            className="text-xs font-normal capitalize"
+                            style={{ color: getStatusColor(project.status) }}
+                          >
+                            {project.status}
+                          </span>
+                        </div>
                       </div>
 
-                      {/* Timeline/Progress */}
-                      <div className="flex-1 min-w-[272px]">
+                      {/* Timeline/Progress - 30% */}
+                      <div className="w-[30%]">
                         <div className="flex items-center gap-2">
                           <div className="relative h-2 flex-1 bg-[#f1f1f3] rounded-full overflow-hidden">
                             <div
-                              className="h-full bg-[#0177c7] rounded-full transition-all"
-                              style={{ width: `${project.progress}%` }}
+                              className="h-full rounded-full transition-all"
+                              style={{ 
+                                width: `${project.progress}%`,
+                                backgroundColor: getProgressColor(project.progress)
+                              }}
                             />
                           </div>
                         </div>
@@ -356,17 +396,6 @@ export default function ProjectsPage() {
                   </div>
                 ))}
               </div>
-            </div>
-
-            {/* See all projects button */}
-            <div className="flex justify-end">
-              <Button
-                variant="outline"
-                className="h-10 px-6 border border-[#d9d9d9] bg-white hover:bg-gray-50 gap-2"
-              >
-                <span className="text-sm font-normal leading-[24px] text-black">See all projects</span>
-                <ArrowRight size={20} className="text-black" />
-              </Button>
             </div>
           </div>
         </section>
