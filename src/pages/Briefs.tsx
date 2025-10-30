@@ -327,9 +327,9 @@ export default function BriefsPage() {
                 <div className="flex gap-2.5 items-center">
                   <button 
                     onClick={() => navigate("/dashboard/calculator")}
-                    className="w-[216px] bg-[#f1f1f3] backdrop-blur-sm rounded-[28px] flex items-center justify-center gap-[10px] px-[24px] py-[18px] hover:bg-[#e5e5e5] transition"
+                    className="w-[216px] bg-[#03b3e2] backdrop-blur-sm rounded-[28px] flex items-center justify-center gap-[10px] px-[24px] py-[18px] hover:opacity-90 transition"
                   >
-                    <Calculator size={16} />
+                    <Calculator size={16} className="text-black" />
                     <span className="text-base font-semibold leading-[23.94px] text-black whitespace-nowrap">Quick calculator</span>
                   </button>
                   <button 
@@ -579,9 +579,9 @@ function TemplateSelectionScreen({ onCancel, onCreateBrief }: { onCancel: () => 
         <div className="flex gap-2.5 items-center">
           <button 
             onClick={() => navigate("/dashboard/calculator")}
-            className="w-[224px] h-10 bg-[#f1f1f3] backdrop-blur-sm rounded-[28px] flex items-center justify-center gap-[10px] px-[24px] hover:bg-[#e5e5e5] transition"
+            className="w-[224px] h-10 bg-[#03b3e2] backdrop-blur-sm rounded-[28px] flex items-center justify-center gap-[10px] px-[24px] hover:opacity-90 transition"
           >
-            <Calculator size={16} />
+            <Calculator size={16} className="text-black" />
             <span className="text-base font-semibold leading-[23.94px] text-black whitespace-nowrap">Quick calculator</span>
           </button>
           <button 

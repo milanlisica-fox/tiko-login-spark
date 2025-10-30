@@ -226,21 +226,21 @@ export default function TikoDashboard() {
                   onClick={async (e) => {
                     const button = e.currentTarget;
 
-                    // Add orange color + bounce animation
-                    button.classList.add("animate-bounce-once", "bg-[#ffb546]");
+                    // Add bounce animation with brand color
+                    button.classList.add("animate-bounce-once", "bg-[#03b3e2]");
 
                     // Wait for animation to complete (~600ms)
                     await new Promise((resolve) => setTimeout(resolve, 600));
 
                     // Remove the animation so it resets next time
-                    button.classList.remove("animate-bounce-once", "bg-[#ffb546]");
+                    button.classList.remove("animate-bounce-once", "bg-[#03b3e2]");
 
                     // Navigate after animation
                     navigate("/dashboard/calculator");
                   }}
-                  className="w-[216px] bg-[#f1f1f3] backdrop-blur-sm rounded-[28px] flex items-center justify-center gap-[10px] px-[24px] py-[18px] hover:bg-[#e5e5e5] transition"
+                  className="w-[216px] bg-[#03b3e2] backdrop-blur-sm rounded-[28px] flex items-center justify-center gap-[10px] px-[24px] py-[18px] hover:opacity-90 transition"
                 >
-                  <Calculator size={16} />
+                  <Calculator size={16} className="text-black" />
                   <span className="text-base font-semibold leading-[23.94px] text-black whitespace-nowrap">
                     Quick calculator
                   </span>

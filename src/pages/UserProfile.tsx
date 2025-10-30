@@ -1,11 +1,10 @@
 import { useMemo, useRef, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { Home, FileText, Folder, BarChart2, LogOut, ArrowRight, User, Bell, Coins, ChevronDown, Upload, Trash2 } from "lucide-react";
+import { Home, FileText, Folder, BarChart2, LogOut, ArrowRight, User, Bell, Coins, ChevronDown } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { Dialog, DialogContent, DialogOverlay } from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
+import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { Popover, PopoverTrigger, PopoverContent } from "@/components/ui/popover";
 import HBAvatar from "@/components/common/HBAvatar";
 
@@ -56,20 +55,12 @@ const deleteIcon = "https://www.figma.com/api/mcp/asset/f07e3248-cac6-46be-bc96-
 const dividerLine = "https://www.figma.com/api/mcp/asset/e2a2fcaa-d006-4987-a053-d9609ffc1a58";
 const closeIcon = "https://www.figma.com/api/mcp/asset/da3bf0f3-859a-44ec-a211-7e6bcf5021ee";
 
-// Password dialog icons from Figma
-const eyeIcon = "https://www.figma.com/api/mcp/asset/4c99cf02-0506-4a05-8aa3-83a286baddc1";
+// Password section removed
 
 export default function UserProfilePage() {
   const navigate = useNavigate();
   const location = useLocation();
   const [isPhotoDialogOpen, setIsPhotoDialogOpen] = useState(false);
-  const [isPasswordExpanded, setIsPasswordExpanded] = useState(false);
-  const [currentPassword, setCurrentPassword] = useState("");
-  const [newPassword, setNewPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-  const [showCurrentPassword, setShowCurrentPassword] = useState(false);
-  const [showNewPassword, setShowNewPassword] = useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [avatarSrc, setAvatarSrc] = useState<string | undefined>(undefined);
   const [tempAvatarSrc, setTempAvatarSrc] = useState<string | undefined>(undefined);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
@@ -102,36 +93,7 @@ export default function UserProfilePage() {
     toast.info("Change email functionality coming soon");
   };
 
-  const handleChangePassword = () => {
-    setIsPasswordExpanded(!isPasswordExpanded);
-  };
-
-  const handleCancelPassword = () => {
-    setIsPasswordExpanded(false);
-    setCurrentPassword("");
-    setNewPassword("");
-    setConfirmPassword("");
-  };
-
-  const handleSavePassword = () => {
-    if (!currentPassword || !newPassword || !confirmPassword) {
-      toast.error("Please fill in all fields");
-      return;
-    }
-    if (newPassword !== confirmPassword) {
-      toast.error("New passwords do not match");
-      return;
-    }
-    if (newPassword.length < 12 || !/[a-zA-Z]/.test(newPassword) || !/[0-9]/.test(newPassword)) {
-      toast.error("Password must be at least 12 characters with a letter and a number");
-      return;
-    }
-    toast.success("Password changed successfully");
-    setIsPasswordExpanded(false);
-    setCurrentPassword("");
-    setNewPassword("");
-    setConfirmPassword("");
-  };
+  // Change password functionality removed
 
   return (
     <div className="flex h-screen bg-[#f9f9f9]">
@@ -361,135 +323,7 @@ export default function UserProfilePage() {
                 </CardContent>
               </Card>
 
-              {/* Password Card */}
-              <Card className="bg-white border-0 rounded-[12px] shadow-none">
-                <CardContent className="p-[24px]">
-                  <div className="flex gap-[16px] items-start justify-between pb-[4px]">
-                    <div className="flex flex-1 flex-col gap-[8px]">
-                      <h3 className="text-[22px] font-bold leading-[29.26px] text-black">
-                        Password
-                      </h3>
-                      {!isPasswordExpanded && (
-                        <p className="text-sm leading-[18.62px] text-black">
-                          Last update 30 days
-                        </p>
-                      )}
-                      {isPasswordExpanded && (
-                        <div className="flex flex-col gap-[8px] w-full">
-                          {/* Current Password */}
-                          <div className="flex flex-col gap-[4px] py-[8px]">
-                            <div className="relative">
-                              <Input
-                                type={showCurrentPassword ? "text" : "password"}
-                                value={currentPassword}
-                                onChange={(e) => setCurrentPassword(e.target.value)}
-                                placeholder="Current password"
-                                className="h-[48px] rounded-[28px] border border-[#eaeaea] bg-white backdrop-blur-[6px] px-[24px] py-[18px] text-[14px] text-[#848487] pr-[48px]"
-                              />
-                              <button
-                                type="button"
-                                onClick={() => setShowCurrentPassword(!showCurrentPassword)}
-                                className="absolute right-[24px] top-1/2 -translate-y-1/2"
-                              >
-                                <div className="overflow-clip relative shrink-0 size-[16px]">
-                                  <img src={eyeIcon} alt="Toggle visibility" className="block max-w-none size-full" />
-                                </div>
-                              </button>
-                            </div>
-                            <p className="text-[14px] text-[#848487] text-right">
-                              Forgot your password?{" "}
-                              <button className="font-bold text-[#006ff2] hover:underline">
-                                Reset
-                              </button>
-                            </p>
-                          </div>
-
-                          {/* New Password */}
-                          <div className="flex flex-col gap-[16px]">
-                            <div className="flex flex-col gap-[4px]">
-                              <div className="relative">
-                                <Input
-                                  type={showNewPassword ? "text" : "password"}
-                                  value={newPassword}
-                                  onChange={(e) => setNewPassword(e.target.value)}
-                                  placeholder="New password"
-                                  className="h-[48px] rounded-[28px] border border-[#eaeaea] bg-white backdrop-blur-[6px] px-[24px] py-[18px] text-[14px] text-[#848487] pr-[48px]"
-                                />
-                                <button
-                                  type="button"
-                                  onClick={() => setShowNewPassword(!showNewPassword)}
-                                  className="absolute right-[24px] top-1/2 -translate-y-1/2"
-                                >
-                                  <div className="overflow-clip relative shrink-0 size-[16px]">
-                                    <img src={eyeIcon} alt="Toggle visibility" className="block max-w-none size-full" />
-                                  </div>
-                                </button>
-                              </div>
-                              <p className="text-[14px] text-[#848487]">
-                                Min 12 characters with a letter and a number
-                              </p>
-                            </div>
-
-                            {/* Confirm Password */}
-                            <div className="relative">
-                              <Input
-                                type={showConfirmPassword ? "text" : "password"}
-                                value={confirmPassword}
-                                onChange={(e) => setConfirmPassword(e.target.value)}
-                                placeholder="Confirm password"
-                                className="h-[48px] rounded-[28px] border border-[#eaeaea] bg-white backdrop-blur-[6px] px-[24px] py-[18px] text-[14px] text-[#848487] pr-[48px]"
-                              />
-                              <button
-                                type="button"
-                                onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                                className="absolute right-[24px] top-1/2 -translate-y-1/2"
-                              >
-                                <div className="overflow-clip relative shrink-0 size-[16px]">
-                                  <img src={eyeIcon} alt="Toggle visibility" className="block max-w-none size-full" />
-                                </div>
-                              </button>
-                            </div>
-                          </div>
-
-                          {/* Action Buttons */}
-                          <div className="flex gap-[6px] items-center pt-[12px]">
-                            <Button
-                              onClick={handleCancelPassword}
-                              className="flex-1 h-[32px] bg-[#f1f1f3] hover:bg-[#e5e5e5] backdrop-blur-[6px] rounded-[28px] px-[20px] py-[16px]"
-                            >
-                              <span className="text-[13px] font-semibold leading-[18.62px] text-black">
-                                Cancel
-                              </span>
-                            </Button>
-                            <Button
-                              onClick={handleSavePassword}
-                              className="flex-1 h-[32px] bg-[#ffb546] hover:opacity-90 backdrop-blur-[6px] rounded-[28px] px-[20px] py-[16px]"
-                            >
-                              <span className="text-[13px] font-semibold leading-[18.62px] text-black">
-                                Save
-                              </span>
-                            </Button>
-                          </div>
-                        </div>
-                      )}
-                    </div>
-                    {!isPasswordExpanded && (
-                      <Button
-                        onClick={handleChangePassword}
-                        variant="ghost"
-                        className="backdrop-blur-[6px] flex gap-[8px] h-[24px] items-center justify-center rounded-[28px] hover:bg-transparent p-0"
-                      >
-                        <span className="text-[12px] font-semibold leading-[23.94px] text-[#848487]">
-                          Change
-                        </span>
-                        <div className="overflow-clip relative shrink-0 size-[16px]">
-                          <img src={arrowRightIcon} alt="" className="block max-w-none size-full" />
-                        </div>
-                      </Button>
-                    )}
-                  </div>
-                </CardContent>
-              </Card>
+              {/* Password section removed */}
 
               {/* Access Card */}
               <Card className="bg-white border-0 rounded-[12px] shadow-none">
