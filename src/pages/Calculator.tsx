@@ -475,9 +475,7 @@ export default function CalculatorPage() {
 
         {/* Decorative Background Elements */}
         <div className="absolute bottom-[-18px] right-[-17px] w-[433px] h-[184px] pointer-events-none overflow-hidden">
-          <img src={imgGroup} alt="" className="absolute bottom-0 right-0 opacity-20" />
-          <img src={imgGroup1} alt="" className="absolute top-1/2 right-0 opacity-20" />
-          <img src={imgGroup2} alt="" className="absolute top-0 right-0 opacity-20" />
+          <img src={imgGroup} alt="" className="of absolute bottom-0 right-0 opacity-70 h-[54px]" />
         </div>
       </main>
 
