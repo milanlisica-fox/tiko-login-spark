@@ -28,7 +28,6 @@ const Login = () => {
     }
 
     setIsLoading(true);
-    
     // Simulate login
     // triggerConfetti();
     triggerArrow();
@@ -36,8 +35,7 @@ const Login = () => {
       toast.success("Welcome back!");
       navigate("/dashboard");
       setIsLoading(false);
-    
-    }, 1500);
+    }, 1200);
   };
 
   const triggerArrow = () => {
