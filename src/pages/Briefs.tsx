@@ -454,7 +454,7 @@ export default function BriefsPage() {
                       ),
                     },
                   ].map((card, i) => (
-                    <div key={i} className="bg-white rounded-xl p-5 flex flex-col gap-3 border border-[#ececec]">
+                    <div key={i} className="bg-white rounded-xl p-5 flex flex-col gap-3 border border-[#ececec] h-full">
                       <div className="flex items-center justify-between">
                         <h3 className="text-sm font-bold leading-[18.62px] text-black">{card.title}</h3>
                         <div className="relative">
@@ -462,7 +462,12 @@ export default function BriefsPage() {
                           {card.notificationBadge}
                         </div>
                       </div>
-                      <p className="text-sm leading-[18.62px] text-[#646464]">{card.content}</p>
+                      <p
+                        className="text-sm leading-[18.62px] text-[#646464] min-h-[38px] overflow-hidden"
+                        style={{ display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical' }}
+                      >
+                        {card.content}
+                      </p>
                       <div className="flex items-center justify-between pt-1">
                         {card.statusBadge}
                         <div className="flex -space-x-2">
@@ -1585,12 +1590,17 @@ function AllBriefsSection() {
           const badgeStyle = getBadgeStyle(b.badge);
 
           return (
-            <div key={b.id} className="bg-white rounded-xl p-5 flex flex-col gap-3 border border-[#ececec]">
+            <div key={b.id} className="bg-white rounded-xl p-5 flex flex-col gap-3 border border-[#ececec] h-full">
               <div className="flex items-center justify-between">
                 <h3 className="text-sm font-bold leading-[18.62px] text-black">{b.title}</h3>
                 <div className="flex items-center">{b.icon}</div>
               </div>
-              <p className="text-sm leading-[18.62px] text-[#646464]">{b.desc}</p>
+              <p
+                className="text-sm leading-[18.62px] text-[#646464] min-h-[38px] overflow-hidden"
+                style={{ display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical' }}
+              >
+                {b.desc}
+              </p>
               <div className="flex items-center justify-between pt-1">
                 <span 
                   className="text-xs py-[2px] px-2 rounded-[12px] flex items-center justify-center"
