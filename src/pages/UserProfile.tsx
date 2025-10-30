@@ -6,12 +6,15 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { Popover, PopoverTrigger, PopoverContent } from "@/components/ui/popover";
+import DashboardLayout from "@/components/layout/DashboardLayout";
 import HBAvatar from "@/components/common/HBAvatar";
+import NotificationsPopover from "@/components/layout/NotificationsPopover";
+import { BRAND } from "@/constants/branding";
 
 // Figma image URLs
-const logoImage = "https://www.figma.com/api/mcp/asset/e6ec2a32-b26b-4e3a-bd4a-4e803cad7b85";
-const logoDot = "https://www.figma.com/api/mcp/asset/04d711ff-9aa1-4e99-ae1a-4fe72b6fa22c";
-const dividerImage = "https://www.figma.com/api/mcp/asset/ed109f8c-67ff-4f01-943f-65f17570f9e7";
+const logoImage = BRAND.logo;
+const logoDot = BRAND.logoDot;
+const dividerImage = BRAND.divider;
 
 // User profile images from Figma
 const avatarImg1 = "https://www.figma.com/api/mcp/asset/8f703c7e-bd75-44c9-bfd6-7bd2a9304ada";
@@ -65,15 +68,7 @@ export default function UserProfilePage() {
   const [tempAvatarSrc, setTempAvatarSrc] = useState<string | undefined>(undefined);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
-  const navItems = useMemo(
-    () => [
-      { name: "Central", icon: Home, path: "/dashboard" },
-      { name: "Briefs", icon: FileText, path: "/dashboard/briefs" },
-      { name: "Projects", icon: Folder, path: "/dashboard/projects" },
-      { name: "Tracker", icon: BarChart2, path: "/dashboard/tracker" },
-    ],
-    []
-  );
+  // nav items centralized via DashboardLayout
 
   const activeName = useMemo(() => {
     if (location.pathname.startsWith("/dashboard/briefs")) return "Briefs";
@@ -84,185 +79,47 @@ export default function UserProfilePage() {
     return "Central";
   }, [location.pathname]);
 
-  const handleLogout = () => {
-    toast.success("Logged out successfully");
-    navigate("/");
-  };
-
   const handleChangeEmail = () => {
     toast.info("Change email functionality coming soon");
   };
 
   // Change password functionality removed
 
+  const topbarRight = (
+    <>
+      <NotificationsPopover />
+      <div className="flex items-center gap-1">
+        <Coins size={20} className="text-[#848487]" />
+        <span className="text-xs leading-[15.96px] text-[#646464]">372 Tokens</span>
+      </div>
+      <button onClick={() => navigate("/dashboard/profile")} className="flex items-center gap-2 hover:opacity-80 transition cursor-pointer">
+        <HBAvatar size={40} src={avatarSrc} />
+        <div className="flex flex-col">
+          <p className="text-sm font-bold leading-[18.62px] text-[#646464]">Henry Bray</p>
+          <p className="text-xs leading-[15.96px] text-[#646464]">Marcomms</p>
+        </div>
+        <ChevronDown size={24} className="text-[#646464] rotate-90" />
+      </button>
+    </>
+  );
+
+  const titleNode = (
+    <div className="flex items-center gap-2">
+      <User size={20} className="text-black" />
+      <span className="text-sm leading-[19.6px] text-black">My account</span>
+    </div>
+  );
+
   return (
-    <div className="flex h-screen bg-[#f9f9f9]">
-      {/* Sidebar */}
-      <aside className="w-[240px] bg-[#f7f7f7] border-r border-[#d9d9d9] flex flex-col justify-between">
-        <div>
-          {/* Logo */}
-          <div className="h-[70px] flex items-center justify-start px-8 py-4">
-            <div className="main-logo flex items-center gap-1.5">
-              <img src={logoImage} alt="TIKO" className="h-8" />
-              <img src={logoDot} alt="" className="w-[14.6px] h-[14.6px]" />
-            </div>
-          </div>
-
-          {/* Divider */}
-          <div className="h-px relative">
-            <img src={dividerImage} alt="" className="w-full h-full" />
-          </div>
-
-          {/* Navigation */}
-          <nav className="pt-8 px-4 flex flex-col gap-2">
-            {navItems.map((item) => {
-              const Icon = item.icon;
-              const isActive = activeName === item.name;
-              return (
-                <button
-                  key={item.name}
-                  onClick={() => navigate(item.path)}
-                  className={`w-full flex items-center gap-2 px-4 py-4 rounded-lg transition relative ${
-                    isActive ? "bg-white" : "bg-transparent hover:bg-white/50"
-                  }`}
-                >
-                  <Icon size={20} className={isActive ? "text-black" : "text-black"} />
-                  <span className={`text-sm leading-[19.6px] ${isActive ? "font-semibold" : "font-normal"} text-black`}>
-                    {item.name}
-                  </span>
-                </button>
-              );
-            })}
-          </nav>
-        </div>
-
-        {/* Logout */}
-        <div className="px-4 pb-8">
-          <button
-            onClick={handleLogout}
-            className="w-full flex items-center gap-2 px-4 py-4 rounded-lg transition hover:bg-white/50"
-          >
-            <LogOut size={20} className="text-black" />
-            <span className="text-sm leading-[19.6px] font-normal text-black">
-              Logout
-            </span>
-          </button>
-        </div>
-      </aside>
-
-      {/* Main content */}
-      <main className="flex-1 flex flex-col overflow-hidden">
-        {/* Top Bar */}
-        <header className="h-[70px] bg-[#f9f9f9] border-b border-[#e0e0e0] flex items-center justify-between px-4 relative">
-          {/* Breadcrumb */}
-          <div className="flex items-center gap-2 px-4 py-4 rounded-lg">
-            <User size={20} className="text-black" />
-            <span className="text-sm leading-[19.6px] text-black">My account</span>
-          </div>
-
-          {/* Right side */}
-          <div className="flex items-center gap-6 pr-[30px]">
-            {/* Notifications */}
-            <Popover>
-              <PopoverTrigger asChild>
-                <button className="flex items-center gap-2 relative cursor-pointer">
-                  <Bell size={24} className="text-[#848487]" />
-                  <div className="absolute -left-1 -top-1 min-w-[20px] h-5 bg-[#ff4337] border-2 border-[#f7f7f7] rounded-full flex items-center justify-center px-1">
-                    <span className="text-[10px] font-bold leading-[14px] text-white">3</span>
-                  </div>
-                </button>
-              </PopoverTrigger>
-              <PopoverContent 
-                align="end" 
-                sideOffset={10}
-                className="w-80 p-0 bg-white border border-[#e0e0e0] shadow-lg"
-              >
-                <div className="p-4 border-b border-[#e0e0e0]">
-                  <h3 className="text-base font-bold leading-[21.28px] text-black">Notifications</h3>
-                </div>
-                <div className="max-h-96 overflow-y-auto">
-                  {/* Mock notification items */}
-                  <div className="p-4 border-b border-[#f1f1f3] hover:bg-[#f9f9f9] cursor-pointer transition">
-                    <div className="flex items-start justify-between gap-2">
-                      <div className="flex-1">
-                        <p className="text-sm font-semibold leading-[18.62px] text-black mb-1">
-                          New brief submitted
-                        </p>
-                        <p className="text-xs leading-[15.96px] text-[#646464]">
-                          Sarah Johnson submitted a new brief for review
-                        </p>
-                        <p className="text-xs leading-[15.96px] text-[#848487] mt-1">
-                          2 hours ago
-                        </p>
-                      </div>
-                      <div className="w-2 h-2 bg-[#ff4337] rounded-full flex-shrink-0 mt-1" />
-                    </div>
-                  </div>
-                  <div className="p-4 border-b border-[#f1f1f3] hover:bg-[#f9f9f9] cursor-pointer transition">
-                    <div className="flex items-start justify-between gap-2">
-                      <div className="flex-1">
-                        <p className="text-sm font-semibold leading-[18.62px] text-black mb-1">
-                          Project milestone reached
-                        </p>
-                        <p className="text-xs leading-[15.96px] text-[#646464]">
-                          "Fold Toolkit Q3 2025" has reached 50% completion
-                        </p>
-                        <p className="text-xs leading-[15.96px] text-[#848487] mt-1">
-                          5 hours ago
-                        </p>
-                      </div>
-                      <div className="w-2 h-2 bg-[#ff4337] rounded-full flex-shrink-0 mt-1" />
-                    </div>
-                  </div>
-                  <div className="p-4 border-b border-[#f1f1f3] hover:bg-[#f9f9f9] cursor-pointer transition">
-                    <div className="flex items-start justify-between gap-2">
-                      <div className="flex-1">
-                        <p className="text-sm font-semibold leading-[18.62px] text-black mb-1">
-                          Brief approved
-                        </p>
-                        <p className="text-xs leading-[15.96px] text-[#646464]">
-                          Your brief "S Series OOH Campaign" has been approved
-                        </p>
-                        <p className="text-xs leading-[15.96px] text-[#848487] mt-1">
-                          1 day ago
-                        </p>
-                      </div>
-                      <div className="w-2 h-2 bg-[#ff4337] rounded-full flex-shrink-0 mt-1" />
-                    </div>
-                  </div>
-                </div>
-                <div className="p-3 border-t border-[#e0e0e0]">
-                  <button className="w-full text-xs font-semibold leading-[15.96px] text-[#646464] hover:text-black transition">
-                    View all notifications
-                  </button>
-                </div>
-              </PopoverContent>
-            </Popover>
-
-            {/* Tokens */}
-            <div className="flex items-center gap-1">
-              <Coins size={20} className="text-[#848487]" />
-              <span className="text-xs leading-[15.96px] text-[#646464]">372 Tokens</span>
-            </div>
-
-            {/* User Profile */}
-              <button
-              onClick={() => navigate("/dashboard/profile")}
-              className="flex items-center gap-2 hover:opacity-80 transition cursor-pointer"
-            >
-              <HBAvatar size={40} src={avatarSrc} />
-              <div className="flex flex-col">
-                <p className="text-sm font-bold leading-[18.62px] text-[#646464]">Henry Bray</p>
-                <p className="text-xs leading-[15.96px] text-[#646464]">Marcomms</p>
-              </div>
-              <ChevronDown size={24} className="text-[#646464] rotate-90" />
-            </button>
-          </div>
-        </header>
-
-        {/* Profile Content */}
-        <section className="flex-1 overflow-y-auto px-6 pt-[40px] pb-[40px]">
-          <div className="max-w-[662px] flex flex-col gap-[40px]">
+    <DashboardLayout
+      title={titleNode}
+      logoSrc={logoImage}
+      logoDotSrc={logoDot}
+      dividerSrc={dividerImage}
+      TopbarRight={topbarRight}
+    >
+      <div className="px-6 pt-[40px] pb-[40px]">
+        <div className="max-w-[662px] flex flex-col gap-[40px]">
             {/* User Header */}
             <div className="flex gap-[24px] items-center">
               {/* Avatar */}
@@ -342,9 +199,7 @@ export default function UserProfilePage() {
               </Card>
             </div>
           </div>
-        </section>
-      </main>
-
+        
       {/* Change Photo Dialog */}
       <Dialog open={isPhotoDialogOpen} onOpenChange={setIsPhotoDialogOpen}>
         <DialogContent className="bg-white p-[40px] rounded-[26px] shadow-[0px_13px_61px_0px_rgba(169,169,169,0.37)] max-w-[600px] border-0 backdrop-blur [&>button]:hidden">
@@ -473,6 +328,7 @@ export default function UserProfilePage() {
           </div>
         </DialogContent>
       </Dialog>
-    </div>
+      </div>
+    </DashboardLayout>
   );
 }

@@ -15,25 +15,20 @@ import firstPlaceMedalImg from "@/assets/images/first-place.png";
 import bullseyeImg from "@/assets/images/Bullseye.png";
 import shakingHandsImg from "@/assets/images/shaking hands.png";
 import boltImg from "@/assets/images/bolt.png";
+import DashboardLayout from "@/components/layout/DashboardLayout";
+import NotificationsPopover from "@/components/layout/NotificationsPopover";
+import { BRAND } from "@/constants/branding";
 
 // Figma image URLs
-const logoImage = "https://www.figma.com/api/mcp/asset/e6ec2a32-b26b-4e3a-bd4a-4e803cad7b85";
-const logoDot = "https://www.figma.com/api/mcp/asset/04d711ff-9aa1-4e99-ae1a-4fe72b6fa22c";
-const dividerImage = "https://www.figma.com/api/mcp/asset/ed109f8c-67ff-4f01-943f-65f17570f9e7";
+const logoImage = BRAND.logo;
+const logoDot = BRAND.logoDot;
+const dividerImage = BRAND.divider;
 
 export default function TrackerPage() {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const navItems = useMemo(
-    () => [
-      { name: "Central", icon: Home, path: "/dashboard" },
-      { name: "Briefs", icon: FileText, path: "/dashboard/briefs" },
-      { name: "Projects", icon: Folder, path: "/dashboard/projects" },
-      { name: "Tracker", icon: BarChart2, path: "/dashboard/tracker" },
-    ],
-    []
-  );
+  // nav items centralized via DashboardLayout
 
   const activeName = useMemo(() => {
     if (location.pathname.startsWith("/dashboard/briefs")) return "Briefs";
@@ -42,11 +37,6 @@ export default function TrackerPage() {
     if (location.pathname.startsWith("/dashboard/tracker")) return "Tracker";
     return "Central";
   }, [location.pathname]);
-
-  const handleLogout = () => {
-    toast.success("Logged out successfully");
-    navigate("/");
-  };
 
   // Mock data for teams leaderboard
   const teamsData = [
@@ -125,427 +115,156 @@ export default function TrackerPage() {
     },
   };
 
-  return (
-    <div className="flex h-screen bg-[#f9f9f9]">
-      {/* Sidebar */}
-      <aside className="w-[240px] bg-[#f7f7f7] border-r border-[#d9d9d9] flex flex-col justify-between">
-        <div>
-          {/* Logo */}
-          <div className="h-[70px] flex items-center justify-start px-8 py-4">
-            <div className="main-logo flex items-center gap-1.5">
-              <img src={logoImage} alt="TIKO" className="h-8" />
-              <img src={logoDot} alt="" className="w-[14.6px] h-[14.6px]" />
-            </div>
-          </div>
-
-          {/* Divider */}
-          <div className="h-px relative">
-            <img src={dividerImage} alt="" className="w-full h-full" />
-          </div>
-
-          {/* Navigation */}
-          <nav className="pt-8 px-4 flex flex-col gap-2">
-            {navItems.map((item) => {
-              const Icon = item.icon;
-              const isActive = activeName === item.name;
-              return (
-                <button
-                  key={item.name}
-                  onClick={() => navigate(item.path)}
-                  className={`w-full flex items-center gap-2 px-4 py-4 rounded-lg transition relative ${
-                    isActive ? "bg-white" : "bg-transparent hover:bg-white/50"
-                  }`}
-                >
-                  <Icon size={20} className={isActive ? "text-black" : "text-black"} />
-                  <span className={`text-sm leading-[19.6px] ${isActive ? "font-semibold" : "font-normal"} text-black`}>
-                    {item.name}
-                  </span>
-                </button>
-              );
-            })}
-          </nav>
+  const topbarRight = (
+    <>
+      <NotificationsPopover />
+      <div className="flex items-center gap-1">
+        <Coins size={20} className="text-[#848487]" />
+        <span className="text-xs leading-[15.96px] text-[#646464]">372 Tokens</span>
+      </div>
+      <button onClick={() => navigate("/dashboard/profile")} className="flex items-center gap-2 hover:opacity-80 transition cursor-pointer">
+        <HBAvatar size={40} />
+        <div className="flex flex-col">
+          <p className="text-sm font-bold leading-[18.62px] text-[#646464]">Henry Bray</p>
+          <p className="text-xs leading-[15.96px] text-[#646464]">Marcomms</p>
         </div>
+        <ChevronDown size={24} className="text-[#646464] rotate-90" />
+      </button>
+    </>
+  );
 
-        {/* Logout */}
-        <div className="px-4 pb-8">
-          <button 
-            onClick={handleLogout}
-            className="w-full flex items-center gap-2 px-4 py-4 rounded-lg transition hover:bg-white/50"
-          >
-            <LogOut size={20} className="text-black" />
-            <span className="text-sm leading-[19.6px] font-normal text-black">
-              Logout
-            </span>
-          </button>
-        </div>
-      </aside>
-
-      {/* Main content */}
-      <main className="flex-1 flex flex-col">
-        {/* Top Bar */}
-        <header className="h-[70px] bg-[#f9f9f9] border-b border-[#e0e0e0] flex items-center justify-between px-4 relative">
-          {/* Breadcrumb */}
-          <div className="flex items-center gap-2 px-4 py-4 rounded-lg">
-            <BarChart2 size={20} className="text-black" />
-            <span className="text-sm leading-[19.6px] text-black">{activeName}</span>
-          </div>
-
-          {/* Right side */}
-          <div className="flex items-center gap-6 pr-[30px]">
-            {/* Notifications */}
-            <Popover>
-              <PopoverTrigger asChild>
-                <button className="flex items-center gap-2 relative cursor-pointer">
-                  <Bell size={24} className="text-[#848487]" />
-                  <div className="absolute -left-1 -top-1 min-w-[20px] h-5 bg-[#ff4337] border-2 border-[#f7f7f7] rounded-full flex items-center justify-center px-1">
-                    <span className="text-[10px] font-bold leading-[14px] text-white">3</span>
-                  </div>
-                </button>
-              </PopoverTrigger>
-              <PopoverContent 
-                align="end" 
-                sideOffset={10}
-                className="w-80 p-0 bg-white border border-[#e0e0e0] shadow-lg"
-              >
-                <div className="p-4 border-b border-[#e0e0e0]">
-                  <h3 className="text-base font-bold leading-[21.28px] text-black">Notifications</h3>
-                </div>
-                <div className="max-h-96 overflow-y-auto">
-                  {/* Mock notification items */}
-                  <div className="p-4 border-b border-[#f1f1f3] hover:bg-[#f9f9f9] cursor-pointer transition">
-                    <div className="flex items-start justify-between gap-2">
-                      <div className="flex-1">
-                        <p className="text-sm font-semibold leading-[18.62px] text-black mb-1">
-                          New brief submitted
-                        </p>
-                        <p className="text-xs leading-[15.96px] text-[#646464]">
-                          Sarah Johnson submitted a new brief for review
-                        </p>
-                        <p className="text-xs leading-[15.96px] text-[#848487] mt-1">
-                          2 hours ago
-                        </p>
-                      </div>
-                      <div className="w-2 h-2 bg-[#ff4337] rounded-full flex-shrink-0 mt-1" />
-                    </div>
-                  </div>
-                  <div className="p-4 border-b border-[#f1f1f3] hover:bg-[#f9f9f9] cursor-pointer transition">
-                    <div className="flex items-start justify-between gap-2">
-                      <div className="flex-1">
-                        <p className="text-sm font-semibold leading-[18.62px] text-black mb-1">
-                          Project milestone reached
-                        </p>
-                        <p className="text-xs leading-[15.96px] text-[#646464]">
-                          "Fold Toolkit Q3 2025" has reached 50% completion
-                        </p>
-                        <p className="text-xs leading-[15.96px] text-[#848487] mt-1">
-                          5 hours ago
-                        </p>
-                      </div>
-                      <div className="w-2 h-2 bg-[#ff4337] rounded-full flex-shrink-0 mt-1" />
-                    </div>
-                  </div>
-                  <div className="p-4 border-b border-[#f1f1f3] hover:bg-[#f9f9f9] cursor-pointer transition">
-                    <div className="flex items-start justify-between gap-2">
-                      <div className="flex-1">
-                        <p className="text-sm font-semibold leading-[18.62px] text-black mb-1">
-                          Brief approved
-                        </p>
-                        <p className="text-xs leading-[15.96px] text-[#646464]">
-                          Your brief "S Series OOH Campaign" has been approved
-                        </p>
-                        <p className="text-xs leading-[15.96px] text-[#848487] mt-1">
-                          1 day ago
-                        </p>
-                      </div>
-                      <div className="w-2 h-2 bg-[#ff4337] rounded-full flex-shrink-0 mt-1" />
-                    </div>
-                  </div>
-                </div>
-                <div className="p-3 border-t border-[#e0e0e0]">
-                  <button className="w-full text-xs font-semibold leading-[15.96px] text-[#646464] hover:text-black transition">
-                    View all notifications
-                  </button>
-                </div>
-              </PopoverContent>
-            </Popover>
-
-            {/* Tokens */}
-            <div className="flex items-center gap-1">
-              <Coins size={20} className="text-[#848487]" />
-              <span className="text-xs leading-[15.96px] text-[#646464]">372 Tokens</span>
-            </div>
-
-            {/* User Profile */}
-            <button
-              onClick={() => navigate("/dashboard/profile")}
-              className="flex items-center gap-2 hover:opacity-80 transition cursor-pointer"
-            >
-              <HBAvatar size={40} />
-              <div className="flex flex-col">
-                <p className="text-sm font-bold leading-[18.62px] text-[#646464]">Henry Bray</p>
-                <p className="text-xs leading-[15.96px] text-[#646464]">Marcomms</p>
-              </div>
-              <ChevronDown size={24} className="text-[#646464] rotate-90" />
-            </button>
-          </div>
-        </header>
-
-        {/* Tracker Content */}
-        <section className="flex-1 overflow-y-auto pt-[40px] pb-[40px]">
-          <div className="w-[90%] mx-auto space-y-10">
-            {/* Header */}
-            <div className="flex items-center justify-between">
-              <div className="flex flex-col gap-1">
-                <h1 className="text-[32px] font-bold leading-[38.4px] text-black">
-                  Real-time insights to guide your spend
-                </h1>
-                <p className="text-lg leading-[23.94px] text-black">
-                  Stay on top of spend, progress, and priorities—all in one place.
-                </p>
-              </div>
-              <Button
-                variant="outline"
-                className="h-10 px-6 border border-[#d9d9d9] bg-white hover:bg-gray-50 text-black"
-              >
-                <span className="text-black">All insights</span>
-                <ChevronRight size={20} className="ml-2 text-black" />
-              </Button>
-            </div>
-
-            {/* Teams' Leaderboard */}
-            <div className="space-y-4">
-              <h2 className="text-[22px] font-bold leading-[29.26px] text-black">Teams' Leaderboard</h2>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-                {teamsData.map((team) => {
-                  return (
-                  <Card key={team.id} className="border border-[#ececec] bg-white relative">
-                    {team.isMyTeam && (
-                      <div className="absolute top-4 right-4">
-                        <Badge variant="secondary" className="bg-[#f1f1f3] text-black border-none text-xs">
-                          My team
-                        </Badge>
-                      </div>
-                    )}
-                    <CardHeader className="pb-3 pt-6">
-                      <div className="flex flex-col items-start gap-2">
-                        {(team as any).isEmoji ? (
-                          <span style={{ width: '22px', height: '30px', display: 'inline-block', fontSize: '30px', lineHeight: '30px' }}>{team.icon}</span>
-                        ) : (
-                          <img src={team.icon} alt={`${team.title} medal`} className="w-[30px] h-[30px]" style={{ objectFit: 'contain' }} />
-                        )}
-                        <CardTitle className="text-black font-bold text-[18px] leading-[23.94px]" style={{ letterSpacing: '0px' }}>
-                          {team.title}
-                        </CardTitle>
-                      </div>
-                    </CardHeader>
-                    <CardContent className="space-y-4">
-                      {/* Overall Score */}
-                      <div className="space-y-2">
-                        <div className="flex items-center justify-between">
-                          <span className="text-sm leading-[18.62px] text-black">Overall score</span>
-                          <span 
-                            className="text-[32px] font-bold leading-[38.4px]"
-                            style={{ color: team.progressBarColor }}
-                          >
-                            {team.overallScore}%
-                          </span>
-                        </div>
-                        <div className="relative h-4 w-full bg-[#f1f1f3] rounded-full overflow-hidden">
-                          <div 
-                            className="h-full rounded-full transition-all"
-                            style={{ 
-                              width: `${team.overallScore}%`,
-                              backgroundColor: team.progressBarColor
-                            }}
-                          />
-                        </div>
-                      </div>
-
-                      {/* Brief Quality Score */}
-                      <div className="flex items-center justify-between">
-                        <span className="text-sm leading-[18.62px] text-black">Brief Quality Score</span>
-                        <span className="text-sm leading-[18.62px] text-black font-normal">{team.briefQualityScore}%</span>
-                      </div>
-
-                      {/* Token Efficiency */}
-                      <div className="flex items-center justify-between">
-                        <span className="text-sm leading-[18.62px] text-black">Token Efficiency</span>
-                        <span className="text-sm leading-[18.62px] text-black font-normal">{team.tokenEfficiency}%</span>
-                      </div>
-
-                      {/* Small Icons */}
-                      <div className="flex items-center gap-2 pt-2">
-                        <div className="w-8 h-8 rounded-full border border-[#03b3e2] overflow-hidden">
-                          <img src={boltImg} alt="Bolt" className="w-full h-full" style={{ objectFit: 'cover' }} />
-                        </div>
-                        <div className="w-8 h-8 rounded-full border border-[#ff9800] overflow-hidden">
-                          <img src={shakingHandsImg} alt="Shaking Hands" className="w-full h-full" style={{ objectFit: 'cover' }} />
-                        </div>
-                        <div className="w-8 h-8 rounded-full border border-[#e91e63] overflow-hidden">
-                          <img src={bullseyeImg} alt="Bullseye" className="w-full h-full" style={{ objectFit: 'cover' }} />
-                        </div>
-                      </div>
-                    </CardContent>
-                  </Card>
-                  );
-                })}
-              </div>
-            </div>
-
-            {/* Just-in-Time Insights */}
-            <div className="space-y-4">
-              <h2 className="text-[22px] font-bold leading-[29.26px] text-black">Just-in-Time Insights</h2>
-              
-              <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
-                {/* Brief Quality Score Chart */}
-                <Card className="lg:col-span-1 border border-[#ececec] bg-white">
-                  <CardHeader className="pb-3">
-                    <CardTitle className="text-base font-bold leading-[21.28px] text-black">Brief quality score - All categories</CardTitle>
-                  </CardHeader>
-                  <CardContent className="space-y-6">
-                    <ChartContainer config={qualityScoreConfig} className="h-[200px] w-full">
-                      <ResponsiveContainer width="100%" height="100%">
-                        <AreaChart data={qualityScoreData} margin={{ left: 10, right: 10, top: 10, bottom: 20 }}>
-                          <defs>
-                            <linearGradient id="qualityGradient" x1="0" y1="0" x2="0" y2="1">
-                              <stop offset="5%" stopColor="#0177c7" stopOpacity={0.3} />
-                              <stop offset="95%" stopColor="#0177c7" stopOpacity={0} />
-                            </linearGradient>
-                          </defs>
-                          <CartesianGrid strokeDasharray="3 3" stroke="#e0e0e0" vertical={true} />
-                          <XAxis 
-                            dataKey="quarter" 
-                            axisLine={false}
-                            tickLine={false}
-                            tick={{ fill: "#646464", fontSize: 12 }}
-                            label={{ value: "Quarter", position: "insideBottom", offset: -5, style: { fill: "#646464", fontSize: 12 } }}
-                          />
-                          <YAxis 
-                            axisLine={false}
-                            tickLine={false}
-                            domain={[70, 95]}
-                            ticks={[70, 75, 80, 85, 90, 95]}
-                            tick={{ fill: "#646464", fontSize: 12 }}
-                            label={{ value: "Quality score (%)", angle: -90, position: "insideLeft", offset: 15, style: { fill: "#646464", fontSize: 12, textAnchor: "middle" } }}
-                          />
-                          <ChartTooltip content={<ChartTooltipContent />} />
-                          <Area
-                            type="monotone"
-                            dataKey="score"
-                            stroke="#0177c7"
-                            strokeWidth={2}
-                            fill="url(#qualityGradient)"
-                          />
-                        </AreaChart>
-                      </ResponsiveContainer>
-                    </ChartContainer>
-
-                    {/* Insight Card */}
-                    <div className="flex flex-col" style={{ gap: '4px', paddingTop: '8px', paddingRight: '16px', paddingBottom: '8px', paddingLeft: '16px', borderRadius: '12px', backgroundColor: '#F1F1F380' }}>
-                      <p style={{ fontSize: '12px', lineHeight: '15.96px', fontWeight: 700, color: '#00C3B1' }}>
-                        Insight
-                      </p>
-                      <p style={{ fontSize: '12px', lineHeight: '18px', fontWeight: 400, color: '#000000' }}>
-                        Brief quality score has improved to 89% with consistent upward trend
-                      </p>
-                    </div>
-                  </CardContent>
-                </Card>
-
-                {/* Spend by Type Chart */}
-                <Card className="lg:col-span-2 border border-[#ececec] bg-white">
-                  <CardHeader className="pb-3">
-                    <CardTitle className="text-base font-bold leading-[21.28px] text-black">Token distribution</CardTitle>
-                  </CardHeader>
-                  <CardContent className="space-y-6">
-                    <ChartContainer config={spendConfig} className="h-[250px] w-full">
-                      <ResponsiveContainer width="100%" height="100%">
-                        <BarChart data={spendByTypeData} layout="vertical" margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
-                          <CartesianGrid strokeDasharray="3 3" stroke="#e0e0e0" horizontal={true} vertical={true} />
-                          <XAxis 
-                            type="number"
-                            axisLine={false}
-                            tickLine={false}
-                            domain={[0, 4500]}
-                            ticks={[0, 500, 1000, 1500, 2000, 2500, 3000, 3500, 4000, 4500]}
-                            tick={{ fill: "#646464", fontSize: 12 }}
-                          />
-                          <YAxis 
-                            type="category"
-                            dataKey="type"
-                            axisLine={false}
-                            tickLine={false}
-                            tick={{ fill: "#646464", fontSize: 12 }}
-                            width={80}
-                          />
-                          <ChartTooltip 
-                            cursor={false}
-                            content={({ active, payload }) => {
-                              if (!active || !payload || payload.length === 0) return null;
-                              
-                              const data = payload[0].payload;
-                              const total = data.total || (data.spent + data.committed + data.remaining);
-                              
-                              return (
-                                <div className="bg-white border border-gray-200 rounded-lg shadow-md min-w-[140px]" style={{ padding: '10px 12px' }}>
-                                  <div className="text-xs font-medium mb-3" style={{ color: '#646464', paddingTop: '2px' }}>{data.type}</div>
-                                  <div className="space-y-2">
-                                    {payload.map((entry, index) => {
-                                      const value = entry.value as number;
-                                      return (
-                                        <div key={index} className="flex items-center justify-between gap-3">
-                                          <div className="flex items-center gap-1.5">
-                                            <div 
-                                              className="w-2.5 h-2.5" 
-                                              style={{ 
-                                                backgroundColor: entry.color || entry.fill,
-                                                borderRadius: '2px'
-                                              }} 
-                                            />
-                                            <span className="text-xs" style={{ color: '#646464' }}>
-                                              {entry.name === 'spent' ? 'Tokens Spent' : entry.name === 'committed' ? 'Tokens Committed' : 'Tokens Remaining'}
-                                            </span>
-                                          </div>
-                                          <span className="text-xs font-medium" style={{ color: '#000000' }}>
-                                            {value.toLocaleString()}
-                                          </span>
-                                        </div>
-                                      );
-                                    })}
-                                  </div>
-                                </div>
-                              );
-                            }}
-                          />
-                          <Bar dataKey="remaining" stackId="a" fill="#0177c7" radius={[6, 6, 6, 6]} />
-                          <Bar dataKey="committed" stackId="a" fill="#03b3e2" radius={[6, 6, 6, 6]} />
-                          <Bar dataKey="spent" stackId="a" fill="#00c3b1" radius={[6, 6, 6, 6]} />
-                        </BarChart>
-                      </ResponsiveContainer>
-                    </ChartContainer>
-
-                    {/* Legend */}
-                    <div className="flex items-center justify-center gap-6 text-xs">
-                      <div className="flex items-center gap-2">
-                        <div className="w-3 h-3 bg-[#00c3b1]" style={{ borderRadius: '2px' }} />
-                        <span className="text-[#646464]">Tokens Spent</span>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <div className="w-3 h-3 bg-[#03b3e2]" style={{ borderRadius: '2px' }} />
-                        <span className="text-[#646464]">Tokens Committed</span>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <div className="w-3 h-3 bg-[#0177c7]" style={{ borderRadius: '2px' }} />
-                        <span className="text-[#646464]">Tokens Remaining</span>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              </div>
-            </div>
-          </div>
-        </section>
-      </main>
+  const titleNode = (
+    <div className="flex items-center gap-2">
+      <BarChart2 size={20} className="text-black" />
+      <span className="text-sm leading-[19.6px] text-black">{activeName}</span>
     </div>
+  );
+
+  return (
+    <DashboardLayout
+      title={titleNode}
+      logoSrc={logoImage}
+      logoDotSrc={logoDot}
+      dividerSrc={dividerImage}
+      TopbarRight={topbarRight}
+    >
+      <div className="pt-[40px] pb-[40px]">
+        <div className="w-[90%] mx-auto space-y-10">
+          {/* Header */}
+          <div className="flex items-center justify-between">
+            <div className="flex flex-col gap-1">
+              <h1 className="text-[32px] font-bold leading-[38.4px] text-black">Real-time insights to guide your spend</h1>
+              <p className="text-lg leading-[23.94px] text-black">Stay on top of spend, progress, and priorities—all in one place.</p>
+            </div>
+            <Button variant="outline" className="h-10 px-6 border border-[#d9d9d9] bg-white hover:bg-gray-50 text-black">
+              <span className="text-black">All insights</span>
+              <ChevronRight size={20} className="ml-2 text-black" />
+            </Button>
+          </div>
+
+          {/* Teams' Leaderboard */}
+          <div className="space-y-4">
+            <h2 className="text-[22px] font-bold leading-[29.26px] text-black">Teams' Leaderboard</h2>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+              {teamsData.map((team) => (
+                <Card key={team.id} className="border border-[#ececec] bg-white relative">
+                  {team.isMyTeam && (
+                    <div className="absolute top-4 right-4">
+                      <Badge variant="secondary" className="bg-[#f1f1f3] text-black border-none text-xs">My team</Badge>
+                    </div>
+                  )}
+                  <CardHeader className="pb-3 pt-6">
+                    <div className="flex flex-col items-start gap-2">
+                      {(team as any).isEmoji ? (
+                        <span style={{ width: '22px', height: '30px', display: 'inline-block', fontSize: '30px', lineHeight: '30px' }}>{team.icon}</span>
+                      ) : (
+                        <img src={team.icon} alt={`${team.title} medal`} className="w-[30px] h-[30px]" style={{ objectFit: 'contain' }} />
+                      )}
+                      <CardTitle className="text-black font-bold text-[18px] leading-[23.94px]" style={{ letterSpacing: '0px' }}>{team.title}</CardTitle>
+                    </div>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    <div className="space-y-2">
+                      <div className="flex items-center justify-between">
+                        <span className="text-sm leading-[18.62px] text-black">Overall score</span>
+                        <span className="text-[32px] font-bold leading-[38.4px]" style={{ color: team.progressBarColor }}>{team.overallScore}%</span>
+                      </div>
+                      <div className="relative h-4 w-full bg-[#f1f1f3] rounded-full overflow-hidden">
+                        <div className="h-full rounded-full transition-all" style={{ width: `${team.overallScore}%`, backgroundColor: team.progressBarColor }} />
+                      </div>
+                    </div>
+                    <div className="flex items-center justify-between"><span className="text-sm leading-[18.62px] text-black">Brief Quality Score</span><span className="text-sm leading-[18.62px] text-black font-normal">{team.briefQualityScore}%</span></div>
+                    <div className="flex items-center justify-between"><span className="text-sm leading-[18.62px] text-black">Token Efficiency</span><span className="text-sm leading-[18.62px] text-black font-normal">{team.tokenEfficiency}%</span></div>
+                    <div className="flex items-center gap-2 pt-2">
+                      <div className="w-8 h-8 rounded-full border border-[#03b3e2] overflow-hidden"><img src={boltImg} alt="Bolt" className="w-full h-full" style={{ objectFit: 'cover' }} /></div>
+                      <div className="w-8 h-8 rounded-full border border-[#ff9800] overflow-hidden"><img src={shakingHandsImg} alt="Shaking Hands" className="w-full h-full" style={{ objectFit: 'cover' }} /></div>
+                      <div className="w-8 h-8 rounded-full border border-[#e91e63] overflow-hidden"><img src={bullseyeImg} alt="Bullseye" className="w-full h-full" style={{ objectFit: 'cover' }} /></div>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          </div>
+
+          {/* Just-in-Time Insights */}
+          <div className="space-y-4">
+            <h2 className="text-[22px] font-bold leading-[29.26px] text-black">Just-in-Time Insights</h2>
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
+              <Card className="lg:col-span-1 border border-[#ececec] bg-white">
+                <CardHeader className="pb-3">
+                  <CardTitle className="text_base font-bold leading-[21.28px] text-black">Brief quality score - All categories</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-6">
+                  <ChartContainer config={{ score: { label: "Quality Score", color: "#0177c7" } }} className="h-[200px] w-full">
+                    <ResponsiveContainer width="100%" height="100%">
+                      <AreaChart data={qualityScoreData} margin={{ left: 10, right: 10, top: 10, bottom: 20 }}>
+                        <defs>
+                          <linearGradient id="qualityGradient" x1="0" y1="0" x2="0" y2="1">
+                            <stop offset="5%" stopColor="#0177c7" stopOpacity={0.3} />
+                            <stop offset="95%" stopColor="#0177c7" stopOpacity={0} />
+                          </linearGradient>
+                        </defs>
+                        <CartesianGrid strokeDasharray="3 3" stroke="#e0e0e0" vertical={true} />
+                        <XAxis dataKey="quarter" axisLine={false} tickLine={false} tick={{ fill: "#646464", fontSize: 12 }} />
+                        <YAxis axisLine={false} tickLine={false} domain={[70, 95]} ticks={[70, 75, 80, 85, 90, 95]} tick={{ fill: "#646464", fontSize: 12 }} />
+                        <ChartTooltip content={<ChartTooltipContent />} />
+                        <Area type="monotone" dataKey="score" stroke="#0177c7" strokeWidth={2} fill="url(#qualityGradient)" />
+                      </AreaChart>
+                    </ResponsiveContainer>
+                  </ChartContainer>
+                </CardContent>
+              </Card>
+
+              <Card className="lg:col-span-2 border border-[#ececec] bg-white">
+                <CardHeader className="pb-3">
+                  <CardTitle className="text-base font-bold leading-[21.28px] text-black">Token distribution</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-6">
+                  <ChartContainer config={{ spent: { label: "Tokens Spent", color: "#00c3b1" }, committed: { label: "Tokens Committed", color: "#03b3e2" }, remaining: { label: "Tokens Remaining", color: "#0177c7" } }} className="h-[250px] w-full">
+                    <ResponsiveContainer width="100%" height="100%">
+                      <BarChart data={spendByTypeData} layout="vertical" margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
+                        <CartesianGrid strokeDasharray="3 3" stroke="#e0e0e0" horizontal={true} vertical={true} />
+                        <XAxis type="number" axisLine={false} tickLine={false} domain={[0, 4500]} ticks={[0, 500, 1000, 1500, 2000, 2500, 3000, 3500, 4000, 4500]} tick={{ fill: "#646464", fontSize: 12 }} />
+                        <YAxis type="category" dataKey="type" axisLine={false} tickLine={false} tick={{ fill: "#646464", fontSize: 12 }} width={80} />
+                        <ChartTooltip cursor={false} content={<ChartTooltipContent />} />
+                        <Bar dataKey="remaining" stackId="a" fill="#0177c7" radius={[6, 6, 6, 6]} />
+                        <Bar dataKey="committed" stackId="a" fill="#03b3e2" radius={[6, 6, 6, 6]} />
+                        <Bar dataKey="spent" stackId="a" fill="#00c3b1" radius={[6, 6, 6, 6]} />
+                      </BarChart>
+                    </ResponsiveContainer>
+                  </ChartContainer>
+
+                  <div className="flex items-center justify-center gap-6 text-xs">
+                    <div className="flex items-center gap-2"><div className="w-3 h-3 bg-[#00c3b1]" style={{ borderRadius: '2px' }} /><span className="text-[#646464]">Tokens Spent</span></div>
+                    <div className="flex items-center gap-2"><div className="w-3 h-3 bg-[#03b3e2]" style={{ borderRadius: '2px' }} /><span className="text-[#646464]">Tokens Committed</span></div>
+                    <div className="flex items-center gap-2"><div className="w-3 h-3 bg-[#0177c7]" style={{ borderRadius: '2px' }} /><span className="text-[#646464]">Tokens Remaining</span></div>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+          </div>
+        </div>
+      </div>
+    </DashboardLayout>
   );
 }

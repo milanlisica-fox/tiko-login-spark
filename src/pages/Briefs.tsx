@@ -13,19 +13,33 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } f
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { format } from "date-fns";
 import confetti from "canvas-confetti";
+import DashboardLayout from "@/components/layout/DashboardLayout";
+import NotificationsPopover from "@/components/layout/NotificationsPopover";
+import { BRAND, TEMPLATE_ICONS } from "@/constants/branding";
+import { PillPrimary, PillAccent, PillSubtle, PillGhost } from "@/components/common/buttons";
+import StatCard from "@/components/common/StatCard";
+import BriefCard from "@/components/common/BriefCard";
+import { Field } from "@/components/common/Field";
+import DateField from "@/components/common/DateField";
+import ChatInput from "@/components/common/ChatInput";
+import FormFooter from "@/components/common/FormFooter";
+import TokenEstimate from "@/components/common/TokenEstimate";
+import { getBadgeStyle } from "@/lib/utils";
+import { ALL_TEMPLATES } from "@/constants/templates";
+import { RECOMMENDED_DELIVERABLES, DELIVERABLES_LIST } from "@/constants/deliverables";
 
 // Reuse images from Dashboard for consistent visuals
-const logoImage = "https://www.figma.com/api/mcp/asset/e6ec2a32-b26b-4e3a-bd4a-4e803cad7b85";
-const logoDot = "https://www.figma.com/api/mcp/asset/04d711ff-9aa1-4e99-ae1a-4fe72b6fa22c";
-const dividerImage = "https://www.figma.com/api/mcp/asset/ed109f8c-67ff-4f01-943f-65f17570f9e7";
+const logoImage = BRAND.logo;
+const logoDot = BRAND.logoDot;
+const dividerImage = BRAND.divider;
 
 // Template icons from Figma
-const iconAssetAdaptation = "https://www.figma.com/api/mcp/asset/c1a556d8-686f-44f2-88a7-ae10c1e9e2f2";
-const iconBAU = "https://www.figma.com/api/mcp/asset/97b7efb4-4c30-4c6a-b0f1-00389ded9baf";
-const iconPOS = "https://www.figma.com/api/mcp/asset/5538e7d7-21fd-482e-a031-dbcda03fedf1";
-const iconDigitalPOS = "https://www.figma.com/api/mcp/asset/313704f8-5070-4770-b5fe-eb44c650dc2f";
-const iconFeatureAsset = "https://www.figma.com/api/mcp/asset/ec129011-0fa8-488e-bd49-a3ae85c02d77";
-const iconToolkit = "https://www.figma.com/api/mcp/asset/835dc746-f8b7-47a1-8471-75138a491898";
+const iconAssetAdaptation = TEMPLATE_ICONS.assetAdaptation;
+const iconBAU = TEMPLATE_ICONS.bau;
+const iconPOS = TEMPLATE_ICONS.pos;
+const iconDigitalPOS = TEMPLATE_ICONS.digitalPos;
+const iconFeatureAsset = TEMPLATE_ICONS.featureAsset;
+const iconToolkit = TEMPLATE_ICONS.toolkit;
 const iconPartnerships = "https://www.figma.com/api/mcp/asset/c1a556d8-686f-44f2-88a7-ae10c1e9e2f2";
 const iconSocialContent = "https://www.figma.com/api/mcp/asset/5538e7d7-21fd-482e-a031-dbcda03fedf1";
 const arrowRightIcon = "https://www.figma.com/api/mcp/asset/aded2578-385a-4338-976a-dd31471fba50";
@@ -75,15 +89,7 @@ export default function BriefsPage() {
     }
   }, [location.state, navigate]);
 
-  const navItems = useMemo(
-    () => [
-      { name: "Central", icon: Home, path: "/dashboard" },
-      { name: "Briefs", icon: FileText, path: "/dashboard/briefs" },
-      { name: "Projects", icon: Folder, path: "/dashboard/projects" },
-      { name: "Tracker", icon: BarChart2, path: "/dashboard/tracker" },
-    ],
-    []
-  );
+  // nav items centralized via DashboardLayout
 
   const activeName = useMemo(() => {
     if (location.pathname.startsWith("/dashboard/briefs")) return "Briefs";
@@ -98,199 +104,57 @@ export default function BriefsPage() {
     navigate("/");
   };
 
+  const topbarRight = (
+    <>
+      <NotificationsPopover />
+      <div className="flex items-center gap-1">
+        <Coins size={20} className="text-[#848487]" />
+        <span className="text-xs leading-[15.96px] text-[#646464]">372 Tokens</span>
+      </div>
+      <button onClick={() => navigate("/dashboard/profile")} className="flex items-center gap-2 hover:opacity-80 transition cursor-pointer">
+        <HBAvatar size={40} />
+        <div className="flex flex-col">
+          <p className="text-sm font-bold leading-[18.62px] text-[#646464]">Henry Bray</p>
+          <p className="text-xs leading-[15.96px] text-[#646464]">Marcomms</p>
+        </div>
+        <ChevronDown size={24} className="text-[#646464] rotate-90" />
+      </button>
+    </>
+  );
+
+  const pageTitle = isCreatingBrief && (briefView === "form" || briefView === "deliverables" || briefView === "ai-response") ? "New brief" : activeName;
+
+  const titleNode = (
+    isCreatingBrief && (briefView === "form" || briefView === "deliverables" || briefView === "ai-response") ? (
+      <span className="text-sm leading-[19.6px] text-black">{pageTitle}</span>
+    ) : (
+      <div className="flex items-center gap-2">
+        <FileText size={20} className="text-black" />
+        <span className="text-sm leading-[19.6px] text-black">{activeName}</span>
+      </div>
+    )
+  );
+
   return (
-    <div className="flex h-screen bg-[#f9f9f9]">
-      {/* Sidebar */}
-      <aside className="w-[240px] bg-[#f7f7f7] border-r border-[#d9d9d9] flex flex-col justify-between">
-        <div>
-          {/* Logo */}
-          <div className="h-[70px] flex items-center justify-start px-8 py-4">
-            <div className="main-logo flex items-center gap-1.5">
-              <img src={logoImage} alt="TIKO" className="h-8" />
-              <img src={logoDot} alt="" className="w-[14.6px] h-[14.6px]" />
-            </div>
-          </div>
-
-          {/* Divider */}
-          <div className="h-px relative">
-            <img src={dividerImage} alt="" className="w-full h-full" />
-          </div>
-
-          {/* Navigation */}
-          <nav className="pt-8 px-4 flex flex-col gap-2">
-            {navItems.map((item) => {
-              const Icon = item.icon;
-              const isActive = activeName === item.name;
-              const handleNavClick = () => {
-                if (item.path === "/dashboard/briefs") {
-                  // Always show list view when clicking Briefs in the sidebar
-                  if (isCreatingBrief) {
-                    setIsCreatingBrief(false);
-                    setBriefView("templates");
-                    return;
-                  }
-                }
-                navigate(item.path);
-              };
-              return (
-                <button
-                  key={item.name}
-                  onClick={handleNavClick}
-                  className={`w-full flex items-center gap-2 px-4 py-4 rounded-lg transition relative ${
-                    isActive ? "bg-white" : "bg-transparent hover:bg-white/50"
-                  }`}
-                >
-                  <Icon size={20} className={isActive ? "text-black" : "text-black"} />
-                  <span className={`text-sm leading-[19.6px] ${isActive ? "font-semibold" : "font-normal"} text-black`}>
-                    {item.name}
-                  </span>
-                </button>
-              );
-            })}
-          </nav>
-        </div>
-
-        {/* Logout */}
-        <div className="px-4 pb-8">
-          <button 
-            onClick={handleLogout}
-            className="w-full flex items-center gap-2 px-4 py-4 rounded-lg transition hover:bg-white/50"
-          >
-            <LogOut size={20} className="text-black" />
-            <span className="text-sm leading-[19.6px] font-normal text-black">
-              Logout
-            </span>
-          </button>
-        </div>
-      </aside>
-
-      {/* Main content */}
-      <main className="flex-1 flex flex-col">
-        {/* Top Bar */}
-        <header className="h-[70px] bg-[#f9f9f9] border-b border-[#e0e0e0] flex items-center justify-between px-4 relative">
-          {/* Breadcrumb */}
-          <div className="flex items-center gap-2 px-4 py-4 rounded-lg">
-            {isCreatingBrief && (briefView === "form" || briefView === "deliverables" || briefView === "ai-response") ? (
-              <>
-                <button onClick={() => {
-                  if (briefView === "ai-response") setBriefView("deliverables");
-                  else if (briefView === "deliverables") setBriefView("form");
-                  else setBriefView("templates");
-                }} className="flex items-center gap-2">
-                  <ArrowLeft size={20} className="text-black" />
-                </button>
-                <span className="text-sm leading-[19.6px] text-black">New brief</span>
-              </>
-            ) : (
-              <>
-                <FileText size={20} className="text-black" />
-                <span className="text-sm leading-[19.6px] text-black">{activeName}</span>
-              </>
-            )}
-          </div>
-
-          {/* Right side */}
-          <div className="flex items-center gap-6 pr-[30px]">
-            {/* Notifications */}
-            <Popover>
-              <PopoverTrigger asChild>
-                <button className="flex items-center gap-2 relative cursor-pointer">
-                  <Bell size={24} className="text-[#848487]" />
-                  <div className="absolute -left-1 -top-1 min-w-[20px] h-5 bg-[#ff4337] border-2 border-[#f7f7f7] rounded-full flex items-center justify-center px-1">
-                    <span className="text-[10px] font-bold leading-[14px] text-white">3</span>
-                  </div>
-                </button>
-              </PopoverTrigger>
-              <PopoverContent 
-                align="end" 
-                sideOffset={10}
-                className="w-80 p-0 bg-white border border-[#e0e0e0] shadow-lg"
-              >
-                <div className="p-4 border-b border-[#e0e0e0]">
-                  <h3 className="text-base font-bold leading-[21.28px] text-black">Notifications</h3>
-                </div>
-                <div className="max-h-96 overflow-y-auto">
-                  {/* Mock notification items */}
-                  <div className="p-4 border-b border-[#f1f1f3] hover:bg-[#f9f9f9] cursor-pointer transition">
-                    <div className="flex items-start justify-between gap-2">
-                      <div className="flex-1">
-                        <p className="text-sm font-semibold leading-[18.62px] text-black mb-1">
-                          New brief submitted
-                        </p>
-                        <p className="text-xs leading-[15.96px] text-[#646464]">
-                          Sarah Johnson submitted a new brief for review
-                        </p>
-                        <p className="text-xs leading-[15.96px] text-[#848487] mt-1">
-                          2 hours ago
-                        </p>
-                      </div>
-                      <div className="w-2 h-2 bg-[#ff4337] rounded-full flex-shrink-0 mt-1" />
-                    </div>
-                  </div>
-                  <div className="p-4 border-b border-[#f1f1f3] hover:bg-[#f9f9f9] cursor-pointer transition">
-                    <div className="flex items-start justify-between gap-2">
-                      <div className="flex-1">
-                        <p className="text-sm font-semibold leading-[18.62px] text-black mb-1">
-                          Project milestone reached
-                        </p>
-                        <p className="text-xs leading-[15.96px] text-[#646464]">
-                          "Fold Toolkit Q3 2025" has reached 50% completion
-                        </p>
-                        <p className="text-xs leading-[15.96px] text-[#848487] mt-1">
-                          5 hours ago
-                        </p>
-                      </div>
-                      <div className="w-2 h-2 bg-[#ff4337] rounded-full flex-shrink-0 mt-1" />
-                    </div>
-                  </div>
-                  <div className="p-4 border-b border-[#f1f1f3] hover:bg-[#f9f9f9] cursor-pointer transition">
-                    <div className="flex items-start justify-between gap-2">
-                      <div className="flex-1">
-                        <p className="text-sm font-semibold leading-[18.62px] text-black mb-1">
-                          Brief approved
-                        </p>
-                        <p className="text-xs leading-[15.96px] text-[#646464]">
-                          Your brief "S Series OOH Campaign" has been approved
-                        </p>
-                        <p className="text-xs leading-[15.96px] text-[#848487] mt-1">
-                          1 day ago
-                        </p>
-                      </div>
-                      <div className="w-2 h-2 bg-[#ff4337] rounded-full flex-shrink-0 mt-1" />
-                    </div>
-                  </div>
-                </div>
-                <div className="p-3 border-t border-[#e0e0e0]">
-                  <button className="w-full text-xs font-semibold leading-[15.96px] text-[#646464] hover:text-black transition">
-                    View all notifications
-                  </button>
-                </div>
-              </PopoverContent>
-            </Popover>
-
-            {/* Tokens */}
-            <div className="flex items-center gap-1">
-              <Coins size={20} className="text-[#848487]" />
-              <span className="text-xs leading-[15.96px] text-[#646464]">372 Tokens</span>
-            </div>
-
-            {/* User Profile */}
-            <button
-              onClick={() => navigate("/dashboard/profile")}
-              className="flex items-center gap-2 hover:opacity-80 transition cursor-pointer"
-            >
-              <HBAvatar size={40} />
-              <div className="flex flex-col">
-                <p className="text-sm font-bold leading-[18.62px] text-[#646464]">Henry Bray</p>
-                <p className="text-xs leading-[15.96px] text-[#646464]">Marcomms</p>
-              </div>
-              <ChevronDown size={24} className="text-[#646464] rotate-90" />
-            </button>
-          </div>
-        </header>
-
-        {/* Briefs Content */}
-        <section className="flex-1 overflow-y-auto px-6 pt-[40px] pb-[40px]">
+    <DashboardLayout
+      title={titleNode}
+      onNavigate={(path) => {
+        if (path === "/dashboard/briefs") {
+          if (isCreatingBrief) {
+            setIsCreatingBrief(false);
+            setBriefView("templates");
+            return;
+          }
+        }
+        navigate(path);
+      }}
+      logoSrc={logoImage}
+      logoDotSrc={logoDot}
+      dividerSrc={dividerImage}
+      TopbarRight={topbarRight}
+    >
+      {/* Briefs Content */}
+      <div className="px-6 pt-[40px] pb-[40px]">
           {isCreatingBrief ? (
             briefView === "templates" ? (
               <TemplateSelectionScreen 
@@ -327,20 +191,22 @@ export default function BriefsPage() {
                   <p className="text-lg leading-[23.94px] text-black">Kickstart your next project with clarity and ease</p>
                 </div>
                 <div className="flex gap-2.5 items-center">
-                  <button 
+                  <PillPrimary
                     onClick={() => navigate("/dashboard/calculator")}
-                    className="w-[216px] bg-[#03b3e2] backdrop-blur-sm rounded-[28px] flex items-center justify-center gap-[10px] px-[24px] py-[18px] hover:opacity-90 transition"
+                    size="md"
+                    className="w-[224px]"
                   >
                     <Calculator size={16} className="text-black" />
-                    <span className="text-base font-semibold leading-[23.94px] text-black whitespace-nowrap">Quick calculator</span>
-                  </button>
-                  <button 
+                    <span className="font-semibold leading-[23.94px] text-black whitespace-nowrap">Quick calculator</span>
+                  </PillPrimary>
+                  <PillAccent
                     onClick={() => setIsCreatingBrief(true)}
-                    className="w-[216px] backdrop-blur-[6px] backdrop-filter bg-[#ffb546] px-[24px] py-[18px] rounded-[28px] flex items-center justify-center gap-[10px] hover:opacity-90 transition"
+                    size="md"
+                    className="w-[224px]"
                   >
                     <span className="text-[16px] font-semibold leading-[23.94px] text-black whitespace-nowrap">Create brief</span>
                     <img src={createBriefArrowIcon} alt="" className="h-[14px] w-[15.567px]" />
-                  </button>
+                  </PillAccent>
                 </div>
               </div>
 
@@ -375,13 +241,8 @@ export default function BriefsPage() {
                     )
                   },
                 ].map((card) => (
-                  <div key={card.title} className="bg-white rounded-xl p-6 relative overflow-hidden">
-                    <div className="flex items-start justify-between pb-1">
-                      <div className="flex flex-col gap-1">
-                        <h3 className="text-sm font-bold leading-[18.62px] text-black">{card.title}</h3>
-                      </div>
-                    </div>
-                    <p className="text-[40px] font-medium leading-[45.6px] text-black">{card.value}</p>
+                  <div key={card.title} className="relative overflow-hidden">
+                    <StatCard title={card.title} value={card.value} className="rounded-xl p-6" />
                     {card.icon}
                   </div>
                 ))}
@@ -473,39 +334,39 @@ export default function BriefsPage() {
                       ),
                     },
                   ].map((card, i) => (
-                    <div key={i} className="bg-white rounded-xl p-5 flex flex-col gap-3 border border-[#ececec] h-full">
-                      <div className="flex items-center justify-between">
-                        <h3 className="text-sm font-bold leading-[18.62px] text-black">{card.title}</h3>
+                    <BriefCard
+                      key={i}
+                      title={card.title}
+                      description={card.content}
+                      right={
                         <div className="relative">
                           {card.badgeIcon}
                           {card.notificationBadge}
                         </div>
-                      </div>
-                      <p
-                        className="text-sm leading-[18.62px] text-[#646464] min-h-[38px] overflow-hidden"
-                        style={{ display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical' }}
-                      >
-                        {card.content}
-                      </p>
-                      <div className="flex items-center justify-between pt-1">
-                        {card.statusBadge}
-                        <div className="flex -space-x-2">
-                          {[0,1,2].map((a) => {
-                            const seed = `avatar_${i}_${a}`;
-                            return (
-                              <Avatar key={a} className="w-6 h-6 border-2 border-white">
-                                <AvatarImage 
-                                  src={`https://api.dicebear.com/7.x/personas/png?seed=${seed}&size=64`} 
-                                  alt={`Avatar ${a + 1}`}
-                                />
-                                <AvatarFallback className="text-xs bg-gradient-to-br from-blue-200 to-blue-300">
-                                  {String.fromCharCode(65 + a)}
-                                </AvatarFallback>
-                              </Avatar>
-                            );
-                          })}
+                      }
+                      meta={
+                        <div className="flex items-center justify-between">
+                          {card.statusBadge}
+                          <div className="flex -space-x-2">
+                            {[0,1,2].map((a) => {
+                              const seed = `avatar_${i}_${a}`;
+                              return (
+                                <Avatar key={a} className="w-6 h-6 border-2 border-white">
+                                  <AvatarImage 
+                                    src={`https://api.dicebear.com/7.x/personas/png?seed=${seed}&size=64`} 
+                                    alt={`Avatar ${a + 1}`}
+                                  />
+                                  <AvatarFallback className="text-xs bg-gradient-to-br from-blue-200 to-blue-300">
+                                    {String.fromCharCode(65 + a)}
+                                  </AvatarFallback>
+                                </Avatar>
+                              );
+                            })}
+                          </div>
                         </div>
-                      </div>
+                      }
+                      className="h-full"
+                    >
                       <div className="h-px bg-[#ececec]" />
                       <div className="flex items-center justify-between text-xs text-[#848487]">
                         <div className="flex items-center gap-1">
@@ -513,11 +374,11 @@ export default function BriefsPage() {
                           <span>12</span>
                         </div>
                         <div className="flex items-center gap-1">
-                          <span>📅</span>
-                          <span>Nov 28</span>
+                          <span>🕒</span>
+                          <span>3h</span>
                         </div>
                       </div>
-                    </div>
+                    </BriefCard>
                   ))}
                 </div>
               </div>
@@ -526,9 +387,8 @@ export default function BriefsPage() {
               <AllBriefsSection />
             </div>
           )}
-        </section>
-      </main>
-    </div>
+      </div>
+    </DashboardLayout>
   );
 }
 
@@ -537,19 +397,7 @@ function TemplateSelectionScreen({ onCancel, onCreateBrief }: { onCancel: () => 
   const [activeTab, setActiveTab] = useState<"All" | "Popular" | "Recent" | "New">("All");
   const uploadInputRef = useRef<HTMLInputElement | null>(null);
 
-  const allTemplates = [
-    { id: "asset-adaptation", title: "Asset adaptation", icon: iconAssetAdaptation, hasRotation: true, category: "popular" },
-    { id: "bau-campaign", title: "BAU Campaign", icon: iconBAU, category: "all" },
-    { id: "point-of-sale", title: "Point Of Sale", icon: iconPOS, category: "all" },
-    { id: "digital-pos", title: "Digital POS", icon: iconDigitalPOS, category: "all" },
-    { id: "feature-asset", title: "Feature asset", icon: iconFeatureAsset, category: "all" },
-    { id: "toolkit", title: "Toolkit", icon: iconToolkit, category: "popular" },
-    { id: "partnerships", title: "Partnerships", icon: iconPartnerships, hasRotation: true, category: "all" },
-    { id: "social-content", title: "Social content", icon: iconSocialContent, category: "popular" },
-  ];
-
-  // Filter templates based on active tab
-  const templates = allTemplates.filter((template) => {
+  const templates = ALL_TEMPLATES.filter((template) => {
     if (activeTab === "All") return template.category === "all" || template.category === "popular";
     if (activeTab === "Popular") return template.category === "popular";
     if (activeTab === "Recent") return template.category === "recent";
@@ -580,20 +428,22 @@ function TemplateSelectionScreen({ onCancel, onCreateBrief }: { onCancel: () => 
         
         {/* Action Buttons */}
         <div className="flex gap-2.5 items-center">
-          <button 
+          <PillPrimary
             onClick={() => navigate("/dashboard/calculator")}
-            className="w-[224px] h-10 bg-[#03b3e2] backdrop-blur-sm rounded-[28px] flex items-center justify-center gap-[10px] px-[24px] hover:opacity-90 transition"
+            size="md"
+            className="w-[224px]"
           >
             <Calculator size={16} className="text-black" />
-            <span className="text-base font-semibold leading-[23.94px] text-black whitespace-nowrap">Quick calculator</span>
-          </button>
-          <button 
+            <span className="font-semibold leading-[23.94px] text-black whitespace-nowrap">Quick calculator</span>
+          </PillPrimary>
+          <PillAccent
             onClick={onCreateBrief}
-            className="w-[224px] h-10 backdrop-blur-[6px] backdrop-filter bg-[#ffb546] px-[24px] rounded-[28px] flex items-center justify-center gap-[10px] hover:opacity-90 transition"
+            size="md"
+            className="w-[224px]"
           >
             <span className="text-[16px] font-semibold leading-[23.94px] text-black whitespace-nowrap">Create brief</span>
             <img src={createBriefArrowIcon} alt="" className="h-[14px] w-[15.567px]" />
-          </button>
+          </PillAccent>
         </div>
 
         {/* Upload existing brief - centered below buttons */}
@@ -764,63 +614,29 @@ function NewBriefForm({ onCancel, onNext }: { onCancel: () => void; onNext: () =
 
           <div className="flex flex-col gap-6">
             {/* Project Title */}
-            <div className="flex flex-col gap-2">
-              <div className="flex flex-col gap-0.5">
-                <Label className="text-sm font-bold leading-[18.62px] text-[#09090a]">
-                  Project title
-                </Label>
-                <p className="text-xs leading-[15.96px] text-[#848487]">
-                  Give your brief a short, clear name
-                </p>
-              </div>
+            <Field label="Project title" helpText="Give your brief a short, clear name">
               <Input
                 value={formData.projectTitle}
                 onChange={(e) => handleChange("projectTitle", e.target.value)}
                 placeholder="e.g. Spring Campaign 2025"
                 className="border-[#e0e0e0] rounded-[85px] px-5 py-2.5 h-auto bg-[#f9f9f9]"
               />
-            </div>
+            </Field>
 
             {/* Due Date */}
-            <div className="flex flex-col gap-2">
-              <div className="flex flex-col gap-0.5">
-                <Label className="text-sm font-bold leading-[18.62px] text-[#09090a]">
-                  Due date
-                </Label>
-                <p className="text-xs leading-[15.96px] text-[#848487]">
-                  When is this project due?
-                </p>
-              </div>
-              <Popover>
-                <PopoverTrigger asChild>
-                  <button className="border border-[#e0e0e0] rounded-[85px] px-5 py-2.5 flex items-center justify-between h-auto hover:bg-[#f9f9f9]">
-                    <span className="text-sm leading-[18.62px] text-[#848487]">
-                      {formData.dueDate ? format(formData.dueDate, "PPP") : "Pick a date"}
-                    </span>
-                    <CalendarIcon size={20} className="text-[#848487]" />
-                  </button>
-                </PopoverTrigger>
-                <PopoverContent className="w-auto p-0" align="start">
-                  <Calendar
-                    mode="single"
-                    selected={formData.dueDate}
-                    onSelect={(date) => handleChange("dueDate", date)}
-                    initialFocus
-                  />
-                </PopoverContent>
-              </Popover>
-            </div>
+            <DateField
+              label={
+                <div className="flex items-center gap-2">
+                  <span>Due date</span>
+                </div>
+              }
+              helpText="When is this project due?"
+              value={formData.dueDate}
+              onChange={(date) => handleChange("dueDate", date)}
+            />
 
             {/* Project Lead */}
-            <div className="flex flex-col gap-2">
-              <div className="flex flex-col gap-0.5">
-                <Label className="text-sm font-bold leading-[18.62px] text-[#09090a]">
-                  Project lead*
-                </Label>
-                <p className="text-xs leading-[15.96px] text-[#848487]">
-                  Who will own this project?
-                </p>
-              </div>
+            <Field label="Project lead*" helpText="Who will own this project?">
               <Select value={formData.projectLead} onValueChange={(value) => handleChange("projectLead", value)}>
                 <SelectTrigger className="border-[#e0e0e0] rounded-[85px] px-5 py-2.5 h-auto bg-[#f9f9f9] [&>span]:text-[#848487] data-[placeholder]:text-[#848487]">
                   <SelectValue placeholder="Choose a lead" />
@@ -831,18 +647,10 @@ function NewBriefForm({ onCancel, onNext }: { onCancel: () => void; onNext: () =
                   <SelectItem value="jane-smith">Jane Smith</SelectItem>
                 </SelectContent>
               </Select>
-            </div>
+            </Field>
 
             {/* Objective */}
-            <div className="flex flex-col gap-2">
-              <div className="flex flex-col gap-0.5">
-                <Label className="text-sm font-bold leading-[18.62px] text-[#09090a]">
-                  Objective
-                </Label>
-                <p className="text-xs leading-[15.96px] text-[#848487]">
-                  What's the main goal of this project?
-                </p>
-              </div>
+            <Field label="Objective" helpText="What's the main goal of this project?">
               <Textarea
                 value={formData.objective}
                 onChange={(e) => handleChange("objective", e.target.value)}
@@ -850,7 +658,7 @@ function NewBriefForm({ onCancel, onNext }: { onCancel: () => void; onNext: () =
                 className="border-[#e0e0e0] rounded-lg px-5 py-2.5 min-h-[74px] resize-none bg-[#f9f9f9]"
                 rows={3}
               />
-            </div>
+            </Field>
 
             {/* Note */}
             <div className="flex flex-col gap-2 pt-1">
@@ -863,12 +671,13 @@ function NewBriefForm({ onCancel, onNext }: { onCancel: () => void; onNext: () =
         </div>
 
         {/* Next Button */}
-        <button
+        <PillSubtle
           onClick={handleNext}
-          className="px-6 py-[18px] bg-[#f9f9f9] backdrop-blur-sm rounded-[28px] flex items-center justify-center gap-2.5 hover:bg-[#e5e5e5] transition w-full"
+          size="md"
+          className="w-full bg-[#f9f9f9] hover:bg-[#e5e5e5]"
         >
           <span className="text-sm font-semibold leading-[18.62px] text-[#848487]">Next</span>
-        </button>
+        </PillSubtle>
       </div>
 
       {/* Right Panel */}
@@ -899,23 +708,21 @@ function NewBriefForm({ onCancel, onNext }: { onCancel: () => void; onNext: () =
 
           {/* Action Buttons */}
           <div className="flex items-center justify-between w-full">
-            <button
-              onClick={onCancel}
-              className="px-2 py-[18px] bg-transparent rounded-[28px] flex items-center justify-center hover:bg-[#f1f1f3] transition h-8"
-            >
+            <PillGhost onClick={onCancel} size="sm" className="px-2 h-8">
               <span className="text-[13px] font-semibold leading-[18.62px] text-black">Discard</span>
-            </button>
+            </PillGhost>
             <div className="flex gap-1 items-center">
-              <button className="px-4 py-[18px] bg-[#f9f9f9] backdrop-blur-sm rounded-[28px] flex items-center justify-center gap-2.5 hover:bg-[#e5e5e5] transition h-8">
+              <PillSubtle size="sm" className="h-8 bg-[#f9f9f9] hover:bg-[#e5e5e5]">
                 <span className="text-[13px] font-semibold leading-[18.62px] text-[#848487]">Save draft</span>
-              </button>
-              <button 
+              </PillSubtle>
+              <PillAccent
                 type="button"
                 onClick={() => navigate("/dashboard/briefs/review")}
-                className="px-4 py-[18px] bg-[#ffb546] backdrop-blur-sm rounded-[28px] flex items-center justify-center gap-2.5 hover:opacity-90 transition h-8"
+                size="sm"
+                className="h-8"
               >
                 <span className="text-[13px] font-semibold leading-[18.62px] text-black">Review brief</span>
-              </button>
+              </PillAccent>
             </div>
           </div>
         </div>
@@ -933,12 +740,13 @@ function NewBriefForm({ onCancel, onNext }: { onCancel: () => void; onNext: () =
             </DialogDescription>
           </DialogHeader>
           <div className="flex justify-center pt-4">
-            <button
+            <PillAccent
+              type="button"
               onClick={handleViewAllBriefs}
-              className="px-6 py-[18px] bg-[#ffb546] backdrop-blur-sm rounded-[28px] flex items-center justify-center gap-2.5 hover:opacity-90 transition"
+              size="md"
             >
               <span className="text-sm font-semibold leading-[18.62px] text-black">View all briefs</span>
-            </button>
+            </PillAccent>
           </div>
         </DialogContent>
       </Dialog>
@@ -967,13 +775,6 @@ function DeliverablesSelectionScreen({ onCancel, onBack, onNavigateToAiResponse 
     projectLead: "Henry Bray",
     objective: "To create a product toolkit that provides clear guidance to help partners effectively amplify the campaign message. The toolkit should enable consistent execution, align with campaign objectives, and make it easy for users to activate the campaign across channels.",
   };
-
-  const recommendedDeliverables = [
-    { id: "1", title: "Editable Image Files Adapted Under NDA", tokens: 2 },
-    { id: "2", title: "Video File Created Non NDA", tokens: 1 },
-    { id: "3", title: "PDF Files Created Non NDA", tokens: 10 },
-    { id: "4", title: "Non Editable Image Files Created Non NDA", tokens: 2 },
-  ];
 
   const handleAddDeliverable = (deliverableId: string, tokens: number) => {
     if (selectedDeliverables.includes(deliverableId)) {
@@ -1041,34 +842,25 @@ function DeliverablesSelectionScreen({ onCancel, onBack, onNavigateToAiResponse 
               </p>
 
               <div className="flex flex-col gap-1">
-                {recommendedDeliverables.map((deliverable) => {
+                {RECOMMENDED_DELIVERABLES.map((deliverable) => {
                   const isSelected = selectedDeliverables.includes(deliverable.id);
                   return (
-                    <div
-                      key={deliverable.id}
-                      className="bg-[#efeff0] border border-[#e0e0e0] rounded-[6px] p-3 flex items-center justify-between hover:bg-[#e5e5e5] transition"
-                    >
-                      <div className="flex flex-col gap-0.5">
-                        <p className="text-sm leading-[18.62px] text-black">
-                          {deliverable.title}
-                        </p>
-                        <p className="text-[10px] leading-[14px] text-black">
-                          {deliverable.tokens} {deliverable.tokens === 1 ? "token" : "tokens"}
-                        </p>
+                    <div key={deliverable.id} className="flex items-center justify-between p-3 rounded-lg bg-white border border-[#e0e0e0]">
+                      <div className="flex items-center gap-3">
+                        <span className="text-sm font-semibold leading-[18.62px] text-black">{deliverable.title}</span>
                       </div>
-                      <button
-                        onClick={() => handleAddDeliverable(deliverable.id, deliverable.tokens)}
-                        className={`w-8 h-8 rounded-full flex items-center justify-center transition ${
-                          isSelected 
-                            ? "bg-[#03B3E2] hover:bg-[#0299c7]" 
-                            : "bg-[#f1f1f3] hover:bg-[#e5e5e5]"
-                        }`}
-                      >
-                        <Plus 
-                          size={18} 
-                          className={`${isSelected ? "text-white" : "text-[#03B3E2]"}`}
-                        />
-                      </button>
+                      <div className="flex items-center gap-3">
+                        <span className="text-xs leading-[15.96px] text-[#848487]">{deliverable.tokens} Tokens</span>
+                        <button
+                          onClick={() => handleAddDeliverable(deliverable.id, deliverable.tokens)}
+                          className={`w-6 h-6 rounded-full ${isSelected ? "bg-[#03B3E2]" : "bg-white border border-[#03B3E2]"} flex items-center justify-center relative`}
+                        >
+                          <Plus 
+                            size={18} 
+                            className={`${isSelected ? "text-white" : "text-[#03B3E2]"}`}
+                          />
+                        </button>
+                      </div>
                     </div>
                   );
                 })}
@@ -1093,30 +885,15 @@ function DeliverablesSelectionScreen({ onCancel, onBack, onNavigateToAiResponse 
           </div>
 
           {/* AI Chat Input at Bottom - Centered */}
-          <div className="mt-auto pt-4 flex flex-col items-center gap-2">
-            <form onSubmit={handleSubmit} className="w-[516px] bg-white border border-[#e0e0e0] rounded-[23px] p-1 flex items-center justify-between">
-              <div className="flex gap-[7px] items-center flex-1">
-                <div className="h-10 w-[35.514px] shrink-0">
-                  <img src={imgFrame14} alt="" className="w-full h-full" />
-                </div>
-                <input
-                  type="text"
-                  value={chatInput}
-                  onChange={(e) => setChatInput(e.target.value)}
-                  placeholder="Type here..."
-                  className="flex-1 text-sm leading-[18.62px] text-[#848487] bg-transparent border-none outline-none placeholder-[#848487]"
-                />
-              </div>
-              <button type="submit" className="w-10 h-10 shrink-0 relative cursor-pointer hover:opacity-80 transition">
-                <img src={imgFrame15} alt="Submit" className="w-full h-full" />
-              </button>
-            </form>
-
-            {/* Help Text */}
-            <p className="text-[12px] leading-[15.96px] text-[#424242] text-center w-[347px]">
-              Need a hand? <span className="font-bold">Talk to your Iris account manager</span>
-            </p>
-          </div>
+          <ChatInput
+            value={chatInput}
+            onChange={setChatInput}
+            onSubmit={(v) => { if (v.trim()) { onNavigateToAiResponse(v.trim()); } }}
+            leftIconSrc={imgFrame14}
+            rightIconSrc={imgFrame15}
+            helpText="Need a hand? Talk to your Iris account manager"
+            containerClassName="mt-auto pt-4"
+          />
         </div>
 
         {/* Vertical Divider */}
@@ -1164,33 +941,14 @@ function DeliverablesSelectionScreen({ onCancel, onBack, onNavigateToAiResponse 
           {/* Footer */}
           <div className="flex flex-col gap-1 items-end shrink-0">
             {/* Token Estimate */}
-            <div className="flex gap-2 items-center pb-2">
-              <img src={tokenIcon} alt="" className="h-5 w-5" />
-              <span className="text-[13px] leading-[18.62px] text-black">{tokenEstimate}</span>
-              <span className="text-[13px] leading-[18.62px] text-[#848487]">Tokens estimate</span>
-            </div>
+            <TokenEstimate value={tokenEstimate} />
 
             {/* Action Buttons */}
-            <div className="flex items-center justify-between w-full">
-              <button
-                onClick={onCancel}
-                className="px-2 py-[18px] bg-transparent rounded-[28px] flex items-center justify-center hover:bg-[#f1f1f3] transition h-8"
-              >
-                <span className="text-[13px] font-semibold leading-[18.62px] text-black">Discard</span>
-              </button>
-              <div className="flex gap-1 items-center">
-                <button className="px-4 py-[18px] bg-[#f1f1f3] backdrop-blur-sm rounded-[28px] flex items-center justify-center hover:bg-[#e5e5e5] transition h-8">
-                  <span className="text-[13px] font-semibold leading-[18.62px] text-black">Save draft</span>
-                </button>
-                <button 
-                  type="button"
-                  onClick={() => navigate("/dashboard/briefs/review")}
-                  className="px-4 py-[18px] bg-[#ffb546] backdrop-blur-sm rounded-[28px] flex items-center justify-center hover:opacity-90 transition h-8"
-                >
-                  <span className="text-[13px] font-semibold leading-[18.62px] text-black">Review brief</span>
-                </button>
-              </div>
-            </div>
+            <FormFooter
+              onDiscard={onCancel}
+              onSaveDraft={() => {}}
+              onReview={() => navigate("/dashboard/briefs/review")}
+            />
           </div>
         </div>
       </div>
@@ -1207,16 +965,25 @@ function DeliverablesSelectionScreen({ onCancel, onBack, onNavigateToAiResponse 
             </DialogDescription>
           </DialogHeader>
           <div className="flex justify-center pt-4">
-            <button
+            <PillAccent
               type="button"
               onClick={handleViewAllBriefs}
-              className="px-6 py-[18px] bg-[#ffb546] backdrop-blur-sm rounded-[28px] flex items-center justify-center gap-2.5 hover:opacity-90 transition"
+              size="md"
             >
               <span className="text-sm font-semibold leading-[18.62px] text-black">View all briefs</span>
-            </button>
+            </PillAccent>
           </div>
         </DialogContent>
       </Dialog>
+
+      {/* AI Chat Input at Bottom - Centered */}
+      <ChatInput
+        leftIconSrc={imgFrame14_v2}
+        rightIconSrc={imgFrame15_v2}
+        helpText="Need a hand? Talk to your Iris account manager"
+        className="w-[516px]"
+        containerClassName="absolute bottom-[26px] left-[264px]"
+      />
     </div>
   );
 }
@@ -1273,48 +1040,7 @@ function AIResponseScreen({ userInput, onBack, onCancel }: { userInput: string; 
   };
 
   // Mock deliverables list from Figma
-  const deliverablesList = [
-    {
-      kvType: "Q7 KV",
-      variants: [
-        { variant: "Clean", size: "1:1, 16:9, 9:16, PT, LS, Ex Pt, Ex LS" },
-        { variant: "80/20", size: "PDF, PT EXT, LS EXT" },
-        { variant: "70/30", size: "1:1, 16:9, 9:16, PT, LS, Ex Pt, Ex LS" },
-      ],
-    },
-    {
-      kvType: "B7 KV",
-      variants: [
-        { variant: "Clean", size: "1:1, 16:9, 9:16, PT, LS, Ex Pt, Ex LS" },
-        { variant: "80/20", size: "PDF, PT EXT, LS EXT" },
-        { variant: "70/30", size: "1:1, 16:9, 9:16, PT, LS, Ex Pt, Ex LS" },
-      ],
-    },
-    {
-      kvType: "Combo KV (Q7 &B7)",
-      variants: [
-        { variant: "Clean", size: "1:1, 16:9, 9:16, PT, LS, Ex Pt, Ex LS" },
-        { variant: "80/20", size: "PDF, PT EXT, LS EXT" },
-        { variant: "70/30", size: "1:1, 16:9, 9:16, PT, LS, Ex Pt, Ex LS" },
-      ],
-    },
-    {
-      kvType: "Family KV (Q7, B7 & B7R) - (Bespoke KV)",
-      variants: [
-        { variant: "Clean", size: "1:1, 16:9, 9:16, PT, LS, Ex Pt, Ex LS" },
-        { variant: "80/20", size: "PDF, PT EXT, LS EXT" },
-        { variant: "70/30", size: "1:1, 16:9, 9:16, PT, LS, Ex Pt, Ex LS" },
-      ],
-    },
-    {
-      kvType: "B7 & B7R KV (Bespoke KV)",
-      variants: [
-        { variant: "Clean", size: "1:1, 16:9, 9:16, PT, LS, Ex Pt, Ex LS" },
-        { variant: "80/20", size: "PDF, PT EXT, LS EXT" },
-        { variant: "70/30", size: "1:1, 16:9, 9:16, PT, LS, Ex Pt, Ex LS" },
-      ],
-    },
-  ];
+  const deliverablesList = DELIVERABLES_LIST;
 
   return (
     <div className="flex flex-col w-full relative h-[calc(100vh-70px)]">
@@ -1426,33 +1152,14 @@ function AIResponseScreen({ userInput, onBack, onCancel }: { userInput: string; 
           {/* Footer */}
           <div className="flex flex-col gap-1 items-end shrink-0">
             {/* Token Estimate */}
-            <div className="flex gap-2 items-center pb-2">
-              <img src={tokenIcon} alt="" className="h-5 w-5" />
-              <span className="text-[13px] leading-[18.62px] text-black">10</span>
-              <span className="text-[13px] leading-[18.62px] text-[#848487]">Tokens estimate</span>
-            </div>
+            <TokenEstimate value={10} />
 
             {/* Action Buttons */}
-            <div className="flex items-center justify-between w-full">
-              <button
-                onClick={onCancel}
-                className="px-2 py-[18px] bg-transparent rounded-[28px] flex items-center justify-center hover:bg-[#f1f1f3] transition h-8"
-              >
-                <span className="text-[13px] font-semibold leading-[18.62px] text-black">Discard</span>
-              </button>
-              <div className="flex gap-1 items-center">
-                <button className="px-4 py-[18px] bg-[#f1f1f3] backdrop-blur-sm rounded-[28px] flex items-center justify-center hover:bg-[#e5e5e5] transition h-8">
-                  <span className="text-[13px] font-semibold leading-[18.62px] text-black">Save draft</span>
-                </button>
-                <button 
-                  type="button"
-                  onClick={() => navigate("/dashboard/briefs/review")}
-                  className="px-4 py-[18px] bg-[#ffb546] backdrop-blur-sm rounded-[28px] flex items-center justify-center hover:opacity-90 transition h-8"
-                >
-                  <span className="text-[13px] font-semibold leading-[18.62px] text-black">Review brief</span>
-                </button>
-              </div>
-            </div>
+            <FormFooter
+              onDiscard={onCancel}
+              onSaveDraft={() => {}}
+              onReview={() => navigate("/dashboard/briefs/review")}
+            />
           </div>
         </div>
       </div>
@@ -1469,38 +1176,25 @@ function AIResponseScreen({ userInput, onBack, onCancel }: { userInput: string; 
             </DialogDescription>
           </DialogHeader>
           <div className="flex justify-center pt-4">
-            <button
+            <PillAccent
               type="button"
               onClick={handleViewAllBriefs}
-              className="px-6 py-[18px] bg-[#ffb546] backdrop-blur-sm rounded-[28px] flex items-center justify-center gap-2.5 hover:opacity-90 transition"
+              size="md"
             >
               <span className="text-sm font-semibold leading-[18.62px] text-black">View all briefs</span>
-            </button>
+            </PillAccent>
           </div>
         </DialogContent>
       </Dialog>
 
       {/* AI Chat Input at Bottom - Centered */}
-      <div className="absolute bottom-[26px] left-[264px] w-[516px] bg-white border border-[#e0e0e0] rounded-[23px] p-1 flex items-center justify-between">
-        <div className="flex gap-[7px] items-center flex-1">
-          <div className="h-10 w-[35.514px] shrink-0">
-            <img src={imgFrame14_v2} alt="" className="w-full h-full" />
-          </div>
-          <input
-            type="text"
-            placeholder="Type here..."
-            className="flex-1 text-sm leading-[18.62px] text-[#848487] bg-transparent border-none outline-none placeholder-[#848487]"
-          />
-        </div>
-        <div className="w-10 h-10 shrink-0 relative">
-          <img src={imgFrame15_v2} alt="" className="w-full h-full" />
-        </div>
-      </div>
-
-      {/* Help Text */}
-      <p className="absolute bottom-[22px] left-[522px] text-[12px] leading-[15.96px] text-[#424242] text-center translate-x-[-50%] translate-y-[100%] w-[347px]">
-        Need a hand? <span className="font-bold">Talk to your Iris account manager</span>
-      </p>
+      <ChatInput
+        leftIconSrc={imgFrame14_v2}
+        rightIconSrc={imgFrame15_v2}
+        helpText="Need a hand? Talk to your Iris account manager"
+        className="w-[516px]"
+        containerClassName="absolute bottom-[26px] left-[264px]"
+      />
     </div>
   );
 }
@@ -1594,77 +1288,41 @@ function AllBriefsSection() {
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {filtered.map((b) => {
           // Badge styling based on type
-          const getBadgeStyle = (badge: string) => {
-            switch (badge) {
-              case "Creation":
-                return {
-                  width: '61px',
-                  height: '20px',
-                  backgroundColor: '#0177C70D',
-                  color: '#0177C7',
-                };
-              case "Adaptation":
-                return {
-                  width: '75px',
-                  height: '20px',
-                  backgroundColor: '#8092DC0D',
-                  color: '#8092DC',
-                };
-              case "Resize":
-                return {
-                  width: '50px',
-                  height: '20px',
-                  backgroundColor: '#00C3B10F',
-                  color: '#00C3B1',
-                };
-              default:
-                return {
-                  width: 'auto',
-                  height: '20px',
-                  backgroundColor: '#f9f9f9',
-                  color: '#646464',
-                };
-            }
-          };
-
           const badgeStyle = getBadgeStyle(b.badge);
 
           return (
-            <div key={b.id} className="bg-white rounded-xl p-5 flex flex-col gap-3 border border-[#ececec] h-full">
-              <div className="flex items-center justify-between">
-                <h3 className="text-sm font-bold leading-[18.62px] text-black">{b.title}</h3>
-                <div className="flex items-center">{b.icon}</div>
-              </div>
-              <p
-                className="text-sm leading-[18.62px] text-[#646464] min-h-[38px] overflow-hidden"
-                style={{ display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical' }}
-              >
-                {b.desc}
-              </p>
-              <div className="flex items-center justify-between pt-1">
-                <span 
-                  className="text-xs py-[2px] px-2 rounded-[12px] flex items-center justify-center"
-                  style={badgeStyle}
-                >
-                  {b.badge}
-                </span>
-                <div className="flex -space-x-2">
-                  {Array.from({ length: b.avatars }).map((_, a) => {
-                    const seed = `brief_${b.id}_avatar_${a}`;
-                    return (
-                      <Avatar key={a} className="w-6 h-6 border-2 border-white">
-                        <AvatarImage 
-                          src={`https://api.dicebear.com/7.x/personas/png?seed=${seed}&size=64`} 
-                          alt={`Avatar ${a + 1}`}
-                        />
-                        <AvatarFallback className="text-xs bg-gradient-to-br from-blue-200 to-blue-300">
-                          {String.fromCharCode(65 + a)}
-                        </AvatarFallback>
-                      </Avatar>
-                    );
-                  })}
+            <BriefCard
+              key={b.id}
+              title={b.title}
+              description={b.desc}
+              right={b.icon}
+              meta={
+                <div className="flex items-center justify-between">
+                  <span 
+                    className="text-xs py-[2px] px-2 rounded-[12px] flex items-center justify-center"
+                    style={badgeStyle as React.CSSProperties}
+                  >
+                    {b.badge}
+                  </span>
+                  <div className="flex -space-x-2">
+                    {Array.from({ length: b.avatars }).map((_, a) => {
+                      const seed = `brief_${b.id}_avatar_${a}`;
+                      return (
+                        <Avatar key={a} className="w-6 h-6 border-2 border-white">
+                          <AvatarImage 
+                            src={`https://api.dicebear.com/7.x/personas/png?seed=${seed}&size=64`} 
+                            alt={`Avatar ${a + 1}`}
+                          />
+                          <AvatarFallback className="text-xs bg-gradient-to-br from-blue-200 to-blue-300">
+                            {String.fromCharCode(65 + a)}
+                          </AvatarFallback>
+                        </Avatar>
+                      );
+                    })}
+                  </div>
                 </div>
-              </div>
+              }
+            >
               <div className="h-px bg-[#ececec]" />
               <div className="flex items-center justify-between text-xs text-[#848487]">
                 <div className="flex items-center gap-1">
@@ -1672,11 +1330,11 @@ function AllBriefsSection() {
                   <span>{b.comments}</span>
                 </div>
                 <div className="flex items-center gap-1">
-                  <span>📅</span>
+                  <span>🕒</span>
                   <span>{b.date}</span>
                 </div>
               </div>
-            </div>
+            </BriefCard>
           );
         })}
       </div>
