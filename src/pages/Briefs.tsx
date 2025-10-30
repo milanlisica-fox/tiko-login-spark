@@ -1,5 +1,6 @@
 import { useMemo, useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import HBAvatar from "@/components/common/HBAvatar";
 import { Home, FileText, Folder, BarChart2, LogOut, Bell, ChevronDown, ArrowRight, Calculator, Coins, X, Calendar as CalendarIcon, ArrowLeft, Plus, ChevronDown as ChevronDownIcon } from "lucide-react";
 import { toast } from "sonner";
 import { Input } from "@/components/ui/input";
@@ -53,9 +54,16 @@ export default function BriefsPage() {
   const [briefView, setBriefView] = useState<"templates" | "form" | "deliverables" | "ai-response">("templates");
   const [aiInputText, setAiInputText] = useState("");
 
-  // Check if we should show the form directly from navigation state
+  // Check if we should show the form directly from navigation state or reset to overview
   useEffect(() => {
-    const state = location.state as { createBrief?: boolean; showForm?: boolean } | null;
+    const state = location.state as { createBrief?: boolean; showForm?: boolean; resetToOverview?: boolean } | null;
+    if (state?.resetToOverview) {
+      setIsCreatingBrief(false);
+      setBriefView("templates");
+      // Clear the state so subsequent renders don't re-trigger
+      navigate("/dashboard/briefs", { replace: true });
+      return;
+    }
     if (state?.createBrief && state?.showForm) {
       setIsCreatingBrief(true);
       setBriefView("form");
@@ -63,7 +71,7 @@ export default function BriefsPage() {
       setIsCreatingBrief(true);
       setBriefView("templates");
     }
-  }, [location.state]);
+  }, [location.state, navigate]);
 
   const navItems = useMemo(
     () => [
@@ -111,10 +119,21 @@ export default function BriefsPage() {
             {navItems.map((item) => {
               const Icon = item.icon;
               const isActive = activeName === item.name;
+              const handleNavClick = () => {
+                if (item.path === "/dashboard/briefs") {
+                  // Always show list view when clicking Briefs in the sidebar
+                  if (isCreatingBrief) {
+                    setIsCreatingBrief(false);
+                    setBriefView("templates");
+                    return;
+                  }
+                }
+                navigate(item.path);
+              };
               return (
                 <button
                   key={item.name}
-                  onClick={() => navigate(item.path)}
+                  onClick={handleNavClick}
                   className={`w-full flex items-center gap-2 px-4 py-4 rounded-lg transition relative ${
                     isActive ? "bg-white" : "bg-transparent hover:bg-white/50"
                   }`}
@@ -258,9 +277,7 @@ export default function BriefsPage() {
               onClick={() => navigate("/dashboard/profile")}
               className="flex items-center gap-2 hover:opacity-80 transition cursor-pointer"
             >
-              <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white font-bold text-sm">
-                HB
-              </div>
+              <HBAvatar size={40} />
               <div className="flex flex-col">
                 <p className="text-sm font-bold leading-[18.62px] text-[#646464]">Henry Bray</p>
                 <p className="text-xs leading-[15.96px] text-[#646464]">Marcomms</p>
@@ -310,14 +327,14 @@ export default function BriefsPage() {
                 <div className="flex gap-3 h-12">
                   <button 
                     onClick={() => navigate("/dashboard/calculator")}
-                    className="px-6 py-[18px] bg-[#f1f1f3] backdrop-blur-sm rounded-[28px] flex items-center justify-center gap-2.5 hover:bg-[#e5e5e5] transition"
+                    className="w-[224px] h-10 bg-[#f1f1f3] backdrop-blur-sm rounded-[28px] flex items-center justify-center gap-[10px] px-[24px] hover:bg-[#e5e5e5] transition"
                   >
                     <Calculator size={16} />
                     <span className="text-[13px] font-semibold leading-[18.62px] text-black whitespace-nowrap">Quick calculator</span>
                   </button>
                   <button 
                     onClick={() => setIsCreatingBrief(true)}
-                    className="backdrop-blur-[6px] backdrop-filter bg-[#ffb546] px-[24px] py-[18px] rounded-[28px] flex items-center justify-center gap-[10px] hover:opacity-90 transition"
+                    className="w-[224px] h-10 backdrop-blur-[6px] backdrop-filter bg-[#ffb546] px-[24px] rounded-[28px] flex items-center justify-center gap-[10px] hover:opacity-90 transition"
                   >
                     <span className="text-[16px] font-semibold leading-[23.94px] text-black whitespace-nowrap">Create brief</span>
                     <img src={createBriefArrowIcon} alt="" className="h-[14px] w-[15.567px]" />
@@ -562,14 +579,14 @@ function TemplateSelectionScreen({ onCancel, onCreateBrief }: { onCancel: () => 
         <div className="flex gap-2.5 items-center">
           <button 
             onClick={() => navigate("/dashboard/calculator")}
-            className="px-6 py-[18px] bg-[#f1f1f3] backdrop-blur-sm rounded-[28px] flex items-center justify-center gap-2.5 hover:bg-[#e5e5e5] transition h-10"
+            className="w-[224px] h-10 bg-[#f1f1f3] backdrop-blur-sm rounded-[28px] flex items-center justify-center gap-[10px] px-[24px] hover:bg-[#e5e5e5] transition"
           >
             <Calculator size={16} />
             <span className="text-base font-semibold leading-[23.94px] text-black whitespace-nowrap">Quick calculator</span>
           </button>
           <button 
             onClick={onCreateBrief}
-            className="backdrop-blur-[6px] backdrop-filter bg-[#ffb546] px-[24px] py-[18px] rounded-[28px] flex items-center justify-center gap-[10px] hover:opacity-90 transition"
+            className="w-[224px] h-10 backdrop-blur-[6px] backdrop-filter bg-[#ffb546] px-[24px] rounded-[28px] flex items-center justify-center gap-[10px] hover:opacity-90 transition"
           >
             <span className="text-[16px] font-semibold leading-[23.94px] text-black whitespace-nowrap">Create brief</span>
             <img src={createBriefArrowIcon} alt="" className="h-[14px] w-[15.567px]" />
@@ -676,7 +693,7 @@ function NewBriefForm({ onCancel, onNext }: { onCancel: () => void; onNext: () =
 
   const handleViewAllBriefs = () => {
     setShowConfirmation(false);
-    navigate("/dashboard/briefs");
+    navigate("/dashboard/briefs", { state: { resetToOverview: true } });
   };
 
   useEffect(() => {
@@ -947,7 +964,7 @@ function DeliverablesSelectionScreen({ onCancel, onBack, onNavigateToAiResponse 
 
   const handleViewAllBriefs = () => {
     setShowConfirmation(false);
-    navigate("/dashboard/briefs");
+    navigate("/dashboard/briefs", { state: { resetToOverview: true } });
   };
 
   useEffect(() => {

@@ -1,5 +1,6 @@
 import { useMemo } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import HBAvatar from "@/components/common/HBAvatar";
 import { Home, FileText, Folder, BarChart2, LogOut, Bell, ChevronDown, ArrowRight, Calculator, Coins } from "lucide-react";
 import { toast } from "sonner";
 import { Popover, PopoverTrigger, PopoverContent } from "@/components/ui/popover";
@@ -196,9 +197,7 @@ export default function TikoDashboard() {
               onClick={() => navigate("/dashboard/profile")}
               className="flex items-center gap-2 hover:opacity-80 transition cursor-pointer"
             >
-              <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white font-bold text-sm">
-                HB
-              </div>
+              <HBAvatar size={40} />
               <div className="flex flex-col">
                 <p className="text-sm font-bold leading-[18.62px] text-[#646464]">Henry Bray</p>
                 <p className="text-xs leading-[15.96px] text-[#646464]">Marcomms</p>
@@ -232,7 +231,7 @@ export default function TikoDashboard() {
                   </span>
                 </button>
                 <button 
-                  onClick={() => navigate("/dashboard/briefs", { state: { createBrief: true, showForm: true } })}
+                  onClick={() => navigate("/dashboard/briefs", { state: { createBrief: true } })}
                   className="backdrop-blur-[6px] backdrop-filter bg-[#ffb546] px-[24px] py-[18px] rounded-[28px] flex items-center justify-center gap-[10px] hover:opacity-90 transition"
                 >
                   <span className="text-[16px] font-semibold leading-[23.94px] text-black whitespace-nowrap">
