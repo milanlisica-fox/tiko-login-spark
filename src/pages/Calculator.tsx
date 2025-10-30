@@ -462,9 +462,9 @@ export default function CalculatorPage() {
               {/* Create Brief Button */}
               <button
                 onClick={handleCreateBrief}
-                className="mt-auto w-full backdrop-blur-[6px] backdrop-filter bg-[#ffb546] px-[24px] py-[18px] rounded-[28px] flex items-center justify-center gap-[10px] hover:opacity-90 transition mt-6"
+                className="mt-auto w-full h-10 backdrop-blur-[6px] backdrop-filter bg-[#ffb546] px-[24px] rounded-[28px] flex items-center justify-center gap-[10px] hover:opacity-90 transition mt-6"
               >
-                <span className="text-[16px] font-semibold leading-[23.94px] text-black">
+                <span className="text-[16px] font-semibold leading-[23.94px] text-black whitespace-nowrap">
                   Create brief
                 </span>
                 <img src={createBriefArrowIcon} alt="" className="h-[14px] w-[15.567px]" />

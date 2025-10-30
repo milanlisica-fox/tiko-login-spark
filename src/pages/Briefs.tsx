@@ -324,17 +324,17 @@ export default function BriefsPage() {
                   <h1 className="text-[32px] font-bold leading-[38.4px] text-black">Briefs overview</h1>
                   <p className="text-lg leading-[23.94px] text-black">Kickstart your next project with clarity and ease</p>
                 </div>
-                <div className="flex gap-3 h-12">
+                <div className="flex gap-2.5 items-center">
                   <button 
                     onClick={() => navigate("/dashboard/calculator")}
-                    className="w-[224px] h-10 bg-[#f1f1f3] backdrop-blur-sm rounded-[28px] flex items-center justify-center gap-[10px] px-[24px] hover:bg-[#e5e5e5] transition"
+                    className="w-[216px] bg-[#f1f1f3] backdrop-blur-sm rounded-[28px] flex items-center justify-center gap-[10px] px-[24px] py-[18px] hover:bg-[#e5e5e5] transition"
                   >
                     <Calculator size={16} />
-                    <span className="text-[13px] font-semibold leading-[18.62px] text-black whitespace-nowrap">Quick calculator</span>
+                    <span className="text-base font-semibold leading-[23.94px] text-black whitespace-nowrap">Quick calculator</span>
                   </button>
                   <button 
                     onClick={() => setIsCreatingBrief(true)}
-                    className="w-[224px] h-10 backdrop-blur-[6px] backdrop-filter bg-[#ffb546] px-[24px] rounded-[28px] flex items-center justify-center gap-[10px] hover:opacity-90 transition"
+                    className="w-[216px] backdrop-blur-[6px] backdrop-filter bg-[#ffb546] px-[24px] py-[18px] rounded-[28px] flex items-center justify-center gap-[10px] hover:opacity-90 transition"
                   >
                     <span className="text-[16px] font-semibold leading-[23.94px] text-black whitespace-nowrap">Create brief</span>
                     <img src={createBriefArrowIcon} alt="" className="h-[14px] w-[15.567px]" />

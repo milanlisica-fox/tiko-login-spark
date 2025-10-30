@@ -221,18 +221,19 @@ export default function TikoDashboard() {
                 </p>
               </div>
 
-              <div className="flex gap-3 h-12">
+              <div className="flex gap-2.5 items-center">
                 <button 
                   onClick={() => navigate("/dashboard/calculator")}
-                  className="px-6 py-[18px] bg-[#f1f1f3] backdrop-blur-sm rounded-[28px] flex items-center justify-center gap-2.5 hover:bg-[#e5e5e5] transition"
+                  className="w-[216px] bg-[#f1f1f3] backdrop-blur-sm rounded-[28px] flex items-center justify-center gap-[10px] px-[24px] py-[18px] hover:bg-[#e5e5e5] transition"
                 >
-                  <span className="text-[13px] font-semibold leading-[18.62px] text-black whitespace-nowrap">
+                  <Calculator size={16} />
+                  <span className="text-base font-semibold leading-[23.94px] text-black whitespace-nowrap">
                     Quick calculator
                   </span>
                 </button>
                 <button 
                   onClick={() => navigate("/dashboard/briefs", { state: { createBrief: true } })}
-                  className="backdrop-blur-[6px] backdrop-filter bg-[#ffb546] px-[24px] py-[18px] rounded-[28px] flex items-center justify-center gap-[10px] hover:opacity-90 transition"
+                  className="w-[216px] backdrop-blur-[6px] backdrop-filter bg-[#ffb546] px-[24px] py-[18px] rounded-[28px] flex items-center justify-center gap-[10px] hover:opacity-90 transition"
                 >
                   <span className="text-[16px] font-semibold leading-[23.94px] text-black whitespace-nowrap">
                     Create brief
