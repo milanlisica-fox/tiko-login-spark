@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Home, FileText, Folder, BarChart2, LogOut, ArrowRight, User, Bell, Coins, ChevronDown, Upload, Trash2 } from "lucide-react";
 import { toast } from "sonner";
@@ -7,6 +7,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Dialog, DialogContent, DialogOverlay } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Popover, PopoverTrigger, PopoverContent } from "@/components/ui/popover";
+import HBAvatar from "@/components/common/HBAvatar";
 
 // Figma image URLs
 const logoImage = "https://www.figma.com/api/mcp/asset/e6ec2a32-b26b-4e3a-bd4a-4e803cad7b85";
@@ -69,11 +70,14 @@ export default function UserProfilePage() {
   const [showCurrentPassword, setShowCurrentPassword] = useState(false);
   const [showNewPassword, setShowNewPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [avatarSrc, setAvatarSrc] = useState<string | undefined>(undefined);
+  const [tempAvatarSrc, setTempAvatarSrc] = useState<string | undefined>(undefined);
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
 
   const navItems = useMemo(
     () => [
       { name: "Central", icon: Home, path: "/dashboard" },
-      { name: "Briefs", icon: FileText, path: "/dashboard/briefs", hasNotification: true },
+      { name: "Briefs", icon: FileText, path: "/dashboard/briefs" },
       { name: "Projects", icon: Folder, path: "/dashboard/projects" },
       { name: "Tracker", icon: BarChart2, path: "/dashboard/tracker" },
     ],
@@ -164,9 +168,6 @@ export default function UserProfilePage() {
                   <span className={`text-sm leading-[19.6px] ${isActive ? "font-semibold" : "font-normal"} text-black`}>
                     {item.name}
                   </span>
-                  {item.hasNotification && (
-                    <div className="absolute left-[13px] top-0.5 w-2 h-2 bg-[#ff4337] border-2 border-[#f7f7f7] rounded-full" />
-                  )}
                 </button>
               );
             })}
@@ -283,13 +284,11 @@ export default function UserProfilePage() {
             </div>
 
             {/* User Profile */}
-            <button
+              <button
               onClick={() => navigate("/dashboard/profile")}
               className="flex items-center gap-2 hover:opacity-80 transition cursor-pointer"
             >
-              <div className="w-10 h-10 rounded-full bg-gray-200 overflow-hidden">
-                <div className="w-full h-full bg-gradient-to-br from-blue-200 to-blue-300" />
-              </div>
+              <HBAvatar size={40} src={avatarSrc} />
               <div className="flex flex-col">
                 <p className="text-sm font-bold leading-[18.62px] text-[#646464]">Henry Bray</p>
                 <p className="text-xs leading-[15.96px] text-[#646464]">Marcomms</p>
@@ -305,30 +304,14 @@ export default function UserProfilePage() {
             {/* User Header */}
             <div className="flex gap-[24px] items-center">
               {/* Avatar */}
-              <div 
-                className="h-[120px] w-[121.739px] rounded-full overflow-hidden relative shrink-0 cursor-pointer group"
-                onClick={() => setIsPhotoDialogOpen(true)}
+              <div
+                className="h-[120px] w-[120px] rounded-full cursor-pointer group relative shrink-0"
+                onClick={() => { setTempAvatarSrc(avatarSrc); setIsPhotoDialogOpen(true); }}
               >
-                {/* Base avatar images */}
-                <div className="absolute inset-0">
-                  <img alt="" className="block max-w-none size-full" src={avatarHoverImg1} />
-                </div>
-                <div className="h-[41.104px] w-[32.443px] absolute top-[calc(50%-20.552px)] left-[calc(50%-16.2215px)]">
-                  <img alt="" className="block max-w-none size-full" src={avatarHoverImg2} />
-                </div>
-                <div className="h-[41.104px] w-[32.232px] absolute top-[calc(50%-20.552px)] left-[calc(50%+16.116px)]">
-                  <img alt="" className="block max-w-none size-full" src={avatarHoverImg3} />
-                </div>
-                <div className="absolute inset-[34.15%_27.36%_48.72%_55.51%]">
-                  <img alt="" className="block max-w-none size-full" src={avatarHoverImg4} />
-                </div>
-                <div className="absolute inset-[34.15%_56.44%_48.72%_26.42%]">
-                  <img alt="" className="block max-w-none size-full" src={avatarHoverImg5} />
-                </div>
-                
+                <HBAvatar size={120} className="rounded-full" src={avatarSrc} />
                 {/* Hover overlay with "Add photo" text */}
                 <div className="absolute inset-0 bg-[rgba(131,110,110,0.7)] flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200 rounded-full">
-                  <p 
+                  <p
                     className="text-[22px] font-bold leading-[29.26px] text-[#fcfcff] not-italic"
                     style={{ textShadow: '0px 1px 4px rgba(0,0,0,0.25)' }}
                   >
@@ -558,27 +541,36 @@ export default function UserProfilePage() {
                 {/* Avatar Preview and Actions */}
                 <div className="flex flex-col gap-[40px] items-center">
                   {/* Large Avatar Preview */}
-                  <div className="h-[160px] w-[162.319px] rounded-full overflow-hidden relative shrink-0">
-                    <div className="absolute inset-0">
-                      <img alt="" className="block max-w-none size-full" src={dialogAvatarImg1} />
-                    </div>
-                    <div className="absolute inset-[32.79%_50.83%_32.96%_22.52%]">
-                      <img alt="" className="block max-w-none size-full" src={dialogAvatarImg2} />
-                    </div>
-                    <div className="absolute inset-[32.79%_21.17%_32.96%_52.35%]">
-                      <img alt="" className="block max-w-none size-full" src={dialogAvatarImg3} />
-                    </div>
-                    <div className="absolute inset-[34.15%_27.36%_48.72%_55.51%]">
-                      <img alt="" className="block max-w-none size-full" src={dialogAvatarImg4} />
-                    </div>
-                    <div className="absolute inset-[34.15%_56.44%_48.72%_26.42%]">
-                      <img alt="" className="block max-w-none size-full" src={dialogAvatarImg5} />
-                    </div>
-                  </div>
+                  <HBAvatar size={160} src={tempAvatarSrc} />
 
                   {/* Upload and Remove Buttons */}
                   <div className="flex gap-[40px] items-start">
-                    <button className="flex gap-[4px] items-start hover:opacity-80 transition cursor-pointer">
+                    <input
+                      ref={fileInputRef}
+                      type="file"
+                      accept="image/*"
+                      className="hidden"
+                      onChange={(e) => {
+                        const file = e.target.files && e.target.files[0];
+                        if (!file) return;
+                        if (file.size > 1024 * 1024) {
+                          toast.error("Max file size is 1 MB");
+                          e.currentTarget.value = "";
+                          return;
+                        }
+                        if (!file.type.startsWith("image/")) {
+                          toast.error("Please select an image file");
+                          e.currentTarget.value = "";
+                          return;
+                        }
+                        const objectUrl = URL.createObjectURL(file);
+                        setTempAvatarSrc((prev) => {
+                          if (prev && prev.startsWith("blob:")) URL.revokeObjectURL(prev);
+                          return objectUrl;
+                        });
+                      }}
+                    />
+                    <button className="flex gap-[4px] items-start hover:opacity-80 transition cursor-pointer" onClick={() => fileInputRef.current?.click()}>
                       <div className="overflow-clip relative shrink-0 size-[20px]">
                         <img src={uploadIcon} alt="Upload" className="block max-w-none size-full" />
                       </div>
@@ -586,7 +578,12 @@ export default function UserProfilePage() {
                         Upload
                       </p>
                     </button>
-                    <button className="flex gap-[4px] items-start hover:opacity-80 transition cursor-pointer">
+                    <button className="flex gap-[4px] items-start hover:opacity-80 transition cursor-pointer" onClick={() => {
+                      setTempAvatarSrc((prev) => {
+                        if (prev && prev.startsWith("blob:")) URL.revokeObjectURL(prev);
+                        return undefined;
+                      });
+                    }}>
                       <div className="overflow-clip relative shrink-0 size-[20px]">
                         <img src={deleteIcon} alt="Remove" className="block max-w-none size-full" />
                       </div>
@@ -622,6 +619,12 @@ export default function UserProfilePage() {
                 </Button>
                 <Button
                   onClick={() => {
+                    setAvatarSrc((prev) => {
+                      if (prev && prev.startsWith("blob:") && prev !== tempAvatarSrc) {
+                        URL.revokeObjectURL(prev);
+                      }
+                      return tempAvatarSrc;
+                    });
                     toast.success("Profile picture saved");
                     setIsPhotoDialogOpen(false);
                   }}

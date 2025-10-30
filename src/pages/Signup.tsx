@@ -125,7 +125,7 @@ const Signup = () => {
                   <p className="text-sm leading-[17px] text-card-foreground/70 text-left">
                     Already have an account?{" "}
                     <Link
-                      to="/login"
+                      to="/"
                       className="font-bold text-card-foreground/70 hover:text-card-foreground transition-colors"
                     >
                       Sign in

@@ -1,5 +1,6 @@
 import { useMemo } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import HBAvatar from "@/components/common/HBAvatar";
 import { Home, FileText, Folder, BarChart2, LogOut, Bell, ChevronDown, ArrowRight, Coins, AlertTriangle } from "lucide-react";
 import { toast } from "sonner";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
@@ -28,7 +29,7 @@ export default function ProjectsPage() {
   const navItems = useMemo(
     () => [
       { name: "Central", icon: Home, path: "/dashboard" },
-      { name: "Briefs", icon: FileText, path: "/dashboard/briefs", hasNotification: true },
+      { name: "Briefs", icon: FileText, path: "/dashboard/briefs" },
       { name: "Projects", icon: Folder, path: "/dashboard/projects" },
       { name: "Tracker", icon: BarChart2, path: "/dashboard/tracker" },
     ],
@@ -216,9 +217,6 @@ export default function ProjectsPage() {
                   <span className={`text-sm leading-[19.6px] ${isActive ? "font-semibold" : "font-normal"} text-black`}>
                     {item.name}
                   </span>
-                  {item.hasNotification && (
-                    <div className="absolute left-[13px] top-0.5 w-2 h-2 bg-[#ff4337] border-2 border-[#f7f7f7] rounded-full" />
-                  )}
                 </button>
               );
             })}
@@ -243,7 +241,7 @@ export default function ProjectsPage() {
         <header className="h-[70px] bg-[#f9f9f9] border-b border-[#e0e0e0] flex items-center justify-between px-4 relative">
           {/* Breadcrumb */}
           <div className="flex items-center gap-2 px-4 py-4 rounded-lg">
-            <Home size={20} className="text-black" />
+            <Folder size={20} className="text-black" />
             <span className="text-sm leading-[19.6px] text-black">{activeName}</span>
           </div>
 
@@ -337,9 +335,7 @@ export default function ProjectsPage() {
               onClick={() => navigate("/dashboard/profile")}
               className="flex items-center gap-2 hover:opacity-80 transition cursor-pointer"
             >
-              <div className="w-10 h-10 rounded-full bg-gray-200 overflow-hidden">
-                <div className="w-full h-full bg-gradient-to-br from-blue-200 to-blue-300" />
-              </div>
+              <HBAvatar size={40} />
               <div className="flex flex-col">
                 <p className="text-sm font-bold leading-[18.62px] text-[#646464]">Henry Bray</p>
                 <p className="text-xs leading-[15.96px] text-[#646464]">Marcomms</p>
