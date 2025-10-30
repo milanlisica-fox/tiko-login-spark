@@ -1,3 +1,6 @@
+@import url("./styles/tokens.css");
+@import url("./styles/components.css");
+@import url("./styles/typography.css");
 @tailwind base;
 @tailwind components;
 @tailwind utilities;

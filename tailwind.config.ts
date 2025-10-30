@@ -1,4 +1,5 @@
 import type { Config } from "tailwindcss";
+import tailwindAnimate from "tailwindcss-animate";
 
 export default {
   darkMode: ["class"],
@@ -57,11 +58,34 @@ export default {
           border: "hsl(var(--sidebar-border))",
           ring: "hsl(var(--sidebar-ring))",
         },
+        // Project brand tokens (hex via CSS variables)
+        brand: "var(--color-brand)",
+        accent2: "var(--color-accent)",
+        danger: "var(--color-danger)",
+        success: "var(--color-success)",
+        info: "var(--color-info)",
+        surface: "var(--color-surface)",
+        text: "var(--color-text)",
+        muted2: "var(--color-muted)",
+        subtle: "var(--color-subtle)",
+        bgNeutral: "var(--color-bg)",
+        borderNeutral: "var(--color-border)",
       },
       borderRadius: {
         lg: "var(--radius)",
         md: "calc(var(--radius) - 2px)",
         sm: "calc(var(--radius) - 4px)",
+        pill: "var(--radius-lg)",
+        card: "var(--radius-md)",
+        tile: "var(--radius-xl)",
+      },
+      boxShadow: {
+        sm: "var(--shadow-sm)",
+        md: "var(--shadow-md)",
+      },
+      zIndex: {
+        popover: "var(--z-popover)",
+        dialog: "var(--z-dialog)",
       },
       keyframes: {
         "accordion-down": {
@@ -96,5 +120,5 @@ export default {
       },
     },
   },
-  plugins: [require("tailwindcss-animate")],
+  plugins: [tailwindAnimate],
 } satisfies Config;

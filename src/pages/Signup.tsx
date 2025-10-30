@@ -53,7 +53,7 @@ const Signup = () => {
       colors: ['#00D4FF', '#FFB800', '#1C1C1C', '#FFFFFF'],
     };
 
-    function fire(particleRatio: number, opts: any) {
+    function fire(particleRatio: number, opts: confetti.Options) {
       confetti({
         ...defaults,
         ...opts,

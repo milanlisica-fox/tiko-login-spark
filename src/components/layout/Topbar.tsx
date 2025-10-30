@@ -1,11 +1,12 @@
 import React from "react";
 import NotificationsPopover from "@/components/layout/NotificationsPopover";
 import UserMenu from "@/components/layout/UserMenu";
-import { Coins } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { Icons } from "@/constants/icons";
 
 export default function Topbar({ title, Right }: { title: React.ReactNode; Right?: React.ReactNode }) {
   const navigate = useNavigate();
+  const TokensIcon = Icons.tokens;
   return (
     <header className="h-[70px] bg-[#f9f9f9] border-b border-[#e0e0e0] flex items-center justify-between px-4">
       <div className="flex items-center gap-2 px-4 py-4">
@@ -20,7 +21,7 @@ export default function Topbar({ title, Right }: { title: React.ReactNode; Right
           <>
             <NotificationsPopover />
             <div className="flex items-center gap-1">
-              <Coins size={20} className="text-[#848487]" />
+              <TokensIcon size={20} className="text-[#848487]" />
               <span className="text-xs leading-[15.96px] text-[#646464]">372 Tokens</span>
             </div>
             <UserMenu name="Henry Bray" dept="Marcomms" onClick={() => navigate("/dashboard/profile")} />

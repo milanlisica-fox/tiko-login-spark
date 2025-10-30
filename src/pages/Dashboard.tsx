@@ -7,16 +7,16 @@ import { Popover, PopoverTrigger, PopoverContent } from "@/components/ui/popover
 import DashboardLayout from "@/components/layout/DashboardLayout";
 import NotificationsPopover from "@/components/layout/NotificationsPopover";
 import { BRAND } from "@/constants/branding";
+import { DASHBOARD_ASSETS } from "@/constants/dashboard-assets";
 
 // Figma image URLs
 const logoImage = BRAND.logo;
 const logoDot = BRAND.logoDot;
-
-const briefsVector1 = "https://www.figma.com/api/mcp/asset/c3d9cf0a-062c-4d11-83eb-cab601f0ed31";
-const briefsVector2 = "https://www.figma.com/api/mcp/asset/862d739b-abb1-4a57-a57c-854b7c9d2dce";
-const briefsVector3 = "https://www.figma.com/api/mcp/asset/c97bed00-0373-4dd4-9c22-a0b5fd884097";
-const projectsVector = "https://www.figma.com/api/mcp/asset/5e2d54d4-2d3d-4c1e-99a9-d369def9bc84";
-const createBriefArrowIcon = "https://www.figma.com/api/mcp/asset/33c5c1d3-721c-423d-8e72-cd89fd07637c";
+const briefsVector1 = DASHBOARD_ASSETS.briefsVector1;
+const briefsVector2 = DASHBOARD_ASSETS.briefsVector2;
+const briefsVector3 = DASHBOARD_ASSETS.briefsVector3;
+const projectsVector = DASHBOARD_ASSETS.projectsVector;
+const createBriefArrowIcon = DASHBOARD_ASSETS.createBriefArrowIcon;
 
 export default function TikoDashboard() {
   const navigate = useNavigate();
@@ -69,10 +69,10 @@ export default function TikoDashboard() {
             {/* Header with action buttons */}
             <div className="flex items-center justify-between">
               <div className="flex flex-col gap-1">
-                <h1 className="text-[32px] font-bold leading-[38.4px] text-black">
+                <h1 className="text-h1 text-black">
                   Welcome back, Henry!
                 </h1>
-                <p className="text-lg leading-[23.94px] text-black">
+                <p className="text-body text-black">
                   Create briefs, track progress, and keep momentum flowing.
                 </p>
               </div>

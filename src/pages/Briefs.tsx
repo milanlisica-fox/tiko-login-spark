@@ -27,6 +27,10 @@ import TokenEstimate from "@/components/common/TokenEstimate";
 import { getBadgeStyle } from "@/lib/utils";
 import { ALL_TEMPLATES } from "@/constants/templates";
 import { RECOMMENDED_DELIVERABLES, DELIVERABLES_LIST } from "@/constants/deliverables";
+import { Icons } from "@/constants/icons";
+import { BRIEFS_ASSETS } from "@/constants/briefs-assets";
+import Badge from "@/components/common/Badge";
+import AvatarStack from "@/components/common/AvatarStack";
 
 // Reuse images from Dashboard for consistent visuals
 const logoImage = BRAND.logo;
@@ -39,28 +43,28 @@ const iconPOS = TEMPLATE_ICONS.pos;
 const iconDigitalPOS = TEMPLATE_ICONS.digitalPos;
 const iconFeatureAsset = TEMPLATE_ICONS.featureAsset;
 const iconToolkit = TEMPLATE_ICONS.toolkit;
-const iconPartnerships = "https://www.figma.com/api/mcp/asset/c1a556d8-686f-44f2-88a7-ae10c1e9e2f2";
-const iconSocialContent = "https://www.figma.com/api/mcp/asset/5538e7d7-21fd-482e-a031-dbcda03fedf1";
-const arrowRightIcon = "https://www.figma.com/api/mcp/asset/aded2578-385a-4338-976a-dd31471fba50";
+const iconPartnerships = TEMPLATE_ICONS.assetAdaptation;
+const iconSocialContent = TEMPLATE_ICONS.pos;
+const arrowRightIcon = BRIEFS_ASSETS.arrowRightIcon;
 
 // New brief form images from Figma
-const briefLoadingIcon = "https://www.figma.com/api/mcp/asset/72b9b00c-3cef-4290-a604-5a85dae49da4";
-const tokenIcon = "https://www.figma.com/api/mcp/asset/9b4ee3b2-4fab-4d57-a716-36af1bfb4291";
-const createBriefArrowIcon = "https://www.figma.com/api/mcp/asset/33c5c1d3-721c-423d-8e72-cd89fd07637c";
+const briefLoadingIcon = BRIEFS_ASSETS.briefLoadingIcon;
+const tokenIcon = BRIEFS_ASSETS.tokenIcon;
+const createBriefArrowIcon = BRIEFS_ASSETS.createBriefArrowIcon;
 
 // Deliverables screen images from Figma
-const imgFrame14 = "https://www.figma.com/api/mcp/asset/fe99575b-8465-4231-a868-ebd338d7488e";
-const imgFrame15 = "https://www.figma.com/api/mcp/asset/73cdd6a7-1b90-41e6-92b7-d74d896ac41b";
-const imgLine10 = "https://www.figma.com/api/mcp/asset/72de3633-cbde-4f52-a617-6480a78ffab1";
-const imgLineStroke = "https://www.figma.com/api/mcp/asset/7526d27e-2d12-451f-8734-7948c58e1bb8";
+const imgFrame14 = BRIEFS_ASSETS.imgFrame14;
+const imgFrame15 = BRIEFS_ASSETS.imgFrame15;
+const imgLine10 = BRIEFS_ASSETS.imgLine10;
+const imgLineStroke = BRIEFS_ASSETS.imgLineStroke;
 
 // AI Response screen images from Figma
-const imgLine11 = "https://www.figma.com/api/mcp/asset/eb5e3b99-c1d1-4c7f-8b76-b1d1f7328087";
-const imgLine12 = "https://www.figma.com/api/mcp/asset/b0c33ab4-8352-4301-888e-175517ef6274";
-const imgFrame14_v2 = "https://www.figma.com/api/mcp/asset/d26c3cfb-b903-4bcb-acad-deab88e4291e";
-const imgFrame15_v2 = "https://www.figma.com/api/mcp/asset/47ce8115-0573-4c9b-87da-8910dfe4fced";
+const imgLine11 = BRIEFS_ASSETS.imgLine11;
+const imgLine12 = BRIEFS_ASSETS.imgLine12;
+const imgFrame14_v2 = BRIEFS_ASSETS.imgFrame14_v2;
+const imgFrame15_v2 = BRIEFS_ASSETS.imgFrame15_v2;
 // Upload icon (match profile picture dialog)
-const uploadIcon = "https://www.figma.com/api/mcp/asset/ddbd83a4-2dd8-426f-9875-8383e44a9aa0";
+const uploadIcon = BRIEFS_ASSETS.uploadIcon;
 
 export default function BriefsPage() {
   const navigate = useNavigate();
@@ -107,7 +111,7 @@ export default function BriefsPage() {
     <>
       <NotificationsPopover />
       <div className="flex items-center gap-1">
-        <Coins size={20} className="text-[#848487]" />
+        <Icons.tokens size={20} className="text-[#848487]" />
         <span className="text-xs leading-[15.96px] text-[#646464]">372 Tokens</span>
       </div>
       <button onClick={() => navigate("/dashboard/profile")} className="flex items-center gap-2 hover:opacity-80 transition cursor-pointer">
@@ -116,7 +120,7 @@ export default function BriefsPage() {
           <p className="text-sm font-bold leading-[18.62px] text-[#646464]">Henry Bray</p>
           <p className="text-xs leading-[15.96px] text-[#646464]">Marcomms</p>
         </div>
-        <ChevronDown size={24} className="text-[#646464] rotate-90" />
+        <Icons.chevronDown size={24} className="text-[#646464] rotate-90" />
       </button>
     </>
   );
@@ -128,7 +132,7 @@ export default function BriefsPage() {
       <span className="text-sm leading-[19.6px] text-black">{pageTitle}</span>
     ) : (
       <div className="flex items-center gap-2">
-        <FileText size={20} className="text-black" />
+        <Icons.briefs size={20} className="text-black" />
         <span className="text-sm leading-[19.6px] text-black">{activeName}</span>
       </div>
     )
@@ -185,8 +189,8 @@ export default function BriefsPage() {
               {/* Header */}
               <div className="flex items-center justify-between">
                 <div className="flex flex-col gap-1">
-                  <h1 className="text-[32px] font-bold leading-[38.4px] text-black">Briefs overview</h1>
-                  <p className="text-lg leading-[23.94px] text-black">Kickstart your next project with clarity and ease</p>
+                  <h1 className="text-h1 text-black">Briefs overview</h1>
+                  <p className="text-body text-black">Kickstart your next project with clarity and ease</p>
                 </div>
                 <div className="flex gap-2.5 items-center">
                   <PillPrimary
@@ -194,7 +198,7 @@ export default function BriefsPage() {
                     size="md"
                     className="w-[224px]"
                   >
-                    <Calculator size={16} className="text-black" />
+                    <Icons.calculator size={16} className="text-black" />
                     <span className="font-semibold leading-[23.94px] text-black whitespace-nowrap">Quick calculator</span>
                   </PillPrimary>
                   <PillAccent
@@ -414,7 +418,7 @@ function TemplateSelectionScreen({ onCancel, onCreateBrief }: { onCancel: () => 
       {/* Header Section */}
       <div className="flex flex-col gap-6 items-center w-full">
         <div className="flex flex-col gap-4 items-center">
-          <h1 className="text-[32px] font-bold leading-[38.4px] text-black text-center">
+          <h1 className="text-h1 text-black text-center">
             Write your next brief in minutes
           </h1>
           <p className="text-sm leading-[18.62px] text-black text-center max-w-[600px]">
@@ -431,7 +435,7 @@ function TemplateSelectionScreen({ onCancel, onCreateBrief }: { onCancel: () => 
             size="md"
             className="w-[224px]"
           >
-            <Calculator size={16} className="text-black" />
+            <Icons.calculator size={16} className="text-black" />
             <span className="font-semibold leading-[23.94px] text-black whitespace-nowrap">Quick calculator</span>
           </PillPrimary>
           <PillAccent
@@ -730,7 +734,7 @@ function NewBriefForm({ onCancel, onNext }: { onCancel: () => void; onNext: () =
       <Dialog open={showConfirmation} onOpenChange={setShowConfirmation}>
         <DialogContent className="sm:max-w-md !bg-white border border-[#e0e0e0] rounded-xl p-8 [&>button]:hidden">
           <DialogHeader className="flex flex-col gap-4 items-center text-center">
-            <DialogTitle className="text-[32px] font-bold leading-[38.4px] text-black text-center">
+            <DialogTitle className="text-h1 text-black text-center">
               Brief successfully submitted!
             </DialogTitle>
             <DialogDescription className="text-sm leading-[18.62px] text-[#424242] text-center">
@@ -955,7 +959,7 @@ function DeliverablesSelectionScreen({ onCancel, onBack, onNavigateToAiResponse 
       <Dialog open={showConfirmation} onOpenChange={setShowConfirmation}>
         <DialogContent className="sm:max-w-md !bg-white border border-[#e0e0e0] rounded-xl p-8 [&>button]:hidden">
           <DialogHeader className="flex flex-col gap-4 items-center text-center">
-            <DialogTitle className="text-[32px] font-bold leading-[38.4px] text-black text-center">
+            <DialogTitle className="text-h1 text-black text-center">
               Brief successfully submitted!
             </DialogTitle>
             <DialogDescription className="text-sm leading-[18.62px] text-[#424242] text-center">
@@ -1166,7 +1170,7 @@ function AIResponseScreen({ userInput, onBack, onCancel }: { userInput: string; 
       <Dialog open={showConfirmation} onOpenChange={setShowConfirmation}>
         <DialogContent className="sm:max-w-md !bg-white border border-[#e0e0e0] rounded-xl p-8 [&>button]:hidden">
           <DialogHeader className="flex flex-col gap-4 items-center text-center">
-            <DialogTitle className="text-[32px] font-bold leading-[38.4px] text-black text-center">
+            <DialogTitle className="text-h1 text-black text-center">
               Brief successfully submitted!
             </DialogTitle>
             <DialogDescription className="text-sm leading-[18.62px] text-[#424242] text-center">
@@ -1274,7 +1278,7 @@ function AllBriefsSection() {
         {["All", "Drafts", "In review"].map((tab) => (
           <button
             key={tab}
-            onClick={() => setActiveTab(tab as any)}
+            onClick={() => setActiveTab(tab as "All" | "Drafts" | "In review")}
             className={`h-[26px] px-3 rounded-full text-xs font-semibold ${
               activeTab === tab ? "bg-black text-white" : "bg-[#f1f1f3] text-black"
             }`}
@@ -1296,28 +1300,12 @@ function AllBriefsSection() {
               right={b.icon}
               meta={
                 <div className="flex items-center justify-between">
-                  <span 
-                    className="text-xs py-[2px] px-2 rounded-[12px] flex items-center justify-center"
-                    style={badgeStyle as React.CSSProperties}
-                  >
-                    {b.badge}
-                  </span>
-                  <div className="flex -space-x-2">
-                    {Array.from({ length: b.avatars }).map((_, a) => {
-                      const seed = `brief_${b.id}_avatar_${a}`;
-                      return (
-                        <Avatar key={a} className="w-6 h-6 border-2 border-white">
-                          <AvatarImage 
-                            src={`https://api.dicebear.com/7.x/personas/png?seed=${seed}&size=64`} 
-                            alt={`Avatar ${a + 1}`}
-                          />
-                          <AvatarFallback className="text-xs bg-gradient-to-br from-blue-200 to-blue-300">
-                            {String.fromCharCode(65 + a)}
-                          </AvatarFallback>
-                        </Avatar>
-                      );
-                    })}
-                  </div>
+                  <Badge
+                    label={b.badge}
+                    intent={b.badge === "Creation" ? "creation" : b.badge === "Adaptation" ? "adaptation" : b.badge === "Resize" ? "resize" : "default"}
+                    width={b.badge === "Creation" ? "creation" : b.badge === "Adaptation" ? "adaptation" : b.badge === "Resize" ? "resize" : "auto"}
+                  />
+                  <AvatarStack count={b.avatars} seedPrefix={`brief_${b.id}_avatar`} />
                 </div>
               }
             >

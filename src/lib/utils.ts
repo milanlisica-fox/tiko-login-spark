@@ -24,6 +24,12 @@ export function getProgressBarColor(progress: number): string {
   return "#00C3B1";
 }
 
+export function getProgressTextColorClass(progress: number): string {
+  if (progress < 33) return "text-[#FF4337]";
+  if (progress <= 70) return "text-[#FFB546]";
+  return "text-[#00C3B1]";
+}
+
 export function getBadgeStyle(badge: string): { width: string | number; height: string | number; backgroundColor: string; color: string } {
   switch (badge) {
     case "Creation":

@@ -1,28 +1,31 @@
 import React from "react";
+import { cva, type VariantProps } from "@/lib/cva";
 
-type PillButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
-  variant?: "primary" | "accent" | "subtle" | "ghost";
-  size?: "sm" | "md" | "lg";
-};
+const buttonVariants = cva("pill-base", {
+  variants: {
+    variant: {
+      primary: "bg-[var(--color-brand)] text-black hover:opacity-90",
+      accent: "bg-[var(--color-accent)] text-black hover:opacity-90",
+      subtle: "bg-transparent text-[var(--color-muted)] hover:opacity-80",
+      ghost: "bg-transparent text-black hover:opacity-80",
+    },
+    size: {
+      sm: "h-8 px-4 text-sm",
+      md: "h-10 px-5 text-sm",
+      lg: "h-[44px] px-6 text-base",
+    },
+  },
+  defaultVariants: {
+    variant: "primary",
+    size: "md",
+  },
+});
 
-const base = "rounded-[28px] flex items-center justify-center gap-[10px] transition";
+export type PillButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & VariantProps<typeof buttonVariants>;
 
-const sizeClasses: Record<NonNullable<PillButtonProps["size"]>, string> = {
-  sm: "h-8 px-4 text-sm",
-  md: "h-10 px-5 text-sm",
-  lg: "h-[44px] px-6 text-base",
-};
-
-const variantClasses: Record<NonNullable<PillButtonProps["variant"]>, string> = {
-  primary: "bg-[#03b3e2] text-black hover:opacity-90",
-  accent: "bg-[#ffb546] text-black hover:opacity-90",
-  subtle: "bg-transparent text-[#848487] hover:opacity-80",
-  ghost: "bg-transparent text-black hover:opacity-80",
-};
-
-export function PillButton({ variant = "primary", size = "md", className = "", children, ...rest }: PillButtonProps) {
+export function PillButton({ variant, size, className = "", children, ...rest }: PillButtonProps) {
   return (
-    <button className={`${base} ${sizeClasses[size]} ${variantClasses[variant]} ${className}`} {...rest}>
+    <button className={buttonVariants({ variant, size, className })} {...rest}>
       {children}
     </button>
   );

@@ -1,6 +1,6 @@
-import { Home, FileText, Folder, BarChart2 } from "lucide-react";
+import { Home, FileText, Folder, BarChart2, type LucideIcon } from "lucide-react";
 
-export type NavItem = { name: string; icon: any; path: string };
+export type NavItem = { name: string; icon: LucideIcon; path: string };
 
 export const DASHBOARD_NAV: NavItem[] = [
   { name: "Central", icon: Home, path: "/dashboard" },

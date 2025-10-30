@@ -10,6 +10,7 @@ import DashboardLayout from "@/components/layout/DashboardLayout";
 import NotificationsPopover from "@/components/layout/NotificationsPopover";
 import { BRAND } from "@/constants/branding";
 import { getPriorityColor, getProgressBarColor } from "@/lib/utils";
+import { Icons } from "@/constants/icons";
 
 // Figma image URLs
 const logoImage = BRAND.logo;
@@ -147,13 +148,13 @@ export default function ProjectsPage() {
     const inProgress = projects.filter((p) => p.progress > 0 && p.progress < 100).length;
     const forReview = projects.filter((p) => p.priority === "High" && p.progress < 50).length;
     return { complete, inProgress, forReview };
-  }, []);
+  }, [projects]);
 
   const topbarRight = (
     <>
       <NotificationsPopover />
       <div className="flex items-center gap-1">
-        <Coins size={20} className="text-[#848487]" />
+        <Icons.tokens size={20} className="text-[#848487]" />
         <span className="text-xs leading-[15.96px] text-[#646464]">372 Tokens</span>
       </div>
       <button onClick={() => navigate("/dashboard/profile")} className="flex items-center gap-2 hover:opacity-80 transition cursor-pointer">
@@ -169,7 +170,7 @@ export default function ProjectsPage() {
 
   const titleNode = (
     <div className="flex items-center gap-2">
-      <Folder size={20} className="text-black" />
+      <Icons.projects size={20} className="text-black" />
       <span className="text-sm leading-[19.6px] text-black">{activeName}</span>
     </div>
   );
@@ -185,7 +186,7 @@ export default function ProjectsPage() {
         <div className="w-[90%] mx-auto space-y-[30px]">
           <div className="flex items-start justify-between gap-4">
             <div className="flex flex-col gap-1">
-              <h1 className="text-[32px] font-bold leading-[38.4px] text-black">Work at a glance</h1>
+              <h1 className="text-h1 text-black">Work at a glance</h1>
               <p className="text-base leading-[24px] text-black">A clear view of your team's active projects and priorities.</p>
             </div>
             <Button variant="outline" className="h-10 px-6 border border-[#d9d9d9] bg-white hover:bg-gray-50 gap-2">

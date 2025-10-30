@@ -1,0 +1,31 @@
+@tailwind components;
+@layer components {
+  .divider-line { @apply h-px; background-color: var(--color-border); }
+
+  /* Radius utilities */
+  .radius-md { @apply rounded-[12px]; }
+  .radius-lg { @apply rounded-[28px]; }
+  .radius-xl { @apply rounded-[60px]; }
+
+  /* Spacing utilities */
+  .p-section { @apply p-6; }
+  .gap-section { @apply gap-6; }
+  .space-section { @apply p-6 gap-6; }
+
+  /* Card and button bases */
+  .card-base { @apply bg-white border; border-color: var(--color-border); }
+
+  .pill-base { @apply radius-lg flex items-center justify-center gap-[10px] transition; }
+
+  .text-muted { color: var(--color-muted); }
+
+  /* line clamp without extra plugin */
+  .line-clamp-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+}
+
+

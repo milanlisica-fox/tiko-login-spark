@@ -1,0 +1,31 @@
+:root {
+  /* Brand palette */
+  --color-bg: #f9f9f9;
+  --color-surface: #ffffff;
+  --color-border: #e0e0e0;
+  --color-text: #000000;
+  --color-muted: #848487;
+  --color-subtle: #646464;
+
+  --color-brand: #03b3e2;   /* Buttons, CTAs */
+  --color-accent: #ffb546;  /* Secondary accent */
+  --color-danger: #ff4337;  /* Alerts/badges */
+  --color-success: #00c3b1;
+  --color-info: #8092dc;
+
+  /* Radii */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 28px;
+  --radius-xl: 60px;
+
+  /* Shadows */
+  --shadow-sm: 0 1px 2px rgba(0,0,0,0.04);
+  --shadow-md: 0 2px 8px rgba(0,0,0,0.06);
+
+  /* Z-index scale */
+  --z-popover: 50;
+  --z-dialog: 60;
+}
+
+

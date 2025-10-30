@@ -1,0 +1,9 @@
+@tailwind components;
+@layer components {
+  .text-h1 { @apply text-[32px] leading-[38.4px] font-bold; }
+  .text-h2 { @apply text-[22px] leading-[29.26px] font-bold; }
+  .text-body { @apply text-base leading-[24px]; }
+  .text-caption { @apply text-xs leading-[15.96px]; }
+}
+
+

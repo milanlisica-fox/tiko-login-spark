@@ -3,7 +3,8 @@ import Logo from "./Logo";
 import { LogOut } from "lucide-react";
 import { useLogout } from "@/hooks/useAuth";
 
-type NavItem = { name: string; icon: any; path: string };
+type IconComponent = React.ComponentType<{ size?: number; className?: string }>;
+type NavItem = { name: string; icon: IconComponent; path: string };
 
 export default function Sidebar({
   navItems,
@@ -20,14 +21,15 @@ export default function Sidebar({
   logoSrc: string;
   logoDotSrc?: string;
 }) {
-  const logout = onLogout ?? useLogout();
+  const defaultLogout = useLogout();
+  const logout = onLogout ?? defaultLogout;
   return (
     <aside className="w-[240px] bg-[#f7f7f7] border-r border-[#d9d9d9] flex flex-col justify-between">
       <div>
         <div className="h-[70px] flex items-center justify-start px-8 py-4">
           <Logo variant="sidebar" logoSrc={logoSrc} logoDotSrc={logoDotSrc} />
         </div>
-        <div className="h-px bg-[#e0e0e0]" />
+        <div className="divider-line" />
         <nav className="pt-8 px-4 flex flex-col gap-2">
           {navItems.map((item) => {
             const Icon = item.icon;

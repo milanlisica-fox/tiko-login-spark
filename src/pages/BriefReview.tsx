@@ -231,7 +231,7 @@ export default function BriefReview() {
       <Dialog open={showConfirmation} onOpenChange={setShowConfirmation}>
         <DialogContent className="sm:max-w-md !bg-white border border-[#e0e0e0] rounded-xl p-8 [&>button]:hidden">
           <DialogHeader className="flex flex-col gap-4 items-center text-center">
-            <DialogTitle className="text-[32px] font-bold leading-[38.4px] text-black text-center">
+            <DialogTitle className="text-h1 text-black text-center">
               Brief successfully submitted!
             </DialogTitle>
             <DialogDescription className="text-sm leading-[18.62px] text-[#424242] text-center">

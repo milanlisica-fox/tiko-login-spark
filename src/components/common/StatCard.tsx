@@ -11,7 +11,7 @@ type StatCardProps = {
 
 export default function StatCard({ title, subtitle, value, barPercent, barColor = "#03b3e2", className = "" }: StatCardProps) {
   return (
-    <div className={`bg-white rounded-[60px] p-[24px] flex flex-col justify-center ${className}`}>
+    <div className={`card-base radius-xl p-section flex flex-col justify-center ${className}`}>
       <div className="flex flex-col gap-3">
         <h3 className="text-base leading-[24px] text-black font-normal">{title}</h3>
         {subtitle ? <p className="text-sm leading-[18.62px] text-[#646464]">{subtitle}</p> : null}

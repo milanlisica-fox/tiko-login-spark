@@ -18,6 +18,8 @@ import boltImg from "@/assets/images/bolt.png";
 import DashboardLayout from "@/components/layout/DashboardLayout";
 import NotificationsPopover from "@/components/layout/NotificationsPopover";
 import { BRAND } from "@/constants/branding";
+import LegendItem from "@/components/common/LegendItem";
+import { getProgressTextColorClass } from "@/lib/utils";
 
 // Figma image URLs
 const logoImage = BRAND.logo;
@@ -151,8 +153,8 @@ export default function TrackerPage() {
           {/* Header */}
           <div className="flex items-center justify-between">
             <div className="flex flex-col gap-1">
-              <h1 className="text-[32px] font-bold leading-[38.4px] text-black">Real-time insights to guide your spend</h1>
-              <p className="text-lg leading-[23.94px] text-black">Stay on top of spend, progress, and priorities—all in one place.</p>
+              <h1 className="text-h1 text-black">Real-time insights to guide your spend</h1>
+              <p className="text-body text-black">Stay on top of spend, progress, and priorities—all in one place.</p>
             </div>
             <Button variant="outline" className="h-10 px-6 border border-[#d9d9d9] bg-white hover:bg-gray-50 text-black">
               <span className="text-black">All insights</span>
@@ -173,19 +175,19 @@ export default function TrackerPage() {
                   )}
                   <CardHeader className="pb-3 pt-6">
                     <div className="flex flex-col items-start gap-2">
-                      {(team as any).isEmoji ? (
-                        <span style={{ width: '22px', height: '30px', display: 'inline-block', fontSize: '30px', lineHeight: '30px' }}>{team.icon}</span>
+                      {team.isEmoji ? (
+                        <span className="inline-block" style={{ width: '22px', height: '30px', fontSize: '30px', lineHeight: '30px' }}>{team.icon}</span>
                       ) : (
-                        <img src={team.icon} alt={`${team.title} medal`} className="w-[30px] h-[30px]" style={{ objectFit: 'contain' }} />
+                        <img src={team.icon} alt={`${team.title} medal`} className="w-[30px] h-[30px] object-contain" />
                       )}
-                      <CardTitle className="text-black font-bold text-[18px] leading-[23.94px]" style={{ letterSpacing: '0px' }}>{team.title}</CardTitle>
+                      <CardTitle className="text-black font-bold text-[18px] leading-[23.94px]">{team.title}</CardTitle>
                     </div>
                   </CardHeader>
                   <CardContent className="space-y-4">
                     <div className="space-y-2">
                       <div className="flex items-center justify-between">
                         <span className="text-sm leading-[18.62px] text-black">Overall score</span>
-                        <span className="text-[32px] font-bold leading-[38.4px]" style={{ color: team.progressBarColor }}>{team.overallScore}%</span>
+                        <span className={`text-[32px] font-bold leading-[38.4px] ${getProgressTextColorClass(team.overallScore)}`}>{team.overallScore}%</span>
                       </div>
                       <div className="relative h-4 w-full bg-[#f1f1f3] rounded-full overflow-hidden">
                         <div className="h-full rounded-full transition-all" style={{ width: `${team.overallScore}%`, backgroundColor: team.progressBarColor }} />
@@ -194,9 +196,9 @@ export default function TrackerPage() {
                     <div className="flex items-center justify-between"><span className="text-sm leading-[18.62px] text-black">Brief Quality Score</span><span className="text-sm leading-[18.62px] text-black font-normal">{team.briefQualityScore}%</span></div>
                     <div className="flex items-center justify-between"><span className="text-sm leading-[18.62px] text-black">Token Efficiency</span><span className="text-sm leading-[18.62px] text-black font-normal">{team.tokenEfficiency}%</span></div>
                     <div className="flex items-center gap-2 pt-2">
-                      <div className="w-8 h-8 rounded-full border border-[#03b3e2] overflow-hidden"><img src={boltImg} alt="Bolt" className="w-full h-full" style={{ objectFit: 'cover' }} /></div>
-                      <div className="w-8 h-8 rounded-full border border-[#ff9800] overflow-hidden"><img src={shakingHandsImg} alt="Shaking Hands" className="w-full h-full" style={{ objectFit: 'cover' }} /></div>
-                      <div className="w-8 h-8 rounded-full border border-[#e91e63] overflow-hidden"><img src={bullseyeImg} alt="Bullseye" className="w-full h-full" style={{ objectFit: 'cover' }} /></div>
+                      <div className="w-8 h-8 rounded-full border border-[#03b3e2] overflow-hidden"><img src={boltImg} alt="Bolt" className="w-full h-full object-cover" /></div>
+                      <div className="w-8 h-8 rounded-full border border-[#ff9800] overflow-hidden"><img src={shakingHandsImg} alt="Shaking Hands" className="w-full h-full object-cover" /></div>
+                      <div className="w-8 h-8 rounded-full border border-[#e91e63] overflow-hidden"><img src={bullseyeImg} alt="Bullseye" className="w-full h-full object-cover" /></div>
                     </div>
                   </CardContent>
                 </Card>
@@ -253,9 +255,9 @@ export default function TrackerPage() {
                   </ChartContainer>
 
                   <div className="flex items-center justify-center gap-6 text-xs">
-                    <div className="flex items-center gap-2"><div className="w-3 h-3 bg-[#00c3b1]" style={{ borderRadius: '2px' }} /><span className="text-[#646464]">Tokens Spent</span></div>
-                    <div className="flex items-center gap-2"><div className="w-3 h-3 bg-[#03b3e2]" style={{ borderRadius: '2px' }} /><span className="text-[#646464]">Tokens Committed</span></div>
-                    <div className="flex items-center gap-2"><div className="w-3 h-3 bg-[#0177c7]" style={{ borderRadius: '2px' }} /><span className="text-[#646464]">Tokens Remaining</span></div>
+                    <LegendItem color="#00c3b1" label="Tokens Spent" />
+                    <LegendItem color="#03b3e2" label="Tokens Committed" />
+                    <LegendItem color="#0177c7" label="Tokens Remaining" />
                   </div>
                 </CardContent>
               </Card>
