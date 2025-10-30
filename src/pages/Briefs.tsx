@@ -902,10 +902,10 @@ function NewBriefForm({ onCancel, onNext }: { onCancel: () => void; onNext: () =
       <Dialog open={showConfirmation} onOpenChange={setShowConfirmation}>
         <DialogContent className="sm:max-w-md !bg-white border border-[#e0e0e0] rounded-xl p-8 [&>button]:hidden">
           <DialogHeader className="flex flex-col gap-4 items-center text-center">
-            <DialogTitle className="text-[32px] font-bold leading-[38.4px] text-black">
+            <DialogTitle className="text-[32px] font-bold leading-[38.4px] text-black text-center">
               Brief successfully submitted!
             </DialogTitle>
-            <DialogDescription className="text-sm leading-[18.62px] text-[#424242]">
+            <DialogDescription className="text-sm leading-[18.62px] text-[#424242] text-center">
               Your brief status has been updated to Review. We will get back to you soon.
             </DialogDescription>
           </DialogHeader>
@@ -1176,10 +1176,10 @@ function DeliverablesSelectionScreen({ onCancel, onBack, onNavigateToAiResponse 
       <Dialog open={showConfirmation} onOpenChange={setShowConfirmation}>
         <DialogContent className="sm:max-w-md !bg-white border border-[#e0e0e0] rounded-xl p-8 [&>button]:hidden">
           <DialogHeader className="flex flex-col gap-4 items-center text-center">
-            <DialogTitle className="text-[32px] font-bold leading-[38.4px] text-black">
+            <DialogTitle className="text-[32px] font-bold leading-[38.4px] text-black text-center">
               Brief successfully submitted!
             </DialogTitle>
-            <DialogDescription className="text-sm leading-[18.62px] text-[#424242]">
+            <DialogDescription className="text-sm leading-[18.62px] text-[#424242] text-center">
               Your brief status has been updated to Review. We will get back to you soon.
             </DialogDescription>
           </DialogHeader>
@@ -1438,10 +1438,10 @@ function AIResponseScreen({ userInput, onBack, onCancel }: { userInput: string; 
       <Dialog open={showConfirmation} onOpenChange={setShowConfirmation}>
         <DialogContent className="sm:max-w-md !bg-white border border-[#e0e0e0] rounded-xl p-8 [&>button]:hidden">
           <DialogHeader className="flex flex-col gap-4 items-center text-center">
-            <DialogTitle className="text-[32px] font-bold leading-[38.4px] text-black">
+            <DialogTitle className="text-[32px] font-bold leading-[38.4px] text-black text-center">
               Brief successfully submitted!
             </DialogTitle>
-            <DialogDescription className="text-sm leading-[18.62px] text-[#424242]">
+            <DialogDescription className="text-sm leading-[18.62px] text-[#424242] text-center">
               Your brief status has been updated to Review. We will get back to you soon.
             </DialogDescription>
           </DialogHeader>
