@@ -12,7 +12,6 @@ export default function DashboardLayout({
   onLogout,
   logoSrc,
   logoDotSrc,
-  dividerSrc,
   TopbarRight,
 }: {
   title: ReactNode;
@@ -21,7 +20,6 @@ export default function DashboardLayout({
   onLogout?: () => void;
   logoSrc: string;
   logoDotSrc?: string;
-  dividerSrc?: string;
   TopbarRight?: ReactNode;
 }) {
   const navigate = useNavigate();
@@ -42,7 +40,6 @@ export default function DashboardLayout({
         onLogout={onLogout}
         logoSrc={logoSrc}
         logoDotSrc={logoDotSrc}
-        dividerSrc={dividerSrc}
       />
       <main className="flex-1 flex flex-col overflow-hidden">
         <Topbar title={title} Right={TopbarRight} />

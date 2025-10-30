@@ -31,7 +31,6 @@ import { RECOMMENDED_DELIVERABLES, DELIVERABLES_LIST } from "@/constants/deliver
 // Reuse images from Dashboard for consistent visuals
 const logoImage = BRAND.logo;
 const logoDot = BRAND.logoDot;
-const dividerImage = BRAND.divider;
 
 // Template icons from Figma
 const iconAssetAdaptation = TEMPLATE_ICONS.assetAdaptation;
@@ -150,7 +149,6 @@ export default function BriefsPage() {
       }}
       logoSrc={logoImage}
       logoDotSrc={logoDot}
-      dividerSrc={dividerImage}
       TopbarRight={topbarRight}
     >
       {/* Briefs Content */}

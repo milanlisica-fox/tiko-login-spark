@@ -14,7 +14,6 @@ import { BRAND } from "@/constants/branding";
 // Figma image URLs
 const logoImage = BRAND.logo;
 const logoDot = BRAND.logoDot;
-const dividerImage = BRAND.divider;
 
 // User profile images from Figma
 const avatarImg1 = "https://www.figma.com/api/mcp/asset/8f703c7e-bd75-44c9-bfd6-7bd2a9304ada";
@@ -115,7 +114,6 @@ export default function UserProfilePage() {
       title={titleNode}
       logoSrc={logoImage}
       logoDotSrc={logoDot}
-      dividerSrc={dividerImage}
       TopbarRight={topbarRight}
     >
       <div className="px-6 pt-[40px] pb-[40px]">

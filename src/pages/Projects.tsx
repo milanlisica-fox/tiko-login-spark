@@ -14,7 +14,6 @@ import { getPriorityColor, getProgressBarColor } from "@/lib/utils";
 // Figma image URLs
 const logoImage = BRAND.logo;
 const logoDot = BRAND.logoDot;
-const dividerImage = BRAND.divider;
 
 interface Project {
   id: number;
@@ -180,7 +179,6 @@ export default function ProjectsPage() {
       title={titleNode}
       logoSrc={logoImage}
       logoDotSrc={logoDot}
-      dividerSrc={dividerImage}
       TopbarRight={topbarRight}
     >
       <div className="pt-[40px] pb-[40px]">

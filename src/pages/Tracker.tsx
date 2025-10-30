@@ -22,7 +22,6 @@ import { BRAND } from "@/constants/branding";
 // Figma image URLs
 const logoImage = BRAND.logo;
 const logoDot = BRAND.logoDot;
-const dividerImage = BRAND.divider;
 
 export default function TrackerPage() {
   const navigate = useNavigate();
@@ -145,7 +144,6 @@ export default function TrackerPage() {
       title={titleNode}
       logoSrc={logoImage}
       logoDotSrc={logoDot}
-      dividerSrc={dividerImage}
       TopbarRight={topbarRight}
     >
       <div className="pt-[40px] pb-[40px]">

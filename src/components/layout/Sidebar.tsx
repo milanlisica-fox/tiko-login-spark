@@ -12,7 +12,6 @@ export default function Sidebar({
   onLogout,
   logoSrc,
   logoDotSrc,
-  dividerSrc,
 }: {
   navItems: NavItem[];
   activeName: string;
@@ -20,7 +19,6 @@ export default function Sidebar({
   onLogout?: () => void;
   logoSrc: string;
   logoDotSrc?: string;
-  dividerSrc?: string;
 }) {
   const logout = onLogout ?? useLogout();
   return (
@@ -29,13 +27,7 @@ export default function Sidebar({
         <div className="h-[70px] flex items-center justify-start px-8 py-4">
           <Logo variant="sidebar" logoSrc={logoSrc} logoDotSrc={logoDotSrc} />
         </div>
-        <div className="h-px relative">
-          {dividerSrc ? (
-            <img src={dividerSrc} alt="" className="w-full h-full" />
-          ) : (
-            <div className="w-full h-px bg-[#e0e0e0]" />
-          )}
-        </div>
+        <div className="h-px bg-[#e0e0e0]" />
         <nav className="pt-8 px-4 flex flex-col gap-2">
           {navItems.map((item) => {
             const Icon = item.icon;

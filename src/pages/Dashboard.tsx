@@ -11,7 +11,7 @@ import { BRAND } from "@/constants/branding";
 // Figma image URLs
 const logoImage = BRAND.logo;
 const logoDot = BRAND.logoDot;
-const dividerImage = BRAND.divider;
+
 const briefsVector1 = "https://www.figma.com/api/mcp/asset/c3d9cf0a-062c-4d11-83eb-cab601f0ed31";
 const briefsVector2 = "https://www.figma.com/api/mcp/asset/862d739b-abb1-4a57-a57c-854b7c9d2dce";
 const briefsVector3 = "https://www.figma.com/api/mcp/asset/c97bed00-0373-4dd4-9c22-a0b5fd884097";
@@ -62,7 +62,6 @@ export default function TikoDashboard() {
       title={titleNode}
       logoSrc={logoImage}
       logoDotSrc={logoDot}
-      dividerSrc={dividerImage}
       TopbarRight={topbarRight}
     >
       <div className="px-6 pt-[40px] pb-[40px]">

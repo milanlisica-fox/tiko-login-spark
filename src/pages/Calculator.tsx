@@ -13,7 +13,6 @@ import { BRAND } from "@/constants/branding";
 // Reuse images from Dashboard for consistent visuals
 const logoImage = BRAND.logo;
 const logoDot = BRAND.logoDot;
-const dividerImage = BRAND.divider;
 
 // Calculator page images from Figma
 const imgVector = "https://www.figma.com/api/mcp/asset/e5ad3caa-ae8a-4a50-bf19-1b64b4af5b0d";
@@ -167,7 +166,6 @@ export default function CalculatorPage() {
       title={titleNode}
       logoSrc={logoImage}
       logoDotSrc={logoDot}
-      dividerSrc={dividerImage}
       TopbarRight={topbarRight}
     >
       <div className="px-6 pt-[40px] pb-[40px] relative">
