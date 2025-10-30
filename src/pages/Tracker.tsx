@@ -9,6 +9,12 @@ import { Badge } from "@/components/ui/badge";
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
 import { AreaChart, Area, BarChart, Bar, XAxis, YAxis, CartesianGrid, ResponsiveContainer } from "recharts";
 import { Popover, PopoverTrigger, PopoverContent } from "@/components/ui/popover";
+import bronzeMedalImg from "@/assets/images/bronze-medal.png";
+import silverMedalImg from "@/assets/images/silver-medal.png";
+import firstPlaceMedalImg from "@/assets/images/first-place.png";
+import bullseyeImg from "@/assets/images/Bullseye.png";
+import shakingHandsImg from "@/assets/images/shaking hands.png";
+import boltImg from "@/assets/images/bolt.png";
 
 // Figma image URLs
 const logoImage = "https://www.figma.com/api/mcp/asset/e6ec2a32-b26b-4e3a-bd4a-4e803cad7b85";
@@ -47,7 +53,8 @@ export default function TrackerPage() {
     {
       id: 1,
       title: "Omni & Digital",
-      icon: "🏆",
+      icon: firstPlaceMedalImg as string,
+      isEmoji: false,
       iconColor: "text-yellow-500",
       overallScore: 95,
       briefQualityScore: 95,
@@ -58,7 +65,8 @@ export default function TrackerPage() {
     {
       id: 2,
       title: "Marcomms",
-      icon: "🥈",
+      icon: silverMedalImg as string,
+      isEmoji: false,
       iconColor: "text-gray-400",
       overallScore: 94,
       briefQualityScore: 94,
@@ -69,7 +77,8 @@ export default function TrackerPage() {
     {
       id: 3,
       title: "IMG",
-      icon: "🥉",
+      icon: bronzeMedalImg as string,
+      isEmoji: false,
       iconColor: "text-amber-600",
       overallScore: 92,
       briefQualityScore: 92,
@@ -319,7 +328,11 @@ export default function TrackerPage() {
                     )}
                     <CardHeader className="pb-3 pt-6">
                       <div className="flex flex-col items-start gap-2">
-                        <span style={{ width: '22px', height: '30px', display: 'inline-block', fontSize: '30px', lineHeight: '30px' }}>{team.icon}</span>
+                        {(team as any).isEmoji ? (
+                          <span style={{ width: '22px', height: '30px', display: 'inline-block', fontSize: '30px', lineHeight: '30px' }}>{team.icon}</span>
+                        ) : (
+                          <img src={team.icon} alt={`${team.title} medal`} className="w-[30px] h-[30px]" style={{ objectFit: 'contain' }} />
+                        )}
                         <CardTitle className="text-black font-bold text-[18px] leading-[23.94px]" style={{ letterSpacing: '0px' }}>
                           {team.title}
                         </CardTitle>
@@ -362,14 +375,14 @@ export default function TrackerPage() {
 
                       {/* Small Icons */}
                       <div className="flex items-center gap-2 pt-2">
-                        <div className="w-8 h-8 rounded-full bg-[#e3f2fd] border border-[#03b3e2] flex items-center justify-center">
-                          <span className="text-lg">⚡</span>
+                        <div className="w-8 h-8 rounded-full border border-[#03b3e2] overflow-hidden">
+                          <img src={boltImg} alt="Bolt" className="w-full h-full" style={{ objectFit: 'cover' }} />
                         </div>
-                        <div className="w-8 h-8 rounded-full bg-[#fff3e0] border border-[#ff9800] flex items-center justify-center">
-                          <span className="text-lg">🤝</span>
+                        <div className="w-8 h-8 rounded-full border border-[#ff9800] overflow-hidden">
+                          <img src={shakingHandsImg} alt="Shaking Hands" className="w-full h-full" style={{ objectFit: 'cover' }} />
                         </div>
-                        <div className="w-8 h-8 rounded-full bg-[#fce4ec] border border-[#e91e63] flex items-center justify-center">
-                          <span className="text-lg">🎯</span>
+                        <div className="w-8 h-8 rounded-full border border-[#e91e63] overflow-hidden">
+                          <img src={bullseyeImg} alt="Bullseye" className="w-full h-full" style={{ objectFit: 'cover' }} />
                         </div>
                       </div>
                     </CardContent>
