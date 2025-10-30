@@ -1,4 +1,4 @@
-import { useMemo, useState, useEffect } from "react";
+import { useMemo, useState, useEffect, useRef } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import HBAvatar from "@/components/common/HBAvatar";
 import { Home, FileText, Folder, BarChart2, LogOut, Bell, ChevronDown, ArrowRight, Calculator, Coins, X, Calendar as CalendarIcon, ArrowLeft, Plus, ChevronDown as ChevronDownIcon } from "lucide-react";
@@ -46,6 +46,8 @@ const imgLine11 = "https://www.figma.com/api/mcp/asset/eb5e3b99-c1d1-4c7f-8b76-b
 const imgLine12 = "https://www.figma.com/api/mcp/asset/b0c33ab4-8352-4301-888e-175517ef6274";
 const imgFrame14_v2 = "https://www.figma.com/api/mcp/asset/d26c3cfb-b903-4bcb-acad-deab88e4291e";
 const imgFrame15_v2 = "https://www.figma.com/api/mcp/asset/47ce8115-0573-4c9b-87da-8910dfe4fced";
+// Upload icon (match profile picture dialog)
+const uploadIcon = "https://www.figma.com/api/mcp/asset/ddbd83a4-2dd8-426f-9875-8383e44a9aa0";
 
 export default function BriefsPage() {
   const navigate = useNavigate();
@@ -533,6 +535,7 @@ export default function BriefsPage() {
 function TemplateSelectionScreen({ onCancel, onCreateBrief }: { onCancel: () => void; onCreateBrief: () => void }) {
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState<"All" | "Popular" | "Recent" | "New">("All");
+  const uploadInputRef = useRef<HTMLInputElement | null>(null);
 
   const allTemplates = [
     { id: "asset-adaptation", title: "Asset adaptation", icon: iconAssetAdaptation, hasRotation: true, category: "popular" },
@@ -591,6 +594,26 @@ function TemplateSelectionScreen({ onCancel, onCreateBrief }: { onCancel: () => 
             <span className="text-[16px] font-semibold leading-[23.94px] text-black whitespace-nowrap">Create brief</span>
             <img src={createBriefArrowIcon} alt="" className="h-[14px] w-[15.567px]" />
           </button>
+        </div>
+
+        {/* Upload existing brief - centered below buttons */}
+        <div className="flex flex-col items-center mt-2 w-full">
+          <div className="flex items-center gap-2 justify-center">
+            <p className="text-sm leading-[18.62px] text-black text-center">
+              Already have a brief file, please upload it.
+            </p>
+            <input ref={uploadInputRef} type="file" className="hidden" />
+            <button
+              type="button"
+              className="flex gap-[4px] items-start hover:opacity-80 transition cursor-pointer"
+              onClick={() => uploadInputRef.current?.click()}
+            >
+              <div className="overflow-clip relative shrink-0 size-[20px]">
+                <img src={uploadIcon} alt="Upload" className="block max-w-none size-full" />
+              </div>
+              <p className="text-[14px] font-bold leading-[18.62px] text-[#09090a]">Upload</p>
+            </button>
+          </div>
         </div>
       </div>
 
@@ -888,10 +911,10 @@ function NewBriefForm({ onCancel, onNext }: { onCancel: () => void; onNext: () =
               </button>
               <button 
                 type="button"
-                onClick={() => setShowConfirmation(true)}
+                onClick={() => navigate("/dashboard/briefs/review")}
                 className="px-4 py-[18px] bg-[#ffb546] backdrop-blur-sm rounded-[28px] flex items-center justify-center gap-2.5 hover:opacity-90 transition h-8"
               >
-                <span className="text-[13px] font-semibold leading-[18.62px] text-black">Generate brief</span>
+                <span className="text-[13px] font-semibold leading-[18.62px] text-black">Review brief</span>
               </button>
             </div>
           </div>
@@ -1161,10 +1184,10 @@ function DeliverablesSelectionScreen({ onCancel, onBack, onNavigateToAiResponse 
                 </button>
                 <button 
                   type="button"
-                  onClick={() => setShowConfirmation(true)}
+                  onClick={() => navigate("/dashboard/briefs/review")}
                   className="px-4 py-[18px] bg-[#ffb546] backdrop-blur-sm rounded-[28px] flex items-center justify-center hover:opacity-90 transition h-8"
                 >
-                  <span className="text-[13px] font-semibold leading-[18.62px] text-black">Generate brief</span>
+                  <span className="text-[13px] font-semibold leading-[18.62px] text-black">Review brief</span>
                 </button>
               </div>
             </div>
@@ -1423,10 +1446,10 @@ function AIResponseScreen({ userInput, onBack, onCancel }: { userInput: string; 
                 </button>
                 <button 
                   type="button"
-                  onClick={() => setShowConfirmation(true)}
+                  onClick={() => navigate("/dashboard/briefs/review")}
                   className="px-4 py-[18px] bg-[#ffb546] backdrop-blur-sm rounded-[28px] flex items-center justify-center hover:opacity-90 transition h-8"
                 >
-                  <span className="text-[13px] font-semibold leading-[18.62px] text-black">Generate brief</span>
+                  <span className="text-[13px] font-semibold leading-[18.62px] text-black">Review brief</span>
                 </button>
               </div>
             </div>
