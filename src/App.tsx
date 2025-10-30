@@ -12,6 +12,7 @@ import Tracker from "./pages/Tracker";
 import Calculator from "./pages/Calculator";
 import UserProfile from "./pages/UserProfile";
 import NotFound from "./pages/NotFound";
+import BriefReview from "./pages/BriefReview";
 
 const queryClient = new QueryClient();
 
@@ -26,6 +27,7 @@ const App = () => (
           <Route path="/signup" element={<Signup />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/dashboard/briefs" element={<Briefs />} />
+          <Route path="/dashboard/briefs/review" element={<BriefReview />} />
           <Route path="/dashboard/projects" element={<Projects />} />
           <Route path="/dashboard/tracker" element={<Tracker />} />
           <Route path="/dashboard/calculator" element={<Calculator />} />

@@ -314,39 +314,39 @@ export default function CalculatorPage() {
 
         {/* Calculator Content */}
         <section className="flex-1 overflow-y-auto px-6 pt-[40px] pb-[40px] relative">
-          {/* Filter Bar */}
-          <button
-            onClick={() => setIsFilterOpen(true)}
-            className="bg-[#f1f1f3] rounded-[54px] px-6 py-2 flex items-center gap-6 mb-6 hover:bg-[#e5e5e5] transition"
-          >
-            <div className="flex flex-col gap-1">
-              <p className="text-sm font-bold leading-[18.62px] text-black">Asset</p>
-              <p className="text-xs leading-[15.96px] text-[#848487]">Any asset type</p>
-            </div>
-            <div className="w-px h-8 bg-[#e0e0e0]" />
-            <div className="flex flex-col gap-1">
-              <p className="text-sm font-bold leading-[18.62px] text-black">NDA</p>
-              <p className="text-xs leading-[15.96px] text-[#848487]">Any NDA type</p>
-            </div>
-            <div className="w-px h-8 bg-[#e0e0e0]" />
-            <div className="flex flex-col gap-1">
-              <p className="text-sm font-bold leading-[18.62px] text-black">Task</p>
-              <p className="text-xs leading-[15.96px] text-[#848487]">Any task type</p>
-            </div>
-            <div className="ml-auto">
-              <div className="w-8 h-8 rounded-full bg-[#ffb546] flex items-center justify-center">
-                <img src={imgFilterIcon} alt="Filter" className="w-4 h-4" />
-              </div>
-            </div>
-          </button>
 
           {/* Main Content Area */}
           <div className="flex gap-8">
             {/* Left Panel - Asset List */}
-            <div className="flex-1 max-w-[720px]">
+            <div className="flex-1 max-w-[1220px]">
               <h1 className="text-[28px] font-bold leading-[37.24px] text-black mb-10">
                 Build your asset list
               </h1>
+              {/* Filter Bar */}
+              <button
+                onClick={() => setIsFilterOpen(true)}
+                className="bg-[#f1f1f3] rounded-[54px] px-6 py-2 flex items-center gap-6 mb-6 hover:bg-[#e5e5e5] transition"
+              >
+                <div className="flex flex-col gap-1">
+                  <p className="text-sm font-bold leading-[18.62px] text-black">Asset</p>
+                  <p className="text-xs leading-[15.96px] text-[#848487]">Any asset type</p>
+                </div>
+                <div className="w-px h-8 bg-[#e0e0e0]" />
+                <div className="flex flex-col gap-1">
+                  <p className="text-sm font-bold leading-[18.62px] text-black">NDA</p>
+                  <p className="text-xs leading-[15.96px] text-[#848487]">Any NDA type</p>
+                </div>
+                <div className="w-px h-8 bg-[#e0e0e0]" />
+                <div className="flex flex-col gap-1">
+                  <p className="text-sm font-bold leading-[18.62px] text-black">Task</p>
+                  <p className="text-xs leading-[15.96px] text-[#848487]">Any task type</p>
+                </div>
+                <div className="ml-auto">
+                  <div className="w-8 h-8 rounded-full bg-[#ffb546] flex items-center justify-center">
+                    <img src={imgFilterIcon} alt="Filter" className="w-4 h-4" />
+                  </div>
+                </div>
+              </button>
 
               <div className="flex flex-col gap-5">
                 {availableAssets.map((asset, index) => {
@@ -399,7 +399,7 @@ export default function CalculatorPage() {
             <div className="w-px bg-[#e0e0e0]" />
 
             {/* Right Panel - Summary */}
-            <div className="w-[368px] shrink-0">
+            <div className="w-[400px] shrink-0 relative overflow-hidden">
               <h2 className="text-[28px] font-bold leading-[37.24px] text-black mb-10">
                 Summary
               </h2>
@@ -462,21 +462,26 @@ export default function CalculatorPage() {
               {/* Create Brief Button */}
               <button
                 onClick={handleCreateBrief}
-                className="mt-auto w-full h-10 backdrop-blur-[6px] backdrop-filter bg-[#ffb546] px-[24px] rounded-[28px] flex items-center justify-center gap-[10px] hover:opacity-90 transition mt-6"
+                className="mt-5 w-full h-10 backdrop-blur-[6px] backdrop-filter bg-[#ffb546] px-[24px] rounded-[28px] flex items-center justify-center gap-[10px] hover:opacity-90 transition mt-6"
               >
                 <span className="text-[16px] font-semibold leading-[23.94px] text-black whitespace-nowrap">
                   Create brief
                 </span>
                 <img src={createBriefArrowIcon} alt="" className="h-[14px] w-[15.567px]" />
               </button>
+              {/* Decorative Background Elements */}
+            <div className="absolute bottom-[-18px] right-[-17px] w-full h-[54px] pointer-events-none overflow-hidden">
+              <img
+                src="https://www.figma.com/api/mcp/asset/5fe2ecb6-5d0e-42f1-b3e1-1f7e44923017"
+                alt=""
+                className="absolute bottom-0 right-0 w-full h-[54px] object-cover opacity-70"
+              />
+            </div>
+
             </div>
           </div>
         </section>
 
-        {/* Decorative Background Elements */}
-        <div className="absolute bottom-[-18px] right-[-17px] w-[433px] h-[184px] pointer-events-none overflow-hidden">
-          <img src={imgGroup} alt="" className="of absolute bottom-0 right-0 opacity-70 h-[54px]" />
-        </div>
       </main>
 
       {/* Filter Dialog */}
