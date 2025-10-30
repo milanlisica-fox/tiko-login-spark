@@ -152,14 +152,14 @@ const Login = () => {
                   </button>
                 </div>
 
-                <div className="flex justify-end">
+                {/* <div className="flex justify-end">
                   <Link
                     to="/forgot-password"
                     className="text-sm text-card-foreground/70 hover:text-card-foreground transition-colors"
                   >
                     Forgot password?
                   </Link>
-                </div>
+                </div> */}
 
                 <Button
                   type="submit"
@@ -169,7 +169,7 @@ const Login = () => {
                   Login
                   <img src="https://www.figma.com/api/mcp/asset/33c5c1d3-721c-423d-8e72-cd89fd07637c" alt="" className="h-[14px] w-[15.567px]"/>
                 </Button>
-
+{/* 
                 <p className="text-center text-card-foreground/70 text-sm">
                   Don't have an account?{" "}
                   <Link
@@ -178,7 +178,7 @@ const Login = () => {
                   >
                     Sign up
                   </Link>
-                </p>
+                </p> */}
               </form>
             </div>
           </div>
