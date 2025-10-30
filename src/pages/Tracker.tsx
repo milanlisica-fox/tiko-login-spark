@@ -1,6 +1,5 @@
 import { useMemo } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
-import HBAvatar from "@/components/common/HBAvatar";
+import { useNavigate } from "react-router-dom";
 import { Home, FileText, Folder, BarChart2, LogOut, Bell, ChevronDown, ArrowRight, Coins, ChevronRight } from "lucide-react";
 import { toast } from "sonner";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -16,7 +15,8 @@ import bullseyeImg from "@/assets/images/Bullseye.png";
 import shakingHandsImg from "@/assets/images/shaking hands.png";
 import boltImg from "@/assets/images/bolt.png";
 import DashboardLayout from "@/components/layout/DashboardLayout";
-import NotificationsPopover from "@/components/layout/NotificationsPopover";
+import DashboardTopbarRight from "@/components/layout/DashboardTopbarRight";
+import { useActiveNav } from "@/hooks/useActiveNav";
 import { BRAND } from "@/constants/branding";
 import LegendItem from "@/components/common/LegendItem";
 import { getProgressTextColorClass } from "@/lib/utils";
@@ -27,17 +27,9 @@ const logoDot = BRAND.logoDot;
 
 export default function TrackerPage() {
   const navigate = useNavigate();
-  const location = useLocation();
 
   // nav items centralized via DashboardLayout
-
-  const activeName = useMemo(() => {
-    if (location.pathname.startsWith("/dashboard/briefs")) return "Briefs";
-    if (location.pathname === "/dashboard") return "Central";
-    if (location.pathname.startsWith("/dashboard/projects")) return "Projects";
-    if (location.pathname.startsWith("/dashboard/tracker")) return "Tracker";
-    return "Central";
-  }, [location.pathname]);
+  const { activeName } = useActiveNav();
 
   // Mock data for teams leaderboard
   const teamsData = [
@@ -116,23 +108,7 @@ export default function TrackerPage() {
     },
   };
 
-  const topbarRight = (
-    <>
-      <NotificationsPopover />
-      <div className="flex items-center gap-1">
-        <Coins size={20} className="text-[#848487]" />
-        <span className="text-xs leading-[15.96px] text-[#646464]">372 Tokens</span>
-      </div>
-      <button onClick={() => navigate("/dashboard/profile")} className="flex items-center gap-2 hover:opacity-80 transition cursor-pointer">
-        <HBAvatar size={40} />
-        <div className="flex flex-col">
-          <p className="text-sm font-bold leading-[18.62px] text-[#646464]">Henry Bray</p>
-          <p className="text-xs leading-[15.96px] text-[#646464]">Marcomms</p>
-        </div>
-        <ChevronDown size={24} className="text-[#646464] rotate-90" />
-      </button>
-    </>
-  );
+  const topbarRight = <DashboardTopbarRight />;
 
   const titleNode = (
     <div className="flex items-center gap-2">
@@ -187,7 +163,7 @@ export default function TrackerPage() {
                     <div className="space-y-2">
                       <div className="flex items-center justify-between">
                         <span className="text-sm leading-[18.62px] text-black">Overall score</span>
-                        <span className={`text-[32px] font-bold leading-[38.4px] ${getProgressTextColorClass(team.overallScore)}`}>{team.overallScore}%</span>
+                        <span className="text-[32px] font-bold leading-[38.4px]" style={{ color: team.progressBarColor }}>{team.overallScore}%</span>
                       </div>
                       <div className="relative h-4 w-full bg-[#f1f1f3] rounded-full overflow-hidden">
                         <div className="h-full rounded-full transition-all" style={{ width: `${team.overallScore}%`, backgroundColor: team.progressBarColor }} />
@@ -215,7 +191,7 @@ export default function TrackerPage() {
                   <CardTitle className="text_base font-bold leading-[21.28px] text-black">Brief quality score - All categories</CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-6">
-                  <ChartContainer config={{ score: { label: "Quality Score", color: "#0177c7" } }} className="h-[200px] w-full">
+                  <ChartContainer config={qualityScoreConfig} className="h-[200px] w-full">
                     <ResponsiveContainer width="100%" height="100%">
                       <AreaChart data={qualityScoreData} margin={{ left: 10, right: 10, top: 10, bottom: 20 }}>
                         <defs>
@@ -225,13 +201,42 @@ export default function TrackerPage() {
                           </linearGradient>
                         </defs>
                         <CartesianGrid strokeDasharray="3 3" stroke="#e0e0e0" vertical={true} />
-                        <XAxis dataKey="quarter" axisLine={false} tickLine={false} tick={{ fill: "#646464", fontSize: 12 }} />
-                        <YAxis axisLine={false} tickLine={false} domain={[70, 95]} ticks={[70, 75, 80, 85, 90, 95]} tick={{ fill: "#646464", fontSize: 12 }} />
-                        <ChartTooltip content={<ChartTooltipContent />} />
-                        <Area type="monotone" dataKey="score" stroke="#0177c7" strokeWidth={2} fill="url(#qualityGradient)" />
+                        <XAxis 
+                          dataKey="quarter" 
+                          axisLine={false}
+                          tickLine={false}
+                          tick={{ fill: "#646464", fontSize: 12 }}
+                          label={{ value: "Quarter", position: "insideBottom", offset: -5, style: { fill: "#646464", fontSize: 12 } }}
+                        />
+                        <YAxis 
+                          axisLine={false}
+                          tickLine={false}
+                          domain={[70, 95]}
+                          ticks={[70, 75, 80, 85, 90, 95]}
+                          tick={{ fill: "#646464", fontSize: 12 }}
+                          label={{ value: "Quality score (%)", angle: -90, position: "insideLeft", offset: 15, style: { fill: "#646464", fontSize: 12, textAnchor: "middle" } }}
+                        />
+                        <ChartTooltip content={<ChartTooltipContent className="bg-white [&_span]:text-black [&_div]:text-black" />} />
+                        <Area
+                          type="monotone"
+                          dataKey="score"
+                          stroke="#0177c7"
+                          strokeWidth={2}
+                          fill="url(#qualityGradient)"
+                        />
                       </AreaChart>
                     </ResponsiveContainer>
                   </ChartContainer>
+                  
+                  {/* Insight section */}
+                  <div className="flex flex-col gap-1 pt-2 pr-4 pb-2 pl-4 rounded-xl bg-[#F1F1F380]">
+                    <p className="text-xs leading-[15.96px] font-bold text-[#00C3B1]">
+                      Insight
+                    </p>
+                    <p className="text-xs leading-[18px] font-normal text-black">
+                      Brief quality score has improved to 89% with consistent upward trend
+                    </p>
+                  </div>
                 </CardContent>
               </Card>
 
@@ -246,7 +251,7 @@ export default function TrackerPage() {
                         <CartesianGrid strokeDasharray="3 3" stroke="#e0e0e0" horizontal={true} vertical={true} />
                         <XAxis type="number" axisLine={false} tickLine={false} domain={[0, 4500]} ticks={[0, 500, 1000, 1500, 2000, 2500, 3000, 3500, 4000, 4500]} tick={{ fill: "#646464", fontSize: 12 }} />
                         <YAxis type="category" dataKey="type" axisLine={false} tickLine={false} tick={{ fill: "#646464", fontSize: 12 }} width={80} />
-                        <ChartTooltip cursor={false} content={<ChartTooltipContent />} />
+                        <ChartTooltip cursor={false} content={<ChartTooltipContent className="bg-white [&_span]:text-black [&_div]:text-black" />} />
                         <Bar dataKey="remaining" stackId="a" fill="#0177c7" radius={[6, 6, 6, 6]} />
                         <Bar dataKey="committed" stackId="a" fill="#03b3e2" radius={[6, 6, 6, 6]} />
                         <Bar dataKey="spent" stackId="a" fill="#00c3b1" radius={[6, 6, 6, 6]} />

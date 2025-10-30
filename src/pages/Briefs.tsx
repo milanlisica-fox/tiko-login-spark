@@ -1,6 +1,5 @@
 import { useMemo, useState, useEffect, useRef } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import HBAvatar from "@/components/common/HBAvatar";
 import { Home, FileText, Folder, BarChart2, LogOut, Bell, ChevronDown, ArrowRight, Calculator, Coins, X, Calendar as CalendarIcon, ArrowLeft, Plus, ChevronDown as ChevronDownIcon } from "lucide-react";
 import { toast } from "sonner";
 import { Input } from "@/components/ui/input";
@@ -12,9 +11,10 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { format } from "date-fns";
-import confetti from "canvas-confetti";
+import { triggerSuccessConfetti } from "@/lib/animations";
 import DashboardLayout from "@/components/layout/DashboardLayout";
-import NotificationsPopover from "@/components/layout/NotificationsPopover";
+import DashboardTopbarRight from "@/components/layout/DashboardTopbarRight";
+import { useActiveNav } from "@/hooks/useActiveNav";
 import { BRAND, TEMPLATE_ICONS } from "@/constants/branding";
 import { PillPrimary, PillAccent, PillSubtle, PillGhost } from "@/components/common/buttons";
 import StatCard from "@/components/common/StatCard";
@@ -31,6 +31,10 @@ import { Icons } from "@/constants/icons";
 import { BRIEFS_ASSETS } from "@/constants/briefs-assets";
 import Badge from "@/components/common/Badge";
 import AvatarStack from "@/components/common/AvatarStack";
+import SuccessDialog from "@/components/common/SuccessDialog";
+import BriefPreviewPanel from "@/components/briefs/BriefPreviewPanel";
+import { StyledInput } from "@/components/common/StyledInput";
+import TabFilter from "@/components/common/TabFilter";
 
 // Reuse images from Dashboard for consistent visuals
 const logoImage = BRAND.logo;
@@ -93,43 +97,25 @@ export default function BriefsPage() {
   }, [location.state, navigate]);
 
   // nav items centralized via DashboardLayout
-
-  const activeName = useMemo(() => {
-    if (location.pathname.startsWith("/dashboard/briefs")) return "Briefs";
-    if (location.pathname === "/dashboard") return "Central";
-    if (location.pathname.startsWith("/dashboard/projects")) return "Projects";
-    if (location.pathname.startsWith("/dashboard/tracker")) return "Tracker";
-    return "Central";
-  }, [location.pathname]);
+  const { activeName } = useActiveNav();
 
   const handleLogout = () => {
     toast.success("Logged out successfully");
     navigate("/");
   };
 
-  const topbarRight = (
-    <>
-      <NotificationsPopover />
-      <div className="flex items-center gap-1">
-        <Icons.tokens size={20} className="text-[#848487]" />
-        <span className="text-xs leading-[15.96px] text-[#646464]">372 Tokens</span>
-      </div>
-      <button onClick={() => navigate("/dashboard/profile")} className="flex items-center gap-2 hover:opacity-80 transition cursor-pointer">
-        <HBAvatar size={40} />
-        <div className="flex flex-col">
-          <p className="text-sm font-bold leading-[18.62px] text-[#646464]">Henry Bray</p>
-          <p className="text-xs leading-[15.96px] text-[#646464]">Marcomms</p>
-        </div>
-        <Icons.chevronDown size={24} className="text-[#646464] rotate-90" />
-      </button>
-    </>
-  );
+  const topbarRight = <DashboardTopbarRight />;
 
   const pageTitle = isCreatingBrief && (briefView === "form" || briefView === "deliverables" || briefView === "ai-response") ? "New brief" : activeName;
 
   const titleNode = (
     isCreatingBrief && (briefView === "form" || briefView === "deliverables" || briefView === "ai-response") ? (
-      <span className="text-sm leading-[19.6px] text-black">{pageTitle}</span>
+      <div className="flex items-center gap-2">
+        <button onClick={() => briefView === "deliverables" || briefView === "ai-response" ? setBriefView("form") : setBriefView("templates")} className="hover:opacity-70 transition">
+          <ArrowLeft size={20} className="text-black" />
+        </button>
+        <span className="text-sm leading-[19.6px] text-black">{pageTitle}</span>
+      </div>
     ) : (
       <div className="flex items-center gap-2">
         <Icons.briefs size={20} className="text-black" />
@@ -193,22 +179,24 @@ export default function BriefsPage() {
                   <p className="text-body text-black">Kickstart your next project with clarity and ease</p>
                 </div>
                 <div className="flex gap-2.5 items-center">
-                  <PillPrimary
+                  <button
                     onClick={() => navigate("/dashboard/calculator")}
-                    size="md"
-                    className="w-[224px]"
+                    className="w-[224px] bg-[#03b3e2] backdrop-blur-sm rounded-[28px] flex items-center justify-center gap-[10px] px-[24px] py-[18px] hover:opacity-90 transition"
                   >
                     <Icons.calculator size={16} className="text-black" />
-                    <span className="font-semibold leading-[23.94px] text-black whitespace-nowrap">Quick calculator</span>
-                  </PillPrimary>
-                  <PillAccent
+                    <span className="text-base font-semibold leading-[23.94px] text-black whitespace-nowrap">
+                      Quick calculator
+                    </span>
+                  </button>
+                  <button 
                     onClick={() => setIsCreatingBrief(true)}
-                    size="md"
-                    className="w-[224px]"
+                    className="w-[224px] backdrop-blur-[6px] backdrop-filter bg-[#ffb546] px-[24px] py-[18px] rounded-[28px] flex items-center justify-center gap-[10px] hover:opacity-90 transition"
                   >
-                    <span className="text-[16px] font-semibold leading-[23.94px] text-black whitespace-nowrap">Create brief</span>
+                    <span className="text-[16px] font-semibold leading-[23.94px] text-black whitespace-nowrap">
+                      Create brief
+                    </span>
                     <img src={createBriefArrowIcon} alt="" className="h-[14px] w-[15.567px]" />
-                  </PillAccent>
+                  </button>
                 </div>
               </div>
 
@@ -216,7 +204,8 @@ export default function BriefsPage() {
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
                 {[
                   { 
-                    title: "Draft briefs", 
+                    title: "Draft briefs",
+                    titleBold: true,
                     value: 5,
                     icon: (
                       <svg width="40" height="44" viewBox="0 0 40 44" fill="none" xmlns="http://www.w3.org/2000/svg" className="absolute right-5 top-5">
@@ -225,7 +214,8 @@ export default function BriefsPage() {
                     )
                   },
                   { 
-                    title: "In review", 
+                    title: "In review",
+                    titleBold: true,
                     value: 4,
                     icon: (
                       <svg width="50" height="32" viewBox="0 0 50 32" fill="none" xmlns="http://www.w3.org/2000/svg" className="absolute right-5 top-5">
@@ -234,7 +224,8 @@ export default function BriefsPage() {
                     )
                   },
                   { 
-                    title: "SOW Ready to sign", 
+                    title: "SOW Ready to sign",
+                    titleBold: true,
                     value: 3,
                     icon: (
                       <svg width="45" height="40" viewBox="0 0 45 40" fill="none" xmlns="http://www.w3.org/2000/svg" className="absolute right-5 top-5">
@@ -244,7 +235,7 @@ export default function BriefsPage() {
                   },
                 ].map((card) => (
                   <div key={card.title} className="relative overflow-hidden">
-                    <StatCard title={card.title} value={card.value} className="rounded-xl p-6" />
+                    <StatCard title={card.title} value={card.value} className="rounded-xl p-6" titleBold={card.titleBold} />
                     {card.icon}
                   </div>
                 ))}
@@ -430,22 +421,24 @@ function TemplateSelectionScreen({ onCancel, onCreateBrief }: { onCancel: () => 
         
         {/* Action Buttons */}
         <div className="flex gap-2.5 items-center">
-          <PillPrimary
+          <button
             onClick={() => navigate("/dashboard/calculator")}
-            size="md"
-            className="w-[224px]"
+            className="w-[224px] h-10 bg-[#03b3e2] backdrop-blur-sm rounded-[28px] flex items-center justify-center gap-[10px] px-[24px] hover:opacity-90 transition"
           >
             <Icons.calculator size={16} className="text-black" />
-            <span className="font-semibold leading-[23.94px] text-black whitespace-nowrap">Quick calculator</span>
-          </PillPrimary>
-          <PillAccent
+            <span className="text-base font-semibold leading-[23.94px] text-black whitespace-nowrap">
+              Quick calculator
+            </span>
+          </button>
+          <button 
             onClick={onCreateBrief}
-            size="md"
-            className="w-[224px]"
+            className="w-[224px] h-10 backdrop-blur-[6px] backdrop-filter bg-[#ffb546] px-[24px] rounded-[28px] flex items-center justify-center gap-[10px] hover:opacity-90 transition"
           >
-            <span className="text-[16px] font-semibold leading-[23.94px] text-black whitespace-nowrap">Create brief</span>
+            <span className="text-[16px] font-semibold leading-[23.94px] text-black whitespace-nowrap">
+              Create brief
+            </span>
             <img src={createBriefArrowIcon} alt="" className="h-[14px] w-[15.567px]" />
-          </PillAccent>
+          </button>
         </div>
 
         {/* Upload existing brief - centered below buttons */}
@@ -478,47 +471,12 @@ function TemplateSelectionScreen({ onCancel, onCreateBrief }: { onCancel: () => 
         </div>
 
         {/* Tabs */}
-        <div className="flex items-start px-6 gap-2">
-          <button
-            onClick={() => setActiveTab("All")}
-            className={`px-4 py-1.5 rounded-[28px] text-xs font-semibold leading-[14.4px] transition ${
-              activeTab === "All"
-                ? "bg-black text-[#fcfcff]"
-                : "bg-[#f1f1f3] text-black"
-            }`}
-          >
-            All templates
-          </button>
-          <button
-            onClick={() => setActiveTab("Popular")}
-            className={`px-4 py-1.5 rounded-[6px] text-xs leading-[14.4px] transition ${
-              activeTab === "Popular"
-                ? "bg-black text-[#fcfcff] font-semibold"
-                : "bg-[#f1f1f3] text-black font-normal"
-            }`}
-          >
-            Popular
-          </button>
-          <button
-            onClick={() => setActiveTab("Recent")}
-            className={`px-4 py-1.5 rounded-[28px] text-xs font-normal leading-[14.4px] transition ${
-              activeTab === "Recent"
-                ? "bg-black text-[#fcfcff]"
-                : "bg-[#f1f1f3] text-black"
-            }`}
-          >
-            Recent
-          </button>
-          <button
-            onClick={() => setActiveTab("New")}
-            className={`px-4 py-1.5 rounded-[6px] text-xs font-normal leading-[14.4px] transition ${
-              activeTab === "New"
-                ? "bg-black text-[#fcfcff]"
-                : "bg-[#f1f1f3] text-black"
-            }`}
-          >
-            New
-          </button>
+        <div className="px-6">
+          <TabFilter
+            tabs={["All", "Popular", "Recent", "New"]}
+            activeTab={activeTab}
+            onTabChange={(tab) => setActiveTab(tab as typeof activeTab)}
+          />
         </div>
 
         {/* Template Cards */}
@@ -573,40 +531,12 @@ function NewBriefForm({ onCancel, onNext }: { onCancel: () => void; onNext: () =
 
   useEffect(() => {
     if (showConfirmation) {
-      // Trigger confetti animation - single smooth burst
-      const count = 200;
-      const defaults = { 
-        startVelocity: 30, 
-        spread: 360, 
-        ticks: 100, 
-        zIndex: 9999,
-        gravity: 0.8,
-        decay: 0.94
-      };
-
-      function randomInRange(min: number, max: number) {
-        return Math.random() * (max - min) + min;
-      }
-
-      // Single burst from both sides
-      confetti({
-        ...defaults,
-        particleCount: count,
-        origin: { x: randomInRange(0.2, 0.4), y: 0.5 },
-        colors: ['#ffb546', '#03B3E2', '#ff4337', '#646464', '#848487']
-      });
-      
-      confetti({
-        ...defaults,
-        particleCount: count,
-        origin: { x: randomInRange(0.6, 0.8), y: 0.5 },
-        colors: ['#ffb546', '#03B3E2', '#ff4337', '#646464', '#848487']
-      });
+      triggerSuccessConfetti();
     }
   }, [showConfirmation]);
 
   return (
-    <div className="flex gap-0 w-full">
+    <div className="flex gap-0 w-full h-full">
       {/* Left Form Section */}
       <div className="flex flex-col gap-8 p-6 rounded-xl w-[564px]">
         <div className="flex flex-col gap-4">
@@ -617,11 +547,11 @@ function NewBriefForm({ onCancel, onNext }: { onCancel: () => void; onNext: () =
           <div className="flex flex-col gap-6">
             {/* Project Title */}
             <Field label="Project title" helpText="Give your brief a short, clear name">
-              <Input
+              <StyledInput
                 value={formData.projectTitle}
                 onChange={(e) => handleChange("projectTitle", e.target.value)}
                 placeholder="e.g. Spring Campaign 2025"
-                className="border-[#e0e0e0] rounded-[85px] px-5 py-2.5 h-auto bg-[#f9f9f9]"
+                variant="brief"
               />
             </Field>
 
@@ -640,13 +570,13 @@ function NewBriefForm({ onCancel, onNext }: { onCancel: () => void; onNext: () =
             {/* Project Lead */}
             <Field label="Project lead*" helpText="Who will own this project?">
               <Select value={formData.projectLead} onValueChange={(value) => handleChange("projectLead", value)}>
-                <SelectTrigger className="border-[#e0e0e0] rounded-[85px] px-5 py-2.5 h-auto bg-[#f9f9f9] [&>span]:text-[#848487] data-[placeholder]:text-[#848487]">
+                <SelectTrigger className={`border-[#e0e0e0] rounded-[85px] px-5 py-2.5 h-auto bg-[#f9f9f9] ${formData.projectLead ? '[&_span]:text-black' : '[&_span]:text-[#848487]'}`}>
                   <SelectValue placeholder="Choose a lead" />
                 </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="henry-bray">Henry Bray</SelectItem>
-                  <SelectItem value="john-doe">John Doe</SelectItem>
-                  <SelectItem value="jane-smith">Jane Smith</SelectItem>
+                <SelectContent className="bg-[#f9f9f9]">
+                  <SelectItem value="henry-bray" className="text-black">Henry Bray</SelectItem>
+                  <SelectItem value="john-doe" className="text-black">John Doe</SelectItem>
+                  <SelectItem value="jane-smith" className="text-black">Jane Smith</SelectItem>
                 </SelectContent>
               </Select>
             </Field>
@@ -657,7 +587,7 @@ function NewBriefForm({ onCancel, onNext }: { onCancel: () => void; onNext: () =
                 value={formData.objective}
                 onChange={(e) => handleChange("objective", e.target.value)}
                 placeholder="e.g. Increase signups by 20% through targeted ads"
-                className="border-[#e0e0e0] rounded-lg px-5 py-2.5 min-h-[74px] resize-none bg-[#f9f9f9]"
+                className="border-[#e0e0e0] rounded-lg px-5 py-2.5 min-h-[74px] resize-none bg-[#f9f9f9] text-black placeholder:text-[#848487]"
                 rows={3}
               />
             </Field>
@@ -683,7 +613,7 @@ function NewBriefForm({ onCancel, onNext }: { onCancel: () => void; onNext: () =
       </div>
 
       {/* Right Panel */}
-      <div className="flex flex-col gap-2.5 pb-5 pr-10 pl-2.5 pt-2.5 h-[830px] w-[601px]">
+      <div className="flex flex-col gap-2.5 pb-5 pr-10 pl-2.5 pt-2.5 w-[540px]">
         {/* Loading State */}
         <div className="bg-white flex flex-1 flex-col gap-8 items-center justify-center p-6 rounded-xl min-h-0">
           <div className="flex flex-col gap-2 items-center">
@@ -731,27 +661,11 @@ function NewBriefForm({ onCancel, onNext }: { onCancel: () => void; onNext: () =
       </div>
 
       {/* Confirmation Dialog */}
-      <Dialog open={showConfirmation} onOpenChange={setShowConfirmation}>
-        <DialogContent className="sm:max-w-md !bg-white border border-[#e0e0e0] rounded-xl p-8 [&>button]:hidden">
-          <DialogHeader className="flex flex-col gap-4 items-center text-center">
-            <DialogTitle className="text-h1 text-black text-center">
-              Brief successfully submitted!
-            </DialogTitle>
-            <DialogDescription className="text-sm leading-[18.62px] text-[#424242] text-center">
-              Your brief status has been updated to Review. We will get back to you soon.
-            </DialogDescription>
-          </DialogHeader>
-          <div className="flex justify-center pt-4">
-            <PillAccent
-              type="button"
-              onClick={handleViewAllBriefs}
-              size="md"
-            >
-              <span className="text-sm font-semibold leading-[18.62px] text-black">View all briefs</span>
-            </PillAccent>
-          </div>
-        </DialogContent>
-      </Dialog>
+      <SuccessDialog
+        open={showConfirmation}
+        onOpenChange={setShowConfirmation}
+        onConfirm={handleViewAllBriefs}
+      />
     </div>
   );
 }
@@ -795,35 +709,7 @@ function DeliverablesSelectionScreen({ onCancel, onBack, onNavigateToAiResponse 
 
   useEffect(() => {
     if (showConfirmation) {
-      // Trigger confetti animation - single smooth burst
-      const count = 200;
-      const defaults = { 
-        startVelocity: 30, 
-        spread: 360, 
-        ticks: 100, 
-        zIndex: 9999,
-        gravity: 0.8,
-        decay: 0.94
-      };
-
-      function randomInRange(min: number, max: number) {
-        return Math.random() * (max - min) + min;
-      }
-
-      // Single burst from both sides
-      confetti({
-        ...defaults,
-        particleCount: count,
-        origin: { x: randomInRange(0.2, 0.4), y: 0.5 },
-        colors: ['#ffb546', '#03B3E2', '#ff4337', '#646464', '#848487']
-      });
-      
-      confetti({
-        ...defaults,
-        particleCount: count,
-        origin: { x: randomInRange(0.6, 0.8), y: 0.5 },
-        colors: ['#ffb546', '#03B3E2', '#ff4337', '#646464', '#848487']
-      });
+      triggerSuccessConfetti();
     }
   }, [showConfirmation]);
 
@@ -832,8 +718,8 @@ function DeliverablesSelectionScreen({ onCancel, onBack, onNavigateToAiResponse 
       {/* Main Content Area */}
       <div className="flex-1 flex overflow-hidden">
         {/* Left Panel */}
-        <div className="flex flex-col gap-[10px] p-6 w-[564px] shrink-0 overflow-y-auto relative">
-          <div className="flex flex-col gap-4">
+        <div className="flex flex-col p-6 w-[564px] shrink-0 h-full">
+          <div className="flex flex-col gap-3 h-[80%] overflow-y-auto">
             <p className="text-sm leading-[18.62px] text-[#424242] w-full">
               Great! Next up are the deliverables. You can either browse and select the ones you need, or start detailing them below. TIKO will summarise the deliverables and prompt you to make sure you include everything you need for this project.
             </p>
@@ -847,28 +733,37 @@ function DeliverablesSelectionScreen({ onCancel, onBack, onNavigateToAiResponse 
                 {RECOMMENDED_DELIVERABLES.map((deliverable) => {
                   const isSelected = selectedDeliverables.includes(deliverable.id);
                   return (
-                    <div key={deliverable.id} className="flex items-center justify-between p-3 rounded-lg bg-white border border-[#e0e0e0]">
-                      <div className="flex items-center gap-3">
-                        <span className="text-sm font-semibold leading-[18.62px] text-black">{deliverable.title}</span>
+                    <div
+                      key={deliverable.id}
+                      className="bg-[#efeff0] border border-[#e0e0e0] rounded-[6px] p-3 flex items-center justify-between hover:bg-[#e5e5e5] transition"
+                    >
+                      <div className="flex flex-col gap-0.5">
+                        <p className="text-sm leading-[18.62px] text-black">
+                          {deliverable.title}
+                        </p>
+                        <p className="text-[10px] leading-[14px] text-black">
+                          {deliverable.tokens} {deliverable.tokens === 1 ? "token" : "tokens"}
+                        </p>
                       </div>
-                      <div className="flex items-center gap-3">
-                        <span className="text-xs leading-[15.96px] text-[#848487]">{deliverable.tokens} Tokens</span>
-                        <button
-                          onClick={() => handleAddDeliverable(deliverable.id, deliverable.tokens)}
-                          className={`w-6 h-6 rounded-full ${isSelected ? "bg-[#03B3E2]" : "bg-white border border-[#03B3E2]"} flex items-center justify-center relative`}
-                        >
-                          <Plus 
-                            size={18} 
-                            className={`${isSelected ? "text-white" : "text-[#03B3E2]"}`}
-                          />
-                        </button>
-                      </div>
+                      <button
+                        onClick={() => handleAddDeliverable(deliverable.id, deliverable.tokens)}
+                        className={`w-8 h-8 rounded-full flex items-center justify-center transition ${
+                          isSelected 
+                            ? "bg-[#03B3E2] hover:bg-[#0299c7]" 
+                            : "bg-[#f1f1f3] hover:bg-[#e5e5e5]"
+                        }`}
+                      >
+                        <Plus 
+                          size={18} 
+                          className={`${isSelected ? "text-white" : "text-[#03B3E2]"}`}
+                        />
+                      </button>
                     </div>
                   );
                 })}
               </div>
 
-              <button className="flex items-center justify-center gap-1.5 pt-2">
+              <button className="flex items-center justify-center gap-1.5 pt-1">
                 <p className="text-sm font-bold leading-[18.62px] text-[#848487]">
                   More deliverables
                 </p>
@@ -887,53 +782,30 @@ function DeliverablesSelectionScreen({ onCancel, onBack, onNavigateToAiResponse 
           </div>
 
           {/* AI Chat Input at Bottom - Centered */}
-          <ChatInput
-            value={chatInput}
-            onChange={setChatInput}
-            onSubmit={(v) => { if (v.trim()) { onNavigateToAiResponse(v.trim()); } }}
-            leftIconSrc={imgFrame14}
-            rightIconSrc={imgFrame15}
-            helpText="Need a hand? Talk to your Iris account manager"
-            containerClassName="mt-auto pt-4"
-          />
+          <div className="mt-5">
+            <ChatInput
+              value={chatInput}
+              onChange={setChatInput}
+              onSubmit={(v) => { if (v.trim()) { onNavigateToAiResponse(v.trim()); } }}
+              leftIconSrc={imgFrame14}
+              rightIconSrc={imgFrame15}
+              helpText="Need a hand? Talk to your Iris account manager"
+            />
+          </div>
         </div>
 
         {/* Vertical Divider */}
-        <div className="w-px bg-[#e0e0e0] shrink-0" />
+        <div className="w-px bg-[#e0e0e0] h-[90%] shrink-0" />
 
         {/* Right Panel */}
-        <div className="flex flex-col gap-[10px] p-[10px] pr-10 w-[601px] shrink-0 overflow-hidden">
+        <div className="flex flex-col gap-3 p-[10px] pr-10 w-[540px] shrink-0 overflow-hidden">
           {/* Brief Preview */}
-          <div className="bg-white flex-1 flex flex-col gap-8 p-6 rounded-xl min-h-0 overflow-y-auto">
-            <div className="flex flex-col gap-4">
-              <div className="flex items-center justify-center">
-                <p className="text-[22px] font-bold leading-[29.26px] text-black">
-                  {mockBriefData.projectTitle}
-                </p>
-              </div>
-
-              <div className="flex flex-col gap-6">
-                <div className="flex flex-col gap-2">
-                  <p className="text-sm leading-[18.62px] text-[#09090a]">
-                    <span className="font-bold">Launch date: </span>
-                    <span className="font-normal">{mockBriefData.launchDate}</span>
-                  </p>
-                </div>
-
-                <div className="flex flex-col gap-2">
-                  <p className="text-sm leading-[18.62px] text-[#09090a]">
-                    <span className="font-bold">Project lead: </span>
-                    <span className="font-normal">{mockBriefData.projectLead}</span>
-                  </p>
-                </div>
-
-                <p className="text-sm leading-[18.62px] text-[#09090a]">
-                  <span className="font-bold">Objective: </span>
-                  <span className="font-normal">{mockBriefData.objective}</span>
-                </p>
-              </div>
-            </div>
-          </div>
+          <BriefPreviewPanel
+            projectTitle={mockBriefData.projectTitle}
+            launchDate={mockBriefData.launchDate}
+            projectLead={mockBriefData.projectLead}
+            objective={mockBriefData.objective}
+          />
 
           {/* Separator */}
           <div className="h-[9px] relative w-full shrink-0">
@@ -956,35 +828,10 @@ function DeliverablesSelectionScreen({ onCancel, onBack, onNavigateToAiResponse 
       </div>
 
       {/* Confirmation Dialog */}
-      <Dialog open={showConfirmation} onOpenChange={setShowConfirmation}>
-        <DialogContent className="sm:max-w-md !bg-white border border-[#e0e0e0] rounded-xl p-8 [&>button]:hidden">
-          <DialogHeader className="flex flex-col gap-4 items-center text-center">
-            <DialogTitle className="text-h1 text-black text-center">
-              Brief successfully submitted!
-            </DialogTitle>
-            <DialogDescription className="text-sm leading-[18.62px] text-[#424242] text-center">
-              Your brief status has been updated to Review. We will get back to you soon.
-            </DialogDescription>
-          </DialogHeader>
-          <div className="flex justify-center pt-4">
-            <PillAccent
-              type="button"
-              onClick={handleViewAllBriefs}
-              size="md"
-            >
-              <span className="text-sm font-semibold leading-[18.62px] text-black">View all briefs</span>
-            </PillAccent>
-          </div>
-        </DialogContent>
-      </Dialog>
-
-      {/* AI Chat Input at Bottom - Centered */}
-      <ChatInput
-        leftIconSrc={imgFrame14_v2}
-        rightIconSrc={imgFrame15_v2}
-        helpText="Need a hand? Talk to your Iris account manager"
-        className="w-[516px]"
-        containerClassName="absolute bottom-[26px] left-[264px]"
+      <SuccessDialog
+        open={showConfirmation}
+        onOpenChange={setShowConfirmation}
+        onConfirm={handleViewAllBriefs}
       />
     </div>
   );
@@ -1001,35 +848,7 @@ function AIResponseScreen({ userInput, onBack, onCancel }: { userInput: string; 
 
   useEffect(() => {
     if (showConfirmation) {
-      // Trigger confetti animation - single smooth burst
-      const count = 200;
-      const defaults = { 
-        startVelocity: 30, 
-        spread: 360, 
-        ticks: 100, 
-        zIndex: 9999,
-        gravity: 0.8,
-        decay: 0.94
-      };
-
-      function randomInRange(min: number, max: number) {
-        return Math.random() * (max - min) + min;
-      }
-
-      // Single burst from both sides
-      confetti({
-        ...defaults,
-        particleCount: count,
-        origin: { x: randomInRange(0.2, 0.4), y: 0.5 },
-        colors: ['#ffb546', '#03B3E2', '#ff4337', '#646464', '#848487']
-      });
-      
-      confetti({
-        ...defaults,
-        particleCount: count,
-        origin: { x: randomInRange(0.6, 0.8), y: 0.5 },
-        colors: ['#ffb546', '#03B3E2', '#ff4337', '#646464', '#848487']
-      });
+      triggerSuccessConfetti();
     }
   }, [showConfirmation]);
 
@@ -1113,38 +932,14 @@ function AIResponseScreen({ userInput, onBack, onCancel }: { userInput: string; 
         <div className="w-px bg-[#e0e0e0] shrink-0" />
 
         {/* Right Panel - Same as Deliverables Screen */}
-        <div className="flex flex-col gap-[10px] p-[10px] pr-10 w-[601px] shrink-0 overflow-hidden">
+        <div className="flex flex-col gap-[10px] p-[10px] pr-10 w-[540px] shrink-0 overflow-hidden">
           {/* Brief Preview */}
-          <div className="bg-white flex-1 flex flex-col gap-8 p-6 rounded-xl min-h-0 overflow-y-auto">
-            <div className="flex flex-col gap-4">
-              <div className="flex items-center justify-center">
-                <p className="text-[22px] font-bold leading-[29.26px] text-black">
-                  {mockBriefData.projectTitle}
-                </p>
-              </div>
-
-              <div className="flex flex-col gap-6">
-                <div className="flex flex-col gap-2">
-                  <p className="text-sm leading-[18.62px] text-[#09090a]">
-                    <span className="font-bold">Launch date: </span>
-                    <span className="font-normal">{mockBriefData.launchDate}</span>
-                  </p>
-                </div>
-
-                <div className="flex flex-col gap-2">
-                  <p className="text-sm leading-[18.62px] text-[#09090a]">
-                    <span className="font-bold">Project lead: </span>
-                    <span className="font-normal">{mockBriefData.projectLead}</span>
-                  </p>
-                </div>
-
-                <p className="text-sm leading-[18.62px] text-[#09090a]">
-                  <span className="font-bold">Objective: </span>
-                  <span className="font-normal">{mockBriefData.objective}</span>
-                </p>
-              </div>
-            </div>
-          </div>
+          <BriefPreviewPanel
+            projectTitle={mockBriefData.projectTitle}
+            launchDate={mockBriefData.launchDate}
+            projectLead={mockBriefData.projectLead}
+            objective={mockBriefData.objective}
+          />
 
           {/* Separator */}
           <div className="h-[9px] relative w-full shrink-0">
@@ -1167,27 +962,11 @@ function AIResponseScreen({ userInput, onBack, onCancel }: { userInput: string; 
       </div>
 
       {/* Confirmation Dialog */}
-      <Dialog open={showConfirmation} onOpenChange={setShowConfirmation}>
-        <DialogContent className="sm:max-w-md !bg-white border border-[#e0e0e0] rounded-xl p-8 [&>button]:hidden">
-          <DialogHeader className="flex flex-col gap-4 items-center text-center">
-            <DialogTitle className="text-h1 text-black text-center">
-              Brief successfully submitted!
-            </DialogTitle>
-            <DialogDescription className="text-sm leading-[18.62px] text-[#424242] text-center">
-              Your brief status has been updated to Review. We will get back to you soon.
-            </DialogDescription>
-          </DialogHeader>
-          <div className="flex justify-center pt-4">
-            <PillAccent
-              type="button"
-              onClick={handleViewAllBriefs}
-              size="md"
-            >
-              <span className="text-sm font-semibold leading-[18.62px] text-black">View all briefs</span>
-            </PillAccent>
-          </div>
-        </DialogContent>
-      </Dialog>
+      <SuccessDialog
+        open={showConfirmation}
+        onOpenChange={setShowConfirmation}
+        onConfirm={handleViewAllBriefs}
+      />
 
       {/* AI Chat Input at Bottom - Centered */}
       <ChatInput
@@ -1274,19 +1053,12 @@ function AllBriefsSection() {
   return (
     <div className="space-y-4">
       <h2 className="text-base font-semibold leading-[21.28px] text-black">All briefs</h2>
-      <div className="flex items-center gap-2">
-        {["All", "Drafts", "In review"].map((tab) => (
-          <button
-            key={tab}
-            onClick={() => setActiveTab(tab as "All" | "Drafts" | "In review")}
-            className={`h-[26px] px-3 rounded-full text-xs font-semibold ${
-              activeTab === tab ? "bg-black text-white" : "bg-[#f1f1f3] text-black"
-            }`}
-          >
-            {tab}
-          </button>
-        ))}
-      </div>
+      <TabFilter
+        tabs={["All", "Drafts", "In review"]}
+        activeTab={activeTab}
+        onTabChange={(tab) => setActiveTab(tab as typeof activeTab)}
+        variant="compact"
+      />
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {filtered.map((b) => {
           // Badge styling based on type

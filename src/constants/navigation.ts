@@ -13,6 +13,8 @@ export function matchActiveName(pathname: string): string {
   if (pathname.startsWith("/dashboard/briefs")) return "Briefs";
   if (pathname.startsWith("/dashboard/projects")) return "Projects";
   if (pathname.startsWith("/dashboard/tracker")) return "Tracker";
+  if (pathname.startsWith("/dashboard/calculator")) return "Calculator";
+  if (pathname.startsWith("/dashboard/profile")) return "My account";
   return "Central";
 }
 

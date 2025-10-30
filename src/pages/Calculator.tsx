@@ -1,13 +1,13 @@
-import { useMemo, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
-import HBAvatar from "@/components/common/HBAvatar";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Home, FileText, Folder, BarChart2, LogOut, Bell, ChevronDown, Calculator, Coins, Plus, X } from "lucide-react";
 import { toast } from "sonner";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Popover, PopoverTrigger, PopoverContent } from "@/components/ui/popover";
 import DashboardLayout from "@/components/layout/DashboardLayout";
-import NotificationsPopover from "@/components/layout/NotificationsPopover";
+import DashboardTopbarRight from "@/components/layout/DashboardTopbarRight";
+import { useActiveNav } from "@/hooks/useActiveNav";
 import { BRAND } from "@/constants/branding";
 import { CALCULATOR_ASSETS } from "@/constants/calculator-assets";
 
@@ -45,7 +45,6 @@ interface SelectedAsset {
 
 export default function CalculatorPage() {
   const navigate = useNavigate();
-  const location = useLocation();
   const [selectedAssets, setSelectedAssets] = useState<SelectedAsset[]>([]);
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const [selectedAssetType, setSelectedAssetType] = useState<string[]>([]);
@@ -53,15 +52,7 @@ export default function CalculatorPage() {
   const [selectedTaskType, setSelectedTaskType] = useState<string[]>([]);
 
   // nav items centralized via DashboardLayout
-
-  const activeName = useMemo(() => {
-    if (location.pathname.startsWith("/dashboard/briefs")) return "Briefs";
-    if (location.pathname === "/dashboard") return "Central";
-    if (location.pathname.startsWith("/dashboard/projects")) return "Projects";
-    if (location.pathname.startsWith("/dashboard/tracker")) return "Tracker";
-    if (location.pathname.startsWith("/dashboard/calculator")) return "Calculator";
-    return "Central";
-  }, [location.pathname]);
+  const { activeName } = useActiveNav();
 
   // Available assets from Figma design
   const availableAssets: AssetItem[] = [
@@ -137,23 +128,7 @@ export default function CalculatorPage() {
     navigate("/dashboard/briefs");
   };
 
-  const topbarRight = (
-    <>
-      <NotificationsPopover />
-      <div className="flex items-center gap-1">
-        <Coins size={20} className="text-[#848487]" />
-        <span className="text-xs leading-[15.96px] text-[#646464]">372 Tokens</span>
-      </div>
-      <button onClick={() => navigate("/dashboard/profile")} className="flex items-center gap-2 hover:opacity-80 transition cursor-pointer">
-        <HBAvatar size={40} />
-        <div className="flex flex-col">
-          <p className="text-sm font-bold leading-[18.62px] text-[#646464]">Henry Bray</p>
-          <p className="text-xs leading-[15.96px] text-[#646464]">Marcomms</p>
-        </div>
-        <ChevronDown size={24} className="text-[#646464] rotate-90" />
-      </button>
-    </>
-  );
+  const topbarRight = <DashboardTopbarRight />;
 
   const titleNode = (
     <div className="flex items-center gap-2">

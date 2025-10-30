@@ -17,11 +17,11 @@ export default function DateField({ label, helpText, value, onChange, placeholde
     <Field label={label} helpText={helpText} className={className}>
       <Popover>
         <PopoverTrigger asChild>
-          <button className="bg-[#f9f9f9] border border-[#e0e0e0] rounded-lg px-5 py-2.5 text-left text-sm text-black w-full">
+          <button className={`bg-[#f9f9f9] border border-[#e0e0e0] rounded-lg px-5 py-2.5 text-left text-sm w-full ${value ? 'text-black' : 'text-[#848487]'}`}>
             {value ? value.toLocaleDateString() : placeholder}
           </button>
         </PopoverTrigger>
-        <PopoverContent align="start" className="p-0 bg-white border border-[#e0e0e0] rounded-lg">
+        <PopoverContent align="start" className="p-0 bg-[#f9f9f9] border border-[#e0e0e0] rounded-lg [&_button]:text-black [&_td]:text-black [&_.day]:text-black">
           <Calendar
             mode="single"
             selected={value}

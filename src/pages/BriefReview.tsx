@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
-import confetti from "canvas-confetti";
+import { triggerSuccessConfetti } from "@/lib/animations";
+import SuccessDialog from "@/components/common/SuccessDialog";
 
 export default function BriefReview() {
   const navigate = useNavigate();
@@ -45,33 +45,7 @@ export default function BriefReview() {
 
   useEffect(() => {
     if (showConfirmation) {
-      const count = 200;
-      const defaults = {
-        startVelocity: 30,
-        spread: 360,
-        ticks: 100,
-        zIndex: 9999,
-        gravity: 0.8,
-        decay: 0.94,
-      } as const;
-
-      function randomInRange(min: number, max: number) {
-        return Math.random() * (max - min) + min;
-      }
-
-      confetti({
-        ...defaults,
-        particleCount: count,
-        origin: { x: randomInRange(0.2, 0.4), y: 0.5 },
-        colors: ["#ffb546", "#03B3E2", "#ff4337", "#646464", "#848487"],
-      });
-
-      confetti({
-        ...defaults,
-        particleCount: count,
-        origin: { x: randomInRange(0.6, 0.8), y: 0.5 },
-        colors: ["#ffb546", "#03B3E2", "#ff4337", "#646464", "#848487"],
-      });
+      triggerSuccessConfetti();
     }
   }, [showConfirmation]);
 
@@ -228,26 +202,11 @@ export default function BriefReview() {
       </main>
 
       {/* Confirmation Dialog */}
-      <Dialog open={showConfirmation} onOpenChange={setShowConfirmation}>
-        <DialogContent className="sm:max-w-md !bg-white border border-[#e0e0e0] rounded-xl p-8 [&>button]:hidden">
-          <DialogHeader className="flex flex-col gap-4 items-center text-center">
-            <DialogTitle className="text-h1 text-black text-center">
-              Brief successfully submitted!
-            </DialogTitle>
-            <DialogDescription className="text-sm leading-[18.62px] text-[#424242] text-center">
-              Your brief status has been updated to Review. We will get back to you soon.
-            </DialogDescription>
-          </DialogHeader>
-          <div className="flex justify-center pt-4">
-            <button
-              onClick={handleViewAllBriefs}
-              className="px-6 py-[18px] bg-[#ffb546] backdrop-blur-sm rounded-[28px] flex items-center justify-center gap-2.5 hover:opacity-90 transition"
-            >
-              <span className="text-sm font-semibold leading-[18.62px] text-black">View all briefs</span>
-            </button>
-          </div>
-        </DialogContent>
-      </Dialog>
+      <SuccessDialog
+        open={showConfirmation}
+        onOpenChange={setShowConfirmation}
+        onConfirm={handleViewAllBriefs}
+      />
     </div>
   );
 }

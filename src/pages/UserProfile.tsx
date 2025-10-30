@@ -1,5 +1,5 @@
-import { useMemo, useRef, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Home, FileText, Folder, BarChart2, LogOut, ArrowRight, User, Bell, Coins, ChevronDown } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
@@ -8,7 +8,8 @@ import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { Popover, PopoverTrigger, PopoverContent } from "@/components/ui/popover";
 import DashboardLayout from "@/components/layout/DashboardLayout";
 import HBAvatar from "@/components/common/HBAvatar";
-import NotificationsPopover from "@/components/layout/NotificationsPopover";
+import DashboardTopbarRight from "@/components/layout/DashboardTopbarRight";
+import { useActiveNav } from "@/hooks/useActiveNav";
 import { BRAND } from "@/constants/branding";
 
 // Figma image URLs
@@ -61,22 +62,13 @@ const closeIcon = "https://www.figma.com/api/mcp/asset/da3bf0f3-859a-44ec-a211-7
 
 export default function UserProfilePage() {
   const navigate = useNavigate();
-  const location = useLocation();
   const [isPhotoDialogOpen, setIsPhotoDialogOpen] = useState(false);
   const [avatarSrc, setAvatarSrc] = useState<string | undefined>(undefined);
   const [tempAvatarSrc, setTempAvatarSrc] = useState<string | undefined>(undefined);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
   // nav items centralized via DashboardLayout
-
-  const activeName = useMemo(() => {
-    if (location.pathname.startsWith("/dashboard/briefs")) return "Briefs";
-    if (location.pathname === "/dashboard") return "Central";
-    if (location.pathname.startsWith("/dashboard/projects")) return "Projects";
-    if (location.pathname.startsWith("/dashboard/tracker")) return "Tracker";
-    if (location.pathname.startsWith("/dashboard/profile")) return "My account";
-    return "Central";
-  }, [location.pathname]);
+  const { activeName } = useActiveNav();
 
   const handleChangeEmail = () => {
     toast.info("Change email functionality coming soon");
@@ -84,23 +76,7 @@ export default function UserProfilePage() {
 
   // Change password functionality removed
 
-  const topbarRight = (
-    <>
-      <NotificationsPopover />
-      <div className="flex items-center gap-1">
-        <Coins size={20} className="text-[#848487]" />
-        <span className="text-xs leading-[15.96px] text-[#646464]">372 Tokens</span>
-      </div>
-      <button onClick={() => navigate("/dashboard/profile")} className="flex items-center gap-2 hover:opacity-80 transition cursor-pointer">
-        <HBAvatar size={40} src={avatarSrc} />
-        <div className="flex flex-col">
-          <p className="text-sm font-bold leading-[18.62px] text-[#646464]">Henry Bray</p>
-          <p className="text-xs leading-[15.96px] text-[#646464]">Marcomms</p>
-        </div>
-        <ChevronDown size={24} className="text-[#646464] rotate-90" />
-      </button>
-    </>
-  );
+  const topbarRight = <DashboardTopbarRight avatarSrc={avatarSrc} />;
 
   const titleNode = (
     <div className="flex items-center gap-2">

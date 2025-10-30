@@ -1,11 +1,11 @@
-import { useMemo } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
-import HBAvatar from "@/components/common/HBAvatar";
+import { useNavigate } from "react-router-dom";
 import { Home, FileText, Folder, BarChart2, Bell, ChevronDown, ArrowRight, Calculator, Coins } from "lucide-react";
 import { toast } from "sonner";
 import { Popover, PopoverTrigger, PopoverContent } from "@/components/ui/popover";
 import DashboardLayout from "@/components/layout/DashboardLayout";
-import NotificationsPopover from "@/components/layout/NotificationsPopover";
+import DashboardTopbarRight from "@/components/layout/DashboardTopbarRight";
+import { useActiveNav } from "@/hooks/useActiveNav";
+import HorizontalBarChart from "@/components/common/HorizontalBarChart";
 import { BRAND } from "@/constants/branding";
 import { DASHBOARD_ASSETS } from "@/constants/dashboard-assets";
 
@@ -20,35 +20,11 @@ const createBriefArrowIcon = DASHBOARD_ASSETS.createBriefArrowIcon;
 
 export default function TikoDashboard() {
   const navigate = useNavigate();
-  const location = useLocation();
 
   // nav items centralized via DashboardLayout
+  const { activeName: active } = useActiveNav();
 
-  const active = useMemo(() => {
-    if (location.pathname.startsWith("/dashboard/briefs")) return "Briefs";
-    if (location.pathname === "/dashboard") return "Central";
-    if (location.pathname.startsWith("/dashboard/projects")) return "Projects";
-    if (location.pathname.startsWith("/dashboard/tracker")) return "Tracker";
-    return "Central";
-  }, [location.pathname]);
-
-  const topbarRight = (
-    <>
-      <NotificationsPopover />
-      <div className="flex items-center gap-1">
-        <Coins size={20} className="text-[#848487]" />
-        <span className="text-xs leading-[15.96px] text-[#646464]">372 Tokens</span>
-      </div>
-      <button onClick={() => navigate("/dashboard/profile")} className="flex items-center gap-2 hover:opacity-80 transition cursor-pointer">
-        <HBAvatar size={40} />
-        <div className="flex flex-col">
-          <p className="text-sm font-bold leading-[18.62px] text-[#646464]">Henry Bray</p>
-          <p className="text-xs leading-[15.96px] text-[#646464]">Marcomms</p>
-        </div>
-        <ChevronDown size={24} className="text-[#646464] rotate-90" />
-      </button>
-    </>
-  );
+  const topbarRight = <DashboardTopbarRight />;
 
   const titleNode = (
     <div className="flex items-center gap-2">
@@ -209,92 +185,41 @@ export default function TikoDashboard() {
 
               <div className="flex gap-4">
                 {/* Token Summary */}
-                <div className="flex-1 bg-[#f9f9f9] rounded-xl px-8 py-6 flex flex-col gap-8 min-w-0">
-                  <h3 className="text-lg font-bold leading-[23.94px] text-black">Token summary</h3>
-                  
-                  <div className="flex flex-col gap-6">
-                    {/* Horizontal bars */}
-                    <div className="flex items-center h-[87px] gap-0">
-                      <div className="h-full bg-[#0177c7] rounded-[12.718px] flex items-center justify-center flex-[0.2672] min-w-[60px]">
-                        <span className="text-base font-bold leading-[21.28px] text-white">3,100</span>
-                      </div>
-                      <div className="h-full bg-[#03b3e2] rounded-[12.718px] flex items-center justify-center flex-[0.1466] min-w-[60px]">
-                        <span className="text-base font-bold leading-[21.28px] text-white">1,700</span>
-                      </div>
-                      <div className="h-full bg-[#00c3b1] rounded-[12.718px] flex items-center justify-center flex-[0.5862] min-w-[60px]">
-                        <span className="text-base font-bold leading-[21.28px] text-white">6,800</span>
-                      </div>
-                    </div>
-
-                    {/* Legend */}
-                    <div className="flex flex-col gap-3">
-                      <div className="flex items-center gap-4">
-                        <div className="flex items-center gap-1.5">
-                          <div className="w-2.5 h-2.5 bg-[#0177c7] rounded-[2.5px]" />
-                          <span className="text-xs leading-[15.96px] text-black">Spent</span>
-                        </div>
-                        <div className="flex items-center gap-1.5">
-                          <div className="w-2.5 h-2.5 bg-[#03b3e2] rounded-[2.5px]" />
-                          <span className="text-xs leading-[15.96px] text-black">Commited</span>
-                        </div>
-                        <div className="flex items-center gap-1.5">
-                          <div className="w-2.5 h-2.5 bg-[#00c3b1] rounded-[2.5px]" />
-                          <span className="text-xs leading-[15.96px] text-black">Remaining</span>
-                        </div>
-                      </div>
-                      <p className="text-xs leading-[15.96px] text-black">
-                        Total: 11,600 tokens
-                      </p>
-                    </div>
-                  </div>
+                <div className="flex-1 bg-[#f9f9f9] rounded-xl px-8 py-6">
+                  <HorizontalBarChart
+                    title="Token summary"
+                    bars={[
+                      { value: 3100, color: "#0177c7", label: "Spent" },
+                      { value: 1700, color: "#03b3e2", label: "Commited" },
+                      { value: 6800, color: "#00c3b1", label: "Remaining" },
+                    ]}
+                    legend={[
+                      { color: "#0177c7", label: "Spent" },
+                      { color: "#03b3e2", label: "Commited" },
+                      { color: "#00c3b1", label: "Remaining" },
+                    ]}
+                    totalText="Total: 11,600 tokens"
+                  />
                 </div>
 
                 {/* Brief Quality Score */}
-                <div className="flex-1 bg-[#f9f9f9] rounded-xl px-8 py-6 flex flex-col gap-8 min-w-0">
-                  <h3 className="text-lg font-bold leading-[23.94px] text-black">Brief quality score</h3>
-                  
-                  <div className="flex flex-col gap-6">
-                    {/* Horizontal bars */}
-                    <div className="flex items-center h-[87px] gap-0">
-                      <div className="h-full bg-[#0177c7] rounded-[12.718px] flex items-center justify-center flex-[0.3152] min-w-[40px]">
-                        <span className="text-base font-bold leading-[21.28px] text-white">52</span>
-                      </div>
-                      <div className="h-full bg-[#03b3e2] rounded-[12.718px] flex items-center justify-center flex-[0.4061] min-w-[40px]">
-                        <span className="text-base font-bold leading-[21.28px] text-white">67</span>
-                      </div>
-                      <div className="h-full bg-[#8092dc] rounded-[12.718px] flex items-center justify-center flex-[0.1879] min-w-[40px]">
-                        <span className="text-base font-bold leading-[21.28px] text-white">31</span>
-                      </div>
-                      <div className="h-full bg-[#00c3b1] rounded-[12.718px] flex items-center justify-center flex-[0.0909] min-w-[40px]">
-                        <span className="text-base font-bold leading-[21.28px] text-white">15</span>
-                      </div>
-                    </div>
-
-                    {/* Legend */}
-                    <div className="flex flex-col gap-3">
-                      <div className="flex flex-wrap items-center gap-3">
-                        <div className="flex items-center gap-1.5">
-                          <div className="w-2.5 h-2.5 bg-[#0177c7] rounded-[2.5px]" />
-                          <span className="text-xs leading-[15.96px] text-black">Excellent</span>
-                        </div>
-                        <div className="flex items-center gap-1.5">
-                          <div className="w-2.5 h-2.5 bg-[#03b3e2] rounded-[2.5px]" />
-                          <span className="text-xs leading-[15.96px] text-black">Good</span>
-                        </div>
-                        <div className="flex items-center gap-1.5">
-                          <div className="w-2.5 h-2.5 bg-[#8092dc] rounded-[2.5px]" />
-                          <span className="text-xs leading-[15.96px] text-black">Needs improvement</span>
-                        </div>
-                        <div className="flex items-center gap-1.5">
-                          <div className="w-2.5 h-2.5 bg-[#00c3b1] rounded-[2.5px]" />
-                          <span className="text-xs leading-[15.96px] text-black">Poor</span>
-                        </div>
-                      </div>
-                      <p className="text-xs leading-[15.96px] text-black">
-                        Total: 165 briefs
-                      </p>
-                    </div>
-                  </div>
+                <div className="flex-1 bg-[#f9f9f9] rounded-xl px-8 py-6">
+                  <HorizontalBarChart
+                    title="Brief quality score"
+                    bars={[
+                      { value: 52, color: "#0177c7", label: "Excellent" },
+                      { value: 67, color: "#03b3e2", label: "Good" },
+                      { value: 31, color: "#8092dc", label: "Needs improvement" },
+                      { value: 15, color: "#00c3b1", label: "Poor" },
+                    ]}
+                    legend={[
+                      { color: "#0177c7", label: "Excellent" },
+                      { color: "#03b3e2", label: "Good" },
+                      { color: "#8092dc", label: "Needs improvement" },
+                      { color: "#00c3b1", label: "Poor" },
+                    ]}
+                    totalText="Total: 165 briefs"
+                  />
                 </div>
               </div>
             </div>
