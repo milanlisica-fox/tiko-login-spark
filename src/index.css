@@ -154,8 +154,23 @@ All colors MUST be HSL.
   }
 }
 
+@keyframes animScale2 {
+  from {
+     transform: translate(-50%, -44%) scale(3);
+  }
+  to {
+    opacity: 1;
+      transform: translate(-50%, -44%) scale(1.05);
+  }
+}
+
 .animate-scale {
   animation: animScale 0.9s ease-out 0.6s forwards;
+}
+
+
+.animate-scale2 {
+  animation: animScale2 0.9s ease-out 0.6s forwards;
 }
 
 .brief-icon img {
@@ -203,4 +218,31 @@ All colors MUST be HSL.
 .of {
   object-fit: contain;
   object-position: center;
+}
+.next + .plus {
+  background-color: #03B3E2;
+}
+
+.next + .plus .plusicon {
+  filter: brightness(0) invert(1);
+}
+
+
+@keyframes bounce-once {
+  0%, 100% {
+    transform: scale(1);
+  }
+  30% {
+    transform: scale(1.15);
+  }
+  50% {
+    transform: scale(0.95);
+  }
+  70% {
+    transform: scale(1.1);
+  }
+}
+
+.animate-bounce-once {
+  animation: bounce-once 0.6s ease-in-out;
 }

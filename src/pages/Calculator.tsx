@@ -369,20 +369,20 @@ export default function CalculatorPage() {
                             <>
                               <button
                                 onClick={() => handleRemoveAsset(asset.id)}
-                                className="w-8 h-8 rounded-full bg-[#f1f1f3] flex items-center justify-center hover:bg-[#e5e5e5] transition"
+                                className="w-8 h-8 rounded-full bg-[#03B3E2] flex items-center justify-center hover:bg-[#e5e5e5] transition"
                               >
-                                <span className="text-[#03B3E2] text-lg">−</span>
+                                <span className="text-[#fff] text-lg">−</span>
                               </button>
-                              <span className="text-sm font-bold text-black w-6 text-center">
+                              <span className="next text-sm font-bold text-black w-6 text-center">
                                 {quantity}
                               </span>
                             </>
                           )}
                           <button
                             onClick={() => handleAddAsset(asset)}
-                            className="w-8 h-8 rounded-full bg-[#f1f1f3] flex items-center justify-center hover:bg-[#e5e5e5] transition"
+                            className="plus w-8 h-8 rounded-full bg-[#f1f1f3] flex items-center justify-center hover:bg-[#e5e5e5] transition"
                           >
-                            <img src={imgAddIcon} alt="Add" className="w-[17.778px] h-[17.778px]" />
+                            <img src={imgAddIcon} alt="Add" className="plusicon w-[17.778px] h-[17.778px]" />
                           </button>
                         </div>
                       </div>

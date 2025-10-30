@@ -96,7 +96,7 @@ const Login = () => {
       <path d="M1459.13,423.25H60.74c-33.55,0-60.74-27.19-60.74-60.74v-25.11c0-13.64,8.31-25.9,20.98-30.96l135-64.13c27.89-11.12,28.01-50.56.18-61.84L20.8,115.12C8.23,110.02,0,97.81,0,84.24v-23.5C0,27.19,27.19,0,60.74,0h1398.39c13.23,0,26.09,4.32,36.64,12.29l160.72,150.88c32.14,24.3,32.14,72.59,0,96.89l-160.72,150.88c-10.55,7.98-23.41,12.29-36.64,12.29Z"/>
     </svg>
       
-      <svg className="animate-scale" xmlns="http://www.w3.org/2000/svg" width="1206" height="739" viewBox="0 0 1206 739" fill="none" style={{
+      <svg className="animate-scale2" xmlns="http://www.w3.org/2000/svg" width="1206" height="739" viewBox="0 0 1206 739" fill="none" style={{
     position: "absolute",
     top: "50%",
     left: "50%",
