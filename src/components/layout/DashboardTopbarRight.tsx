@@ -31,11 +31,11 @@ export default function DashboardTopbarRight({
         className="flex items-center gap-2 hover:opacity-80 transition cursor-pointer"
       >
         <HBAvatar size={40} src={avatarSrc} />
-        <div className="flex flex-col">
+        <div className="flex-col hidden md:flex">
           <p className="text-sm font-bold leading-[18.62px] text-[#646464]">{userName}</p>
           <p className="text-xs leading-[15.96px] text-[#646464]">{userDept}</p>
         </div>
-        <Icons.chevronDown size={24} className="text-[#646464] rotate-90" />
+        <Icons.chevronDown size={24} className="text-[#646464] rotate-90 hidden md:block" />
       </button>
     </>
   );
