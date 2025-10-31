@@ -129,7 +129,7 @@ export default function TrackerPage() {
           {/* Header */}
           <div className="flex items-center justify-between">
             <div className="flex flex-col gap-1">
-              <h1 className="text-h1 text-black">Real-time insights to guide your spend</h1>
+              <h1 className="h1-heading text-h1 text-black">Real-time insights to guide your spend</h1>
               <p className="text-body text-black">Stay on top of spend, progress, and priorities—all in one place.</p>
             </div>
             <Button variant="outline" className="h-10 px-6 border border-[#d9d9d9] bg-white hover:bg-gray-50 text-black">

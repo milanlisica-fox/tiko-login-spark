@@ -40,7 +40,7 @@ const Login = () => {
 
   return (
     <AuthLayout showArrow={true} svgAnimationClass="animate-scale2">
-      <h1 className="text-5xl font-bold text-card-foreground mb-8">
+      <h1 className="h1-heading text-5xl font-bold text-card-foreground mb-8">
         Welcome back!
       </h1>
 

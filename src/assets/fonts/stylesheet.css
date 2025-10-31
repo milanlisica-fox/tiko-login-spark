@@ -1,0 +1,216 @@
+@font-face {
+    font-family: 'SamsungOne 200';
+    src: url('SamsungOne-200.woff2') format('woff2'),
+        url('SamsungOne-200.woff') format('woff');
+    font-weight: 300;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'SamsungOne 800C';
+    src: url('SamsungOne-800C.woff2') format('woff2'),
+        url('SamsungOne-800C.woff') format('woff');
+    font-weight: 900;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'SamsungOne 400C';
+    src: url('SamsungOne-400C.woff2') format('woff2'),
+        url('SamsungOne-400C.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'SamsungOne 300C';
+    src: url('SamsungOne-300C.woff2') format('woff2'),
+        url('SamsungOne-300C.woff') format('woff');
+    font-weight: 300;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'SamsungOne 700C';
+    src: url('SamsungOne-700C.woff2') format('woff2'),
+        url('SamsungOne-700C.woff') format('woff');
+    font-weight: bold;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'SamsungOne 500';
+    src: url('SamsungOne-500.woff2') format('woff2'),
+        url('SamsungOne-500.woff') format('woff');
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'SamsungOne 600';
+    src: url('SamsungOne-600.woff2') format('woff2'),
+        url('SamsungOne-600.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'SamsungOne 450';
+    src: url('SamsungOne-450.woff2') format('woff2'),
+        url('SamsungOne-450.woff') format('woff');
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'SamsungOne 700';
+    src: url('SamsungOne-700.woff2') format('woff2'),
+        url('SamsungOne-700.woff') format('woff');
+    font-weight: bold;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'SamsungOne 600C';
+    src: url('SamsungOne-600C.woff2') format('woff2'),
+        url('SamsungOne-600C.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'SamsungOne 300';
+    src: url('SamsungOne-300.woff2') format('woff2'),
+        url('SamsungOne-300.woff') format('woff');
+    font-weight: 300;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'SamsungOneUI 500';
+    src: url('SamsungOneUI-500.woff2') format('woff2'),
+        url('SamsungOneUI-500.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'SamsungOne 500C';
+    src: url('SamsungOne-500C.woff2') format('woff2'),
+        url('SamsungOne-500C.woff') format('woff');
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'SamsungOne 200C';
+    src: url('SamsungOne-200C.woff2') format('woff2'),
+        url('SamsungOne-200C.woff') format('woff');
+    font-weight: 300;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'SamsungOne 400';
+    src: url('SamsungOne-400.woff2') format('woff2'),
+        url('SamsungOne-400.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'SamsungOne 450C';
+    src: url('SamsungOne-450C.woff2') format('woff2'),
+        url('SamsungOne-450C.woff') format('woff');
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'SamsungOneUI';
+    src: url('SamsungOneUI-MediumCondensed.woff2') format('woff2'),
+        url('SamsungOneUI-MediumCondensed.woff') format('woff');
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'SamsungOneUI 700';
+    src: url('SamsungOneUI-700.woff2') format('woff2'),
+        url('SamsungOneUI-700.woff') format('woff');
+    font-weight: bold;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Samsung Sharp Sans';
+    src: url('SamsungSharpSans-Bold.woff2') format('woff2'),
+        url('SamsungSharpSans-Bold.woff') format('woff');
+    font-weight: bold;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'SamsungOneUI';
+    src: url('SamsungOneUI-RegularCondensed.woff2') format('woff2'),
+        url('SamsungOneUI-RegularCondensed.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Samsung Sharp Sans';
+    src: url('SamsungSharpSans-Regular.woff2') format('woff2'),
+        url('SamsungSharpSans-Regular.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Samsung Sharp Sans';
+    src: url('SamsungSharpSans-Medium.woff2') format('woff2'),
+        url('SamsungSharpSans-Medium.woff') format('woff');
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'SamsungOneUI 600';
+    src: url('SamsungOneUI-600.woff2') format('woff2'),
+        url('SamsungOneUI-600.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'SamsungOneUI';
+    src: url('SamsungOneUI-BoldCondensed.woff2') format('woff2'),
+        url('SamsungOneUI-BoldCondensed.woff') format('woff');
+    font-weight: bold;
+    font-style: normal;
+    font-display: swap;
+}
+

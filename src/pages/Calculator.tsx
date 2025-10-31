@@ -150,7 +150,7 @@ export default function CalculatorPage() {
           <div className="flex flex-col lg:flex-row gap-8">
             {/* Left Panel - Asset List */}
             <div className="flex-1 lg:max-w-[1220px]">
-              <h1 className="text-xl md:text-[28px] font-bold leading-[37.24px] text-black mb-6 md:mb-10 md:text-center lg:text-left">
+              <h1 className="h1-heading text-xl md:text-[28px] font-bold leading-[37.24px] text-black mb-6 md:mb-10 md:text-center lg:text-left">
                 Build your asset list
               </h1>
               {/* Filter Bar */}

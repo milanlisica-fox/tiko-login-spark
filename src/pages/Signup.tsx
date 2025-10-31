@@ -50,7 +50,7 @@ const Signup = () => {
     <AuthLayout showArrow={false} svgAnimationClass="animate-scale">
       {/* Frame 596 - Header Section */}
       <div className="flex flex-col items-center mb-8">
-        <h1 className="text-[38px] font-bold leading-[46px] text-card-foreground mb-1 text-left w-full">
+        <h1 className="h1-heading text-[38px] font-bold leading-[46px] text-card-foreground mb-1 text-left w-full">
           Welcome to TIKO!
         </h1>
         <div className="flex flex-col w-full px-1 py-1">

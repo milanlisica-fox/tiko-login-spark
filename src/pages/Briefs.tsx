@@ -175,7 +175,7 @@ export default function BriefsPage() {
               {/* Header */}
               <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 md:items-center">
                 <div className="flex flex-col gap-1 md:text-center lg:text-left">
-                  <h1 className="text-2xl md:text-h1 text-black">Briefs overview</h1>
+                  <h1 className="h1-heading text-2xl md:text-h1 text-black">Briefs overview</h1>
                   <p className="text-sm md:text-body text-black">Kickstart your next project with clarity and ease</p>
                 </div>
                 <div className="flex flex-col sm:flex-row gap-2.5 items-stretch sm:items-center md:justify-center lg:justify-start">
@@ -409,7 +409,7 @@ function TemplateSelectionScreen({ onCancel, onCreateBrief }: { onCancel: () => 
       {/* Header Section */}
       <div className="flex flex-col gap-6 items-center w-full">
         <div className="flex flex-col gap-4 items-center">
-          <h1 className="text-h1 text-black text-center">
+          <h1 className="h1-heading text-h1 text-black text-center">
             Write your next brief in minutes
           </h1>
           <p className="text-sm leading-[18.62px] text-black text-center max-w-[600px]">

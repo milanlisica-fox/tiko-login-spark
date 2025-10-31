@@ -115,7 +115,7 @@ export default function UserProfilePage() {
 
               {/* User Info */}
               <div className="flex flex-1 flex-col gap-[4px]">
-                <h1 className="text-h1 text-black">
+                <h1 className="h1-heading text-h1 text-black">
                   Henry Bray
                 </h1>
                 <p className="text-body text-black">

@@ -45,7 +45,7 @@ export default function TikoDashboard() {
             {/* Header with action buttons */}
             <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 md:items-center">
               <div className="flex flex-col gap-1 md:text-center lg:text-left">
-                <h1 className="text-2xl md:text-h1 text-black">
+                <h1 className="h1-heading text-2xl md:text-h1 text-black">
                   Welcome back, Henry!
                 </h1>
                 <p className="text-sm md:text-body text-black">
