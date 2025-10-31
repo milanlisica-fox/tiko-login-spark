@@ -21,7 +21,7 @@ export default function Topbar({
   return (
     <header className="h-[70px] bg-[#f9f9f9] border-b border-[#e0e0e0] flex items-center justify-between px-2 md:px-4 lg:px-6 relative">
       {/* Mobile/Tablet: Hamburger menu + centered logo */}
-      <div className="lg:hidden flex items-center justify-center flex-1 relative">
+      <div className="lg:hidden flex items-center md:justify-center flex-1 relative">
         {onMobileMenuClick && (
           <button 
             onClick={onMobileMenuClick}
@@ -43,11 +43,11 @@ export default function Topbar({
       </div>
 
       {/* Right side content */}
-      <div className="flex items-center gap-2 md:gap-4 lg:gap-6 pr-2 lg:pr-[30px]">
+      <div className="flex items-center gap-2 md:gap-4 lg:gap-6 pr-2 lg:pr-[30px] sidenav-r">
         {Right ?? (
           <>
             <NotificationsPopover />
-            <div className="hidden md:flex items-center gap-1">
+            <div className="items-center gap-1">
               <TokensIcon size={18} className="text-[#848487] lg:w-5 lg:h-5" />
               <span className="text-xs leading-[15.96px] text-[#646464]">372 Tokens</span>
             </div>
