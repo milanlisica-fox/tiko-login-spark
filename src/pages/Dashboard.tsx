@@ -70,7 +70,7 @@ export default function TikoDashboard() {
                     // Navigate after animation
                     navigate("/dashboard/calculator");
                   }}
-                  className="w-full sm:w-auto sm:w-[216px] bg-[#03b3e2] backdrop-blur-sm rounded-[28px] flex items-center justify-center gap-[10px] px-[24px] py-[18px] hover:opacity-90 transition"
+                  className="w-full sm:w-[216px] h-[48px] bg-[#03b3e2] backdrop-blur-sm rounded-[28px] flex items-center justify-center gap-[10px] px-[24px] py-[18px] hover:opacity-90 transition"
                 >
                   <Calculator size={16} className="text-black" />
                   <span className="text-base font-semibold leading-[23.94px] text-black whitespace-nowrap">
@@ -79,7 +79,7 @@ export default function TikoDashboard() {
                 </button>
                 <button 
                   onClick={() => navigate("/dashboard/briefs", { state: { createBrief: true } })}
-                  className="w-full sm:w-auto sm:w-[216px] backdrop-blur-[6px] backdrop-filter bg-[#ffb546] px-[24px] py-[18px] rounded-[28px] flex items-center justify-center gap-[10px] hover:opacity-90 transition"
+                  className="w-full sm:w-[216px] h-[48px] backdrop-blur-[6px] backdrop-filter bg-[#ffb546] px-[24px] py-[18px] rounded-[28px] flex items-center justify-center gap-[10px] hover:opacity-90 transition"
                 >
                   <span className="text-[16px] font-semibold leading-[23.94px] text-black whitespace-nowrap">
                     Create brief

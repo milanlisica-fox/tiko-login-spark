@@ -262,7 +262,7 @@ All colors MUST be HSL.
     display: none;
   }
   .main-logo {
-    padding-left: 35px;
+    padding-left: 0;
   }
   .tiko-logo {
     padding-bottom: 0%;
