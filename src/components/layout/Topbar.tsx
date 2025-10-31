@@ -33,7 +33,7 @@ export default function Topbar({
       </div>
 
       {/* Mobile/Tablet: Centered logo */}
-      <div className="lg:hidden absolute inset-0 flex items-center justify-center pointer-events-none">
+      <div className="lg:hidden absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none">
         <Logo variant="sidebar" logoSrc={BRAND.logo} logoDotSrc={BRAND.logoDot} className="max-w-[90px] pointer-events-auto" />
       </div>
 

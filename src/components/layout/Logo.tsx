@@ -13,7 +13,7 @@ export default function Logo({ variant = "sidebar", logoSrc, logoDotSrc, classNa
   const resolvedLogoDotSrc = logoDotSrc ?? BRAND.logoDot;
   if (variant === "sidebar") {
     return (
-      <a className={`main-logo flex items-center gap-1.5 ${className}`} href="/dashboard">
+      <a className={`main-logo flex items-center gap-1.5 ${className} lg:pl-0 pl-0`} href="/dashboard">
         <img src={resolvedLogoSrc} alt="TIKO" className="h-8" />
         {resolvedLogoDotSrc ? <img src={resolvedLogoDotSrc} alt="" className="w-[14.6px] h-[14.6px]" /> : null}
       </a>

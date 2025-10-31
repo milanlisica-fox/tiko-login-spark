@@ -277,8 +277,8 @@ export default function BriefReview() {
             </div>
           </div>
 
-          {/* White Document - Shown on tablet/iPad */}
-          <div className="hidden md:flex flex-col gap-2.5 pb-5 w-full max-w-4xl mt-5">
+          {/* White Document - Shown on mobile and tablet/iPad */}
+          <div className="flex lg:hidden flex-col gap-2.5 pb-5 w-full max-w-4xl mt-5">
             {/* Brief Preview - Double height */}
             <div className="bg-white flex flex-col p-6 rounded-xl min-h-[600px] overflow-y-auto">
               <div className="flex flex-col gap-4">
@@ -348,8 +348,8 @@ export default function BriefReview() {
             </div>
           </div>
 
-          {/* Buttons section for tablet/iPad */}
-          <div className="hidden md:flex flex-col gap-2.5 w-full max-w-4xl pb-5">
+          {/* Buttons section for mobile and tablet/iPad */}
+          <div className="flex lg:hidden flex-col gap-2.5 w-full max-w-4xl pb-5">
             {/* Action Buttons - Order: Edit brief, Submit brief - In a row */}
             <div className="flex flex-row items-center gap-2.5 w-full">
               <button
