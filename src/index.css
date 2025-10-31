@@ -229,7 +229,7 @@ input, textarea, button, a, body {
   font-family: 'SamsungOne', sans-serif !important;
 }
 
-h1.h1-heading {
+h1.h1-heading, .leading-tight {
   font-family: 'Samsung Sharp Sans', sans-serif !important;
 }
 
