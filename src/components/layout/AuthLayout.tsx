@@ -52,7 +52,7 @@ export default function AuthLayout({
           
           <div className="relative z-10 grid md:grid-cols-2 gap-8 md:gap-12 items-center">
             {/* Left side - Logo */}
-            <div className="flex items-center justify-center animate-fade-up-left">
+            <div className="flex items-center justify-start animate-fade-up-left tiko-logo">
               <TikoLogo />
             </div>
 
