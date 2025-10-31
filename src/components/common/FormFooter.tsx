@@ -1,5 +1,7 @@
 import React from "react";
-import { PillAccent, PillGhost, PillSubtle } from "@/components/common/buttons";
+import { BRIEFS_ASSETS } from "@/constants/briefs-assets";
+
+const createBriefArrowIcon = BRIEFS_ASSETS.createBriefArrowIcon;
 
 type FormFooterProps = {
   onDiscard?: () => void;
@@ -10,16 +12,27 @@ type FormFooterProps = {
 export default function FormFooter({ onDiscard, onSaveDraft, onReview }: FormFooterProps) {
   return (
     <div className="flex items-center justify-between w-full">
-      <PillGhost onClick={onDiscard} size="sm" className="px-2 h-8">
-        <span className="text-[13px] font-semibold leading-[18.62px] text-black">Discard</span>
-      </PillGhost>
+      <button
+        onClick={onDiscard}
+        className="px-2 h-8 bg-[#03b3e2] text-black hover:opacity-80 rounded-[28px] transition"
+      >
+        <span className="text-[13px] font-semibold leading-[18.62px]">Discard</span>
+      </button>
       <div className="flex gap-1 items-center">
-        <PillSubtle onClick={onSaveDraft} size="sm" className="h-8 bg-[#f9f9f9] hover:bg-[#e5e5e5]">
-          <span className="text-[13px] font-semibold leading-[18.62px] text-[#848487]">Save draft</span>
-        </PillSubtle>
-        <PillAccent onClick={onReview} size="sm" className="h-8">
+        <button
+          onClick={onSaveDraft}
+          className="h-8 px-4 bg-[#ffb546] hover:opacity-90 rounded-[28px] flex items-center justify-center gap-[10px] transition"
+        >
+          <span className="text-[13px] font-semibold leading-[18.62px] text-black">Save draft</span>
+          <img src={createBriefArrowIcon} alt="" className="h-[14px] w-[15.567px]" />
+        </button>
+        <button
+          onClick={onReview}
+          className="h-8 px-4 bg-[#ffb546] hover:opacity-90 rounded-[28px] flex items-center justify-center gap-[10px] transition"
+        >
           <span className="text-[13px] font-semibold leading-[18.62px] text-black">Review brief</span>
-        </PillAccent>
+          <img src={createBriefArrowIcon} alt="" className="h-[14px] w-[15.567px]" />
+        </button>
       </div>
     </div>
   );

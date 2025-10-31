@@ -514,9 +514,18 @@ function NewBriefForm({ onCancel, onNext }: { onCancel: () => void; onNext: () =
     objective: "",
   });
   const [showConfirmation, setShowConfirmation] = useState(false);
+  const [showSaveDraftConfirmation, setShowSaveDraftConfirmation] = useState(false);
+
+  // Check if form is complete
+  const isFormComplete = formData.projectTitle.trim() !== "" && 
+                         formData.dueDate !== undefined && 
+                         formData.projectLead.trim() !== "" && 
+                         formData.objective.trim() !== "";
 
   const handleNext = () => {
-    onNext();
+    if (isFormComplete) {
+      onNext();
+    }
   };
 
   const handleChange = (field: string, value: string | Date | undefined) => {
@@ -529,6 +538,15 @@ function NewBriefForm({ onCancel, onNext }: { onCancel: () => void; onNext: () =
     navigate("/dashboard/briefs", { state: { resetToOverview: true } });
   };
 
+  const handleViewAllBriefsFromSave = () => {
+    setShowSaveDraftConfirmation(false);
+    navigate("/dashboard/briefs", { state: { resetToOverview: true } });
+  };
+
+  const handleSaveDraft = () => {
+    setShowSaveDraftConfirmation(true);
+  };
+
   useEffect(() => {
     if (showConfirmation) {
       triggerSuccessConfetti();
@@ -536,125 +554,143 @@ function NewBriefForm({ onCancel, onNext }: { onCancel: () => void; onNext: () =
   }, [showConfirmation]);
 
   return (
-    <div className="flex flex-col lg:flex-row gap-0 w-full h-full">
-      {/* Left Form Section */}
-      <div className="flex flex-col gap-8 p-4 md:p-6 rounded-xl lg:w-[564px]">
-        <div className="flex flex-col gap-4">
-          <p className="text-sm leading-[18.62px] text-[#424242] w-full">
-            Start your brief by filling out these required fields.
-          </p>
+    <div className="flex items-center justify-center w-full h-[85vh] px-[15%] overflow-hidden">
+      <div className="flex flex-col lg:flex-row gap-0 w-full max-w-full h-full">
+        {/* Left Form Section */}
+        <div className="flex flex-col gap-2 p-4 md:p-6 rounded-xl lg:flex-[0_0_564px] h-full overflow-y-auto">
+          <div className="flex flex-col gap-4 flex-1">
+            <p className="text-sm leading-[18.62px] text-[#424242] w-full">
+              Start your brief by filling out these required fields.
+            </p>
 
-          <div className="flex flex-col gap-6">
-            {/* Project Title */}
-            <Field label="Project title" helpText="Give your brief a short, clear name">
-              <StyledInput
-                value={formData.projectTitle}
-                onChange={(e) => handleChange("projectTitle", e.target.value)}
-                placeholder="e.g. Spring Campaign 2025"
-                variant="brief"
+            <div className="flex flex-col gap-6">
+              {/* Project Title */}
+              <Field label="Project title" helpText="Give your brief a short, clear name">
+                <StyledInput
+                  value={formData.projectTitle}
+                  onChange={(e) => handleChange("projectTitle", e.target.value)}
+                  placeholder="e.g. Spring Campaign 2025"
+                  variant="brief"
+                />
+              </Field>
+
+              {/* Due Date */}
+              <DateField
+                label={
+                  <div className="flex items-center gap-2">
+                    <span>Due date</span>
+                  </div>
+                }
+                helpText="When is this project due?"
+                value={formData.dueDate}
+                onChange={(date) => handleChange("dueDate", date)}
               />
-            </Field>
 
-            {/* Due Date */}
-            <DateField
-              label={
-                <div className="flex items-center gap-2">
-                  <span>Due date</span>
-                </div>
-              }
-              helpText="When is this project due?"
-              value={formData.dueDate}
-              onChange={(date) => handleChange("dueDate", date)}
-            />
+              {/* Project Lead */}
+              <Field label="Project lead*" helpText="Who will own this project?">
+                <Select value={formData.projectLead} onValueChange={(value) => handleChange("projectLead", value)}>
+                  <SelectTrigger className={`border-[#e0e0e0] rounded-[85px] px-5 py-2.5 h-auto bg-[#f9f9f9] ${formData.projectLead ? '[&_span]:text-black' : '[&_span]:text-[#848487]'}`}>
+                    <SelectValue placeholder="Choose a lead" />
+                  </SelectTrigger>
+                  <SelectContent className="bg-[#f9f9f9]">
+                    <SelectItem value="henry-bray" className="text-black">Henry Bray</SelectItem>
+                    <SelectItem value="john-doe" className="text-black">John Doe</SelectItem>
+                    <SelectItem value="jane-smith" className="text-black">Jane Smith</SelectItem>
+                  </SelectContent>
+                </Select>
+              </Field>
 
-            {/* Project Lead */}
-            <Field label="Project lead*" helpText="Who will own this project?">
-              <Select value={formData.projectLead} onValueChange={(value) => handleChange("projectLead", value)}>
-                <SelectTrigger className={`border-[#e0e0e0] rounded-[85px] px-5 py-2.5 h-auto bg-[#f9f9f9] ${formData.projectLead ? '[&_span]:text-black' : '[&_span]:text-[#848487]'}`}>
-                  <SelectValue placeholder="Choose a lead" />
-                </SelectTrigger>
-                <SelectContent className="bg-[#f9f9f9]">
-                  <SelectItem value="henry-bray" className="text-black">Henry Bray</SelectItem>
-                  <SelectItem value="john-doe" className="text-black">John Doe</SelectItem>
-                  <SelectItem value="jane-smith" className="text-black">Jane Smith</SelectItem>
-                </SelectContent>
-              </Select>
-            </Field>
+              {/* Objective */}
+              <Field label="Objective" helpText="What's the main goal of this project?">
+                <Textarea
+                  value={formData.objective}
+                  onChange={(e) => handleChange("objective", e.target.value)}
+                  placeholder="e.g. Increase signups by 20% through targeted ads"
+                  className="border-[#e0e0e0] rounded-lg px-5 py-2.5 min-h-[74px] resize-none bg-[#f9f9f9] text-black placeholder:text-[#848487]"
+                  rows={3}
+                />
+              </Field>
+            </div>
+          </div>
 
-            {/* Objective */}
-            <Field label="Objective" helpText="What's the main goal of this project?">
-              <Textarea
-                value={formData.objective}
-                onChange={(e) => handleChange("objective", e.target.value)}
-                placeholder="e.g. Increase signups by 20% through targeted ads"
-                className="border-[#e0e0e0] rounded-lg px-5 py-2.5 min-h-[74px] resize-none bg-[#f9f9f9] text-black placeholder:text-[#848487]"
-                rows={3}
-              />
-            </Field>
+          {/* Separator line - aligned with right side */}
+          <div className="h-[9px] relative w-full shrink-0">
+            <div className="absolute h-px left-0 top-[4px] w-full bg-[#e0e0e0]" />
+          </div>
 
-            {/* Note */}
-            <div className="flex flex-col gap-2 pt-1">
-              <div className="h-px bg-[#e0e0e0] w-full" />
-              <p className="text-sm leading-[normal] opacity-[0.826] text-[#434343]">
-                *You can assign multiple leads
+          {/* Note and Next Button */}
+          <div className="flex flex-col gap-2 shrink-0">
+            <p className="text-sm leading-[normal] opacity-[0.826] text-[#434343]">
+              *You can assign multiple leads
+            </p>
+            <button
+              onClick={handleNext}
+              disabled={!isFormComplete}
+              className={`w-full h-10 px-5 rounded-[28px] flex items-center justify-center transition ${
+                isFormComplete
+                  ? "bg-[#ffb546] hover:opacity-90 cursor-pointer"
+                  : "bg-[#f9f9f9] cursor-not-allowed opacity-50"
+              }`}
+            >
+              <span className={`text-sm font-semibold leading-[18.62px] ${
+                isFormComplete ? "text-black" : "text-[#848487]"
+              }`}>Next</span>
+            </button>
+          </div>
+        </div>
+
+        {/* Right Panel */}
+        <div className="hidden lg:flex flex-col gap-2.5 pb-5 pl-2.5 pt-2.5 flex-1 max-w-[540px] h-full overflow-hidden">
+          {/* Loading State - made smaller to prevent scroll */}
+          <div className="bg-white flex flex-col gap-8 items-center justify-center p-6 rounded-xl overflow-hidden h-[89%]">
+            <div className="flex flex-col gap-2 items-center">
+              <img src={briefLoadingIcon} alt="" className="h-[36.966px] w-[77.813px]" />
+              <p className="text-sm font-bold leading-[18.62px] opacity-50 text-[#c1c1c3]">
+                Brief loading...
               </p>
             </div>
           </div>
-        </div>
 
-        {/* Next Button */}
-        <PillSubtle
-          onClick={handleNext}
-          size="md"
-          className="w-full bg-[#f9f9f9] hover:bg-[#e5e5e5]"
-        >
-          <span className="text-sm font-semibold leading-[18.62px] text-[#848487]">Next</span>
-        </PillSubtle>
-      </div>
-
-      {/* Right Panel */}
-      <div className="hidden lg:flex flex-col gap-2.5 pb-5 pr-10 pl-2.5 pt-2.5 w-[540px]">
-        {/* Loading State */}
-        <div className="bg-white flex flex-1 flex-col gap-8 items-center justify-center p-6 rounded-xl min-h-0">
-          <div className="flex flex-col gap-2 items-center">
-            <img src={briefLoadingIcon} alt="" className="h-[36.966px] w-[77.813px]" />
-            <p className="text-sm font-bold leading-[18.62px] opacity-50 text-[#c1c1c3]">
-              Brief loading...
-            </p>
-          </div>
-        </div>
-
-        {/* Separator */}
-        <div className="h-[9px] relative w-full shrink-0">
-          <div className="absolute h-px left-[-9px] top-[4px] w-[600px] bg-[#e0e0e0]" />
-        </div>
-
-        {/* Footer */}
-        <div className="flex flex-col gap-1 items-end shrink-0">
-          {/* Token Estimate */}
-          <div className="flex gap-2 items-center pb-2">
-            <img src={tokenIcon} alt="" className="h-5 w-5" />
-            <span className="text-[13px] leading-[18.62px] text-[#848487]">0</span>
-            <span className="text-[13px] leading-[18.62px] text-[#848487]">Tokens estimate</span>
+          {/* Separator - matching left side line width and position */}
+          <div className="h-[9px] relative w-full shrink-0">
+            <div className="absolute h-px left-0 top-[4px] w-full bg-[#e0e0e0]" />
           </div>
 
-          {/* Action Buttons */}
-          <div className="flex items-center justify-between w-full">
-            <PillGhost onClick={onCancel} size="sm" className="px-2 h-8">
-              <span className="text-[13px] font-semibold leading-[18.62px] text-black">Discard</span>
-            </PillGhost>
-            <div className="flex gap-1 items-center">
-              <PillSubtle size="sm" className="h-8 bg-[#f9f9f9] hover:bg-[#e5e5e5]">
-                <span className="text-[13px] font-semibold leading-[18.62px] text-[#848487]">Save draft</span>
-              </PillSubtle>
-              <PillAccent
-                type="button"
-                onClick={() => navigate("/dashboard/briefs/review")}
-                size="sm"
-                className="h-8"
+          {/* Footer */}
+          <div className="flex flex-col gap-1 items-end shrink-0 w-full">
+            {/* Token Estimate */}
+            <div className="flex gap-2 items-center pb-2 w-full">
+              <img src={tokenIcon} alt="" className="h-5 w-5" />
+              <span className="text-[13px] leading-[18.62px] text-[#848487]">0</span>
+              <span className="text-[13px] leading-[18.62px] text-[#848487]">Tokens estimate</span>
+            </div>
+
+            {/* Action Buttons */}
+            <div className="flex items-center w-full">
+              <button
+                onClick={onCancel}
+                className="w-[25%] h-8 bg-[#03b3e2] text-black hover:opacity-80 rounded-[28px] transition flex items-center justify-center"
               >
-                <span className="text-[13px] font-semibold leading-[18.62px] text-black">Review brief</span>
-              </PillAccent>
+                <span className="text-[13px] font-semibold leading-[18.62px]">Discard</span>
+              </button>
+              <div className="w-[15%]" />
+              <div className="flex gap-1 items-center w-[60%]">
+                <button 
+                  onClick={handleSaveDraft}
+                  className="flex-1 h-8 px-4 bg-[#ffb546] hover:opacity-90 rounded-[28px] flex items-center justify-center gap-[10px] transition"
+                >
+                  <span className="text-[13px] font-semibold leading-[18.62px] text-black">Save draft</span>
+                  <img src={createBriefArrowIcon} alt="" className="h-[14px] w-[15.567px]" />
+                </button>
+                <button
+                  type="button"
+                  onClick={() => navigate("/dashboard/briefs/review")}
+                  className="flex-1 h-8 px-4 bg-[#ffb546] hover:opacity-90 rounded-[28px] flex items-center justify-center gap-[10px] transition"
+                >
+                  <span className="text-[13px] font-semibold leading-[18.62px] text-black">Review brief</span>
+                  <img src={createBriefArrowIcon} alt="" className="h-[14px] w-[15.567px]" />
+                </button>
+              </div>
             </div>
           </div>
         </div>
@@ -666,6 +702,14 @@ function NewBriefForm({ onCancel, onNext }: { onCancel: () => void; onNext: () =
         onOpenChange={setShowConfirmation}
         onConfirm={handleViewAllBriefs}
       />
+
+      {/* Save Draft Confirmation Dialog */}
+      <SuccessDialog
+        open={showSaveDraftConfirmation}
+        onOpenChange={setShowSaveDraftConfirmation}
+        onConfirm={handleViewAllBriefsFromSave}
+        title="Brief successfully drafted!"
+      />
     </div>
   );
 }
@@ -676,6 +720,7 @@ function DeliverablesSelectionScreen({ onCancel, onBack, onNavigateToAiResponse 
   const [tokenEstimate, setTokenEstimate] = useState(0);
   const [chatInput, setChatInput] = useState("");
   const [showConfirmation, setShowConfirmation] = useState(false);
+  const [showSaveDraftConfirmation, setShowSaveDraftConfirmation] = useState(false);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -707,6 +752,15 @@ function DeliverablesSelectionScreen({ onCancel, onBack, onNavigateToAiResponse 
     navigate("/dashboard/briefs", { state: { resetToOverview: true } });
   };
 
+  const handleViewAllBriefsFromSave = () => {
+    setShowSaveDraftConfirmation(false);
+    navigate("/dashboard/briefs", { state: { resetToOverview: true } });
+  };
+
+  const handleSaveDraft = () => {
+    setShowSaveDraftConfirmation(true);
+  };
+
   useEffect(() => {
     if (showConfirmation) {
       triggerSuccessConfetti();
@@ -714,12 +768,11 @@ function DeliverablesSelectionScreen({ onCancel, onBack, onNavigateToAiResponse 
   }, [showConfirmation]);
 
   return (
-    <div className="flex flex-col w-full relative h-[calc(100vh-70px)]">
-      {/* Main Content Area */}
-      <div className="flex-1 flex flex-col lg:flex-row overflow-hidden">
+    <div className="flex items-center justify-center w-full h-[85vh] px-[15%] overflow-hidden">
+      <div className="flex flex-col lg:flex-row gap-0 w-full max-w-full h-full">
         {/* Left Panel */}
-        <div className="flex flex-col p-4 md:p-6 lg:w-[564px] shrink-0 h-full">
-          <div className="flex flex-col gap-3 h-[80%] overflow-y-auto">
+        <div className="flex flex-col gap-2 p-4 md:p-6 lg:flex-[0_0_564px] h-full overflow-y-auto">
+          <div className="flex flex-col gap-3 flex-1">
             <p className="text-sm leading-[18.62px] text-[#424242] w-full">
               Great! Next up are the deliverables. You can either browse and select the ones you need, or start detailing them below. TIKO will summarise the deliverables and prompt you to make sure you include everything you need for this project.
             </p>
@@ -771,18 +824,19 @@ function DeliverablesSelectionScreen({ onCancel, onBack, onNavigateToAiResponse 
               </button>
             </div>
 
-            <div className="h-[9px] relative w-full">
-              <div className="absolute h-px left-0 top-[4px] w-full bg-[#e0e0e0]" />
-            </div>
-
             <p className="text-sm leading-[18.62px] text-[#424242] w-full">
               Prefer to describe it instead? Or not sure which deliverables you need yet? <br />
               <span className="font-bold">Continue describing your brief below</span>
             </p>
           </div>
 
-          {/* AI Chat Input at Bottom - Centered */}
-          <div className="mt-5">
+          {/* Separator line - aligned with right side */}
+          <div className="h-[9px] relative w-full shrink-0">
+            <div className="absolute h-px left-0 top-[4px] w-full bg-[#e0e0e0]" />
+          </div>
+
+          {/* AI Chat Input at Bottom */}
+          <div className="shrink-0">
             <ChatInput
               value={chatInput}
               onChange={setChatInput}
@@ -794,35 +848,54 @@ function DeliverablesSelectionScreen({ onCancel, onBack, onNavigateToAiResponse 
           </div>
         </div>
 
-        {/* Vertical Divider */}
-        <div className="hidden lg:block w-px bg-[#e0e0e0] h-[90%] shrink-0" />
-
         {/* Right Panel */}
-        <div className="hidden lg:flex flex-col gap-3 p-[10px] pr-10 w-[540px] shrink-0 overflow-hidden">
-          {/* Brief Preview */}
-          <BriefPreviewPanel
-            projectTitle={mockBriefData.projectTitle}
-            launchDate={mockBriefData.launchDate}
-            projectLead={mockBriefData.projectLead}
-            objective={mockBriefData.objective}
-          />
+        <div className="hidden lg:flex flex-col gap-2.5 pb-5 pl-2.5 pt-2.5 flex-1 max-w-[540px] h-full overflow-hidden">
+          {/* Brief Preview - made smaller to prevent scroll */}
+          <div className="h-[89%] overflow-hidden">
+            <BriefPreviewPanel
+              projectTitle={mockBriefData.projectTitle}
+              launchDate={mockBriefData.launchDate}
+              projectLead={mockBriefData.projectLead}
+              objective={mockBriefData.objective}
+            />
+          </div>
 
-          {/* Separator */}
+          {/* Separator - matching left side line width and position */}
           <div className="h-[9px] relative w-full shrink-0">
-            <div className="absolute h-px left-[-9px] top-[4px] w-[600px] bg-[#e0e0e0]" />
+            <div className="absolute h-px left-0 top-[4px] w-full bg-[#e0e0e0]" />
           </div>
 
           {/* Footer */}
-          <div className="flex flex-col gap-1 items-end shrink-0">
+          <div className="flex flex-col gap-1 items-end shrink-0 w-full">
             {/* Token Estimate */}
             <TokenEstimate value={tokenEstimate} />
 
             {/* Action Buttons */}
-            <FormFooter
-              onDiscard={onCancel}
-              onSaveDraft={() => {}}
-              onReview={() => navigate("/dashboard/briefs/review")}
-            />
+            <div className="flex items-center w-full">
+              <button
+                onClick={onCancel}
+                className="w-[25%] h-8 bg-[#03b3e2] text-black hover:opacity-80 rounded-[28px] transition flex items-center justify-center"
+              >
+                <span className="text-[13px] font-semibold leading-[18.62px]">Discard</span>
+              </button>
+              <div className="w-[15%]" />
+              <div className="flex gap-1 items-center w-[60%]">
+                <button 
+                  onClick={handleSaveDraft}
+                  className="flex-1 h-8 px-4 bg-[#ffb546] hover:opacity-90 rounded-[28px] flex items-center justify-center gap-[10px] transition"
+                >
+                  <span className="text-[13px] font-semibold leading-[18.62px] text-black">Save draft</span>
+                  <img src={createBriefArrowIcon} alt="" className="h-[14px] w-[15.567px]" />
+                </button>
+                <button
+                  onClick={() => navigate("/dashboard/briefs/review")}
+                  className="flex-1 h-8 px-4 bg-[#ffb546] hover:opacity-90 rounded-[28px] flex items-center justify-center gap-[10px] transition"
+                >
+                  <span className="text-[13px] font-semibold leading-[18.62px] text-black">Review brief</span>
+                  <img src={createBriefArrowIcon} alt="" className="h-[14px] w-[15.567px]" />
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -833,6 +906,14 @@ function DeliverablesSelectionScreen({ onCancel, onBack, onNavigateToAiResponse 
         onOpenChange={setShowConfirmation}
         onConfirm={handleViewAllBriefs}
       />
+
+      {/* Save Draft Confirmation Dialog */}
+      <SuccessDialog
+        open={showSaveDraftConfirmation}
+        onOpenChange={setShowSaveDraftConfirmation}
+        onConfirm={handleViewAllBriefsFromSave}
+        title="Brief successfully drafted!"
+      />
     </div>
   );
 }
@@ -840,10 +921,20 @@ function DeliverablesSelectionScreen({ onCancel, onBack, onNavigateToAiResponse 
 function AIResponseScreen({ userInput, onBack, onCancel }: { userInput: string; onBack: () => void; onCancel: () => void }) {
   const navigate = useNavigate();
   const [showConfirmation, setShowConfirmation] = useState(false);
+  const [showSaveDraftConfirmation, setShowSaveDraftConfirmation] = useState(false);
   
   const handleViewAllBriefs = () => {
     setShowConfirmation(false);
     navigate("/dashboard/briefs");
+  };
+
+  const handleViewAllBriefsFromSave = () => {
+    setShowSaveDraftConfirmation(false);
+    navigate("/dashboard/briefs", { state: { resetToOverview: true } });
+  };
+
+  const handleSaveDraft = () => {
+    setShowSaveDraftConfirmation(true);
   };
 
   useEffect(() => {
@@ -864,99 +955,133 @@ function AIResponseScreen({ userInput, onBack, onCancel }: { userInput: string; 
   const deliverablesList = DELIVERABLES_LIST;
 
   return (
-    <div className="flex flex-col w-full relative h-[calc(100vh-70px)]">
-      {/* Main Content Area */}
-      <div className="flex-1 flex flex-col lg:flex-row overflow-hidden">
+    <div className="flex items-center justify-center w-full h-[85vh] px-[15%] overflow-hidden">
+      <div className="flex flex-col lg:flex-row gap-0 w-full max-w-full h-full">
         {/* Left Panel */}
-        <div className="flex flex-col gap-6 p-4 md:p-6 lg:w-[564px] shrink-0 overflow-y-auto">
-          {/* User Message Bubble */}
-          <div className="bg-[#efeff0] rounded-xl p-4">
-            <p className="text-sm leading-[18.62px] text-[#424242] whitespace-pre-wrap">
-              {userInput || "For this project we need to create like at least 5 different KVs i.e. Q7, B7, Combo, Family and B7&B7R key visual. For each of these we need a clean variant and 80/20, 70/30 variant. For the size you can use default sizes (suggest best ones) for the clean dna 70/30 and for 80/20 we need PDF, PT EXT, LS EXT."}
-            </p>
-          </div>
-
-          {/* AI Response */}
-          <div className="flex flex-col gap-6 px-6 py-4 h-[638px] overflow-y-auto">
-            <p className="text-sm leading-[18.62px] text-[#424242]">
-              Thanks for the input, review here the list of deliverables.
-            </p>
-
-            {/* Deliverables List */}
-            <div className="flex flex-col gap-3 w-[516px]">
-              {/* Header */}
-              <div className="flex gap-2 items-center text-sm font-bold leading-[18.62px] text-black">
-                <p className="flex-1">KV Type</p>
-                <p className="w-[60px]">Variant</p>
-                <p className="w-[200px]">Size</p>
-              </div>
-
-              {/* Divider */}
-              <div className="h-px bg-[#e0e0e0]" />
-
-              {/* Deliverables Items */}
-              {deliverablesList.map((item, idx) => (
-                <div key={idx} className="flex flex-col gap-2">
-                  {item.variants.map((variant, vIdx) => (
-                    <div key={vIdx}>
-                      <div className="flex gap-2 items-center text-[12px] leading-[15.96px] text-black">
-                        <p className={`flex-1 ${vIdx === 0 ? "font-bold" : ""}`}>
-                          {vIdx === 0 ? item.kvType : " "}
-                        </p>
-                        <p className="w-[60px] font-normal">{variant.variant}</p>
-                        <p className="w-[200px] font-normal">{variant.size}</p>
-                      </div>
-                      {vIdx < item.variants.length - 1 && (
-                        <div className="h-px bg-[#e0e0e0] mt-2" />
-                      )}
-                    </div>
-                  ))}
-                  {idx < deliverablesList.length - 1 && (
-                    <div className="h-px bg-[#e0e0e0] mt-2" />
-                  )}
-                </div>
-              ))}
+        <div className="flex flex-col gap-2 p-4 md:p-6 lg:flex-[0_0_564px] h-full overflow-y-auto">
+          <div className="flex flex-col gap-6 flex-1 overflow-y-auto">
+            {/* User Message Bubble */}
+            <div className="bg-[#efeff0] rounded-xl p-4">
+              <p className="text-sm leading-[18.62px] text-[#424242] whitespace-pre-wrap">
+                {userInput || "For this project we need to create like at least 5 different KVs i.e. Q7, B7, Combo, Family and B7&B7R key visual. For each of these we need a clean variant and 80/20, 70/30 variant. For the size you can use default sizes (suggest best ones) for the clean dna 70/30 and for 80/20 we need PDF, PT EXT, LS EXT."}
+              </p>
             </div>
 
-            {/* File Format Note */}
-            <p className="text-sm leading-[18.62px] text-[#424242]">
-              The format of the file is missing here.<br />
-              The recommended file type for these is <span className="font-bold">JPEG</span> and <span className="font-bold">PSD</span>.<br />
-              <br />
-              Would you like to add those?
-            </p>
+            {/* AI Response */}
+            <div className="flex flex-col gap-6 px-6 py-4">
+              <p className="text-sm leading-[18.62px] text-[#424242]">
+                Thanks for the input, review here the list of deliverables.
+              </p>
+
+              {/* Deliverables List */}
+              <div className="flex flex-col gap-3 w-full">
+                {/* Header */}
+                <div className="flex gap-2 items-center text-sm font-bold leading-[18.62px] text-black">
+                  <p className="flex-1">KV Type</p>
+                  <p className="w-[60px]">Variant</p>
+                  <p className="w-[200px]">Size</p>
+                </div>
+
+                {/* Divider */}
+                <div className="h-px bg-[#e0e0e0]" />
+
+                {/* Deliverables Items */}
+                {deliverablesList.map((item, idx) => (
+                  <div key={idx} className="flex flex-col gap-2">
+                    {item.variants.map((variant, vIdx) => (
+                      <div key={vIdx}>
+                        <div className="flex gap-2 items-center text-[12px] leading-[15.96px] text-black">
+                          <p className={`flex-1 ${vIdx === 0 ? "font-bold" : ""}`}>
+                            {vIdx === 0 ? item.kvType : " "}
+                          </p>
+                          <p className="w-[60px] font-normal">{variant.variant}</p>
+                          <p className="w-[200px] font-normal">{variant.size}</p>
+                        </div>
+                        {vIdx < item.variants.length - 1 && (
+                          <div className="h-px bg-[#e0e0e0] mt-2" />
+                        )}
+                      </div>
+                    ))}
+                    {idx < deliverablesList.length - 1 && (
+                      <div className="h-px bg-[#e0e0e0] mt-2" />
+                    )}
+                  </div>
+                ))}
+              </div>
+
+              {/* File Format Note */}
+              <p className="text-sm leading-[18.62px] text-[#424242]">
+                The format of the file is missing here.<br />
+                The recommended file type for these is <span className="font-bold">JPEG</span> and <span className="font-bold">PSD</span>.<br />
+                <br />
+                Would you like to add those?
+              </p>
+            </div>
+          </div>
+
+          {/* Separator line - aligned with right side */}
+          <div className="h-[9px] relative w-full shrink-0">
+            <div className="absolute h-px left-0 top-[4px] w-full bg-[#e0e0e0]" />
+          </div>
+
+          {/* AI Chat Input at Bottom */}
+          <div className="shrink-0">
+            <ChatInput
+              leftIconSrc={imgFrame14_v2}
+              rightIconSrc={imgFrame15_v2}
+              helpText="Need a hand? Talk to your Iris account manager"
+            />
           </div>
         </div>
 
-        {/* Vertical Divider */}
-        <div className="hidden lg:block w-px bg-[#e0e0e0] shrink-0" />
+        {/* Right Panel */}
+        <div className="hidden lg:flex flex-col gap-2.5 pb-5 pl-2.5 pt-2.5 flex-1 max-w-[540px] h-full overflow-hidden">
+          {/* Brief Preview - made smaller to prevent scroll */}
+          <div className="h-[89%] overflow-hidden">
+            <BriefPreviewPanel
+              projectTitle={mockBriefData.projectTitle}
+              launchDate={mockBriefData.launchDate}
+              projectLead={mockBriefData.projectLead}
+              objective={mockBriefData.objective}
+            />
+          </div>
 
-        {/* Right Panel - Same as Deliverables Screen */}
-        <div className="hidden lg:flex flex-col gap-[10px] p-[10px] pr-10 w-[540px] shrink-0 overflow-hidden">
-          {/* Brief Preview */}
-          <BriefPreviewPanel
-            projectTitle={mockBriefData.projectTitle}
-            launchDate={mockBriefData.launchDate}
-            projectLead={mockBriefData.projectLead}
-            objective={mockBriefData.objective}
-          />
-
-          {/* Separator */}
+          {/* Separator - matching left side line width and position */}
           <div className="h-[9px] relative w-full shrink-0">
-            <div className="absolute h-px left-[-9px] top-[4px] w-[600px] bg-[#e0e0e0]" />
+            <div className="absolute h-px left-0 top-[4px] w-full bg-[#e0e0e0]" />
           </div>
 
           {/* Footer */}
-          <div className="flex flex-col gap-1 items-end shrink-0">
+          <div className="flex flex-col gap-1 items-end shrink-0 w-full">
             {/* Token Estimate */}
             <TokenEstimate value={10} />
 
             {/* Action Buttons */}
-            <FormFooter
-              onDiscard={onCancel}
-              onSaveDraft={() => {}}
-              onReview={() => navigate("/dashboard/briefs/review")}
-            />
+            <div className="flex items-center w-full">
+              <button
+                onClick={onCancel}
+                className="w-[25%] h-8 bg-[#03b3e2] text-black hover:opacity-80 rounded-[28px] transition flex items-center justify-center"
+              >
+                <span className="text-[13px] font-semibold leading-[18.62px]">Discard</span>
+              </button>
+              <div className="w-[15%]" />
+              <div className="flex gap-1 items-center w-[60%]">
+                <button 
+                  onClick={handleSaveDraft}
+                  className="flex-1 h-8 px-4 bg-[#ffb546] hover:opacity-90 rounded-[28px] flex items-center justify-center gap-[10px] transition"
+                >
+                  <span className="text-[13px] font-semibold leading-[18.62px] text-black">Save draft</span>
+                  <img src={createBriefArrowIcon} alt="" className="h-[14px] w-[15.567px]" />
+                </button>
+                <button
+                  onClick={() => navigate("/dashboard/briefs/review")}
+                  className="flex-1 h-8 px-4 bg-[#ffb546] hover:opacity-90 rounded-[28px] flex items-center justify-center gap-[10px] transition"
+                >
+                  <span className="text-[13px] font-semibold leading-[18.62px] text-black">Review brief</span>
+                  <img src={createBriefArrowIcon} alt="" className="h-[14px] w-[15.567px]" />
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -968,13 +1093,12 @@ function AIResponseScreen({ userInput, onBack, onCancel }: { userInput: string; 
         onConfirm={handleViewAllBriefs}
       />
 
-      {/* AI Chat Input at Bottom - Centered */}
-      <ChatInput
-        leftIconSrc={imgFrame14_v2}
-        rightIconSrc={imgFrame15_v2}
-        helpText="Need a hand? Talk to your Iris account manager"
-        className="w-full lg:w-[516px]"
-        containerClassName="absolute bottom-[26px] left-0 right-0 px-4 lg:left-[264px] lg:right-auto"
+      {/* Save Draft Confirmation Dialog */}
+      <SuccessDialog
+        open={showSaveDraftConfirmation}
+        onOpenChange={setShowSaveDraftConfirmation}
+        onConfirm={handleViewAllBriefsFromSave}
+        title="Brief successfully drafted!"
       />
     </div>
   );

@@ -14,7 +14,7 @@ export default function BriefPreviewPanel({
   objective,
 }: BriefPreviewPanelProps) {
   return (
-    <div className="bg-white flex flex-col gap-4 p-6 rounded-xl min-h-0 overflow-y-auto h-[80%]">
+    <div className="bg-white flex flex-col gap-4 p-6 rounded-xl min-h-0 overflow-y-auto h-full">
       <div className="flex flex-col gap-3">
         <div className="flex items-center justify-center">
           <p className="text-[22px] font-bold leading-[29.26px] text-black">
