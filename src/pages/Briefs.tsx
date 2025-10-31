@@ -181,7 +181,7 @@ export default function BriefsPage() {
                 <div className="flex flex-col sm:flex-row gap-2.5 items-stretch sm:items-center md:justify-center lg:justify-start">
                   <button
                     onClick={() => navigate("/dashboard/calculator")}
-                    className="w-full sm:w-auto sm:w-[224px] bg-[#03b3e2] backdrop-blur-sm rounded-[28px] flex items-center justify-center gap-[10px] px-[24px] py-[18px] hover:opacity-90 transition"
+                    className="w-full sm:w-[216px] h-[48px] bg-[#03b3e2] backdrop-blur-sm rounded-[28px] flex items-center justify-center gap-[10px] px-[24px] py-[18px] hover:opacity-90 transition"
                   >
                     <Icons.calculator size={16} className="text-black" />
                     <span className="text-base font-semibold leading-[23.94px] text-black whitespace-nowrap">
@@ -190,7 +190,7 @@ export default function BriefsPage() {
                   </button>
                   <button 
                     onClick={() => setIsCreatingBrief(true)}
-                    className="w-full sm:w-auto sm:w-[224px] backdrop-blur-[6px] backdrop-filter bg-[#ffb546] px-[24px] py-[18px] rounded-[28px] flex items-center justify-center gap-[10px] hover:opacity-90 transition"
+                    className="w-full sm:w-[216px] h-[48px] backdrop-blur-[6px] backdrop-filter bg-[#ffb546] px-[24px] py-[18px] rounded-[28px] flex items-center justify-center gap-[10px] hover:opacity-90 transition"
                   >
                     <span className="text-[16px] font-semibold leading-[23.94px] text-black whitespace-nowrap">
                       Create brief
@@ -420,10 +420,10 @@ function TemplateSelectionScreen({ onCancel, onCreateBrief }: { onCancel: () => 
         </div>
         
         {/* Action Buttons */}
-        <div className="flex gap-2.5 items-center">
+        <div className="flex flex-col sm:flex-row gap-2.5 items-center">
           <button
             onClick={() => navigate("/dashboard/calculator")}
-            className="w-[224px] h-10 bg-[#03b3e2] backdrop-blur-sm rounded-[28px] flex items-center justify-center gap-[10px] px-[24px] hover:opacity-90 transition"
+            className="w-full sm:w-[216px] h-[48px] bg-[#03b3e2] backdrop-blur-sm rounded-[28px] flex items-center justify-center gap-[10px] px-[24px] py-[18px] hover:opacity-90 transition"
           >
             <Icons.calculator size={16} className="text-black" />
             <span className="text-base font-semibold leading-[23.94px] text-black whitespace-nowrap">
@@ -432,7 +432,7 @@ function TemplateSelectionScreen({ onCancel, onCreateBrief }: { onCancel: () => 
           </button>
           <button 
             onClick={onCreateBrief}
-            className="w-[224px] h-10 backdrop-blur-[6px] backdrop-filter bg-[#ffb546] px-[24px] rounded-[28px] flex items-center justify-center gap-[10px] hover:opacity-90 transition"
+            className="w-full sm:w-[216px] h-[48px] backdrop-blur-[6px] backdrop-filter bg-[#ffb546] px-[24px] py-[18px] rounded-[28px] flex items-center justify-center gap-[10px] hover:opacity-90 transition"
           >
             <span className="text-[16px] font-semibold leading-[23.94px] text-black whitespace-nowrap">
               Create brief
@@ -554,8 +554,10 @@ function NewBriefForm({ onCancel, onNext }: { onCancel: () => void; onNext: () =
   }, [showConfirmation]);
 
   return (
-    <div className="flex items-center justify-center w-full h-[85vh] px-[15%] overflow-hidden">
-      <div className="flex flex-col lg:flex-row gap-0 w-full max-w-full h-full">
+    <>
+      {/* Desktop Layout - Side by side */}
+      <div className="hidden lg:flex items-center justify-center w-full h-[85vh] px-[15%] overflow-hidden">
+        <div className="flex flex-row gap-0 w-full max-w-full h-full">
         {/* Left Form Section */}
         <div className="flex flex-col gap-2 p-4 md:p-6 rounded-xl lg:flex-[0_0_564px] h-full overflow-y-auto">
           <div className="flex flex-col gap-4 flex-1">
@@ -613,7 +615,7 @@ function NewBriefForm({ onCancel, onNext }: { onCancel: () => void; onNext: () =
             </div>
           </div>
 
-          {/* Separator line - aligned with right side */}
+          {/* Separator line */}
           <div className="h-[9px] relative w-full shrink-0">
             <div className="absolute h-px left-0 top-[4px] w-full bg-[#e0e0e0]" />
           </div>
@@ -639,9 +641,9 @@ function NewBriefForm({ onCancel, onNext }: { onCancel: () => void; onNext: () =
           </div>
         </div>
 
-        {/* Right Panel */}
-        <div className="hidden lg:flex flex-col gap-2.5 pb-5 pl-2.5 pt-2.5 flex-1 max-w-[540px] h-full overflow-hidden">
-          {/* Loading State - made smaller to prevent scroll */}
+        {/* Right Panel - Desktop only */}
+        <div className="flex flex-col gap-2.5 pb-5 pl-2.5 pt-2.5 flex-1 max-w-[540px] h-full overflow-hidden">
+          {/* Loading State */}
           <div className="bg-white flex flex-col gap-8 items-center justify-center p-6 rounded-xl overflow-hidden h-[89%]">
             <div className="flex flex-col gap-2 items-center">
               <img src={briefLoadingIcon} alt="" className="h-[36.966px] w-[77.813px]" />
@@ -651,7 +653,7 @@ function NewBriefForm({ onCancel, onNext }: { onCancel: () => void; onNext: () =
             </div>
           </div>
 
-          {/* Separator - matching left side line width and position */}
+          {/* Separator */}
           <div className="h-[9px] relative w-full shrink-0">
             <div className="absolute h-px left-0 top-[4px] w-full bg-[#e0e0e0]" />
           </div>
@@ -694,6 +696,146 @@ function NewBriefForm({ onCancel, onNext }: { onCancel: () => void; onNext: () =
             </div>
           </div>
         </div>
+        </div>
+      </div>
+
+      {/* Tablet/iPad Layout - Vertical stack: Form -> Line -> Document -> Line -> Buttons */}
+      <div className="flex lg:hidden flex-col items-center w-full min-h-[85vh] overflow-y-auto px-[10%] pb-8 pt-4">
+        {/* Form Section */}
+        <div className="flex flex-col gap-2 rounded-xl w-full max-w-4xl">
+          <div className="flex flex-col gap-4">
+            <p className="text-sm leading-[18.62px] text-[#424242] w-full">
+              Start your brief by filling out these required fields.
+            </p>
+
+            <div className="flex flex-col gap-6">
+              {/* Project Title */}
+              <Field label="Project title" helpText="Give your brief a short, clear name">
+                <StyledInput
+                  value={formData.projectTitle}
+                  onChange={(e) => handleChange("projectTitle", e.target.value)}
+                  placeholder="e.g. Spring Campaign 2025"
+                  variant="brief"
+                />
+              </Field>
+
+              {/* Due Date */}
+              <DateField
+                label={
+                  <div className="flex items-center gap-2">
+                    <span>Due date</span>
+                  </div>
+                }
+                helpText="When is this project due?"
+                value={formData.dueDate}
+                onChange={(date) => handleChange("dueDate", date)}
+              />
+
+              {/* Project Lead */}
+              <Field label="Project lead*" helpText="Who will own this project?">
+                <Select value={formData.projectLead} onValueChange={(value) => handleChange("projectLead", value)}>
+                  <SelectTrigger className={`border-[#e0e0e0] rounded-[85px] px-5 py-2.5 h-auto bg-[#f9f9f9] ${formData.projectLead ? '[&_span]:text-black' : '[&_span]:text-[#848487]'}`}>
+                    <SelectValue placeholder="Choose a lead" />
+                  </SelectTrigger>
+                  <SelectContent className="bg-[#f9f9f9]">
+                    <SelectItem value="henry-bray" className="text-black">Henry Bray</SelectItem>
+                    <SelectItem value="john-doe" className="text-black">John Doe</SelectItem>
+                    <SelectItem value="jane-smith" className="text-black">Jane Smith</SelectItem>
+                  </SelectContent>
+                </Select>
+              </Field>
+
+              {/* Objective */}
+              <Field label="Objective" helpText="What's the main goal of this project?">
+                <Textarea
+                  value={formData.objective}
+                  onChange={(e) => handleChange("objective", e.target.value)}
+                  placeholder="e.g. Increase signups by 20% through targeted ads"
+                  className="border-[#e0e0e0] rounded-lg px-5 py-2.5 min-h-[74px] resize-none bg-[#f9f9f9] text-black placeholder:text-[#848487]"
+                  rows={3}
+                />
+              </Field>
+            </div>
+          </div>
+
+          {/* Separator line */}
+          <div className="h-[9px] relative w-full shrink-0 mt-4">
+            <div className="absolute h-px left-0 top-[4px] w-full bg-[#e0e0e0]" />
+          </div>
+
+          {/* Note */}
+          <div className="shrink-0">
+            <p className="text-sm leading-[normal] opacity-[0.826] text-[#434343]">
+              *You can assign multiple leads
+            </p>
+          </div>
+        </div>
+
+        {/* White Document - Shown on tablet/iPad */}
+        <div className="hidden md:flex flex-col gap-2.5 pb-5 w-full max-w-4xl mt-5">
+          {/* Loading State - Double height */}
+          <div className="bg-white flex flex-col gap-8 items-center justify-center rounded-xl min-h-[600px]">
+            <div className="flex flex-col gap-2 items-center">
+              <img src={briefLoadingIcon} alt="" className="h-[36.966px] w-[77.813px]" />
+              <p className="text-sm font-bold leading-[18.62px] opacity-50 text-[#c1c1c3]">
+                Brief loading...
+              </p>
+            </div>
+          </div>
+
+          {/* Separator */}
+          <div className="h-[9px] relative w-full shrink-0">
+            <div className="absolute h-px left-0 top-[4px] w-full bg-[#e0e0e0]" />
+          </div>
+        </div>
+
+        {/* Buttons section for tablet/iPad */}
+        <div className="hidden md:flex flex-col gap-2.5 w-full max-w-4xl pb-5">
+          {/* Token Estimate */}
+          <div className="flex gap-2 items-center pb-2 w-full justify-end">
+            <img src={tokenIcon} alt="" className="h-5 w-5" />
+            <span className="text-[13px] leading-[18.62px] text-[#848487]">0</span>
+            <span className="text-[13px] leading-[18.62px] text-[#848487]">Tokens estimate</span>
+          </div>
+
+          {/* Action Buttons - Order: Next, Discard, Save draft, Review brief - In a row */}
+          <div className="flex flex-row items-center gap-2.5 w-full">
+            <button
+              onClick={handleNext}
+              disabled={!isFormComplete}
+              className={`h-8 px-4 rounded-[28px] flex items-center justify-center transition flex-1 ${
+                isFormComplete
+                  ? "bg-[#ffb546] hover:opacity-90 cursor-pointer"
+                  : "bg-[#f9f9f9] cursor-not-allowed opacity-50"
+              }`}
+            >
+              <span className={`text-[13px] font-semibold leading-[18.62px] ${
+                isFormComplete ? "text-black" : "text-[#848487]"
+              }`}>Next</span>
+            </button>
+            <button
+              onClick={onCancel}
+              className="h-8 px-4 bg-[#03b3e2] text-black hover:opacity-80 rounded-[28px] transition flex items-center justify-center flex-1"
+            >
+              <span className="text-[13px] font-semibold leading-[18.62px]">Discard</span>
+            </button>
+            <button 
+              onClick={handleSaveDraft}
+              className="flex-1 h-8 px-4 bg-[#ffb546] hover:opacity-90 rounded-[28px] flex items-center justify-center gap-[10px] transition"
+            >
+              <span className="text-[13px] font-semibold leading-[18.62px] text-black">Save draft</span>
+              <img src={createBriefArrowIcon} alt="" className="h-[14px] w-[15.567px]" />
+            </button>
+            <button
+              type="button"
+              onClick={() => navigate("/dashboard/briefs/review")}
+              className="flex-1 h-8 px-4 bg-[#ffb546] hover:opacity-90 rounded-[28px] flex items-center justify-center gap-[10px] transition"
+            >
+              <span className="text-[13px] font-semibold leading-[18.62px] text-black">Review brief</span>
+              <img src={createBriefArrowIcon} alt="" className="h-[14px] w-[15.567px]" />
+            </button>
+          </div>
+        </div>
       </div>
 
       {/* Confirmation Dialog */}
@@ -710,7 +852,7 @@ function NewBriefForm({ onCancel, onNext }: { onCancel: () => void; onNext: () =
         onConfirm={handleViewAllBriefsFromSave}
         title="Brief successfully drafted!"
       />
-    </div>
+    </>
   );
 }
 
@@ -768,11 +910,146 @@ function DeliverablesSelectionScreen({ onCancel, onBack, onNavigateToAiResponse 
   }, [showConfirmation]);
 
   return (
-    <div className="flex items-center justify-center w-full h-[85vh] px-[15%] overflow-hidden">
-      <div className="flex flex-col lg:flex-row gap-0 w-full max-w-full h-full">
-        {/* Left Panel */}
-        <div className="flex flex-col gap-2 p-4 md:p-6 lg:flex-[0_0_564px] h-full overflow-y-auto">
-          <div className="flex flex-col gap-3 flex-1">
+    <>
+      {/* Desktop Layout - Side by side */}
+      <div className="hidden lg:flex items-center justify-center w-full h-[85vh] px-[15%] overflow-hidden">
+        <div className="flex flex-row gap-0 w-full max-w-full h-full">
+          {/* Left Panel */}
+          <div className="flex flex-col gap-2 p-4 md:p-6 lg:flex-[0_0_564px] h-full overflow-y-auto">
+            <div className="flex flex-col gap-3 flex-1">
+              <p className="text-sm leading-[18.62px] text-[#424242] w-full">
+                Great! Next up are the deliverables. You can either browse and select the ones you need, or start detailing them below. TIKO will summarise the deliverables and prompt you to make sure you include everything you need for this project.
+              </p>
+
+            <div className="flex flex-col gap-2">
+              <p className="text-sm font-bold leading-[18.62px] text-[#424242] w-full">
+                Browse recomended deliverables
+              </p>
+
+              <div className="flex flex-col gap-1">
+                {RECOMMENDED_DELIVERABLES.map((deliverable) => {
+                  const isSelected = selectedDeliverables.includes(deliverable.id);
+                  return (
+                    <div
+                      key={deliverable.id}
+                      className="bg-[#efeff0] border border-[#e0e0e0] rounded-[6px] p-3 flex items-center justify-between hover:bg-[#e5e5e5] transition"
+                    >
+                      <div className="flex flex-col gap-0.5">
+                        <p className="text-sm leading-[18.62px] text-black">
+                          {deliverable.title}
+                        </p>
+                        <p className="text-[10px] leading-[14px] text-black">
+                          {deliverable.tokens} {deliverable.tokens === 1 ? "token" : "tokens"}
+                        </p>
+                      </div>
+                      <button
+                        onClick={() => handleAddDeliverable(deliverable.id, deliverable.tokens)}
+                        className={`w-8 h-8 rounded-full flex items-center justify-center transition ${
+                          isSelected 
+                            ? "bg-[#03B3E2] hover:bg-[#0299c7]" 
+                            : "bg-[#f1f1f3] hover:bg-[#e5e5e5]"
+                        }`}
+                      >
+                        <Plus 
+                          size={18} 
+                          className={`${isSelected ? "text-white" : "text-[#03B3E2]"}`}
+                        />
+                      </button>
+                    </div>
+                  );
+                })}
+              </div>
+
+              <button className="flex items-center justify-center gap-1.5 pt-1">
+                <p className="text-sm font-bold leading-[18.62px] text-[#848487]">
+                  More deliverables
+                </p>
+                <ChevronDownIcon size={19} className="text-[#848487]" />
+              </button>
+            </div>
+
+            <p className="text-sm leading-[18.62px] text-[#424242] w-full">
+              Prefer to describe it instead? Or not sure which deliverables you need yet? <br />
+              <span className="font-bold">Continue describing your brief below</span>
+              </p>
+            </div>
+
+            {/* Separator line - aligned with right side */}
+            <div className="h-[9px] relative w-full shrink-0">
+              <div className="absolute h-px left-0 top-[4px] w-full bg-[#e0e0e0]" />
+            </div>
+
+            {/* AI Chat Input at Bottom */}
+            <div className="shrink-0">
+              <ChatInput
+                value={chatInput}
+                onChange={setChatInput}
+                onSubmit={(v) => { if (v.trim()) { onNavigateToAiResponse(v.trim()); } }}
+                leftIconSrc={imgFrame14}
+                rightIconSrc={imgFrame15}
+                helpText="Need a hand? Talk to your Iris account manager"
+              />
+            </div>
+          </div>
+
+          {/* Right Panel */}
+          <div className="flex flex-col gap-2.5 pb-5 pl-2.5 pt-2.5 flex-1 max-w-[540px] h-full overflow-hidden">
+          {/* Brief Preview - made smaller to prevent scroll */}
+          <div className="h-[89%] overflow-hidden">
+            <BriefPreviewPanel
+              projectTitle={mockBriefData.projectTitle}
+              launchDate={mockBriefData.launchDate}
+              projectLead={mockBriefData.projectLead}
+              objective={mockBriefData.objective}
+            />
+          </div>
+
+          {/* Separator - matching left side line width and position */}
+          <div className="h-[9px] relative w-full shrink-0">
+            <div className="absolute h-px left-0 top-[4px] w-full bg-[#e0e0e0]" />
+          </div>
+
+          {/* Footer */}
+          <div className="flex flex-col gap-1 items-end shrink-0 w-full">
+            {/* Token Estimate */}
+            <TokenEstimate value={tokenEstimate} />
+
+            {/* Action Buttons */}
+            <div className="flex items-center w-full">
+              <button
+                onClick={onCancel}
+                className="w-[25%] h-8 bg-[#03b3e2] text-black hover:opacity-80 rounded-[28px] transition flex items-center justify-center"
+              >
+                <span className="text-[13px] font-semibold leading-[18.62px]">Discard</span>
+              </button>
+              <div className="w-[15%]" />
+              <div className="flex gap-1 items-center w-[60%]">
+                <button 
+                  onClick={handleSaveDraft}
+                  className="flex-1 h-8 px-4 bg-[#ffb546] hover:opacity-90 rounded-[28px] flex items-center justify-center gap-[10px] transition"
+                >
+                  <span className="text-[13px] font-semibold leading-[18.62px] text-black">Save draft</span>
+                  <img src={createBriefArrowIcon} alt="" className="h-[14px] w-[15.567px]" />
+                </button>
+                <button
+                  onClick={() => navigate("/dashboard/briefs/review")}
+                  className="flex-1 h-8 px-4 bg-[#ffb546] hover:opacity-90 rounded-[28px] flex items-center justify-center gap-[10px] transition"
+                >
+                  <span className="text-[13px] font-semibold leading-[18.62px] text-black">Review brief</span>
+                  <img src={createBriefArrowIcon} alt="" className="h-[14px] w-[15.567px]" />
+                </button>
+              </div>
+            </div>
+          </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Tablet/iPad Layout - Vertical stack: Form -> Line -> Document -> Line -> Buttons */}
+      <div className="flex lg:hidden flex-col items-center w-full min-h-[85vh] overflow-y-auto px-[10%] pb-8 pt-4">
+        {/* Form Section */}
+        <div className="flex flex-col gap-2 rounded-xl w-full max-w-4xl">
+          <div className="flex flex-col gap-3">
             <p className="text-sm leading-[18.62px] text-[#424242] w-full">
               Great! Next up are the deliverables. You can either browse and select the ones you need, or start detailing them below. TIKO will summarise the deliverables and prompt you to make sure you include everything you need for this project.
             </p>
@@ -830,13 +1107,34 @@ function DeliverablesSelectionScreen({ onCancel, onBack, onNavigateToAiResponse 
             </p>
           </div>
 
-          {/* Separator line - aligned with right side */}
+          {/* Separator line */}
+          <div className="h-[9px] relative w-full shrink-0 mt-4">
+            <div className="absolute h-px left-0 top-[4px] w-full bg-[#e0e0e0]" />
+          </div>
+        </div>
+
+        {/* White Document - Shown on tablet/iPad */}
+        <div className="hidden md:flex flex-col gap-2.5 pb-5 w-full max-w-4xl mt-5">
+          {/* Brief Preview - Double height */}
+          <div className="bg-white flex flex-col p-6 rounded-xl min-h-[600px] overflow-y-auto">
+            <BriefPreviewPanel
+              projectTitle={mockBriefData.projectTitle}
+              launchDate={mockBriefData.launchDate}
+              projectLead={mockBriefData.projectLead}
+              objective={mockBriefData.objective}
+            />
+          </div>
+
+          {/* Separator */}
           <div className="h-[9px] relative w-full shrink-0">
             <div className="absolute h-px left-0 top-[4px] w-full bg-[#e0e0e0]" />
           </div>
+        </div>
 
-          {/* AI Chat Input at Bottom */}
-          <div className="shrink-0">
+        {/* Buttons section for tablet/iPad */}
+        <div className="hidden md:flex flex-col gap-2.5 w-full max-w-4xl pb-5">
+          {/* AI Chat Input above buttons */}
+          <div className="shrink-0 pb-2">
             <ChatInput
               value={chatInput}
               onChange={setChatInput}
@@ -846,56 +1144,34 @@ function DeliverablesSelectionScreen({ onCancel, onBack, onNavigateToAiResponse 
               helpText="Need a hand? Talk to your Iris account manager"
             />
           </div>
-        </div>
-
-        {/* Right Panel */}
-        <div className="hidden lg:flex flex-col gap-2.5 pb-5 pl-2.5 pt-2.5 flex-1 max-w-[540px] h-full overflow-hidden">
-          {/* Brief Preview - made smaller to prevent scroll */}
-          <div className="h-[89%] overflow-hidden">
-            <BriefPreviewPanel
-              projectTitle={mockBriefData.projectTitle}
-              launchDate={mockBriefData.launchDate}
-              projectLead={mockBriefData.projectLead}
-              objective={mockBriefData.objective}
-            />
-          </div>
-
-          {/* Separator - matching left side line width and position */}
-          <div className="h-[9px] relative w-full shrink-0">
-            <div className="absolute h-px left-0 top-[4px] w-full bg-[#e0e0e0]" />
-          </div>
-
-          {/* Footer */}
-          <div className="flex flex-col gap-1 items-end shrink-0 w-full">
-            {/* Token Estimate */}
+          {/* Token Estimate */}
+          <div className="flex gap-2 items-center pb-2 w-full justify-end">
             <TokenEstimate value={tokenEstimate} />
+          </div>
 
-            {/* Action Buttons */}
-            <div className="flex items-center w-full">
-              <button
-                onClick={onCancel}
-                className="w-[25%] h-8 bg-[#03b3e2] text-black hover:opacity-80 rounded-[28px] transition flex items-center justify-center"
-              >
-                <span className="text-[13px] font-semibold leading-[18.62px]">Discard</span>
-              </button>
-              <div className="w-[15%]" />
-              <div className="flex gap-1 items-center w-[60%]">
-                <button 
-                  onClick={handleSaveDraft}
-                  className="flex-1 h-8 px-4 bg-[#ffb546] hover:opacity-90 rounded-[28px] flex items-center justify-center gap-[10px] transition"
-                >
-                  <span className="text-[13px] font-semibold leading-[18.62px] text-black">Save draft</span>
-                  <img src={createBriefArrowIcon} alt="" className="h-[14px] w-[15.567px]" />
-                </button>
-                <button
-                  onClick={() => navigate("/dashboard/briefs/review")}
-                  className="flex-1 h-8 px-4 bg-[#ffb546] hover:opacity-90 rounded-[28px] flex items-center justify-center gap-[10px] transition"
-                >
-                  <span className="text-[13px] font-semibold leading-[18.62px] text-black">Review brief</span>
-                  <img src={createBriefArrowIcon} alt="" className="h-[14px] w-[15.567px]" />
-                </button>
-              </div>
-            </div>
+          {/* Action Buttons - Order: Discard, Save draft, Review brief - In a row */}
+          <div className="flex flex-row items-center gap-2.5 w-full">
+            <button
+              onClick={onCancel}
+              className="h-8 px-4 bg-[#03b3e2] text-black hover:opacity-80 rounded-[28px] transition flex items-center justify-center flex-1"
+            >
+              <span className="text-[13px] font-semibold leading-[18.62px]">Discard</span>
+            </button>
+            <button 
+              onClick={handleSaveDraft}
+              className="flex-1 h-8 px-4 bg-[#ffb546] hover:opacity-90 rounded-[28px] flex items-center justify-center gap-[10px] transition"
+            >
+              <span className="text-[13px] font-semibold leading-[18.62px] text-black">Save draft</span>
+              <img src={createBriefArrowIcon} alt="" className="h-[14px] w-[15.567px]" />
+            </button>
+            <button
+              type="button"
+              onClick={() => navigate("/dashboard/briefs/review")}
+              className="flex-1 h-8 px-4 bg-[#ffb546] hover:opacity-90 rounded-[28px] flex items-center justify-center gap-[10px] transition"
+            >
+              <span className="text-[13px] font-semibold leading-[18.62px] text-black">Review brief</span>
+              <img src={createBriefArrowIcon} alt="" className="h-[14px] w-[15.567px]" />
+            </button>
           </div>
         </div>
       </div>
@@ -914,7 +1190,7 @@ function DeliverablesSelectionScreen({ onCancel, onBack, onNavigateToAiResponse 
         onConfirm={handleViewAllBriefsFromSave}
         title="Brief successfully drafted!"
       />
-    </div>
+    </>
   );
 }
 

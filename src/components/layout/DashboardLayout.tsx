@@ -1,5 +1,6 @@
 import React, { ReactNode, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import { toast } from "sonner";
 import Sidebar from "./Sidebar";
 import Topbar from "./Topbar";
 import MobileSidebar from "./MobileSidebar";
@@ -39,7 +40,13 @@ export default function DashboardLayout({
 
   const handleLogout = () => {
     setIsMobileMenuOpen(false);
-    onLogout?.();
+    if (onLogout) {
+      onLogout();
+    } else {
+      // Fallback to default logout behavior - navigate to login page
+      toast.success("Logged out successfully");
+      navigate("/");
+    }
   };
 
   return (

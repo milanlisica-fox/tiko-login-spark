@@ -20,17 +20,21 @@ export default function Topbar({
   const TokensIcon = Icons.tokens;
   return (
     <header className="h-[70px] bg-[#f9f9f9] border-b border-[#e0e0e0] flex items-center justify-between px-2 md:px-4 lg:px-6 relative">
-      {/* Mobile/Tablet: Hamburger menu + centered logo */}
-      <div className="lg:hidden flex items-center md:justify-center flex-1 relative">
+      {/* Mobile/Tablet: Hamburger menu */}
+      <div className="lg:hidden flex items-center">
         {onMobileMenuClick && (
           <button 
             onClick={onMobileMenuClick}
-            className="absolute left-0 p-1.5 rounded-lg hover:bg-gray-50 transition z-10"
+            className="p-1.5 rounded-lg hover:bg-gray-50 transition z-10"
           >
             <Menu size={20} className="text-black" />
           </button>
         )}
-        <Logo variant="sidebar" logoSrc={BRAND.logo} logoDotSrc={BRAND.logoDot} className="max-w-[90px]" />
+      </div>
+
+      {/* Mobile/Tablet: Centered logo */}
+      <div className="lg:hidden absolute inset-0 flex items-center justify-center pointer-events-none">
+        <Logo variant="sidebar" logoSrc={BRAND.logo} logoDotSrc={BRAND.logoDot} className="max-w-[90px] pointer-events-auto" />
       </div>
 
       {/* Desktop: Title on left */}
@@ -43,7 +47,7 @@ export default function Topbar({
       </div>
 
       {/* Right side content */}
-      <div className="flex items-center gap-2 md:gap-4 lg:gap-6 pr-2 lg:pr-[30px] sidenav-r">
+      <div className="flex items-center gap-2 md:gap-4 lg:gap-6 pr-2 lg:pr-[30px] sidenav-r z-10">
         {Right ?? (
           <>
             <NotificationsPopover />

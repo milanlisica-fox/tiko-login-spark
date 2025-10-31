@@ -22,7 +22,7 @@ export default function DashboardTopbarRight({
   return (
     <>
       <NotificationsPopover />
-      <div className="flex items-center gap-1">
+      <div className="hidden lg:flex items-center gap-1">
         <Icons.tokens size={20} className="text-[#848487]" />
         <span className="text-xs leading-[15.96px] text-[#646464]">{tokenCount} Tokens</span>
       </div>
@@ -31,11 +31,11 @@ export default function DashboardTopbarRight({
         className="flex items-center gap-2 hover:opacity-80 transition cursor-pointer"
       >
         <HBAvatar size={40} src={avatarSrc} />
-        <div className="flex-col hidden md:flex">
+        <div className="flex-col hidden lg:flex">
           <p className="text-sm font-bold leading-[18.62px] text-[#646464]">{userName}</p>
           <p className="text-xs leading-[15.96px] text-[#646464]">{userDept}</p>
         </div>
-        <Icons.chevronDown size={24} className="text-[#646464] rotate-90 hidden md:block" />
+        <Icons.chevronDown size={24} className="text-[#646464] rotate-90 hidden lg:block" />
       </button>
     </>
   );
