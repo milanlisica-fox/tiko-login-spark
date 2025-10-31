@@ -40,20 +40,20 @@ export default function TikoDashboard() {
       logoDotSrc={logoDot}
       TopbarRight={topbarRight}
     >
-      <div className="px-6 pt-[40px] pb-[40px]">
-        <div className="space-y-10">
+      <div className="px-4 md:px-6 pt-[24px] md:pt-[40px] pb-[24px] md:pb-[40px]">
+        <div className="space-y-6 md:space-y-10">
             {/* Header with action buttons */}
-            <div className="flex items-center justify-between">
-              <div className="flex flex-col gap-1">
-                <h1 className="text-h1 text-black">
+            <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 md:items-center">
+              <div className="flex flex-col gap-1 md:text-center lg:text-left">
+                <h1 className="text-2xl md:text-h1 text-black">
                   Welcome back, Henry!
                 </h1>
-                <p className="text-body text-black">
+                <p className="text-sm md:text-body text-black">
                   Create briefs, track progress, and keep momentum flowing.
                 </p>
               </div>
 
-              <div className="flex gap-2.5 items-center">
+              <div className="flex flex-col sm:flex-row gap-2.5 items-stretch sm:items-center md:justify-center lg:justify-start">
                 <button
                   onClick={async (e) => {
                     const button = e.currentTarget;
@@ -70,7 +70,7 @@ export default function TikoDashboard() {
                     // Navigate after animation
                     navigate("/dashboard/calculator");
                   }}
-                  className="w-[216px] bg-[#03b3e2] backdrop-blur-sm rounded-[28px] flex items-center justify-center gap-[10px] px-[24px] py-[18px] hover:opacity-90 transition"
+                  className="w-full sm:w-auto sm:w-[216px] bg-[#03b3e2] backdrop-blur-sm rounded-[28px] flex items-center justify-center gap-[10px] px-[24px] py-[18px] hover:opacity-90 transition"
                 >
                   <Calculator size={16} className="text-black" />
                   <span className="text-base font-semibold leading-[23.94px] text-black whitespace-nowrap">
@@ -79,7 +79,7 @@ export default function TikoDashboard() {
                 </button>
                 <button 
                   onClick={() => navigate("/dashboard/briefs", { state: { createBrief: true } })}
-                  className="w-[216px] backdrop-blur-[6px] backdrop-filter bg-[#ffb546] px-[24px] py-[18px] rounded-[28px] flex items-center justify-center gap-[10px] hover:opacity-90 transition"
+                  className="w-full sm:w-auto sm:w-[216px] backdrop-blur-[6px] backdrop-filter bg-[#ffb546] px-[24px] py-[18px] rounded-[28px] flex items-center justify-center gap-[10px] hover:opacity-90 transition"
                 >
                   <span className="text-[16px] font-semibold leading-[23.94px] text-black whitespace-nowrap">
                     Create brief
@@ -90,9 +90,9 @@ export default function TikoDashboard() {
             </div>
 
             {/* Briefs and Projects Row */}
-            <div className="flex gap-5">
+            <div className="flex flex-col lg:flex-row gap-5">
               {/* Briefs Section */}
-              <div className="flex-[0.7] bg-white rounded-xl p-6 flex flex-col gap-4">
+              <div className="flex-1 lg:flex-[0.7] bg-white rounded-xl p-4 md:p-6 flex flex-col gap-4">
                 <div className="flex items-start justify-between pb-1">
                   <div className="flex flex-col gap-1">
                     <h2 className="text-[22px] font-bold leading-[29.26px] text-black">Briefs</h2>
@@ -111,32 +111,32 @@ export default function TikoDashboard() {
                   </button>
                 </div>
 
-                <div className="flex gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                   {/* Draft briefs */}
-                  <div className="flex-[1_0_0] bg-[#f9f9f9] rounded-[12px] p-[20px] flex flex-col gap-[10px] relative overflow-clip">
-                    <p className="text-sm font-bold leading-[18.62px] text-black">Draft briefs</p>
-                    <p className="text-[40px] font-medium leading-[45.6px] text-black">5</p>
+                  <div className="flex-1 bg-[#f9f9f9] rounded-[12px] p-4 md:p-[20px] flex flex-col gap-[10px] relative overflow-clip">
+                    <p className="text-xs md:text-sm font-bold leading-[18.62px] text-black">Draft briefs</p>
+                    <p className="text-2xl md:text-[40px] font-medium leading-[45.6px] text-black">5</p>
                     <img src={briefsVector1} alt="" className="absolute right-[-20px] top-[20px] w-[45px] h-10" />
                   </div>
 
                   {/* In review */}
-                  <div className="flex-[1_0_0] bg-[#f9f9f9] rounded-[12px] p-[20px] flex flex-col gap-[10px] relative overflow-clip">
-                    <p className="text-sm font-bold leading-[18.62px] text-black">In review</p>
-                    <p className="text-[40px] font-medium leading-[45.6px] text-black">4</p>
+                  <div className="flex-1 bg-[#f9f9f9] rounded-[12px] p-4 md:p-[20px] flex flex-col gap-[10px] relative overflow-clip">
+                    <p className="text-xs md:text-sm font-bold leading-[18.62px] text-black">In review</p>
+                    <p className="text-2xl md:text-[40px] font-medium leading-[45.6px] text-black">4</p>
                     <img src={briefsVector2} alt="" className="absolute right-[-20px] top-[20px] w-[45px] h-10" />
                   </div>
 
                   {/* SOW Ready to sign */}
-                  <div className="flex-[1_0_0] bg-[#f9f9f9] rounded-[12px] p-[20px] flex flex-col gap-[10px] relative overflow-clip">
-                    <p className="text-sm font-bold leading-[18.62px] text-black">SOW Ready to sign</p>
-                    <p className="text-[40px] font-medium leading-[45.6px] text-black">3</p>
+                  <div className="flex-1 bg-[#f9f9f9] rounded-[12px] p-4 md:p-[20px] flex flex-col gap-[10px] relative overflow-clip">
+                    <p className="text-xs md:text-sm font-bold leading-[18.62px] text-black">SOW Ready to sign</p>
+                    <p className="text-2xl md:text-[40px] font-medium leading-[45.6px] text-black">3</p>
                     <img src={briefsVector3} alt="" className="absolute right-[-20px] top-[20px] w-[45px] h-10" />
                   </div>
                 </div>
               </div>
 
               {/* Projects Section */}
-              <div className="flex-[0.3] bg-white rounded-xl p-6 flex flex-col gap-4">
+              <div className="flex-1 lg:flex-[0.3] bg-white rounded-xl p-4 md:p-6 flex flex-col gap-4">
                 <div className="flex items-start justify-between pb-1">
                   <div className="flex flex-col gap-1">
                     <h2 className="text-[22px] font-bold leading-[29.26px] text-black">Projects</h2>
@@ -164,11 +164,11 @@ export default function TikoDashboard() {
             </div>
 
             {/* Tracker Section */}
-            <div className="bg-white rounded-xl p-6 flex flex-col gap-4">
+            <div className="bg-white rounded-xl p-4 md:p-6 flex flex-col gap-4">
               <div className="flex items-start justify-between pb-1">
                 <div className="flex flex-col gap-1">
-                  <h2 className="text-[22px] font-bold leading-[29.26px] text-black">Tracker</h2>
-                  <p className="text-sm leading-[18.62px] text-black">
+                  <h2 className="text-lg md:text-[22px] font-bold leading-[29.26px] text-black">Tracker</h2>
+                  <p className="text-xs md:text-sm leading-[18.62px] text-black">
                     Get the full picture of your team's performance
                   </p>
                 </div>
@@ -183,9 +183,9 @@ export default function TikoDashboard() {
                 </button>
               </div>
 
-              <div className="flex gap-4">
+              <div className="flex flex-col lg:flex-row gap-4">
                 {/* Token Summary */}
-                <div className="flex-1 bg-[#f9f9f9] rounded-xl px-8 py-6">
+                <div className="flex-1 bg-[#f9f9f9] rounded-xl px-4 md:px-8 py-4 md:py-6">
                   <HorizontalBarChart
                     title="Token summary"
                     bars={[
@@ -203,7 +203,7 @@ export default function TikoDashboard() {
                 </div>
 
                 {/* Brief Quality Score */}
-                <div className="flex-1 bg-[#f9f9f9] rounded-xl px-8 py-6">
+                <div className="flex-1 bg-[#f9f9f9] rounded-xl px-4 md:px-8 py-4 md:py-6">
                   <HorizontalBarChart
                     title="Brief quality score"
                     bars={[

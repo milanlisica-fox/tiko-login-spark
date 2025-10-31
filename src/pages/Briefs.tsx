@@ -142,7 +142,7 @@ export default function BriefsPage() {
       TopbarRight={topbarRight}
     >
       {/* Briefs Content */}
-      <div className="px-6 pt-[40px] pb-[40px]">
+      <div className="px-4 md:px-6 pt-[24px] md:pt-[40px] pb-[24px] md:pb-[40px]">
           {isCreatingBrief ? (
             briefView === "templates" ? (
               <TemplateSelectionScreen 
@@ -171,17 +171,17 @@ export default function BriefsPage() {
               />
             )
           ) : (
-            <div className="space-y-10">
+            <div className="space-y-6 md:space-y-10">
               {/* Header */}
-              <div className="flex items-center justify-between">
-                <div className="flex flex-col gap-1">
-                  <h1 className="text-h1 text-black">Briefs overview</h1>
-                  <p className="text-body text-black">Kickstart your next project with clarity and ease</p>
+              <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 md:items-center">
+                <div className="flex flex-col gap-1 md:text-center lg:text-left">
+                  <h1 className="text-2xl md:text-h1 text-black">Briefs overview</h1>
+                  <p className="text-sm md:text-body text-black">Kickstart your next project with clarity and ease</p>
                 </div>
-                <div className="flex gap-2.5 items-center">
+                <div className="flex flex-col sm:flex-row gap-2.5 items-stretch sm:items-center md:justify-center lg:justify-start">
                   <button
                     onClick={() => navigate("/dashboard/calculator")}
-                    className="w-[224px] bg-[#03b3e2] backdrop-blur-sm rounded-[28px] flex items-center justify-center gap-[10px] px-[24px] py-[18px] hover:opacity-90 transition"
+                    className="w-full sm:w-auto sm:w-[224px] bg-[#03b3e2] backdrop-blur-sm rounded-[28px] flex items-center justify-center gap-[10px] px-[24px] py-[18px] hover:opacity-90 transition"
                   >
                     <Icons.calculator size={16} className="text-black" />
                     <span className="text-base font-semibold leading-[23.94px] text-black whitespace-nowrap">
@@ -190,7 +190,7 @@ export default function BriefsPage() {
                   </button>
                   <button 
                     onClick={() => setIsCreatingBrief(true)}
-                    className="w-[224px] backdrop-blur-[6px] backdrop-filter bg-[#ffb546] px-[24px] py-[18px] rounded-[28px] flex items-center justify-center gap-[10px] hover:opacity-90 transition"
+                    className="w-full sm:w-auto sm:w-[224px] backdrop-blur-[6px] backdrop-filter bg-[#ffb546] px-[24px] py-[18px] rounded-[28px] flex items-center justify-center gap-[10px] hover:opacity-90 transition"
                   >
                     <span className="text-[16px] font-semibold leading-[23.94px] text-black whitespace-nowrap">
                       Create brief
@@ -536,9 +536,9 @@ function NewBriefForm({ onCancel, onNext }: { onCancel: () => void; onNext: () =
   }, [showConfirmation]);
 
   return (
-    <div className="flex gap-0 w-full h-full">
+    <div className="flex flex-col lg:flex-row gap-0 w-full h-full">
       {/* Left Form Section */}
-      <div className="flex flex-col gap-8 p-6 rounded-xl w-[564px]">
+      <div className="flex flex-col gap-8 p-4 md:p-6 rounded-xl lg:w-[564px]">
         <div className="flex flex-col gap-4">
           <p className="text-sm leading-[18.62px] text-[#424242] w-full">
             Start your brief by filling out these required fields.
@@ -613,7 +613,7 @@ function NewBriefForm({ onCancel, onNext }: { onCancel: () => void; onNext: () =
       </div>
 
       {/* Right Panel */}
-      <div className="flex flex-col gap-2.5 pb-5 pr-10 pl-2.5 pt-2.5 w-[540px]">
+      <div className="hidden lg:flex flex-col gap-2.5 pb-5 pr-10 pl-2.5 pt-2.5 w-[540px]">
         {/* Loading State */}
         <div className="bg-white flex flex-1 flex-col gap-8 items-center justify-center p-6 rounded-xl min-h-0">
           <div className="flex flex-col gap-2 items-center">
@@ -716,9 +716,9 @@ function DeliverablesSelectionScreen({ onCancel, onBack, onNavigateToAiResponse 
   return (
     <div className="flex flex-col w-full relative h-[calc(100vh-70px)]">
       {/* Main Content Area */}
-      <div className="flex-1 flex overflow-hidden">
+      <div className="flex-1 flex flex-col lg:flex-row overflow-hidden">
         {/* Left Panel */}
-        <div className="flex flex-col p-6 w-[564px] shrink-0 h-full">
+        <div className="flex flex-col p-4 md:p-6 lg:w-[564px] shrink-0 h-full">
           <div className="flex flex-col gap-3 h-[80%] overflow-y-auto">
             <p className="text-sm leading-[18.62px] text-[#424242] w-full">
               Great! Next up are the deliverables. You can either browse and select the ones you need, or start detailing them below. TIKO will summarise the deliverables and prompt you to make sure you include everything you need for this project.
@@ -795,10 +795,10 @@ function DeliverablesSelectionScreen({ onCancel, onBack, onNavigateToAiResponse 
         </div>
 
         {/* Vertical Divider */}
-        <div className="w-px bg-[#e0e0e0] h-[90%] shrink-0" />
+        <div className="hidden lg:block w-px bg-[#e0e0e0] h-[90%] shrink-0" />
 
         {/* Right Panel */}
-        <div className="flex flex-col gap-3 p-[10px] pr-10 w-[540px] shrink-0 overflow-hidden">
+        <div className="hidden lg:flex flex-col gap-3 p-[10px] pr-10 w-[540px] shrink-0 overflow-hidden">
           {/* Brief Preview */}
           <BriefPreviewPanel
             projectTitle={mockBriefData.projectTitle}
@@ -866,9 +866,9 @@ function AIResponseScreen({ userInput, onBack, onCancel }: { userInput: string; 
   return (
     <div className="flex flex-col w-full relative h-[calc(100vh-70px)]">
       {/* Main Content Area */}
-      <div className="flex-1 flex overflow-hidden">
+      <div className="flex-1 flex flex-col lg:flex-row overflow-hidden">
         {/* Left Panel */}
-        <div className="flex flex-col gap-6 p-6 w-[564px] shrink-0 overflow-y-auto">
+        <div className="flex flex-col gap-6 p-4 md:p-6 lg:w-[564px] shrink-0 overflow-y-auto">
           {/* User Message Bubble */}
           <div className="bg-[#efeff0] rounded-xl p-4">
             <p className="text-sm leading-[18.62px] text-[#424242] whitespace-pre-wrap">
@@ -929,10 +929,10 @@ function AIResponseScreen({ userInput, onBack, onCancel }: { userInput: string; 
         </div>
 
         {/* Vertical Divider */}
-        <div className="w-px bg-[#e0e0e0] shrink-0" />
+        <div className="hidden lg:block w-px bg-[#e0e0e0] shrink-0" />
 
         {/* Right Panel - Same as Deliverables Screen */}
-        <div className="flex flex-col gap-[10px] p-[10px] pr-10 w-[540px] shrink-0 overflow-hidden">
+        <div className="hidden lg:flex flex-col gap-[10px] p-[10px] pr-10 w-[540px] shrink-0 overflow-hidden">
           {/* Brief Preview */}
           <BriefPreviewPanel
             projectTitle={mockBriefData.projectTitle}
@@ -973,8 +973,8 @@ function AIResponseScreen({ userInput, onBack, onCancel }: { userInput: string; 
         leftIconSrc={imgFrame14_v2}
         rightIconSrc={imgFrame15_v2}
         helpText="Need a hand? Talk to your Iris account manager"
-        className="w-[516px]"
-        containerClassName="absolute bottom-[26px] left-[264px]"
+        className="w-full lg:w-[516px]"
+        containerClassName="absolute bottom-[26px] left-0 right-0 px-4 lg:left-[264px] lg:right-auto"
       />
     </div>
   );

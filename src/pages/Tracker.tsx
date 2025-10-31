@@ -191,7 +191,7 @@ export default function TrackerPage() {
                   <CardTitle className="text_base font-bold leading-[21.28px] text-black">Brief quality score - All categories</CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-6">
-                  <ChartContainer config={qualityScoreConfig} className="h-[200px] w-full">
+                  <ChartContainer config={qualityScoreConfig} className="h-[250px] md:h-[200px] w-full">
                     <ResponsiveContainer width="100%" height="100%">
                       <AreaChart data={qualityScoreData} margin={{ left: 10, right: 10, top: 10, bottom: 20 }}>
                         <defs>
@@ -245,12 +245,12 @@ export default function TrackerPage() {
                   <CardTitle className="text-base font-bold leading-[21.28px] text-black">Token distribution</CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-6">
-                  <ChartContainer config={{ spent: { label: "Tokens Spent", color: "#00c3b1" }, committed: { label: "Tokens Committed", color: "#03b3e2" }, remaining: { label: "Tokens Remaining", color: "#0177c7" } }} className="h-[250px] w-full">
+                  <ChartContainer config={{ spent: { label: "Tokens Spent", color: "#00c3b1" }, committed: { label: "Tokens Committed", color: "#03b3e2" }, remaining: { label: "Tokens Remaining", color: "#0177c7" } }} className="h-[300px] md:h-[250px] w-full">
                     <ResponsiveContainer width="100%" height="100%">
                       <BarChart data={spendByTypeData} layout="vertical" margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
                         <CartesianGrid strokeDasharray="3 3" stroke="#e0e0e0" horizontal={true} vertical={true} />
                         <XAxis type="number" axisLine={false} tickLine={false} domain={[0, 4500]} ticks={[0, 500, 1000, 1500, 2000, 2500, 3000, 3500, 4000, 4500]} tick={{ fill: "#646464", fontSize: 12 }} />
-                        <YAxis type="category" dataKey="type" axisLine={false} tickLine={false} tick={{ fill: "#646464", fontSize: 12 }} width={80} />
+                        <YAxis type="category" dataKey="type" axisLine={false} tickLine={false} tick={{ fill: "#646464", fontSize: 12 }} width={60} />
                         <ChartTooltip cursor={false} content={<ChartTooltipContent className="bg-white [&_span]:text-black [&_div]:text-black" />} />
                         <Bar dataKey="remaining" stackId="a" fill="#0177c7" radius={[6, 6, 6, 6]} />
                         <Bar dataKey="committed" stackId="a" fill="#03b3e2" radius={[6, 6, 6, 6]} />

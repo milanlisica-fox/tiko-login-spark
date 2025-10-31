@@ -158,12 +158,12 @@ export default function ProjectsPage() {
       logoDotSrc={logoDot}
       TopbarRight={topbarRight}
     >
-      <div className="pt-[40px] pb-[40px]">
-        <div className="w-[90%] mx-auto space-y-[30px]">
-          <div className="flex items-start justify-between gap-4">
+      <div className="pt-[24px] md:pt-[40px] pb-[24px] md:pb-[40px]">
+        <div className="w-[90%] mx-auto space-y-6 md:space-y-[30px]">
+          <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
             <div className="flex flex-col gap-1">
-              <h1 className="text-h1 text-black">Work at a glance</h1>
-              <p className="text-base leading-[24px] text-black">A clear view of your team's active projects and priorities.</p>
+              <h1 className="text-2xl md:text-h1 text-black">Work at a glance</h1>
+              <p className="text-sm md:text-base leading-[24px] text-black">A clear view of your team's active projects and priorities.</p>
             </div>
             <Button variant="outline" className="h-10 px-6 border border-[#d9d9d9] bg-white hover:bg-gray-50 gap-2">
               <span className="text-sm font-normal leading-[24px] text-black">See all projects</span>
@@ -171,20 +171,20 @@ export default function ProjectsPage() {
             </Button>
           </div>
 
-          <div className="grid grid-cols-3 gap-4 w-full">
-            <div className="bg-white rounded-[60px] h-[118px] p-[40px] flex flex-col justify-center">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 w-full">
+            <div className="bg-white rounded-[60px] h-[118px] p-[40px] flex flex-col justify-center text-center md:text-center lg:text-left">
               <div className="flex flex-col gap-[24px]">
                 <h3 className="text-base leading-[24px] text-black font-normal">Complete</h3>
                 <p className="text-[46px] leading-[46px] font-medium text-black">{stats.complete}</p>
               </div>
             </div>
-            <div className="bg-white rounded-[60px] h-[118px] p-[40px] flex flex-col justify-center">
+            <div className="bg-white rounded-[60px] h-[118px] p-[40px] flex flex-col justify-center text-center md:text-center lg:text-left">
               <div className="flex flex-col gap-[24px]">
                 <h3 className="text-base leading-[24px] text-black font-normal">In progress</h3>
                 <p className="text-[46px] leading-[46px] font-medium text-black">{stats.inProgress}</p>
               </div>
             </div>
-            <div className="bg-white rounded-[60px] h-[118px] p-[40px] flex flex-col justify-center">
+            <div className="bg-white rounded-[60px] h-[118px] p-[40px] flex flex-col justify-center text-center md:text-center lg:text-left">
               <div className="flex flex-col gap-[24px]">
                 <h3 className="text-base leading-[24px] text-black font-normal">For review</h3>
                 <p className="text-[46px] leading-[46px] font-medium text-black">{stats.forReview}</p>
@@ -193,53 +193,55 @@ export default function ProjectsPage() {
           </div>
 
           <div className="bg-white rounded-xl overflow-hidden">
-            <div className="p-[16px] space-y-0">
-              {projects.map((project, index) => (
-                <div key={project.id}>
-                  <div className="flex items-center py-[12px] px-[8px] gap-4">
-                    <div className="flex items-center gap-2 w-[35%]">
-                      <div className="flex flex-col gap-[4px]">
-                        <p className={`text-sm leading-[19px] text-black ${project.hasWarning ? "font-bold" : "font-normal"}`}>{project.name}</p>
-                        <p className="text-xs leading-[16px] text-[#646464]">{project.team}</p>
-                      </div>
-                    </div>
-                    <div className="flex items-center justify-center w-[5%]">
-                      {project.hasWarning && (
-                        <div className="w-8 h-8 rounded-full bg-amber-100 flex items-center justify-center">
-                          <AlertTriangle size={16} className="text-amber-600" />
-                        </div>
-                      )}
-                    </div>
-                    <div className="flex items-center justify-center gap-2 w-[20%]">
-                      <div className="flex -space-x-2">
-                        {project.owners.map((owner, idx) => {
-                          const seed = `${owner}_${project.id}_${idx}`;
-                          return (
-                            <Avatar key={idx} className="w-6 h-6 border-2 border-white">
-                              <AvatarImage src={`https://api.dicebear.com/7.x/personas/png?seed=${seed}&size=64`} alt={owner} />
-                              <AvatarFallback className="text-xs bg-gradient-to-br from-blue-200 to-blue-300">{owner}</AvatarFallback>
-                            </Avatar>
-                          );
-                        })}
-                      </div>
-                    </div>
-                    <div className="w-[10%]">
-                      <div className="flex items-center gap-2">
-                        <div className="w-2 h-2 rounded-full" style={{ backgroundColor: getPriorityColor(project.priority) }} />
-                        <span className="text-xs font-normal" style={{ color: getPriorityColor(project.priority) }}>{project.priority}</span>
-                      </div>
-                    </div>
-                    <div className="w-[30%]">
-                      <div className="flex items-center gap-2">
-                        <div className="relative h-2 flex-1 bg-[#f1f1f3] rounded-full overflow-hidden">
-                          <div className="h-full rounded-full transition-all" style={{ width: `${project.progress}%`, backgroundColor: getProgressBarColor(project.progress) }} />
+            <div className="overflow-x-auto">
+              <div className="min-w-[600px] p-[16px] space-y-0">
+                {projects.map((project, index) => (
+                  <div key={project.id}>
+                    <div className="flex items-center py-[12px] px-[8px] gap-4">
+                      <div className="flex items-center gap-2 w-[35%]">
+                        <div className="flex flex-col gap-[4px]">
+                          <p className={`text-sm leading-[19px] text-black ${project.hasWarning ? "font-bold" : "font-normal"}`}>{project.name}</p>
+                          <p className="text-xs leading-[16px] text-[#646464]">{project.team}</p>
                         </div>
                       </div>
+                      <div className="flex items-center justify-center w-[5%]">
+                        {project.hasWarning && (
+                          <div className="w-8 h-8 rounded-full bg-amber-100 flex items-center justify-center">
+                            <AlertTriangle size={16} className="text-amber-600" />
+                          </div>
+                        )}
+                      </div>
+                      <div className="flex items-center justify-center gap-2 w-[20%]">
+                        <div className="flex -space-x-2">
+                          {project.owners.map((owner, idx) => {
+                            const seed = `${owner}_${project.id}_${idx}`;
+                            return (
+                              <Avatar key={idx} className="w-6 h-6 border-2 border-white">
+                                <AvatarImage src={`https://api.dicebear.com/7.x/personas/png?seed=${seed}&size=64`} alt={owner} />
+                                <AvatarFallback className="text-xs bg-gradient-to-br from-blue-200 to-blue-300">{owner}</AvatarFallback>
+                              </Avatar>
+                            );
+                          })}
+                        </div>
+                      </div>
+                      <div className="w-[10%]">
+                        <div className="flex items-center gap-2">
+                          <div className="w-2 h-2 rounded-full" style={{ backgroundColor: getPriorityColor(project.priority) }} />
+                          <span className="text-xs font-normal" style={{ color: getPriorityColor(project.priority) }}>{project.priority}</span>
+                        </div>
+                      </div>
+                      <div className="w-[30%]">
+                        <div className="flex items-center gap-2">
+                          <div className="relative h-2 flex-1 bg-[#f1f1f3] rounded-full overflow-hidden">
+                            <div className="h-full rounded-full transition-all" style={{ width: `${project.progress}%`, backgroundColor: getProgressBarColor(project.progress) }} />
+                          </div>
+                        </div>
+                      </div>
                     </div>
+                    {index < projects.length - 1 && <div className="h-px bg-[#ececec] mx-[16px]" />}
                   </div>
-                  {index < projects.length - 1 && <div className="h-px bg-[#ececec] mx-[16px]" />}
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
           </div>
         </div>

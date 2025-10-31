@@ -16,7 +16,7 @@ export default function AuthLayout({
     <div className="relative min-h-screen bg-background flex items-center justify-center p-4 overflow-hidden">
       {showArrow && (
         <svg 
-          className="login-arrow" 
+          className="login-arrow hidden md:block" 
           xmlns="http://www.w3.org/2000/svg" 
           id="Layer_1" 
           data-name="Layer 1" 
@@ -27,7 +27,7 @@ export default function AuthLayout({
       )}
       
       <svg 
-        className={svgAnimationClass} 
+        className={`${svgAnimationClass} hidden md:block`} 
         xmlns="http://www.w3.org/2000/svg" 
         width="1206" 
         height="739" 
@@ -45,12 +45,12 @@ export default function AuthLayout({
       </svg>
       
       <div className="w-full max-w-7xl relative">
-        <div className="p-8 md:p-16 relative overflow-hidden">
+        <div className="p-4 md:p-8 lg:p-16 relative overflow-hidden">
           {/* Irregular shape effect */}
-          <div className="absolute -right-32 -top-32 w-96 h-96 bg-card-foreground/5 rounded-full blur-3xl" />
-          <div className="absolute -left-32 -bottom-32 w-96 h-96 bg-primary/10 rounded-full blur-3xl" />
+          <div className="absolute -right-32 -top-32 w-96 h-96 bg-card-foreground/5 rounded-full blur-3xl hidden md:block" />
+          <div className="absolute -left-32 -bottom-32 w-96 h-96 bg-primary/10 rounded-full blur-3xl hidden md:block" />
           
-          <div className="relative z-10 grid md:grid-cols-2 gap-12 items-center">
+          <div className="relative z-10 grid md:grid-cols-2 gap-8 md:gap-12 items-center">
             {/* Left side - Logo */}
             <div className="flex items-center justify-center animate-fade-up-left">
               <TikoLogo />
