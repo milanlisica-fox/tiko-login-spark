@@ -212,8 +212,8 @@ export default function SOWPage() {
 
       {/* SOW Document Modal */}
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-        <DialogContent className="max-w-5xl max-h-[95vh] overflow-y-auto p-0 bg-white">
-          <div className="p-6 pb-4">
+        <DialogContent className="max-w-5xl max-h-[95vh] p-0 bg-white flex flex-col">
+          <div className="p-6 pb-4 shrink-0">
             <DialogHeader>
               <DialogTitle className="text-xl font-bold text-black">{selectedSOW?.title}</DialogTitle>
               <DialogDescription className="sr-only">
@@ -222,7 +222,7 @@ export default function SOWPage() {
             </DialogHeader>
           </div>
           
-          <div className="px-6 w-full overflow-y-auto max-h-[calc(95vh-180px)]">
+          <div className="px-6 w-full overflow-y-auto flex-1 min-h-0">
             {/* SOW Document Image */}
             <div className="w-full bg-white border border-[#e0e0e0] rounded-lg overflow-hidden shadow-sm">
               <img
@@ -233,7 +233,7 @@ export default function SOWPage() {
             </div>
           </div>
 
-          <DialogFooter className="flex flex-col sm:flex-row gap-2 p-6 pt-4 border-t border-[#e0e0e0]">
+          <DialogFooter className="flex flex-col sm:flex-row gap-2 p-6 pt-4 border-t border-[#e0e0e0] shrink-0">
             <Button
               onClick={handleWriteComments}
               variant="outline"

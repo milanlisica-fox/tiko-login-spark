@@ -224,46 +224,46 @@ export default function CalculatorPage() {
               {/* Filter Bar */}
               <button
                 onClick={() => setIsFilterOpen(true)}
-                className="bg-[#f1f1f3] rounded-[54px] px-6 py-2 flex items-center gap-6 mb-6 hover:bg-[#e5e5e5] transition w-full"
+                className="bg-[#f1f1f3] rounded-[54px] px-4 md:px-6 py-2 flex items-center gap-2 md:gap-4 lg:gap-6 mb-6 hover:bg-[#e5e5e5] transition w-full"
               >
-                <div className="flex flex-col gap-1">
-                  <p className="text-sm font-bold leading-[18.62px] text-black">Asset</p>
-                  <p className="text-xs leading-[15.96px] text-[#848487]">{getAssetTypeDisplay()}</p>
+                <div className="flex flex-col gap-1 flex-1 min-w-0">
+                  <p className="text-sm font-bold leading-[18.62px] text-black truncate">Asset</p>
+                  <p className="text-xs leading-[15.96px] text-[#848487] truncate">{getAssetTypeDisplay()}</p>
                 </div>
-                <div className="w-px h-8 bg-[#e0e0e0]" />
-                <div className="flex flex-col gap-1">
-                  <p className="text-sm font-bold leading-[18.62px] text-black">NDA</p>
-                  <p className="text-xs leading-[15.96px] text-[#848487]">{getNDADisplay()}</p>
+                <div className="w-px h-8 bg-[#e0e0e0] shrink-0" />
+                <div className="flex flex-col gap-1 flex-1 min-w-0">
+                  <p className="text-sm font-bold leading-[18.62px] text-black truncate">NDA</p>
+                  <p className="text-xs leading-[15.96px] text-[#848487] truncate">{getNDADisplay()}</p>
                 </div>
-                <div className="w-px h-8 bg-[#e0e0e0]" />
-                <div className="flex flex-col gap-1">
-                  <p className="text-sm font-bold leading-[18.62px] text-black">Task</p>
-                  <p className="text-xs leading-[15.96px] text-[#848487]">{getTaskTypeDisplay()}</p>
+                <div className="w-px h-8 bg-[#e0e0e0] shrink-0" />
+                <div className="flex flex-col gap-1 flex-1 min-w-0">
+                  <p className="text-sm font-bold leading-[18.62px] text-black truncate">Task</p>
+                  <p className="text-xs leading-[15.96px] text-[#848487] truncate">{getTaskTypeDisplay()}</p>
                 </div>
-                <div className="ml-auto">
+                <div className="shrink-0">
                   <div className="w-8 h-8 rounded-full bg-[#ffb546] flex items-center justify-center">
                     <img src={imgFilterIcon} alt="Filter" className="w-4 h-4" />
                   </div>
                 </div>
               </button>
 
-              <div className="flex flex-col gap-5">
+              <div className="flex flex-col gap-5 w-full">
                 {filteredAssets.map((asset, index) => {
                     const selectedAsset = selectedAssets.find((a) => a.id === asset.id);
                     const quantity = selectedAsset?.quantity || 0;
 
                     return (
-                      <div key={asset.id}>
-                        <div className="flex items-center justify-between px-3 py-2">
-                          <div className="flex flex-col gap-0.5">
-                            <p className="text-sm leading-[18.62px] text-black">
+                      <div key={asset.id} className="w-full">
+                        <div className="flex items-center justify-between px-4 md:px-6 py-2 w-full">
+                          <div className="flex flex-col gap-0.5 flex-1 min-w-0 pr-4">
+                            <p className="text-sm leading-[18.62px] text-black truncate">
                               {asset.title}
                             </p>
                             <p className="text-[10px] leading-[14px] text-black">
                               {asset.tokens} {asset.tokens === 1 ? "token" : "tokens"}
                             </p>
                           </div>
-                          <div className="flex items-center gap-4">
+                          <div className="flex items-center gap-2 md:gap-4 shrink-0">
                             {quantity > 0 && (
                               <>
                                 <button
@@ -272,7 +272,7 @@ export default function CalculatorPage() {
                                 >
                                   <span className="text-[#fff] text-lg">−</span>
                                 </button>
-                                <span className="next text-sm font-bold text-black w-6 text-center">
+                                <span className="text-sm font-bold text-black w-6 text-center">
                                   {quantity}
                                 </span>
                               </>
@@ -286,7 +286,7 @@ export default function CalculatorPage() {
                           </div>
                         </div>
                         {index < filteredAssets.length - 1 && (
-                          <div className="h-px bg-[#e0e0e0] mt-5" />
+                          <div className="h-px bg-[#e0e0e0] mt-5 mx-4 md:mx-6" />
                         )}
                       </div>
                     );

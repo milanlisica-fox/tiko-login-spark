@@ -12,7 +12,7 @@ import bronzeMedalImg from "@/assets/images/bronze-medal.png";
 import silverMedalImg from "@/assets/images/silver-medal.png";
 import firstPlaceMedalImg from "@/assets/images/first-place.png";
 import bullseyeImg from "@/assets/images/Bullseye.png";
-import shakingHandsImg from "@/assets/images/shaking hands.png";
+import shakingHandsImg from "@/assets/images/shaking-hands.png";
 import boltImg from "@/assets/images/bolt.png";
 import DashboardLayout from "@/components/layout/DashboardLayout";
 import DashboardTopbarRight from "@/components/layout/DashboardTopbarRight";
