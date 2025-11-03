@@ -127,11 +127,14 @@ export default function TikoDashboard() {
                   </div>
 
                   {/* SOW Ready to sign */}
-                  <div className="flex-1 bg-[#f9f9f9] rounded-[12px] p-4 md:p-[20px] flex flex-col gap-[10px] relative overflow-clip">
+                  <button
+                    onClick={() => navigate("/dashboard/sow")}
+                    className="flex-1 bg-[#f9f9f9] rounded-[12px] p-4 md:p-[20px] flex flex-col gap-[10px] relative overflow-clip hover:bg-[#f0f0f0] transition cursor-pointer text-left"
+                  >
                     <p className="text-xs md:text-sm font-bold leading-[18.62px] text-black">SOW Ready to sign</p>
                     <p className="text-2xl md:text-[40px] font-medium leading-[45.6px] text-black">3</p>
                     <img src={briefsVector3} alt="" className="absolute right-[-20px] top-[20px] w-[45px] h-10" />
-                  </div>
+                  </button>
                 </div>
               </div>
 

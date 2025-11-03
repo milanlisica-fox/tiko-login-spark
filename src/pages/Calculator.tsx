@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { Home, FileText, Folder, BarChart2, LogOut, Bell, ChevronDown, Calculator, Coins, Plus, X } from "lucide-react";
 import { toast } from "sonner";
@@ -50,6 +50,7 @@ export default function CalculatorPage() {
   const [selectedAssetType, setSelectedAssetType] = useState<string[]>([]);
   const [selectedNDA, setSelectedNDA] = useState<string[]>([]);
   const [selectedTaskType, setSelectedTaskType] = useState<string[]>([]);
+  const [filtersApplied, setFiltersApplied] = useState(false);
 
   // nav items centralized via DashboardLayout
   const { activeName } = useActiveNav();
@@ -123,6 +124,73 @@ export default function CalculatorPage() {
   const ndaOptions = ["Under NDA", "Non NDA"];
   const taskTypeOptions = ["Creation", "Adaptation", "Resize"];
 
+  // Helper function to parse asset title and extract filter information
+  const parseAssetTitle = (title: string) => {
+    const lowerTitle = title.toLowerCase();
+    
+    // Extract asset type
+    let assetType = "";
+    if (lowerTitle.includes("image")) {
+      assetType = "Image";
+    } else if (lowerTitle.includes("video")) {
+      assetType = "Video";
+    } else if (lowerTitle.includes("pdf")) {
+      assetType = "Media"; // PDF could be considered Media
+    } else if (lowerTitle.includes("ppt")) {
+      assetType = "Media"; // PPT could be considered Media
+    } else if (lowerTitle.includes("doc")) {
+      assetType = "Media"; // Doc could be considered Media
+    }
+    
+    // Extract task type
+    let taskType = "";
+    if (lowerTitle.includes("created")) {
+      taskType = "Creation";
+    } else if (lowerTitle.includes("adapted")) {
+      taskType = "Adaptation";
+    }
+    
+    // Extract NDA status
+    let ndaStatus = "";
+    if (lowerTitle.includes("under nda")) {
+      ndaStatus = "Under NDA";
+    } else if (lowerTitle.includes("non nda")) {
+      ndaStatus = "Non NDA";
+    }
+    
+    return { assetType, taskType, ndaStatus };
+  };
+
+  // Filter assets - show every second asset when filters are applied
+  const filteredAssets = useMemo(() => {
+    // If filters are applied, show every second asset (indices 0, 2, 4, 6, etc.)
+    if (filtersApplied) {
+      return availableAssets.filter((_, index) => index % 2 === 0);
+    }
+    
+    // Otherwise, show all assets
+    return availableAssets;
+  }, [availableAssets, filtersApplied]);
+
+  // Get display text for filter bar
+  const getAssetTypeDisplay = () => {
+    if (selectedAssetType.length === 0) return "Any asset type";
+    if (selectedAssetType.length === 1) return selectedAssetType[0];
+    return `${selectedAssetType.length} asset types`;
+  };
+
+  const getNDADisplay = () => {
+    if (selectedNDA.length === 0) return "Any NDA type";
+    if (selectedNDA.length === 1) return selectedNDA[0];
+    return `${selectedNDA.length} NDA types`;
+  };
+
+  const getTaskTypeDisplay = () => {
+    if (selectedTaskType.length === 0) return "Any task type";
+    if (selectedTaskType.length === 1) return selectedTaskType[0];
+    return `${selectedTaskType.length} task types`;
+  };
+
   const handleCreateBrief = () => {
     toast.success("Creating brief with selected assets...");
     navigate("/dashboard/briefs");
@@ -156,21 +224,21 @@ export default function CalculatorPage() {
               {/* Filter Bar */}
               <button
                 onClick={() => setIsFilterOpen(true)}
-                className="bg-[#f1f1f3] rounded-[54px] px-6 py-2 flex items-center gap-6 mb-6 hover:bg-[#e5e5e5] transition md:w-fit md:mx-auto lg:mx-0"
+                className="bg-[#f1f1f3] rounded-[54px] px-6 py-2 flex items-center gap-6 mb-6 hover:bg-[#e5e5e5] transition w-full"
               >
                 <div className="flex flex-col gap-1">
                   <p className="text-sm font-bold leading-[18.62px] text-black">Asset</p>
-                  <p className="text-xs leading-[15.96px] text-[#848487]">Any asset type</p>
+                  <p className="text-xs leading-[15.96px] text-[#848487]">{getAssetTypeDisplay()}</p>
                 </div>
                 <div className="w-px h-8 bg-[#e0e0e0]" />
                 <div className="flex flex-col gap-1">
                   <p className="text-sm font-bold leading-[18.62px] text-black">NDA</p>
-                  <p className="text-xs leading-[15.96px] text-[#848487]">Any NDA type</p>
+                  <p className="text-xs leading-[15.96px] text-[#848487]">{getNDADisplay()}</p>
                 </div>
                 <div className="w-px h-8 bg-[#e0e0e0]" />
                 <div className="flex flex-col gap-1">
                   <p className="text-sm font-bold leading-[18.62px] text-black">Task</p>
-                  <p className="text-xs leading-[15.96px] text-[#848487]">Any task type</p>
+                  <p className="text-xs leading-[15.96px] text-[#848487]">{getTaskTypeDisplay()}</p>
                 </div>
                 <div className="ml-auto">
                   <div className="w-8 h-8 rounded-full bg-[#ffb546] flex items-center justify-center">
@@ -180,49 +248,49 @@ export default function CalculatorPage() {
               </button>
 
               <div className="flex flex-col gap-5">
-                {availableAssets.map((asset, index) => {
-                  const selectedAsset = selectedAssets.find((a) => a.id === asset.id);
-                  const quantity = selectedAsset?.quantity || 0;
+                {filteredAssets.map((asset, index) => {
+                    const selectedAsset = selectedAssets.find((a) => a.id === asset.id);
+                    const quantity = selectedAsset?.quantity || 0;
 
-                  return (
-                    <div key={asset.id}>
-                      <div className="flex items-center justify-between px-3 py-2">
-                        <div className="flex flex-col gap-0.5">
-                          <p className="text-sm leading-[18.62px] text-black">
-                            {asset.title}
-                          </p>
-                          <p className="text-[10px] leading-[14px] text-black">
-                            {asset.tokens} {asset.tokens === 1 ? "token" : "tokens"}
-                          </p>
+                    return (
+                      <div key={asset.id}>
+                        <div className="flex items-center justify-between px-3 py-2">
+                          <div className="flex flex-col gap-0.5">
+                            <p className="text-sm leading-[18.62px] text-black">
+                              {asset.title}
+                            </p>
+                            <p className="text-[10px] leading-[14px] text-black">
+                              {asset.tokens} {asset.tokens === 1 ? "token" : "tokens"}
+                            </p>
+                          </div>
+                          <div className="flex items-center gap-4">
+                            {quantity > 0 && (
+                              <>
+                                <button
+                                  onClick={() => handleRemoveAsset(asset.id)}
+                                  className="w-8 h-8 rounded-full bg-[#03B3E2] flex items-center justify-center hover:bg-[#e5e5e5] transition"
+                                >
+                                  <span className="text-[#fff] text-lg">−</span>
+                                </button>
+                                <span className="next text-sm font-bold text-black w-6 text-center">
+                                  {quantity}
+                                </span>
+                              </>
+                            )}
+                            <button
+                              onClick={() => handleAddAsset(asset)}
+                              className="plus w-8 h-8 rounded-full bg-[#f1f1f3] flex items-center justify-center hover:bg-[#e5e5e5] transition"
+                            >
+                              <img src={imgAddIcon} alt="Add" className="plusicon w-[17.778px] h-[17.778px]" />
+                            </button>
+                          </div>
                         </div>
-                        <div className="flex items-center gap-4">
-                          {quantity > 0 && (
-                            <>
-                              <button
-                                onClick={() => handleRemoveAsset(asset.id)}
-                                className="w-8 h-8 rounded-full bg-[#03B3E2] flex items-center justify-center hover:bg-[#e5e5e5] transition"
-                              >
-                                <span className="text-[#fff] text-lg">−</span>
-                              </button>
-                              <span className="next text-sm font-bold text-black w-6 text-center">
-                                {quantity}
-                              </span>
-                            </>
-                          )}
-                          <button
-                            onClick={() => handleAddAsset(asset)}
-                            className="plus w-8 h-8 rounded-full bg-[#f1f1f3] flex items-center justify-center hover:bg-[#e5e5e5] transition"
-                          >
-                            <img src={imgAddIcon} alt="Add" className="plusicon w-[17.778px] h-[17.778px]" />
-                          </button>
-                        </div>
+                        {index < filteredAssets.length - 1 && (
+                          <div className="h-px bg-[#e0e0e0] mt-5" />
+                        )}
                       </div>
-                      {index < availableAssets.length - 1 && (
-                        <div className="h-px bg-[#e0e0e0] mt-5" />
-                      )}
-                    </div>
-                  );
-                })}
+                    );
+                  })}
               </div>
             </div>
 
@@ -430,7 +498,11 @@ export default function CalculatorPage() {
             <div className="flex gap-[10px]">
               <Button
                 variant="outline"
-                onClick={() => setIsFilterOpen(false)}
+                onClick={() => {
+                  setIsFilterOpen(false);
+                  // Reset filters applied state when cancelled
+                  setFiltersApplied(false);
+                }}
                 className="flex-1 h-[32px] bg-gray-200 hover:bg-gray-300 backdrop-blur-[6px] rounded-[28px] px-6 py-[18px]"
               >
                 <span className="text-[13px] font-semibold leading-[18.62px] text-black">
@@ -440,7 +512,18 @@ export default function CalculatorPage() {
               <Button
                 onClick={() => {
                   setIsFilterOpen(false);
-                  toast.success("Filters applied");
+                  const filterCount = selectedAssetType.length + selectedNDA.length + selectedTaskType.length;
+                  
+                  if (filterCount > 0) {
+                    // Apply filters - this will show every second asset
+                    setFiltersApplied(true);
+                    const filteredCount = Math.ceil(availableAssets.length / 2);
+                    toast.success(`Filters applied: showing ${filteredCount} asset(s)`);
+                  } else {
+                    // Clear filters - show all assets
+                    setFiltersApplied(false);
+                    toast.success("All filters cleared");
+                  }
                 }}
                 className="flex-1 h-[32px] bg-[#ffb546] hover:opacity-90 backdrop-blur-[6px] rounded-[28px] px-6 py-[18px]"
               >

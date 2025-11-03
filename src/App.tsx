@@ -13,6 +13,7 @@ import Calculator from "./pages/Calculator";
 import UserProfile from "./pages/UserProfile";
 import NotFound from "./pages/NotFound";
 import BriefReview from "./pages/BriefReview";
+import SOW from "./pages/SOW";
 
 const queryClient = new QueryClient();
 
@@ -32,6 +33,7 @@ const App = () => (
           <Route path="/dashboard/tracker" element={<Tracker />} />
           <Route path="/dashboard/calculator" element={<Calculator />} />
           <Route path="/dashboard/profile" element={<UserProfile />} />
+          <Route path="/dashboard/sow" element={<SOW />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>

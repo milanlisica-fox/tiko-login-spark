@@ -233,12 +233,29 @@ export default function BriefsPage() {
                       </svg>
                     )
                   },
-                ].map((card) => (
-                  <div key={card.title} className="relative overflow-hidden">
-                    <StatCard title={card.title} value={card.value} className="rounded-xl p-6" titleBold={card.titleBold} />
-                    {card.icon}
-                  </div>
-                ))}
+                ].map((card) => {
+                  const isSOWCard = card.title === "SOW Ready to sign";
+                  
+                  if (isSOWCard) {
+                    return (
+                      <button
+                        key={card.title}
+                        onClick={() => navigate("/dashboard/sow")}
+                        className="relative overflow-hidden hover:opacity-90 transition cursor-pointer w-full text-left"
+                      >
+                        <StatCard title={card.title} value={card.value} className="rounded-xl p-6" titleBold={card.titleBold} />
+                        {card.icon}
+                      </button>
+                    );
+                  }
+                  
+                  return (
+                    <div key={card.title} className="relative overflow-hidden">
+                      <StatCard title={card.title} value={card.value} className="rounded-xl p-6" titleBold={card.titleBold} />
+                      {card.icon}
+                    </div>
+                  );
+                })}
               </div>
 
               {/* To action on */}
