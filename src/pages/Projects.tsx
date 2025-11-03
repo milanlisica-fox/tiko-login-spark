@@ -159,7 +159,7 @@ export default function ProjectsPage() {
       TopbarRight={topbarRight}
     >
       <div className="pt-[24px] md:pt-[40px] pb-[24px] md:pb-[40px]">
-        <div className="w-[90%] mx-auto space-y-6 md:space-y-[30px]">
+        <div className="w-full max-w-7xl mx-auto px-4 md:px-6 lg:px-8 space-y-6 md:space-y-[30px]">
           <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
             <div className="flex flex-col gap-1">
               <h1 className="h1-heading text-2xl md:text-h1 text-black">Work at a glance</h1>
@@ -171,7 +171,7 @@ export default function ProjectsPage() {
             </Button>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 w-full">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 w-full">
             <div className="bg-white rounded-[60px] h-[118px] p-[40px] flex flex-col justify-center text-center md:text-center lg:text-left">
               <div className="flex flex-col gap-[24px]">
                 <h3 className="text-base leading-[24px] text-black font-normal">Complete</h3>

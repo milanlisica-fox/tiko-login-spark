@@ -38,7 +38,7 @@ export default function SuccessDialog({
         </DialogHeader>
         <div className="flex justify-center pt-4">
           <PillAccent type="button" onClick={onConfirm} size="md">
-            <span className="text-sm font-semibold leading-[18.62px] text-black">{confirmText}</span>
+            <span className="text-sm font-semibold leading-[18.62px] text-black whitespace-nowrap">{confirmText}</span>
           </PillAccent>
         </div>
       </DialogContent>

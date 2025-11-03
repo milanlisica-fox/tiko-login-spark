@@ -23,14 +23,14 @@ export default function FormFooter({ onDiscard, onSaveDraft, onReview }: FormFoo
           onClick={onSaveDraft}
           className="h-8 px-4 bg-[#ffb546] hover:opacity-90 rounded-[28px] flex items-center justify-center gap-[10px] transition"
         >
-          <span className="text-[13px] font-semibold leading-[18.62px] text-black">Save draft</span>
+          <span className="text-[13px] font-semibold leading-[18.62px] text-black whitespace-nowrap">Save draft</span>
           <img src={createBriefArrowIcon} alt="" className="h-[14px] w-[15.567px]" />
         </button>
         <button
           onClick={onReview}
           className="h-8 px-4 bg-[#ffb546] hover:opacity-90 rounded-[28px] flex items-center justify-center gap-[10px] transition"
         >
-          <span className="text-[13px] font-semibold leading-[18.62px] text-black">Review brief</span>
+          <span className="text-[13px] font-semibold leading-[18.62px] text-black whitespace-nowrap">Review brief</span>
           <img src={createBriefArrowIcon} alt="" className="h-[14px] w-[15.567px]" />
         </button>
       </div>

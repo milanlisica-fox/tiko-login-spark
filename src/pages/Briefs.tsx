@@ -201,7 +201,7 @@ export default function BriefsPage() {
               </div>
 
               {/* Stats row */}
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5">
                 {[
                   { 
                     title: "Draft briefs",
@@ -573,11 +573,11 @@ function NewBriefForm({ onCancel, onNext }: { onCancel: () => void; onNext: () =
   return (
     <>
       {/* Desktop Layout - Side by side */}
-      <div className="hidden lg:flex items-center justify-center w-full h-[85vh] px-[15%] overflow-hidden">
-        <div className="flex flex-row gap-0 w-full max-w-full h-full">
+      <div className="hidden lg:flex items-center justify-center w-full h-[85vh] px-6 lg:px-[10%] xl:px-[15%] overflow-hidden">
+        <div className="flex flex-row gap-4 w-full h-full">
       {/* Left Form Section */}
-        <div className="flex flex-col gap-2 p-4 md:p-6 rounded-xl lg:flex-[0_0_564px] h-full overflow-y-auto">
-          <div className="flex flex-col gap-4 flex-1">
+        <div className="flex flex-col gap-2 p-4 md:p-6 rounded-xl flex-[1_1_0%] min-w-0 h-full overflow-hidden">
+          <div className="flex flex-col gap-4 flex-1 min-h-0 overflow-y-auto">
           <p className="text-sm leading-[18.62px] text-[#424242] w-full">
             Start your brief by filling out these required fields.
           </p>
@@ -659,7 +659,7 @@ function NewBriefForm({ onCancel, onNext }: { onCancel: () => void; onNext: () =
       </div>
 
         {/* Right Panel - Desktop only */}
-        <div className="flex flex-col gap-2.5 pb-5 pl-2.5 pt-2.5 flex-1 max-w-[540px] h-full overflow-hidden">
+        <div className="flex flex-col gap-2.5 pb-5 pl-2.5 pt-2.5 flex-[1_1_0%] min-w-0 h-full overflow-hidden">
         {/* Loading State */}
           <div className="bg-white flex flex-col gap-8 items-center justify-center p-6 rounded-xl overflow-hidden h-[89%]">
           <div className="flex flex-col gap-2 items-center">
@@ -685,29 +685,29 @@ function NewBriefForm({ onCancel, onNext }: { onCancel: () => void; onNext: () =
           </div>
 
           {/* Action Buttons */}
-            <div className="flex items-center w-full">
+            <div className="flex items-center w-full min-w-0">
               <button
                 onClick={onCancel}
-                className="w-[25%] h-8 bg-[#03b3e2] text-black hover:opacity-80 rounded-[28px] transition flex items-center justify-center"
+                className="w-[25%] min-w-0 h-8 px-2 md:px-4 bg-[#03b3e2] text-black hover:opacity-80 rounded-[28px] transition flex items-center justify-center"
               >
-                <span className="text-[13px] font-semibold leading-[18.62px]">Discard</span>
+                <span className="text-[13px] font-semibold leading-[18.62px] whitespace-nowrap truncate">Discard</span>
               </button>
-              <div className="w-[15%]" />
-              <div className="flex gap-1 items-center w-[60%]">
+              <div className="w-[15%] shrink-0" />
+              <div className="flex gap-1 items-center w-[60%] min-w-0">
                 <button 
                   onClick={handleSaveDraft}
-                  className="flex-1 h-8 px-4 bg-[#ffb546] hover:opacity-90 rounded-[28px] flex items-center justify-center gap-[10px] transition"
+                  className="flex-1 min-w-0 h-8 px-2 md:px-4 bg-[#ffb546] hover:opacity-90 rounded-[28px] flex items-center justify-center gap-1 md:gap-[10px] transition"
                 >
-                  <span className="text-[13px] font-semibold leading-[18.62px] text-black">Save draft</span>
-                  <img src={createBriefArrowIcon} alt="" className="h-[14px] w-[15.567px]" />
+                  <span className="text-[13px] font-semibold leading-[18.62px] text-black whitespace-nowrap truncate">Save draft</span>
+                  <img src={createBriefArrowIcon} alt="" className="h-[14px] w-[15.567px] shrink-0" />
                 </button>
                 <button
                 type="button"
                 onClick={() => navigate("/dashboard/briefs/review")}
-                  className="flex-1 h-8 px-4 bg-[#ffb546] hover:opacity-90 rounded-[28px] flex items-center justify-center gap-[10px] transition"
+                  className="flex-1 min-w-0 h-8 px-2 md:px-4 bg-[#ffb546] hover:opacity-90 rounded-[28px] flex items-center justify-center gap-1 md:gap-[10px] transition"
               >
-                <span className="text-[13px] font-semibold leading-[18.62px] text-black">Review brief</span>
-                  <img src={createBriefArrowIcon} alt="" className="h-[14px] w-[15.567px]" />
+                <span className="text-[13px] font-semibold leading-[18.62px] text-black whitespace-nowrap truncate">Review brief</span>
+                  <img src={createBriefArrowIcon} alt="" className="h-[14px] w-[15.567px] shrink-0" />
                 </button>
               </div>
             </div>
@@ -717,7 +717,7 @@ function NewBriefForm({ onCancel, onNext }: { onCancel: () => void; onNext: () =
       </div>
 
       {/* Tablet/iPad Layout - Vertical stack: Form -> Line -> Document -> Line -> Buttons */}
-      <div className="flex lg:hidden flex-col items-center w-full min-h-[85vh] overflow-y-auto px-[6%] md:px-[10%] pb-8 pt-4">
+      <div className="flex lg:hidden flex-col items-center w-full min-h-[85vh] overflow-y-auto px-4 md:px-6 lg:px-[10%] xl:px-[15%] pb-8 pt-4">
         {/* Form Section */}
         <div className="flex flex-col gap-2 rounded-xl w-full max-w-4xl">
           <div className="flex flex-col gap-4">
@@ -816,40 +816,40 @@ function NewBriefForm({ onCancel, onNext }: { onCancel: () => void; onNext: () =
           </div>
 
           {/* Action Buttons - Order: Next, Discard, Save draft, Review brief - Stacked on mobile, row on tablet */}
-          <div className="flex flex-col md:flex-row items-center gap-2.5 w-full">
+          <div className="flex flex-col md:flex-row items-center gap-2.5 w-full min-w-0">
             <button
               onClick={handleNext}
               disabled={!isFormComplete}
-              className={`w-full md:flex-1 h-8 px-4 rounded-[28px] flex items-center justify-center transition ${
+              className={`w-full md:flex-1 md:min-w-0 h-8 px-2 md:px-4 rounded-[28px] flex items-center justify-center transition ${
                 isFormComplete
                   ? "bg-[#ffb546] hover:opacity-90 cursor-pointer"
                   : "bg-[#f9f9f9] cursor-not-allowed opacity-50"
               }`}
             >
-              <span className={`text-[13px] font-semibold leading-[18.62px] ${
+              <span className={`text-[13px] font-semibold leading-[18.62px] whitespace-nowrap ${
                 isFormComplete ? "text-black" : "text-[#848487]"
               }`}>Next</span>
             </button>
             <button
               onClick={onCancel}
-              className="w-full md:flex-1 h-8 px-4 bg-[#03b3e2] text-black hover:opacity-80 rounded-[28px] transition flex items-center justify-center"
+              className="w-full md:flex-1 md:min-w-0 h-8 px-2 md:px-4 bg-[#03b3e2] text-black hover:opacity-80 rounded-[28px] transition flex items-center justify-center"
             >
-              <span className="text-[13px] font-semibold leading-[18.62px]">Discard</span>
+              <span className="text-[13px] font-semibold leading-[18.62px] whitespace-nowrap">Discard</span>
             </button>
             <button 
               onClick={handleSaveDraft}
-              className="w-full md:flex-1 h-8 px-4 bg-[#ffb546] hover:opacity-90 rounded-[28px] flex items-center justify-center gap-[10px] transition"
+              className="w-full md:flex-1 md:min-w-0 h-8 px-2 md:px-4 bg-[#ffb546] hover:opacity-90 rounded-[28px] flex items-center justify-center gap-1 md:gap-[10px] transition"
             >
-              <span className="text-[13px] font-semibold leading-[18.62px] text-black">Save draft</span>
-              <img src={createBriefArrowIcon} alt="" className="h-[14px] w-[15.567px]" />
+              <span className="text-[13px] font-semibold leading-[18.62px] text-black whitespace-nowrap">Save draft</span>
+              <img src={createBriefArrowIcon} alt="" className="h-[14px] w-[15.567px] shrink-0" />
             </button>
             <button
               type="button"
               onClick={() => navigate("/dashboard/briefs/review")}
-              className="w-full md:flex-1 h-8 px-4 bg-[#ffb546] hover:opacity-90 rounded-[28px] flex items-center justify-center gap-[10px] transition"
+              className="w-full md:flex-1 md:min-w-0 h-8 px-2 md:px-4 bg-[#ffb546] hover:opacity-90 rounded-[28px] flex items-center justify-center gap-1 md:gap-[10px] transition"
             >
-              <span className="text-[13px] font-semibold leading-[18.62px] text-black">Review brief</span>
-              <img src={createBriefArrowIcon} alt="" className="h-[14px] w-[15.567px]" />
+              <span className="text-[13px] font-semibold leading-[18.62px] text-black whitespace-nowrap">Review brief</span>
+              <img src={createBriefArrowIcon} alt="" className="h-[14px] w-[15.567px] shrink-0" />
             </button>
           </div>
         </div>
@@ -929,11 +929,11 @@ function DeliverablesSelectionScreen({ onCancel, onBack, onNavigateToAiResponse 
   return (
     <>
       {/* Desktop Layout - Side by side */}
-      <div className="hidden lg:flex items-center justify-center w-full h-[85vh] px-[15%] overflow-hidden">
-        <div className="flex flex-row gap-0 w-full max-w-full h-full">
+      <div className="hidden lg:flex items-center justify-center w-full h-[85vh] px-6 lg:px-[10%] xl:px-[15%] overflow-hidden">
+        <div className="flex flex-row gap-4 w-full max-w-full h-full">
         {/* Left Panel */}
-          <div className="flex flex-col gap-2 p-4 md:p-6 lg:flex-[0_0_564px] h-full overflow-y-auto">
-            <div className="flex flex-col gap-3 flex-1">
+          <div className="flex flex-col gap-2 p-4 md:p-6 flex-[1_1_0%] min-w-0 h-full overflow-hidden">
+            <div className="flex flex-col gap-3 flex-1 min-h-0 overflow-y-auto">
             <p className="text-sm leading-[18.62px] text-[#424242] w-full">
               Great! Next up are the deliverables. You can either browse and select the ones you need, or start detailing them below. TIKO will summarise the deliverables and prompt you to make sure you include everything you need for this project.
             </p>
@@ -1010,7 +1010,7 @@ function DeliverablesSelectionScreen({ onCancel, onBack, onNavigateToAiResponse 
         </div>
 
         {/* Right Panel */}
-          <div className="flex flex-col gap-2.5 pb-5 pl-2.5 pt-2.5 flex-1 max-w-[540px] h-full overflow-hidden">
+          <div className="flex flex-col gap-2.5 pb-5 pl-2.5 pt-2.5 flex-[1_1_0%] min-w-0 h-full overflow-hidden">
           {/* Brief Preview - made smaller to prevent scroll */}
           <div className="h-[89%] overflow-hidden">
           <BriefPreviewPanel
@@ -1032,28 +1032,27 @@ function DeliverablesSelectionScreen({ onCancel, onBack, onNavigateToAiResponse 
             <TokenEstimate value={tokenEstimate} />
 
             {/* Action Buttons */}
-            <div className="flex items-center w-full">
+            <div className="flex items-center w-full gap-2 min-w-0">
               <button
                 onClick={onCancel}
-                className="w-[25%] h-8 bg-[#03b3e2] text-black hover:opacity-80 rounded-[28px] transition flex items-center justify-center"
+                className="flex-shrink-0 h-8 px-3 md:px-4 bg-[#03b3e2] text-black hover:opacity-80 rounded-[28px] transition flex items-center justify-center"
               >
-                <span className="text-[13px] font-semibold leading-[18.62px]">Discard</span>
+                <span className="text-[13px] font-semibold leading-[18.62px] whitespace-nowrap">Discard</span>
               </button>
-              <div className="w-[15%]" />
-              <div className="flex gap-1 items-center w-[60%]">
+              <div className="flex gap-1 items-center flex-1 min-w-0">
                 <button 
                   onClick={handleSaveDraft}
-                  className="flex-1 h-8 px-4 bg-[#ffb546] hover:opacity-90 rounded-[28px] flex items-center justify-center gap-[10px] transition"
+                  className="flex-1 min-w-0 h-8 px-2 md:px-4 bg-[#ffb546] hover:opacity-90 rounded-[28px] flex items-center justify-center gap-1 md:gap-[10px] transition"
                 >
-                  <span className="text-[13px] font-semibold leading-[18.62px] text-black">Save draft</span>
-                  <img src={createBriefArrowIcon} alt="" className="h-[14px] w-[15.567px]" />
+                  <span className="text-[13px] font-semibold leading-[18.62px] text-black whitespace-nowrap">Save draft</span>
+                  <img src={createBriefArrowIcon} alt="" className="h-[14px] w-[15.567px] shrink-0" />
                 </button>
                 <button
                   onClick={() => navigate("/dashboard/briefs/review")}
-                  className="flex-1 h-8 px-4 bg-[#ffb546] hover:opacity-90 rounded-[28px] flex items-center justify-center gap-[10px] transition"
+                  className="flex-1 min-w-0 h-8 px-2 md:px-4 bg-[#ffb546] hover:opacity-90 rounded-[28px] flex items-center justify-center gap-1 md:gap-[10px] transition"
                 >
-                  <span className="text-[13px] font-semibold leading-[18.62px] text-black">Review brief</span>
-                  <img src={createBriefArrowIcon} alt="" className="h-[14px] w-[15.567px]" />
+                  <span className="text-[13px] font-semibold leading-[18.62px] text-black whitespace-nowrap">Review brief</span>
+                  <img src={createBriefArrowIcon} alt="" className="h-[14px] w-[15.567px] shrink-0" />
                 </button>
               </div>
             </div>
@@ -1063,7 +1062,7 @@ function DeliverablesSelectionScreen({ onCancel, onBack, onNavigateToAiResponse 
       </div>
 
       {/* Tablet/iPad Layout - Vertical stack: Form -> Line -> Document -> Line -> Buttons */}
-      <div className="flex lg:hidden flex-col items-center w-full min-h-[85vh] overflow-y-auto px-[6%] md:px-[10%] pb-8 pt-4">
+      <div className="flex lg:hidden flex-col items-center w-full min-h-[85vh] overflow-y-auto px-4 md:px-6 lg:px-[10%] xl:px-[15%] pb-8 pt-4">
         {/* Form Section */}
         <div className="flex flex-col gap-2 rounded-xl w-full max-w-4xl">
           <div className="flex flex-col gap-3">
@@ -1169,27 +1168,27 @@ function DeliverablesSelectionScreen({ onCancel, onBack, onNavigateToAiResponse 
           </div>
 
           {/* Action Buttons - Order: Discard, Save draft, Review brief - Stacked on mobile, row on tablet */}
-          <div className="flex flex-col md:flex-row items-center gap-2.5 w-full">
+          <div className="flex flex-col md:flex-row items-center gap-2.5 w-full min-w-0">
             <button
               onClick={onCancel}
-              className="w-full md:flex-1 h-8 px-4 bg-[#03b3e2] text-black hover:opacity-80 rounded-[28px] transition flex items-center justify-center"
+              className="w-full md:flex-1 md:min-w-0 h-8 px-2 md:px-4 bg-[#03b3e2] text-black hover:opacity-80 rounded-[28px] transition flex items-center justify-center"
             >
-              <span className="text-[13px] font-semibold leading-[18.62px]">Discard</span>
+              <span className="text-[13px] font-semibold leading-[18.62px] whitespace-nowrap">Discard</span>
             </button>
             <button 
               onClick={handleSaveDraft}
-              className="w-full md:flex-1 h-8 px-4 bg-[#ffb546] hover:opacity-90 rounded-[28px] flex items-center justify-center gap-[10px] transition"
+              className="w-full md:flex-1 md:min-w-0 h-8 px-2 md:px-4 bg-[#ffb546] hover:opacity-90 rounded-[28px] flex items-center justify-center gap-1 md:gap-[10px] transition"
             >
-              <span className="text-[13px] font-semibold leading-[18.62px] text-black">Save draft</span>
-              <img src={createBriefArrowIcon} alt="" className="h-[14px] w-[15.567px]" />
+              <span className="text-[13px] font-semibold leading-[18.62px] text-black whitespace-nowrap">Save draft</span>
+              <img src={createBriefArrowIcon} alt="" className="h-[14px] w-[15.567px] shrink-0" />
             </button>
             <button
               type="button"
               onClick={() => navigate("/dashboard/briefs/review")}
-              className="w-full md:flex-1 h-8 px-4 bg-[#ffb546] hover:opacity-90 rounded-[28px] flex items-center justify-center gap-[10px] transition"
+              className="w-full md:flex-1 md:min-w-0 h-8 px-2 md:px-4 bg-[#ffb546] hover:opacity-90 rounded-[28px] flex items-center justify-center gap-1 md:gap-[10px] transition"
             >
-              <span className="text-[13px] font-semibold leading-[18.62px] text-black">Review brief</span>
-              <img src={createBriefArrowIcon} alt="" className="h-[14px] w-[15.567px]" />
+              <span className="text-[13px] font-semibold leading-[18.62px] text-black whitespace-nowrap">Review brief</span>
+              <img src={createBriefArrowIcon} alt="" className="h-[14px] w-[15.567px] shrink-0" />
             </button>
           </div>
         </div>
@@ -1252,11 +1251,11 @@ function AIResponseScreen({ userInput, onBack, onCancel }: { userInput: string; 
   return (
     <>
       {/* Desktop Layout - Side by side */}
-      <div className="hidden lg:flex items-center justify-center w-full h-[85vh] px-[15%] overflow-hidden">
-        <div className="flex flex-row gap-0 w-full max-w-full h-full">
+      <div className="hidden lg:flex items-center justify-center w-full h-[85vh] px-6 lg:px-[10%] xl:px-[15%] overflow-hidden">
+        <div className="flex flex-row gap-4 w-full max-w-full h-full">
         {/* Left Panel */}
-          <div className="flex flex-col gap-2 p-4 md:p-6 lg:flex-[0_0_564px] h-full overflow-y-auto">
-          <div className="flex flex-col gap-6 flex-1 overflow-y-auto">
+          <div className="flex flex-col gap-2 p-4 md:p-6 flex-[1_1_0%] min-w-0 h-full overflow-hidden">
+          <div className="flex flex-col gap-6 flex-1 min-h-0 overflow-y-auto">
           {/* User Message Bubble */}
           <div className="bg-[#efeff0] rounded-xl p-4">
             <p className="text-sm leading-[18.62px] text-[#424242] whitespace-pre-wrap">
@@ -1332,7 +1331,7 @@ function AIResponseScreen({ userInput, onBack, onCancel }: { userInput: string; 
           </div>
 
           {/* Right Panel */}
-          <div className="flex flex-col gap-2.5 pb-5 pl-2.5 pt-2.5 flex-1 max-w-[540px] h-full overflow-hidden">
+          <div className="flex flex-col gap-2.5 pb-5 pl-2.5 pt-2.5 flex-[1_1_0%] min-w-0 h-full overflow-hidden">
           {/* Brief Preview - made smaller to prevent scroll */}
           <div className="h-[89%] overflow-hidden">
           <BriefPreviewPanel
@@ -1354,28 +1353,27 @@ function AIResponseScreen({ userInput, onBack, onCancel }: { userInput: string; 
             <TokenEstimate value={10} />
 
             {/* Action Buttons */}
-            <div className="flex items-center w-full">
+            <div className="flex items-center w-full gap-2 min-w-0">
               <button
                 onClick={onCancel}
-                className="w-[25%] h-8 bg-[#03b3e2] text-black hover:opacity-80 rounded-[28px] transition flex items-center justify-center"
+                className="flex-shrink-0 h-8 px-3 md:px-4 bg-[#03b3e2] text-black hover:opacity-80 rounded-[28px] transition flex items-center justify-center"
               >
-                <span className="text-[13px] font-semibold leading-[18.62px]">Discard</span>
+                <span className="text-[13px] font-semibold leading-[18.62px] whitespace-nowrap">Discard</span>
               </button>
-              <div className="w-[15%]" />
-              <div className="flex gap-1 items-center w-[60%]">
+              <div className="flex gap-1 items-center flex-1 min-w-0">
                 <button 
                   onClick={handleSaveDraft}
-                  className="flex-1 h-8 px-4 bg-[#ffb546] hover:opacity-90 rounded-[28px] flex items-center justify-center gap-[10px] transition"
+                  className="flex-1 min-w-0 h-8 px-2 md:px-4 bg-[#ffb546] hover:opacity-90 rounded-[28px] flex items-center justify-center gap-1 md:gap-[10px] transition"
                 >
-                  <span className="text-[13px] font-semibold leading-[18.62px] text-black">Save draft</span>
-                  <img src={createBriefArrowIcon} alt="" className="h-[14px] w-[15.567px]" />
+                  <span className="text-[13px] font-semibold leading-[18.62px] text-black whitespace-nowrap">Save draft</span>
+                  <img src={createBriefArrowIcon} alt="" className="h-[14px] w-[15.567px] shrink-0" />
                 </button>
                 <button
                   onClick={() => navigate("/dashboard/briefs/review")}
-                  className="flex-1 h-8 px-4 bg-[#ffb546] hover:opacity-90 rounded-[28px] flex items-center justify-center gap-[10px] transition"
+                  className="flex-1 min-w-0 h-8 px-2 md:px-4 bg-[#ffb546] hover:opacity-90 rounded-[28px] flex items-center justify-center gap-1 md:gap-[10px] transition"
                 >
-                  <span className="text-[13px] font-semibold leading-[18.62px] text-black">Review brief</span>
-                  <img src={createBriefArrowIcon} alt="" className="h-[14px] w-[15.567px]" />
+                  <span className="text-[13px] font-semibold leading-[18.62px] text-black whitespace-nowrap">Review brief</span>
+                  <img src={createBriefArrowIcon} alt="" className="h-[14px] w-[15.567px] shrink-0" />
                 </button>
               </div>
             </div>
@@ -1385,7 +1383,7 @@ function AIResponseScreen({ userInput, onBack, onCancel }: { userInput: string; 
       </div>
 
       {/* Mobile/Tablet Layout - Vertical stack: Form -> Line -> Document -> Line -> Buttons */}
-      <div className="flex lg:hidden flex-col items-center w-full min-h-[85vh] overflow-y-auto px-[6%] md:px-[10%] pb-8 pt-4">
+      <div className="flex lg:hidden flex-col items-center w-full min-h-[85vh] overflow-y-auto px-4 md:px-6 lg:px-[10%] xl:px-[15%] pb-8 pt-4">
         {/* Form Section */}
         <div className="flex flex-col gap-2 rounded-xl w-full max-w-4xl">
           <div className="flex flex-col gap-6">

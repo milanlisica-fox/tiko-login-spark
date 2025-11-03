@@ -93,7 +93,7 @@ export default function TikoDashboard() {
             <div className="flex flex-col lg:flex-row gap-5">
               {/* Briefs Section */}
               <div className="flex-1 lg:flex-[0.7] bg-white rounded-xl p-4 md:p-6 flex flex-col gap-4">
-                <div className="flex items-start justify-between pb-1">
+                <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3 sm:gap-0 pb-1">
                   <div className="flex flex-col gap-1">
                     <h2 className="text-[22px] font-bold leading-[29.26px] text-black">Briefs</h2>
                     <p className="text-sm leading-[18.62px] text-black">
@@ -102,28 +102,28 @@ export default function TikoDashboard() {
                   </div>
                   <button 
                     onClick={() => navigate("/dashboard/briefs")}
-                    className="flex items-center gap-2 px-2 py-1 rounded-[28px] backdrop-blur-sm hover:bg-gray-50 transition"
+                    className="flex items-center gap-2 px-2 py-1 rounded-[28px] backdrop-blur-sm hover:bg-gray-50 transition self-start sm:self-auto"
                   >
-                    <span className="text-xs font-semibold leading-[23.94px] text-[#848487]">
+                    <span className="text-xs font-semibold leading-[23.94px] text-[#848487] whitespace-nowrap">
                       View all briefs
                     </span>
                     <ArrowRight size={16} className="text-[#848487]" />
                   </button>
                 </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
                   {/* Draft briefs */}
                   <div className="flex-1 bg-[#f9f9f9] rounded-[12px] p-4 md:p-[20px] flex flex-col gap-[10px] relative overflow-clip">
                     <p className="text-xs md:text-sm font-bold leading-[18.62px] text-black">Draft briefs</p>
                     <p className="text-2xl md:text-[40px] font-medium leading-[45.6px] text-black">5</p>
-                    <img src={briefsVector1} alt="" className="absolute right-[-20px] top-[20px] w-[45px] h-10" />
+                    <img src={briefsVector1} alt="" className="absolute right-[-10px] md:right-[-20px] top-[10px] md:top-[20px] w-6 h-6 md:w-[45px] md:h-10" />
                   </div>
 
                   {/* In review */}
                   <div className="flex-1 bg-[#f9f9f9] rounded-[12px] p-4 md:p-[20px] flex flex-col gap-[10px] relative overflow-clip">
                     <p className="text-xs md:text-sm font-bold leading-[18.62px] text-black">In review</p>
                     <p className="text-2xl md:text-[40px] font-medium leading-[45.6px] text-black">4</p>
-                    <img src={briefsVector2} alt="" className="absolute right-[-20px] top-[20px] w-[45px] h-10" />
+                    <img src={briefsVector2} alt="" className="absolute right-[-10px] md:right-[-20px] top-[10px] md:top-[20px] w-6 h-6 md:w-[45px] md:h-10" />
                   </div>
 
                   {/* SOW Ready to sign */}
@@ -133,14 +133,14 @@ export default function TikoDashboard() {
                   >
                     <p className="text-xs md:text-sm font-bold leading-[18.62px] text-black">SOW Ready to sign</p>
                     <p className="text-2xl md:text-[40px] font-medium leading-[45.6px] text-black">3</p>
-                    <img src={briefsVector3} alt="" className="absolute right-[-20px] top-[20px] w-[45px] h-10" />
+                    <img src={briefsVector3} alt="" className="absolute right-[-10px] md:right-[-20px] top-[10px] md:top-[20px] w-6 h-6 md:w-[45px] md:h-10" />
                   </button>
                 </div>
               </div>
 
               {/* Projects Section */}
               <div className="flex-1 lg:flex-[0.3] bg-white rounded-xl p-4 md:p-6 flex flex-col gap-4">
-                <div className="flex items-start justify-between pb-1">
+                <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3 sm:gap-0 pb-1">
                   <div className="flex flex-col gap-1">
                     <h2 className="text-[22px] font-bold leading-[29.26px] text-black">Projects</h2>
                     <p className="text-sm leading-[18.62px] text-black">
@@ -149,9 +149,9 @@ export default function TikoDashboard() {
                   </div>
                   <button 
                     onClick={() => navigate("/dashboard/projects")}
-                    className="flex items-center gap-2 px-2 py-1 rounded-[28px] backdrop-blur-sm hover:bg-gray-50 transition"
+                    className="flex items-center gap-2 px-2 py-1 rounded-[28px] backdrop-blur-sm hover:bg-gray-50 transition self-start sm:self-auto"
                   >
-                    <span className="text-xs font-semibold leading-[23.94px] text-[#848487]">
+                    <span className="text-xs font-semibold leading-[23.94px] text-[#848487] whitespace-nowrap">
                       View all projects
                     </span>
                     <ArrowRight size={16} className="text-[#848487]" />
@@ -161,14 +161,14 @@ export default function TikoDashboard() {
                 <div className="bg-[#f9f9f9] rounded-xl p-5 flex flex-col gap-2.5 relative overflow-hidden">
                   <p className="text-sm font-bold leading-[18.62px] text-black">In progress</p>
                   <p className="text-[40px] font-medium leading-[45.6px] text-black">10</p>
-                  <img src={projectsVector} alt="" className="absolute right-[-46px] top-[-36px] w-[212px] h-[189px]" />
+                  <img src={projectsVector} alt="" className="absolute right-[-23px] md:right-[-46px] top-[-18px] md:top-[-36px] w-[120px] h-[107px] md:w-[212px] md:h-[189px]" />
                 </div>
               </div>
             </div>
 
             {/* Tracker Section */}
             <div className="bg-white rounded-xl p-4 md:p-6 flex flex-col gap-4">
-              <div className="flex items-start justify-between pb-1">
+              <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3 sm:gap-0 pb-1">
                 <div className="flex flex-col gap-1">
                   <h2 className="text-lg md:text-[22px] font-bold leading-[29.26px] text-black">Tracker</h2>
                   <p className="text-xs md:text-sm leading-[18.62px] text-black">
@@ -177,9 +177,9 @@ export default function TikoDashboard() {
                 </div>
                 <button 
                   onClick={() => navigate("/dashboard/tracker")}
-                  className="flex items-center gap-2 px-2 py-1 rounded-[28px] backdrop-blur-sm hover:bg-gray-50 transition"
+                  className="flex items-center gap-2 px-2 py-1 rounded-[28px] backdrop-blur-sm hover:bg-gray-50 transition self-start sm:self-auto"
                 >
-                  <span className="text-xs font-semibold leading-[23.94px] text-[#848487]">
+                  <span className="text-xs font-semibold leading-[23.94px] text-[#848487] whitespace-nowrap">
                     View all insights
                   </span>
                   <ArrowRight size={16} className="text-[#848487]" />

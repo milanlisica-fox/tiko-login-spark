@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { FileText, ArrowLeft } from "lucide-react";
+import { FileText, ArrowLeft, X } from "lucide-react";
 import DashboardLayout from "@/components/layout/DashboardLayout";
 import DashboardTopbarRight from "@/components/layout/DashboardTopbarRight";
 import { useActiveNav } from "@/hooks/useActiveNav";
@@ -36,7 +36,7 @@ export default function SOWPage() {
 
   const titleNode = (
     <div className="flex items-center gap-2">
-      <button onClick={() => navigate("/dashboard")} className="hover:opacity-70 transition">
+      <button onClick={() => navigate("/dashboard/briefs")} className="hover:opacity-70 transition">
         <ArrowLeft size={20} className="text-black" />
       </button>
       <span className="text-sm leading-[19.6px] text-black">SOW Ready to sign</span>
@@ -213,13 +213,20 @@ export default function SOWPage() {
       {/* SOW Document Modal */}
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
         <DialogContent className="max-w-5xl max-h-[95vh] p-0 bg-white flex flex-col">
-          <div className="p-6 pb-4 shrink-0">
+          <div className="p-6 pb-4 shrink-0 relative">
             <DialogHeader>
-              <DialogTitle className="text-xl font-bold text-black">{selectedSOW?.title}</DialogTitle>
+              <DialogTitle className="text-xl font-bold text-black pr-10">{selectedSOW?.title}</DialogTitle>
               <DialogDescription className="sr-only">
                 Review and sign the Statement of Work document for {selectedSOW?.title}
               </DialogDescription>
             </DialogHeader>
+            <button
+              onClick={() => setIsDialogOpen(false)}
+              className="absolute right-4 top-4 md:right-6 md:top-6 w-8 h-8 flex items-center justify-center rounded-sm opacity-70 hover:opacity-100 hover:bg-gray-100 transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 z-10"
+              aria-label="Close dialog"
+            >
+              <X className="h-5 w-5 text-black" />
+            </button>
           </div>
           
           <div className="px-6 w-full overflow-y-auto flex-1 min-h-0">
@@ -237,13 +244,13 @@ export default function SOWPage() {
             <Button
               onClick={handleWriteComments}
               variant="outline"
-              className="w-full sm:w-auto bg-[#f9f9f9] border-[#e0e0e0] text-black hover:bg-[#e5e5e5] h-10 px-6"
+              className="w-full sm:w-auto bg-[#f9f9f9] border-[#e0e0e0] text-black hover:bg-[#e5e5e5] h-10 px-6 whitespace-nowrap"
             >
               Write comments
             </Button>
             <Button
               onClick={handleSignSOW}
-              className="w-full sm:w-auto bg-[#ffb546] text-black hover:opacity-90 h-10 px-6"
+              className="w-full sm:w-auto bg-[#ffb546] text-black hover:opacity-90 h-10 px-6 whitespace-nowrap"
             >
               Sign the SOW
             </Button>

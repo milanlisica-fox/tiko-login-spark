@@ -125,15 +125,15 @@ export default function TrackerPage() {
       TopbarRight={topbarRight}
     >
       <div className="pt-[40px] pb-[40px]">
-        <div className="w-[90%] mx-auto space-y-10">
+        <div className="w-full max-w-7xl mx-auto px-4 md:px-6 lg:px-8 space-y-6 md:space-y-10">
           {/* Header */}
-          <div className="flex items-center justify-between">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <div className="flex flex-col gap-1">
-              <h1 className="h1-heading text-h1 text-black">Real-time insights to guide your spend</h1>
+              <h1 className="h1-heading text-xl md:text-h1 text-black">Real-time insights to guide your spend</h1>
               <p className="text-body text-black">Stay on top of spend, progress, and priorities—all in one place.</p>
             </div>
-            <Button variant="outline" className="h-10 px-6 border border-[#d9d9d9] bg-white hover:bg-gray-50 text-black">
-              <span className="text-black">All insights</span>
+            <Button variant="outline" className="h-10 px-6 border border-[#d9d9d9] bg-white hover:bg-gray-50 text-black whitespace-nowrap">
+              <span className="text-black whitespace-nowrap">All insights</span>
               <ChevronRight size={20} className="ml-2 text-black" />
             </Button>
           </div>
@@ -141,7 +141,7 @@ export default function TrackerPage() {
           {/* Teams' Leaderboard */}
           <div className="space-y-4">
             <h2 className="text-[22px] font-bold leading-[29.26px] text-black">Teams' Leaderboard</h2>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5">
               {teamsData.map((team) => (
                 <Card key={team.id} className="border border-[#ececec] bg-white relative">
                   {team.isMyTeam && (
@@ -185,7 +185,7 @@ export default function TrackerPage() {
           {/* Just-in-Time Insights */}
           <div className="space-y-4">
             <h2 className="text-[22px] font-bold leading-[29.26px] text-black">Just-in-Time Insights</h2>
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
               <Card className="lg:col-span-1 border border-[#ececec] bg-white">
                 <CardHeader className="pb-3">
                   <CardTitle className="text_base font-bold leading-[21.28px] text-black">Brief quality score - All categories</CardTitle>

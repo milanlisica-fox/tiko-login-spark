@@ -527,7 +527,7 @@ export default function CalculatorPage() {
                 }}
                 className="flex-1 h-[32px] bg-[#ffb546] hover:opacity-90 backdrop-blur-[6px] rounded-[28px] px-6 py-[18px]"
               >
-                <span className="text-[13px] font-semibold leading-[18.62px] text-black">
+                <span className="text-[13px] font-semibold leading-[18.62px] text-black whitespace-nowrap">
                   Apply filters
                 </span>
               </Button>

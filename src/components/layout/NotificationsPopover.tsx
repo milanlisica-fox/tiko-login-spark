@@ -50,7 +50,7 @@ export default function NotificationsPopover() {
           </div>
         </div>
         <div className="p-3 border-t border-[#e0e0e0]">
-          <button className="w-full text-xs font-semibold leading-[15.96px] text-[#646464] hover:text-black transition">View all notifications</button>
+          <button className="w-full text-xs font-semibold leading-[15.96px] text-[#646464] hover:text-black transition whitespace-nowrap">View all notifications</button>
         </div>
       </PopoverContent>
     </Popover>

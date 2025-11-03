@@ -79,11 +79,11 @@ export default function BriefReview() {
     >
       <>
         {/* Desktop Layout - Side by side */}
-        <div className="hidden lg:flex items-center justify-center w-full h-[85vh] px-[15%] overflow-hidden">
-          <div className="flex flex-row gap-0 w-full max-w-full h-full">
+        <div className="hidden lg:flex items-center justify-center w-full h-[85vh] px-6 lg:px-[10%] xl:px-[15%] overflow-hidden">
+          <div className="flex flex-row gap-4 w-full h-full">
             {/* Left: read-only form summary */}
-            <div className="flex flex-col gap-2 p-4 md:p-6 rounded-xl lg:flex-[0_0_564px] h-full overflow-y-auto">
-            <div className="flex flex-col gap-4 flex-1">
+            <div className="flex flex-col gap-2 p-4 md:p-6 rounded-xl flex-[1_1_0%] min-w-0 h-full overflow-hidden">
+            <div className="flex flex-col gap-4 flex-1 min-h-0 overflow-y-auto">
               <p className="text-sm leading-[18.62px] text-[#424242] w-full">Review the details of your brief before submitting.</p>
 
               <div className="flex flex-col gap-6">
@@ -131,7 +131,7 @@ export default function BriefReview() {
             </div>
 
             {/* Right Panel */}
-            <div className="flex flex-col gap-2.5 pb-5 pl-2.5 pt-2.5 flex-1 max-w-[540px] h-full overflow-hidden">
+            <div className="flex flex-col gap-2.5 pb-5 pl-2.5 pt-2.5 flex-[1_1_0%] min-w-0 h-full overflow-hidden">
             {/* Brief Preview - made smaller to prevent scroll */}
             <div className="bg-white flex flex-col gap-8 p-6 rounded-xl overflow-y-auto h-[89%]">
               <div className="flex flex-col gap-4">
@@ -201,20 +201,20 @@ export default function BriefReview() {
             </div>
 
             {/* Bottom actions */}
-            <div className="flex items-center w-full shrink-0">
+            <div className="flex items-center w-full shrink-0 min-w-0">
               <button
                 onClick={handleEdit}
-                className="w-[25%] h-8 bg-[#03b3e2] text-black hover:opacity-80 rounded-[28px] transition flex items-center justify-center"
+                className="w-[25%] min-w-0 h-8 px-2 md:px-4 bg-[#03b3e2] text-black hover:opacity-80 rounded-[28px] transition flex items-center justify-center"
               >
-                <span className="text-[13px] font-semibold leading-[18.62px] text-black">Edit brief</span>
+                <span className="text-[13px] font-semibold leading-[18.62px] text-black whitespace-nowrap truncate">Edit brief</span>
               </button>
-              <div className="w-[15%]" />
+              <div className="w-[15%] shrink-0" />
               <button
                 onClick={handleSubmit}
-                className="w-[60%] h-8 bg-[#ffb546] hover:opacity-90 rounded-[28px] flex items-center justify-center gap-[10px] transition"
+                className="w-[60%] min-w-0 h-8 px-2 md:px-4 bg-[#ffb546] hover:opacity-90 rounded-[28px] flex items-center justify-center gap-1 md:gap-[10px] transition"
               >
-                <span className="text-[13px] font-semibold leading-[18.62px] text-black">Submit brief</span>
-                <img src={createBriefArrowIcon} alt="" className="h-[14px] w-[15.567px]" />
+                <span className="text-[13px] font-semibold leading-[18.62px] text-black whitespace-nowrap truncate">Submit brief</span>
+                <img src={createBriefArrowIcon} alt="" className="h-[14px] w-[15.567px] shrink-0" />
               </button>
             </div>
             </div>
@@ -222,7 +222,7 @@ export default function BriefReview() {
         </div>
 
         {/* Tablet/iPad Layout - Vertical stack: Form -> Line -> Document -> Line -> Buttons */}
-        <div className="flex lg:hidden flex-col items-center w-full min-h-[85vh] overflow-y-auto px-[10%] pb-8 pt-4">
+        <div className="flex lg:hidden flex-col items-center w-full min-h-[85vh] overflow-y-auto px-4 md:px-6 lg:px-[10%] xl:px-[15%] pb-8 pt-4">
           {/* Form Section */}
           <div className="flex flex-col gap-2 rounded-xl w-full max-w-4xl">
             <div className="flex flex-col gap-4">
@@ -351,20 +351,19 @@ export default function BriefReview() {
           {/* Buttons section for mobile and tablet/iPad */}
           <div className="flex lg:hidden flex-col gap-2.5 w-full max-w-4xl pb-5">
             {/* Action Buttons - Order: Edit brief, Submit brief - In a row */}
-            <div className="flex flex-row items-center gap-2.5 w-full">
+            <div className="flex flex-row items-center gap-2.5 w-full min-w-0">
               <button
                 onClick={handleEdit}
-                className="h-8 px-4 bg-[#03b3e2] text-black hover:opacity-80 rounded-[28px] transition flex items-center justify-center flex-1"
+                className="flex-1 min-w-0 h-8 px-2 md:px-4 bg-[#03b3e2] text-black hover:opacity-80 rounded-[28px] transition flex items-center justify-center"
               >
-                <span className="text-[13px] font-semibold leading-[18.62px] text-black">Edit brief</span>
+                <span className="text-[13px] font-semibold leading-[18.62px] text-black whitespace-nowrap">Edit brief</span>
               </button>
-              <div className="w-[15%]" />
               <button
                 onClick={handleSubmit}
-                className="flex-1 h-8 px-4 bg-[#ffb546] hover:opacity-90 rounded-[28px] flex items-center justify-center gap-[10px] transition"
+                className="flex-1 min-w-0 h-8 px-2 md:px-4 bg-[#ffb546] hover:opacity-90 rounded-[28px] flex items-center justify-center gap-1 md:gap-[10px] transition"
               >
-                <span className="text-[13px] font-semibold leading-[18.62px] text-black">Submit brief</span>
-                <img src={createBriefArrowIcon} alt="" className="h-[14px] w-[15.567px]" />
+                <span className="text-[13px] font-semibold leading-[18.62px] text-black whitespace-nowrap">Submit brief</span>
+                <img src={createBriefArrowIcon} alt="" className="h-[14px] w-[15.567px] shrink-0" />
               </button>
             </div>
           </div>
