@@ -502,6 +502,8 @@ h1.h1-heading, .leading-tight {
     }
   }
 
+.board-card .roll,
+.card-brief,
 .card-item,
 .card-brief svg,
 .btn,
@@ -530,6 +532,43 @@ h1.h1-heading, .leading-tight {
 .btn:hover img,
 .btn:hover svg {
   transform: scale(1.2);
+}
+
+.board-card > p {
+    position: relative;
+    z-index: 2;
+}
+
+.board-card > img {
+  z-index: 2;
+}
+
+.board-card::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: orange;
+  transition: 0.3s ease-in-out;
+  transform: translateX(100%);
+}
+
+.board-o::after {
+  background-color: #fa9f41;
+}
+
+.board-b::after {
+  background-color: #36bbfb;
+}
+
+.board-c::after {
+  background-color: #18c3b1;
+}
+
+.board-card:hover::after {
+  transform: none;
 }
 
 @media only screen and (max-width: 767px) {

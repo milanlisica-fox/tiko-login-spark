@@ -45,7 +45,7 @@ export default function TikoDashboard() {
             {/* Header */}
             <div className="flex flex-col gap-1 md:text-center lg:text-left">
               <h1 className="h1-heading text-2xl md:text-h1 text-black">
-                Welcome back, Henry!
+                Welcome back, <span className="text-[#00C3B1]">Henry!</span>
               </h1>
               <p className="text-sm md:text-body text-black">
                 Create briefs, track progress, and keep momentum flowing.
@@ -55,7 +55,7 @@ export default function TikoDashboard() {
             {/* Briefs Section */}
             <div className="bg-white rounded-xl p-4 md:p-6 flex flex-col gap-4">
               <div className="flex flex-col gap-1">
-                <h2 className="text-[22px] font-bold leading-[29.26px] text-black">Briefs</h2>
+                <h2 className="text-[22px] font-bold leading-[29.26px] text-[#03b3e2]">Briefs</h2>
                 <p className="text-sm leading-[18.62px] text-black">
                   Kickstart your next project with clarity and ease
                 </p>
@@ -93,7 +93,7 @@ export default function TikoDashboard() {
                 <div className="flex flex-col sm:flex-row lg:flex-col gap-2.5 lg:w-[25%]">
                   <button 
                     onClick={() => navigate("/dashboard/briefs", { state: { createBrief: true } })}
-                    className="w-full sm:flex-1 lg:flex-none h-[48px] bg-[#ffb546] backdrop-blur-sm rounded-[28px] flex items-center justify-center gap-[10px] px-[24px] py-[18px] hover:opacity-90 transition"
+                    className="btn w-full sm:flex-1 lg:flex-none h-[48px] bg-[#ffb546] backdrop-blur-sm rounded-[28px] flex items-center justify-center gap-[10px] px-[24px] py-[18px] hover:opacity-90 transition"
                   >
                     <span className="text-base font-semibold leading-[23.94px] text-black whitespace-nowrap">
                       Create brief
@@ -116,7 +116,7 @@ export default function TikoDashboard() {
                       // Navigate after animation
                       navigate("/dashboard/calculator");
                     }}
-                    className="w-full sm:flex-1 lg:flex-none h-[48px] bg-[#03b3e2] backdrop-blur-sm rounded-[28px] flex items-center justify-center gap-[10px] px-[24px] py-[18px] hover:opacity-90 transition"
+                    className="btn w-full sm:flex-1 lg:flex-none h-[48px] bg-[#03b3e2] backdrop-blur-sm rounded-[28px] flex items-center justify-center gap-[10px] px-[24px] py-[18px] hover:opacity-90 transition"
                   >
                     <Calculator size={16} className="text-black" />
                     <span className="text-base font-semibold leading-[23.94px] text-black whitespace-nowrap">
@@ -125,7 +125,7 @@ export default function TikoDashboard() {
                   </button>
                   <button 
                     onClick={() => navigate("/dashboard/briefs")}
-                    className="w-full sm:flex-1 lg:flex-none h-[48px] bg-[#ffb546] backdrop-blur-sm rounded-[28px] flex items-center justify-center gap-[10px] px-[24px] py-[18px] hover:opacity-90 transition"
+                    className="btn w-full sm:flex-1 lg:flex-none h-[48px] bg-[#ffb546] backdrop-blur-sm rounded-[28px] flex items-center justify-center gap-[10px] px-[24px] py-[18px] hover:opacity-90 transition"
                   >
                     <span className="text-base font-semibold leading-[23.94px] text-black whitespace-nowrap">
                       View all
@@ -140,7 +140,7 @@ export default function TikoDashboard() {
             <div className="bg-white rounded-xl p-4 md:p-6 flex flex-col gap-4">
               <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3 sm:gap-0 pb-1">
                 <div className="flex flex-col gap-1">
-                  <h2 className="text-lg md:text-[22px] font-bold leading-[29.26px] text-black">Tracker</h2>
+                  <h2 className="text-lg md:text-[22px] font-bold leading-[29.26px] text-[#03b3e2]">Tracker</h2>
                   <p className="text-xs md:text-sm leading-[18.62px] text-black">
                     Get the full picture of your team's performance
                   </p>
@@ -212,7 +212,7 @@ export default function TikoDashboard() {
             <div className="bg-white rounded-xl p-4 md:p-6 flex flex-col gap-4">
               <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3 sm:gap-0 pb-1">
                 <div className="flex flex-col gap-1">
-                  <h2 className="text-[22px] font-bold leading-[29.26px] text-black">Projects</h2>
+                  <h2 className="text-[22px] font-bold leading-[29.26px] text-[#03b3e2]">Projects</h2>
                   <p className="text-sm leading-[18.62px] text-black">
                     Never miss a thing, keep things moving
                   </p>
@@ -230,7 +230,7 @@ export default function TikoDashboard() {
 
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
                 {/* Complete */}
-                <div className="bg-[#f9f9f9] rounded-xl p-5 flex flex-col gap-2.5 relative overflow-clip">
+                <div className="board-card board-b bg-[#f9f9f9] rounded-xl p-5 flex flex-col gap-2.5 relative overflow-clip">
                   <p className="text-sm font-bold leading-[18.62px] text-black">Complete</p>
                   <p className="text-[40px] font-medium leading-[45.6px] text-black">3</p>
                   <img 
@@ -241,13 +241,13 @@ export default function TikoDashboard() {
                   />
                 </div>
                 {/* In progress */}
-                <div className="bg-[#f9f9f9] rounded-xl p-5 flex flex-col gap-2.5 relative overflow-clip">
+                <div className="board-card board-c bg-[#f9f9f9] rounded-xl p-5 flex flex-col gap-2.5 relative overflow-clip">
                   <p className="text-sm font-bold leading-[18.62px] text-black">In progress</p>
                   <p className="text-[40px] font-medium leading-[45.6px] text-black">9</p>
                   <img src={projectsVector} alt="" className="absolute right-[-35px] sm:right-[-38px] md:right-[-80px] top-[-33px] sm:top-[-34px] md:top-[-36px] w-[150px] h-[185px] sm:w-[175px] sm:h-[190px] md:w-[212px] md:h-[189px]" />
                 </div>
                 {/* For review */}
-                <div className="bg-[#f9f9f9] rounded-xl p-5 flex flex-col gap-2.5 relative overflow-clip">
+                <div className="board-card board-o bg-[#f9f9f9] rounded-xl p-5 flex flex-col gap-2.5 relative overflow-clip">
                   <p className="text-sm font-bold leading-[18.62px] text-black">For review</p>
                   <p className="text-[40px] font-medium leading-[45.6px] text-black">4</p>
                   <img 
