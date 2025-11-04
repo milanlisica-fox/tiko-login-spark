@@ -133,7 +133,7 @@ export default function TrackerPage() {
               <p className="text-body text-black">Stay on top of spend, progress, and priorities—all in one place.</p>
             </div>
             <Button variant="outline" className="h-10 px-6 border-none bg-[#ffb546] hover:opacity-90 text-black whitespace-nowrap">
-              <span className="text-black font-semibold whitespace-nowrap">View all insights</span>
+              <span className="text-black font-semibold whitespace-nowrap">View all</span>
               <ChevronRight size={20} className="ml-2 text-black" />
             </Button>
           </div>
