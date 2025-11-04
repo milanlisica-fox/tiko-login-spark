@@ -196,6 +196,16 @@ export default function CalculatorPage() {
     navigate("/dashboard/briefs");
   };
 
+  const handleResetFilters = () => {
+    setSelectedAssetType([]);
+    setSelectedNDA([]);
+    setSelectedTaskType([]);
+    setFiltersApplied(false);
+    toast.success("Filters reset");
+  };
+
+  const hasActiveFilters = filtersApplied || selectedAssetType.length > 0 || selectedNDA.length > 0 || selectedTaskType.length > 0;
+
   const topbarRight = <DashboardTopbarRight />;
 
   const titleNode = (
@@ -222,30 +232,41 @@ export default function CalculatorPage() {
                 Build your asset list
               </h1>
               {/* Filter Bar */}
-              <button
-                onClick={() => setIsFilterOpen(true)}
-                className="bg-[#f1f1f3] rounded-[54px] px-4 md:px-6 py-2 flex items-center gap-2 md:gap-4 lg:gap-6 mb-6 hover:bg-[#e5e5e5] transition w-full"
-              >
-                <div className="flex flex-col gap-1 flex-1 min-w-0">
-                  <p className="text-sm font-bold leading-[18.62px] text-black truncate">Asset</p>
-                  <p className="text-xs leading-[15.96px] text-[#848487] truncate">{getAssetTypeDisplay()}</p>
-                </div>
-                <div className="w-px h-8 bg-[#e0e0e0] shrink-0" />
-                <div className="flex flex-col gap-1 flex-1 min-w-0">
-                  <p className="text-sm font-bold leading-[18.62px] text-black truncate">NDA</p>
-                  <p className="text-xs leading-[15.96px] text-[#848487] truncate">{getNDADisplay()}</p>
-                </div>
-                <div className="w-px h-8 bg-[#e0e0e0] shrink-0" />
-                <div className="flex flex-col gap-1 flex-1 min-w-0">
-                  <p className="text-sm font-bold leading-[18.62px] text-black truncate">Task</p>
-                  <p className="text-xs leading-[15.96px] text-[#848487] truncate">{getTaskTypeDisplay()}</p>
-                </div>
-                <div className="shrink-0">
-                  <div className="w-8 h-8 rounded-full bg-[#ffb546] flex items-center justify-center">
-                    <img src={imgFilterIcon} alt="Filter" className="w-4 h-4" />
+              <div className="flex items-center gap-2 mb-6">
+                <button
+                  onClick={() => setIsFilterOpen(true)}
+                  className="bg-[#f1f1f3] rounded-[54px] px-4 md:px-6 py-2 flex items-center gap-2 md:gap-4 lg:gap-6 hover:bg-[#e5e5e5] transition flex-1"
+                >
+                  <div className="flex flex-col gap-1 flex-1 min-w-0">
+                    <p className="text-sm font-bold leading-[18.62px] text-black truncate">Asset</p>
+                    <p className="text-xs leading-[15.96px] text-[#848487] truncate">{getAssetTypeDisplay()}</p>
                   </div>
-                </div>
-              </button>
+                  <div className="w-px h-8 bg-[#e0e0e0] shrink-0" />
+                  <div className="flex flex-col gap-1 flex-1 min-w-0">
+                    <p className="text-sm font-bold leading-[18.62px] text-black truncate">NDA</p>
+                    <p className="text-xs leading-[15.96px] text-[#848487] truncate">{getNDADisplay()}</p>
+                  </div>
+                  <div className="w-px h-8 bg-[#e0e0e0] shrink-0" />
+                  <div className="flex flex-col gap-1 flex-1 min-w-0">
+                    <p className="text-sm font-bold leading-[18.62px] text-black truncate">Task</p>
+                    <p className="text-xs leading-[15.96px] text-[#848487] truncate">{getTaskTypeDisplay()}</p>
+                  </div>
+                  <div className="shrink-0">
+                    <div className="w-8 h-8 rounded-full bg-[#ffb546] flex items-center justify-center">
+                      <img src={imgFilterIcon} alt="Filter" className="w-4 h-4" />
+                    </div>
+                  </div>
+                </button>
+                {hasActiveFilters && (
+                  <button
+                    onClick={handleResetFilters}
+                    className="bg-[#ffb546] rounded-[54px] px-4 md:px-6 py-2 flex items-center gap-2 hover:opacity-90 transition whitespace-nowrap"
+                  >
+                    <span className="text-sm font-semibold leading-[18.62px] text-black">Reset filters</span>
+                    <X size={16} className="text-black" />
+                  </button>
+                )}
+              </div>
 
               <div className="flex flex-col gap-5 w-full">
                 {filteredAssets.map((asset, index) => {
