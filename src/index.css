@@ -587,6 +587,19 @@ h1.h1-heading, .leading-tight {
   border-color: #18c3b1;
 }
 
+  .wavy-text span {
+    display: inline-block;
+    animation: wave 2s ease-in-out;
+    transform-origin: bottom center;
+  }
+
+  @keyframes wave {
+    0%, 100% { transform: translateY(0); }
+    25% { transform: translateY(-8px); }
+    50% { transform: translateY(4px); }
+    75% { transform: translateY(-3px); }
+    }
+
 @media only screen and (max-width: 767px) {
   .animate-scale2 {
     width: 110vh;

@@ -44,12 +44,29 @@ export default function TikoDashboard() {
         <div className="space-y-6 md:space-y-10">
             {/* Header */}
             <div className="flex flex-col gap-1 md:text-center lg:text-left">
-              <h1 className="h1-heading text-2xl md:text-h1 text-black">
-                Welcome back, <span className="text-[#00C3B1]">Henry!</span>
-              </h1>
-              <p className="text-sm md:text-body text-black">
-                Create briefs, track progress, and keep momentum flowing.
-              </p>
+               <h1 className="h1-heading text-2xl md:text-h1 text-black wavy-text">
+    {/* Animate "Welcome back," */}
+    {"Welcome back,".split("").map((char, i) => (
+      <span key={i} style={{ animationDelay: `${i * 0.1}s` }}>
+        {char === " " ? "\u00A0" : char}
+      </span>
+    ))}
+
+    {/* Animate " Henry!" separately */}
+    <span className="text-[#00C3B1]">
+      {" Henry!".split("").map((char, i) => (
+        <span
+          key={`henry-${i}`}
+          style={{ animationDelay: `${(i + 12) * 0.1}s` }}
+        >
+          {char}
+        </span>
+      ))}
+    </span>
+  </h1>
+            <p className="text-sm md:text-body text-black">
+              Create briefs, track progress, and keep momentum flowing.
+            </p>
             </div>
 
             {/* Briefs Section */}
