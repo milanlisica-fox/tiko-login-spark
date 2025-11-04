@@ -60,8 +60,8 @@ export default function HorizontalBarChart({
       </div>
 
       {/* Legend */}
-      <div className="flex flex-col gap-3">
-        <div className="flex flex-wrap items-center gap-3">
+      <div className="flex flex-col gap-3 items-center">
+        <div className="flex flex-wrap items-center gap-3 justify-center">
           {legend.map((item, index) => (
             <div key={index} className="flex items-center gap-1.5">
               <div className="w-2.5 h-2.5 rounded-[2.5px]" style={{ backgroundColor: item.color }} />
@@ -70,7 +70,7 @@ export default function HorizontalBarChart({
           ))}
         </div>
         {totalText && (
-          <p className="text-xs leading-[15.96px] text-black">
+          <p className="text-xs leading-[15.96px] text-black text-center">
             {totalText}
           </p>
         )}
