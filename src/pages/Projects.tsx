@@ -158,15 +158,15 @@ export default function ProjectsPage() {
       logoDotSrc={logoDot}
       TopbarRight={topbarRight}
     >
-      <div className="pt-[24px] md:pt-[40px] pb-[24px] md:pb-[40px]">
-        <div className="w-full max-w-7xl mx-auto px-4 md:px-6 lg:px-8 space-y-6 md:space-y-[30px]">
+      <div className="px-4 md:px-6 pt-[24px] md:pt-[40px] pb-[24px] md:pb-[40px]">
+        <div className="space-y-6 md:space-y-[30px]">
           <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
             <div className="flex flex-col gap-1">
               <h1 className="h1-heading text-2xl md:text-h1 text-black">Work at a glance</h1>
               <p className="text-sm md:text-base leading-[24px] text-black">A clear view of your team's active projects and priorities.</p>
             </div>
-            <Button variant="outline" className="h-10 px-6 border border-[#d9d9d9] bg-white hover:bg-gray-50 gap-2">
-              <span className="text-sm font-normal leading-[24px] text-black">See all projects</span>
+            <Button variant="outline" className="h-10 px-6 border-none bg-[#ffb546] hover:opacity-90 gap-2">
+              <span className="text-sm font-semibold leading-[24px] text-black">View all projects</span>
               <ArrowRight size={20} className="text-black" />
             </Button>
           </div>

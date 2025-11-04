@@ -104,10 +104,10 @@ export default function TikoDashboard() {
                     onClick={() => navigate("/dashboard/briefs")}
                     className="card-brief flex items-center gap-2 px-2 py-1 rounded-[28px] backdrop-blur-sm hover:bg-gray-50 transition self-start sm:self-auto"
                   >
-                    <span className="text-xs font-semibold leading-[23.94px] text-[#848487] whitespace-nowrap">
+                    <span className="text-xs font-semibold leading-[23.94px] text-black whitespace-nowrap">
                       View all briefs
                     </span>
-                    <ArrowRight size={16} className="text-[#848487]" />
+                    <ArrowRight size={16} className="text-black" />
                   </button>
                 </div>
 
@@ -151,10 +151,10 @@ export default function TikoDashboard() {
                     onClick={() => navigate("/dashboard/projects")}
                     className="card-brief flex items-center gap-2 px-2 py-1 rounded-[28px] backdrop-blur-sm hover:bg-gray-50 transition self-start sm:self-auto"
                   >
-                    <span className="text-xs font-semibold leading-[23.94px] text-[#848487] whitespace-nowrap">
+                    <span className="text-xs font-semibold leading-[23.94px] text-black whitespace-nowrap">
                       View all projects
                     </span>
-                    <ArrowRight size={16} className="text-[#848487]" />
+                    <ArrowRight size={16} className="text-black" />
                   </button>
                 </div>
 
@@ -179,10 +179,10 @@ export default function TikoDashboard() {
                   onClick={() => navigate("/dashboard/tracker")}
                   className="card-brief flex items-center gap-2 px-2 py-1 rounded-[28px] backdrop-blur-sm hover:bg-gray-50 transition self-start sm:self-auto"
                 >
-                  <span className="text-xs font-semibold leading-[23.94px] text-[#848487] whitespace-nowrap">
+                  <span className="text-xs font-semibold leading-[23.94px] text-black whitespace-nowrap">
                     View all insights
                   </span>
-                  <ArrowRight size={16} className="text-[#848487]" />
+                  <ArrowRight size={16} className="text-black" />
                 </button>
               </div>
 

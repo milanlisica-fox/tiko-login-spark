@@ -124,16 +124,16 @@ export default function TrackerPage() {
       logoDotSrc={logoDot}
       TopbarRight={topbarRight}
     >
-      <div className="pt-[40px] pb-[40px]">
-        <div className="w-full max-w-7xl mx-auto px-4 md:px-6 lg:px-8 space-y-6 md:space-y-10">
+      <div className="px-4 md:px-6 pt-[40px] pb-[40px]">
+        <div className="space-y-6 md:space-y-10">
           {/* Header */}
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <div className="flex flex-col gap-1">
               <h1 className="h1-heading text-xl md:text-h1 text-black">Real-time insights to guide your spend</h1>
               <p className="text-body text-black">Stay on top of spend, progress, and priorities—all in one place.</p>
             </div>
-            <Button variant="outline" className="h-10 px-6 border border-[#d9d9d9] bg-white hover:bg-gray-50 text-black whitespace-nowrap">
-              <span className="text-black whitespace-nowrap">All insights</span>
+            <Button variant="outline" className="h-10 px-6 border-none bg-[#ffb546] hover:opacity-90 text-black whitespace-nowrap">
+              <span className="text-black font-semibold whitespace-nowrap">View all insights</span>
               <ChevronRight size={20} className="ml-2 text-black" />
             </Button>
           </div>
