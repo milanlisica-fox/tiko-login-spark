@@ -42,76 +42,28 @@ export default function TikoDashboard() {
     >
       <div className="px-4 md:px-6 pt-[24px] md:pt-[40px] pb-[24px] md:pb-[40px]">
         <div className="space-y-6 md:space-y-10">
-            {/* Header with action buttons */}
-            <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 md:items-center">
-              <div className="flex flex-col gap-1 md:text-center lg:text-left">
-                <h1 className="h1-heading text-2xl md:text-h1 text-black">
-                  Welcome back, Henry!
-                </h1>
-                <p className="text-sm md:text-body text-black">
-                  Create briefs, track progress, and keep momentum flowing.
+            {/* Header */}
+            <div className="flex flex-col gap-1 md:text-center lg:text-left">
+              <h1 className="h1-heading text-2xl md:text-h1 text-black">
+                Welcome back, Henry!
+              </h1>
+              <p className="text-sm md:text-body text-black">
+                Create briefs, track progress, and keep momentum flowing.
+              </p>
+            </div>
+
+            {/* Briefs Section */}
+            <div className="bg-white rounded-xl p-4 md:p-6 flex flex-col gap-4">
+              <div className="flex flex-col gap-1">
+                <h2 className="text-[22px] font-bold leading-[29.26px] text-black">Briefs</h2>
+                <p className="text-sm leading-[18.62px] text-black">
+                  Kickstart your next project with clarity and ease
                 </p>
               </div>
 
-              <div className="flex flex-col sm:flex-row gap-2.5 items-stretch sm:items-center md:justify-center lg:justify-start">
-                <button
-                  onClick={async (e) => {
-                    const button = e.currentTarget;
-
-                    // Add bounce animation with brand color
-                    button.classList.add("animate-bounce-once", "bg-[#03b3e2]");
-
-                    // Wait for animation to complete (~600ms)
-                    await new Promise((resolve) => setTimeout(resolve, 600));
-
-                    // Remove the animation so it resets next time
-                    button.classList.remove("animate-bounce-once", "bg-[#03b3e2]");
-
-                    // Navigate after animation
-                    navigate("/dashboard/calculator");
-                  }}
-                  className="btn w-full sm:w-[216px] h-[48px] bg-[#03b3e2] backdrop-blur-sm rounded-[28px] flex items-center justify-center gap-[10px] px-[24px] py-[18px] hover:opacity-90 transition"
-                >
-                  <Calculator size={16} className="text-black" />
-                  <span className="text-base font-semibold leading-[23.94px] text-black whitespace-nowrap">
-                    Quick calculator
-                  </span>
-                </button>
-                <button 
-                  onClick={() => navigate("/dashboard/briefs", { state: { createBrief: true } })}
-                  className="btn w-full sm:w-[216px] h-[48px] backdrop-blur-[6px] backdrop-filter bg-[#ffb546] px-[24px] py-[18px] rounded-[28px] flex items-center justify-center gap-[10px] hover:opacity-90 transition"
-                >
-                  <span className="text-[16px] font-semibold leading-[23.94px] text-black whitespace-nowrap">
-                    Create brief
-                  </span>
-                  <img src={createBriefArrowIcon} alt="" className="h-[14px] w-[15.567px]" />
-                </button>
-              </div>
-            </div>
-
-            {/* Briefs and Projects Row */}
-            <div className="flex flex-col lg:flex-row gap-5">
-              {/* Briefs Section */}
-              <div className="flex-1 lg:flex-[0.7] bg-white rounded-xl p-4 md:p-6 flex flex-col gap-4">
-                <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3 sm:gap-0 pb-1">
-                  <div className="flex flex-col gap-1">
-                    <h2 className="text-[22px] font-bold leading-[29.26px] text-black">Briefs</h2>
-                    <p className="text-sm leading-[18.62px] text-black">
-                      Kickstart your next project with clarity and ease
-                    </p>
-                  </div>
-                  <button 
-                    onClick={() => navigate("/dashboard/briefs")}
-                    className="card-brief flex items-center gap-2 px-2 py-1 rounded-[28px] backdrop-blur-sm hover:bg-gray-50 transition self-start sm:self-auto bg-[#ffb546]"
-                  >
-                    <span className="text-xs font-semibold leading-[23.94px] text-black whitespace-nowrap">
-                      View all briefs
-                    </span>
-                    <ArrowRight size={16} className="text-black" />
-                  </button>
-                </div>
-
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+              <div className="flex flex-col lg:flex-row gap-4">
+                {/* Cards Section - 75% on desktop */}
+                <div className="flex-1 lg:flex-[3] grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
                   {/* Draft briefs */}
                   <div className="flex-1 bg-[#f9f9f9] rounded-[12px] p-4 md:p-[20px] flex flex-col gap-[10px] relative overflow-clip">
                     <p className="text-xs md:text-sm font-bold leading-[18.62px] text-black">Draft briefs</p>
@@ -136,32 +88,50 @@ export default function TikoDashboard() {
                     <img src={briefsVector3} alt="" className="absolute right-[-10px] md:right-[-20px] top-[10px] md:top-[20px] w-6 h-6 md:w-[45px] md:h-10" />
                   </button>
                 </div>
-              </div>
 
-              {/* Projects Section */}
-              <div className="flex-1 lg:flex-[0.3] bg-white rounded-xl p-4 md:p-6 flex flex-col gap-4">
-                <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3 sm:gap-0 pb-1">
-                  <div className="flex flex-col gap-1">
-                    <h2 className="text-[22px] font-bold leading-[29.26px] text-black">Projects</h2>
-                    <p className="text-sm leading-[18.62px] text-black">
-                      Never miss a thing, keep things moving
-                    </p>
-                  </div>
+                {/* Buttons Section - 25% on desktop */}
+                <div className="flex flex-col sm:flex-row lg:flex-col gap-2.5 lg:w-[25%]">
                   <button 
-                    onClick={() => navigate("/dashboard/projects")}
-                    className="card-brief flex items-center gap-2 px-2 py-1 rounded-[28px] backdrop-blur-sm hover:bg-gray-50 transition self-start sm:self-auto bg-[#ffb546]"
+                    onClick={() => navigate("/dashboard/briefs", { state: { createBrief: true } })}
+                    className="w-full sm:flex-1 lg:flex-none h-[48px] bg-[#ffb546] backdrop-blur-sm rounded-[28px] flex items-center justify-center gap-[10px] px-[24px] py-[18px] hover:opacity-90 transition"
                   >
-                    <span className="text-xs font-semibold leading-[23.94px] text-black whitespace-nowrap">
-                      View all projects
+                    <span className="text-base font-semibold leading-[23.94px] text-black whitespace-nowrap">
+                      Create brief
+                    </span>
+                    <img src={createBriefArrowIcon} alt="" className="h-[14px] w-[15.567px]" />
+                  </button>
+                  <button
+                    onClick={async (e) => {
+                      const button = e.currentTarget;
+
+                      // Add bounce animation with brand color
+                      button.classList.add("animate-bounce-once", "bg-[#03b3e2]");
+
+                      // Wait for animation to complete (~600ms)
+                      await new Promise((resolve) => setTimeout(resolve, 600));
+
+                      // Remove the animation so it resets next time
+                      button.classList.remove("animate-bounce-once", "bg-[#03b3e2]");
+
+                      // Navigate after animation
+                      navigate("/dashboard/calculator");
+                    }}
+                    className="w-full sm:flex-1 lg:flex-none h-[48px] bg-[#03b3e2] backdrop-blur-sm rounded-[28px] flex items-center justify-center gap-[10px] px-[24px] py-[18px] hover:opacity-90 transition"
+                  >
+                    <Calculator size={16} className="text-black" />
+                    <span className="text-base font-semibold leading-[23.94px] text-black whitespace-nowrap">
+                      Quick calculator
+                    </span>
+                  </button>
+                  <button 
+                    onClick={() => navigate("/dashboard/briefs")}
+                    className="w-full sm:flex-1 lg:flex-none h-[48px] bg-[#ffb546] backdrop-blur-sm rounded-[28px] flex items-center justify-center gap-[10px] px-[24px] py-[18px] hover:opacity-90 transition"
+                  >
+                    <span className="text-base font-semibold leading-[23.94px] text-black whitespace-nowrap">
+                      View all
                     </span>
                     <ArrowRight size={16} className="text-black" />
                   </button>
-                </div>
-
-                <div className="bg-[#f9f9f9] rounded-xl p-5 flex flex-col gap-2.5 relative overflow-hidden">
-                  <p className="text-sm font-bold leading-[18.62px] text-black">In progress</p>
-                  <p className="text-[40px] font-medium leading-[45.6px] text-black">10</p>
-                  <img src={projectsVector} alt="" className="absolute right-[-23px] md:right-[-46px] top-[-18px] md:top-[-36px] w-[120px] h-[107px] md:w-[212px] md:h-[189px]" />
                 </div>
               </div>
             </div>
@@ -177,12 +147,12 @@ export default function TikoDashboard() {
                 </div>
                 <button 
                   onClick={() => navigate("/dashboard/tracker")}
-                  className="card-brief flex items-center gap-2 px-2 py-1 rounded-[28px] backdrop-blur-sm hover:bg-gray-50 transition self-start sm:self-auto bg-[#ffb546]"
+                  className="hidden sm:flex card-brief items-center gap-2 px-4 py-2 rounded-[28px] backdrop-blur-sm hover:bg-gray-50 transition self-auto bg-[#ffb546]"
                 >
-                  <span className="text-xs font-semibold leading-[23.94px] text-black whitespace-nowrap">
-                    View all insights
+                  <span className="text-sm font-semibold leading-[23.94px] text-black whitespace-nowrap">
+                    View all
                   </span>
-                  <ArrowRight size={16} className="text-black" />
+                  <ArrowRight size={18} className="text-black" />
                 </button>
               </div>
 
@@ -225,6 +195,80 @@ export default function TikoDashboard() {
                   />
                 </div>
               </div>
+              
+              {/* View all button for mobile */}
+              <button 
+                onClick={() => navigate("/dashboard/tracker")}
+                className="flex sm:hidden items-center justify-center gap-2 px-4 py-2 rounded-[28px] backdrop-blur-sm hover:bg-gray-50 transition bg-[#ffb546]"
+              >
+                <span className="text-sm font-semibold leading-[23.94px] text-black whitespace-nowrap">
+                  View all
+                </span>
+                <ArrowRight size={18} className="text-black" />
+              </button>
+            </div>
+
+            {/* Projects Section */}
+            <div className="bg-white rounded-xl p-4 md:p-6 flex flex-col gap-4">
+              <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3 sm:gap-0 pb-1">
+                <div className="flex flex-col gap-1">
+                  <h2 className="text-[22px] font-bold leading-[29.26px] text-black">Projects</h2>
+                  <p className="text-sm leading-[18.62px] text-black">
+                    Never miss a thing, keep things moving
+                  </p>
+                </div>
+                <button 
+                  onClick={() => navigate("/dashboard/projects")}
+                  className="hidden sm:flex card-brief items-center gap-2 px-4 py-2 rounded-[28px] backdrop-blur-sm hover:bg-gray-50 transition self-auto bg-[#ffb546]"
+                >
+                  <span className="text-sm font-semibold leading-[23.94px] text-black whitespace-nowrap">
+                    View all
+                  </span>
+                  <ArrowRight size={18} className="text-black" />
+                </button>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+                {/* Complete */}
+                <div className="bg-[#f9f9f9] rounded-xl p-5 flex flex-col gap-2.5 relative overflow-clip">
+                  <p className="text-sm font-bold leading-[18.62px] text-black">Complete</p>
+                  <p className="text-[40px] font-medium leading-[45.6px] text-black">3</p>
+                  <img 
+                    src={projectsVector} 
+                    alt="" 
+                    className="absolute right-[-35px] sm:right-[-38px] md:right-[-80px] top-[-33px] sm:top-[-34px] md:top-[-36px] w-[150px] h-[185px] sm:w-[175px] sm:h-[190px] md:w-[212px] md:h-[189px]"
+                    style={{ filter: 'brightness(0) saturate(100%) invert(67%) sepia(89%) saturate(2146%) hue-rotate(169deg) brightness(98%) contrast(101%)' }}
+                  />
+                </div>
+                {/* In progress */}
+                <div className="bg-[#f9f9f9] rounded-xl p-5 flex flex-col gap-2.5 relative overflow-clip">
+                  <p className="text-sm font-bold leading-[18.62px] text-black">In progress</p>
+                  <p className="text-[40px] font-medium leading-[45.6px] text-black">9</p>
+                  <img src={projectsVector} alt="" className="absolute right-[-35px] sm:right-[-38px] md:right-[-80px] top-[-33px] sm:top-[-34px] md:top-[-36px] w-[150px] h-[185px] sm:w-[175px] sm:h-[190px] md:w-[212px] md:h-[189px]" />
+                </div>
+                {/* For review */}
+                <div className="bg-[#f9f9f9] rounded-xl p-5 flex flex-col gap-2.5 relative overflow-clip">
+                  <p className="text-sm font-bold leading-[18.62px] text-black">For review</p>
+                  <p className="text-[40px] font-medium leading-[45.6px] text-black">4</p>
+                  <img 
+                    src={projectsVector} 
+                    alt="" 
+                    className="absolute right-[-35px] sm:right-[-38px] md:right-[-80px] top-[-33px] sm:top-[-34px] md:top-[-36px] w-[150px] h-[185px] sm:w-[175px] sm:h-[190px] md:w-[212px] md:h-[189px]"
+                    style={{ filter: 'brightness(0) saturate(100%) invert(71%) sepia(95%) saturate(1352%) hue-rotate(329deg) brightness(102%) contrast(96%)' }}
+                  />
+                </div>
+              </div>
+              
+              {/* View all button for mobile */}
+              <button 
+                onClick={() => navigate("/dashboard/projects")}
+                className="flex sm:hidden items-center justify-center gap-2 px-4 py-2 rounded-[28px] backdrop-blur-sm hover:bg-gray-50 transition bg-[#ffb546]"
+              >
+                <span className="text-sm font-semibold leading-[23.94px] text-black whitespace-nowrap">
+                  View all
+                </span>
+                <ArrowRight size={18} className="text-black" />
+              </button>
             </div>
         </div>
       </div>

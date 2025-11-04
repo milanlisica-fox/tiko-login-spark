@@ -166,7 +166,7 @@ export default function ProjectsPage() {
               <p className="text-sm md:text-base leading-[24px] text-black">A clear view of your team's active projects and priorities.</p>
             </div>
             <Button variant="outline" className="h-10 px-6 border-none bg-[#ffb546] hover:opacity-90 gap-2">
-              <span className="text-sm font-semibold leading-[24px] text-black">View all projects</span>
+              <span className="text-sm font-semibold leading-[24px] text-black">View all</span>
               <ArrowRight size={20} className="text-black" />
             </Button>
           </div>
