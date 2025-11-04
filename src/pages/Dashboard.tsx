@@ -102,7 +102,7 @@ export default function TikoDashboard() {
                   </div>
                   <button 
                     onClick={() => navigate("/dashboard/briefs")}
-                    className="card-brief flex items-center gap-2 px-2 py-1 rounded-[28px] backdrop-blur-sm hover:bg-gray-50 transition self-start sm:self-auto"
+                    className="card-brief flex items-center gap-2 px-2 py-1 rounded-[28px] backdrop-blur-sm hover:bg-gray-50 transition self-start sm:self-auto bg-[#ffb546]"
                   >
                     <span className="text-xs font-semibold leading-[23.94px] text-black whitespace-nowrap">
                       View all briefs
@@ -149,7 +149,7 @@ export default function TikoDashboard() {
                   </div>
                   <button 
                     onClick={() => navigate("/dashboard/projects")}
-                    className="card-brief flex items-center gap-2 px-2 py-1 rounded-[28px] backdrop-blur-sm hover:bg-gray-50 transition self-start sm:self-auto"
+                    className="card-brief flex items-center gap-2 px-2 py-1 rounded-[28px] backdrop-blur-sm hover:bg-gray-50 transition self-start sm:self-auto bg-[#ffb546]"
                   >
                     <span className="text-xs font-semibold leading-[23.94px] text-black whitespace-nowrap">
                       View all projects
@@ -177,7 +177,7 @@ export default function TikoDashboard() {
                 </div>
                 <button 
                   onClick={() => navigate("/dashboard/tracker")}
-                  className="card-brief flex items-center gap-2 px-2 py-1 rounded-[28px] backdrop-blur-sm hover:bg-gray-50 transition self-start sm:self-auto"
+                  className="card-brief flex items-center gap-2 px-2 py-1 rounded-[28px] backdrop-blur-sm hover:bg-gray-50 transition self-start sm:self-auto bg-[#ffb546]"
                 >
                   <span className="text-xs font-semibold leading-[23.94px] text-black whitespace-nowrap">
                     View all insights
