@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { Home, FileText, Folder, BarChart2, LogOut, Bell, ChevronDown, ArrowRight, Coins, ChevronRight, Clock, Bot, Target, AlertTriangle, TrendingUp, CheckCircle2, DollarSign, Menu, Wallet, HelpCircle } from "lucide-react";
 import { toast } from "sonner";
@@ -86,6 +86,29 @@ export default function TrackerPage() {
 
   // nav items centralized via DashboardLayout
   const { activeName } = useActiveNav();
+
+  // Scroll to top when tab changes
+  useEffect(() => {
+    // Use requestAnimationFrame for immediate scroll without delay
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        // Find the actual scroll container (the section element in DashboardLayout)
+        const scrollContainer = document.querySelector('section.overflow-y-auto') ||
+                               document.querySelector('section.flex-1.overflow-y-auto') ||
+                               document.querySelector('main section') ||
+                               document.querySelector('.overflow-y-auto');
+        
+        if (scrollContainer) {
+          scrollContainer.scrollTop = 0;
+        } else {
+          // Fallback to window scroll
+          window.scrollTo(0, 0);
+          document.documentElement.scrollTop = 0;
+          document.body.scrollTop = 0;
+        }
+      });
+    });
+  }, [activeTab]);
 
   const handleAskTiko = () => {
     if (tikoQuestion.trim()) {
@@ -557,63 +580,97 @@ export default function TrackerPage() {
       TopbarRight={topbarRight}
     >
       <div className="px-4 md:px-6 pt-[40px] pb-[40px] ">
-        <div className="space-y-6 md:space-y-10">
-          {/* Header */}
-          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-            <div className="flex flex-col gap-1">
-              <h1 className="h1-heading text-xl md:text-h1 text-black">Real-time insights to guide your spend</h1>
-              <p className="text-body text-black">Stay on top of spend, progress, and priorities—all in one place.</p>
+        {/* Sticky Header and Tabs */}
+        <div className="sticky top-0 z-50 bg-[#f9f9f9] -mx-4 md:-mx-6 px-4 md:px-6 pt-[40px] pb-4 -mt-[40px] border-b border-[#ececec]">
+          <div className="space-y-6">
+            {/* Header */}
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+              <div className="flex flex-col gap-1">
+                <h1 className="h1-heading text-xl md:text-h1 text-black">Real-time insights to guide your spend</h1>
+                <p className="text-body text-black">Stay on top of spend, progress, and priorities—all in one place.</p>
+              </div>
+              <Button variant="outline" className="h-10 px-6 border-none bg-[#ffb546] hover:opacity-90 text-black whitespace-nowrap">
+                <span className="text-black font-semibold whitespace-nowrap">View all</span>
+                <ChevronRight size={20} className="ml-2 text-black" />
+              </Button>
             </div>
-            <Button variant="outline" className="h-10 px-6 border-none bg-[#ffb546] hover:opacity-90 text-black whitespace-nowrap">
-              <span className="text-black font-semibold whitespace-nowrap">View all</span>
-              <ChevronRight size={20} className="ml-2 text-black" />
-            </Button>
-          </div>
 
-          {/* Tabs */}
+            {/* Tabs */}
+            <Tabs value={activeTab} onValueChange={(value) => {
+              // Scroll to top immediately before navigation
+              const scrollContainer = document.querySelector('section.overflow-y-auto') ||
+                                   document.querySelector('section.flex-1.overflow-y-auto') ||
+                                   document.querySelector('main section') ||
+                                   document.querySelector('.overflow-y-auto');
+              if (scrollContainer) {
+                scrollContainer.scrollTop = 0;
+              } else {
+                window.scrollTo(0, 0);
+                document.documentElement.scrollTop = 0;
+                document.body.scrollTop = 0;
+              }
+              navigate(`/dashboard/tracker?tab=${value}`, { replace: true });
+            }} className="w-full">
+              <TabsList className="inline-flex h-10 items-center justify-start rounded-md bg-transparent p-0 text-muted-foreground border-b border-[#ececec] w-full">
+                <TabsTrigger 
+                  value="leaderboard" 
+                  className="inline-flex items-center justify-center whitespace-nowrap rounded-none px-4 py-2 text-sm font-medium ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:bg-transparent data-[state=active]:text-[#03b3e2] data-[state=active]:shadow-none border-b-2 border-transparent data-[state=active]:border-[#03b3e2]"
+                >
+                  Leaderboard
+                </TabsTrigger>
+                <TabsTrigger 
+                  value="brief-quality" 
+                  className="inline-flex items-center justify-center whitespace-nowrap rounded-none px-4 py-2 text-sm font-medium ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:bg-transparent data-[state=active]:text-[#8092dc] data-[state=active]:shadow-none border-b-2 border-transparent data-[state=active]:border-[#8092dc]"
+                >
+                  Brief quality
+                </TabsTrigger>
+                <TabsTrigger 
+                  value="project-performance" 
+                  className="inline-flex items-center justify-center whitespace-nowrap rounded-none px-4 py-2 text-sm font-medium ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:bg-transparent data-[state=active]:text-[#ffb546] data-[state=active]:shadow-none border-b-2 border-transparent data-[state=active]:border-[#ffb546]"
+                >
+                  Project performance
+                </TabsTrigger>
+                <TabsTrigger 
+                  value="budget" 
+                  className="inline-flex items-center justify-center whitespace-nowrap rounded-none px-4 py-2 text-sm font-medium ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:bg-transparent data-[state=active]:text-[#0177c7] data-[state=active]:shadow-none border-b-2 border-transparent data-[state=active]:border-[#0177c7]"
+                >
+                  Budget
+                </TabsTrigger>
+                <TabsTrigger 
+                  value="predictive-analytics" 
+                  className="inline-flex items-center justify-center whitespace-nowrap rounded-none px-4 py-2 text-sm font-medium ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:bg-transparent data-[state=active]:text-[#ff4337] data-[state=active]:shadow-none border-b-2 border-transparent data-[state=active]:border-[#ff4337]"
+                >
+                  Predictive Analytics & Insights
+                </TabsTrigger>
+              </TabsList>
+            </Tabs>
+          </div>
+        </div>
+
+        <div className="space-y-6 md:space-y-10">
+          {/* Tabs Content */}
           <Tabs value={activeTab} onValueChange={(value) => {
+            // Scroll to top immediately before navigation
+            const scrollContainer = document.querySelector('section.overflow-y-auto') ||
+                                 document.querySelector('section.flex-1.overflow-y-auto') ||
+                                 document.querySelector('main section') ||
+                                 document.querySelector('.overflow-y-auto');
+            if (scrollContainer) {
+              scrollContainer.scrollTop = 0;
+            } else {
+              window.scrollTo(0, 0);
+              document.documentElement.scrollTop = 0;
+              document.body.scrollTop = 0;
+            }
             navigate(`/dashboard/tracker?tab=${value}`, { replace: true });
           }} className="w-full">
-            <TabsList className="inline-flex h-10 items-center justify-start rounded-md bg-transparent p-0 text-muted-foreground border-b border-[#ececec] w-full">
-              <TabsTrigger 
-                value="leaderboard" 
-                className="inline-flex items-center justify-center whitespace-nowrap rounded-none px-4 py-2 text-sm font-medium ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:bg-transparent data-[state=active]:text-[#03b3e2] data-[state=active]:shadow-none border-b-2 border-transparent data-[state=active]:border-[#03b3e2]"
-              >
-                Leaderboard
-              </TabsTrigger>
-              <TabsTrigger 
-                value="brief-quality" 
-                className="inline-flex items-center justify-center whitespace-nowrap rounded-none px-4 py-2 text-sm font-medium ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:bg-transparent data-[state=active]:text-[#8092dc] data-[state=active]:shadow-none border-b-2 border-transparent data-[state=active]:border-[#8092dc]"
-              >
-                Brief quality
-              </TabsTrigger>
-              <TabsTrigger 
-                value="project-performance" 
-                className="inline-flex items-center justify-center whitespace-nowrap rounded-none px-4 py-2 text-sm font-medium ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:bg-transparent data-[state=active]:text-[#ffb546] data-[state=active]:shadow-none border-b-2 border-transparent data-[state=active]:border-[#ffb546]"
-              >
-                Project performance
-              </TabsTrigger>
-              <TabsTrigger 
-                value="budget" 
-                className="inline-flex items-center justify-center whitespace-nowrap rounded-none px-4 py-2 text-sm font-medium ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:bg-transparent data-[state=active]:text-[#0177c7] data-[state=active]:shadow-none border-b-2 border-transparent data-[state=active]:border-[#0177c7]"
-              >
-                Budget
-              </TabsTrigger>
-              <TabsTrigger 
-                value="predictive-analytics" 
-                className="inline-flex items-center justify-center whitespace-nowrap rounded-none px-4 py-2 text-sm font-medium ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:bg-transparent data-[state=active]:text-[#ff4337] data-[state=active]:shadow-none border-b-2 border-transparent data-[state=active]:border-[#ff4337]"
-              >
-                Predictive Analytics & Insights
-              </TabsTrigger>
-            </TabsList>
-
             {/* Leaderboard Tab Content */}
             <TabsContent value="leaderboard" className="mt-6">
               <div className="space-y-6 md:space-y-10">
           {/* Teams' Leaderboard */}
           <div className="space-y-4">
             <h2 className="text-[22px] font-bold leading-[29.26px] text-black">Teams' Leaderboard</h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5">
+            <div className="px-[20%] lg:px-0 space-y-5 lg:space-y-0 lg:grid lg:grid-cols-3 lg:gap-5">
                     {teamsData.filter((team) => team.title !== "Omni & Digital" && team.title !== "IMG").map((team) => (
                 <Card key={team.id} className="border border-[#ececec] bg-white relative">
                   {team.isMyTeam && (
@@ -715,65 +772,66 @@ export default function TrackerPage() {
 
             {/* Brief Quality Tab Content */}
             <TabsContent value="brief-quality" className="mt-6">
-              <div className="space-y-6">
-                {/* Row 1: Brief quality score - All categories, Number of iterations, Details provided in the brief */}
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-                  {/* Brief quality score - All categories */}
+              {/* Desktop: Grid Layout */}
+              <div className="hidden lg:block space-y-6">
+                {/* First Row: 3 equal columns */}
+                <div className="grid grid-cols-3 gap-5">
+                {/* 1. Brief quality score - All categories */}
                   <Card className="border border-[#ececec] bg-white">
                     <CardHeader className="pb-3">
-                      <CardTitle className="text-base font-bold leading-[21.28px] text-black">Brief quality score - All categories</CardTitle>
+                    <CardTitle className="text-base font-bold leading-[21.28px] text-black">Brief quality score - All categories</CardTitle>
                     </CardHeader>
-                    <CardContent className="space-y-6">
-                      <ChartContainer config={qualityScoreConfig} className="h-[250px] md:h-[200px] w-full">
+                  <CardContent className="space-y-6">
+                    <ChartContainer config={qualityScoreConfig} className="h-[250px] md:h-[200px] w-full">
                         <ResponsiveContainer width="100%" height="100%">
-                          <AreaChart data={qualityScoreData} margin={{ left: 10, right: 10, top: 10, bottom: 20 }}>
-                            <defs>
-                              <linearGradient id="qualityGradient" x1="0" y1="0" x2="0" y2="1">
-                                <stop offset="5%" stopColor="#0177c7" stopOpacity={0.3} />
-                                <stop offset="95%" stopColor="#0177c7" stopOpacity={0} />
-                              </linearGradient>
-                            </defs>
-                            <CartesianGrid strokeDasharray="3 3" stroke="#e0e0e0" vertical={true} />
+                        <AreaChart data={qualityScoreData} margin={{ left: 10, right: 10, top: 10, bottom: 20 }}>
+                          <defs>
+                            <linearGradient id="qualityGradient" x1="0" y1="0" x2="0" y2="1">
+                              <stop offset="5%" stopColor="#0177c7" stopOpacity={0.3} />
+                              <stop offset="95%" stopColor="#0177c7" stopOpacity={0} />
+                            </linearGradient>
+                          </defs>
+                          <CartesianGrid strokeDasharray="3 3" stroke="#e0e0e0" vertical={true} />
                             <XAxis 
-                              dataKey="quarter" 
+                            dataKey="quarter" 
                               axisLine={false}
                               tickLine={false}
-                              tick={{ fill: "#646464", fontSize: 12 }}
-                              label={{ value: "Quarter", position: "insideBottom", offset: -5, style: { fill: "#646464", fontSize: 12 } }}
+                            tick={{ fill: "#646464", fontSize: 12 }}
+                            label={{ value: "Quarter", position: "insideBottom", offset: -5, style: { fill: "#646464", fontSize: 12 } }}
                             />
                             <YAxis 
                               axisLine={false}
                               tickLine={false}
-                              domain={[70, 95]}
-                              ticks={[70, 75, 80, 85, 90, 95]}
-                              tick={{ fill: "#646464", fontSize: 12 }}
-                              label={{ value: "Quality score (%)", angle: -90, position: "insideLeft", offset: 15, style: { fill: "#646464", fontSize: 12, textAnchor: "middle" } }}
+                            domain={[70, 95]}
+                            ticks={[70, 75, 80, 85, 90, 95]}
+                            tick={{ fill: "#646464", fontSize: 12 }}
+                            label={{ value: "Quality score (%)", angle: -90, position: "insideLeft", offset: 15, style: { fill: "#646464", fontSize: 12, textAnchor: "middle" } }}
                             />
                             <ChartTooltip content={<ChartTooltipContent className="bg-white [&_span]:text-black [&_div]:text-black" />} />
-                            <Area
-                              type="monotone"
-                              dataKey="score"
-                              stroke="#0177c7"
-                              strokeWidth={2}
-                              fill="url(#qualityGradient)"
-                            />
-                          </AreaChart>
+                          <Area
+                            type="monotone"
+                            dataKey="score"
+                            stroke="#0177c7"
+                            strokeWidth={2}
+                            fill="url(#qualityGradient)"
+                          />
+                        </AreaChart>
                         </ResponsiveContainer>
                       </ChartContainer>
-                      
-                      {/* Insight section */}
-                      <div className="flex flex-col gap-1 pt-2 pr-4 pb-2 pl-4 rounded-xl bg-[#F1F1F380]">
-                        <p className="text-xs leading-[15.96px] font-bold text-[#00C3B1]">
-                          Insight
-                        </p>
-                        <p className="text-xs leading-[18px] font-normal text-black">
-                          Brief quality score has improved to 89% with consistent upward trend
-                        </p>
-                      </div>
+                    
+                    {/* Insight section */}
+                    <div className="flex flex-col gap-1 pt-2 pr-4 pb-2 pl-4 rounded-xl bg-[#F1F1F380]">
+                      <p className="text-xs leading-[15.96px] font-bold text-[#00C3B1]">
+                        Insight
+                      </p>
+                      <p className="text-xs leading-[18px] font-normal text-black">
+                        Brief quality score has improved to 89% with consistent upward trend
+                      </p>
+                    </div>
                     </CardContent>
                   </Card>
 
-                  {/* Number of Iterations */}
+                {/* 2. Number of Iterations */}
                   <Card className="border border-[#ececec] bg-white">
                     <CardHeader className="pb-3">
                       <CardTitle className="text-base font-bold leading-[21.28px] text-black">Number of iterations</CardTitle>
@@ -816,7 +874,7 @@ export default function TrackerPage() {
                     </CardContent>
                   </Card>
 
-                  {/* Details Provided in Brief */}
+                {/* 3. Details Provided in Brief */}
                   <Card className="border border-[#ececec] bg-white">
                     <CardHeader className="pb-3">
                       <CardTitle className="text-base font-bold leading-[21.28px] text-black">Details provided in the brief</CardTitle>
@@ -824,14 +882,14 @@ export default function TrackerPage() {
                     <CardContent className="space-y-4">
                       <ChartContainer config={detailsProvidedConfig} className="h-[250px] w-full">
                         <ResponsiveContainer width="100%" height="100%">
-                          <AreaChart data={detailsProvidedData} margin={{ left: 10, right: 10, top: 10, bottom: 20 }}>
-                            <defs>
-                              <linearGradient id="detailsProvidedGradient" x1="0" y1="0" x2="0" y2="1">
-                                <stop offset="5%" stopColor="#0177c7" stopOpacity={0.3} />
-                                <stop offset="95%" stopColor="#0177c7" stopOpacity={0} />
-                              </linearGradient>
-                            </defs>
-                            <CartesianGrid strokeDasharray="3 3" stroke="#e0e0e0" vertical={true} />
+                        <AreaChart data={detailsProvidedData} margin={{ left: 10, right: 10, top: 10, bottom: 20 }}>
+                          <defs>
+                            <linearGradient id="detailsProvidedGradient" x1="0" y1="0" x2="0" y2="1">
+                              <stop offset="5%" stopColor="#0177c7" stopOpacity={0.3} />
+                              <stop offset="95%" stopColor="#0177c7" stopOpacity={0} />
+                            </linearGradient>
+                          </defs>
+                          <CartesianGrid strokeDasharray="3 3" stroke="#e0e0e0" vertical={true} />
                             <XAxis 
                               dataKey="period" 
                               axisLine={false}
@@ -846,130 +904,428 @@ export default function TrackerPage() {
                               tick={{ fill: "#646464", fontSize: 11 }}
                             />
                             <ChartTooltip content={<ChartTooltipContent className="bg-white [&_span]:text-black [&_div]:text-black" />} />
-                            <Area
-                              type="monotone"
-                              dataKey="fields"
-                              stroke="#0177c7"
-                              strokeWidth={2}
-                              fill="url(#detailsProvidedGradient)"
-                            />
-                          </AreaChart>
-                        </ResponsiveContainer>
-                      </ChartContainer>
-                    </CardContent>
-                  </Card>
+                          <Area
+                            type="monotone"
+                            dataKey="fields"
+                            stroke="#0177c7"
+                            strokeWidth={2}
+                            fill="url(#detailsProvidedGradient)"
+                          />
+                        </AreaChart>
+                      </ResponsiveContainer>
+                    </ChartContainer>
+                  </CardContent>
+                </Card>
                 </div>
 
-                {/* Row 2: Right first-time (25%), Number of Briefs per Category (25%), Brief Quality Score (50%) */}
-                <div className="grid grid-cols-1 md:grid-cols-4 gap-5">
-                  {/* Right First-Time Section - 25% */}
-                  <Card className="border border-[#ececec] bg-white md:col-span-1">
-                    <CardHeader className="pb-3">
-                      <CardTitle className="text-base font-bold leading-[21.28px] text-black">Right first-time</CardTitle>
-                    </CardHeader>
-                    <CardContent className="space-y-4">
-                      <div className="flex items-center justify-center">
-                        <div className="text-center">
-                          <div className="text-[32px] font-bold leading-[38.4px]" style={{ color: "#03b3e2" }}>
-                            {rightFirstTimeAverage}%
-                          </div>
-                          <div className="text-xs leading-[15.96px] text-[#646464] mt-1">Average</div>
+                {/* Second Row: 25% / 25% / 50% */}
+                <div className="grid grid-cols-4 gap-5">
+                {/* 4. Right first-time */}
+                <Card className="border border-[#ececec] bg-white col-span-1">
+                  <CardHeader className="pb-3">
+                    <CardTitle className="text-base font-bold leading-[21.28px] text-black">Right first-time</CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    <div className="flex items-center justify-center">
+                      <div className="text-center">
+                        <div className="text-[32px] font-bold leading-[38.4px]" style={{ color: "#03b3e2" }}>
+                          {rightFirstTimeAverage}%
                         </div>
+                        <div className="text-xs leading-[15.96px] text-[#646464] mt-1">Average</div>
                       </div>
-                      <ChartContainer config={rightFirstTimeConfig} className="h-[200px] w-full [&_.recharts-bar-rectangle]:fill-[#03b3e2] [&_.recharts-bar-rectangle]:stroke-none [&_.recharts-tooltip-cursor]:fill-transparent [&_.recharts-rectangle.recharts-tooltip-cursor]:fill-transparent">
-                        <ResponsiveContainer width="100%" height="100%">
-                          <BarChart data={rightFirstTimeData} margin={{ left: 10, right: 10, top: 10, bottom: 20 }}>
-                            <CartesianGrid strokeDasharray="3 3" stroke="#e0e0e0" vertical={false} />
-                            <XAxis 
-                              dataKey="category" 
-                              axisLine={false}
-                              tickLine={false}
-                              tick={{ fill: "#646464", fontSize: 11 }}
-                            />
-                            <YAxis 
-                              axisLine={false}
-                              tickLine={false}
-                              domain={[0, 100]}
-                              ticks={[0, 25, 50, 75, 100]}
-                              tick={{ fill: "#646464", fontSize: 11 }}
-                            />
-                            <ChartTooltip 
-                              cursor={{ fill: 'transparent' }}
-                              content={<ChartTooltipContent className="bg-white [&_span]:text-black [&_div]:text-black" />} 
-                            />
-                            <Bar dataKey="percentage" fill="#03b3e2" radius={[4, 4, 0, 0]} stroke="none" />
+                    </div>
+                    <ChartContainer config={rightFirstTimeConfig} className="h-[200px] w-full [&_.recharts-bar-rectangle]:fill-[#03b3e2] [&_.recharts-bar-rectangle]:stroke-none [&_.recharts-tooltip-cursor]:fill-transparent [&_.recharts-rectangle.recharts-tooltip-cursor]:fill-transparent">
+                      <ResponsiveContainer width="100%" height="100%">
+                        <BarChart data={rightFirstTimeData} margin={{ left: 10, right: 10, top: 10, bottom: 20 }}>
+                          <CartesianGrid strokeDasharray="3 3" stroke="#e0e0e0" vertical={false} />
+                          <XAxis 
+                            dataKey="category" 
+                            axisLine={false}
+                            tickLine={false}
+                            tick={{ fill: "#646464", fontSize: 11 }}
+                          />
+                          <YAxis 
+                            axisLine={false}
+                            tickLine={false}
+                            domain={[0, 100]}
+                            ticks={[0, 25, 50, 75, 100]}
+                            tick={{ fill: "#646464", fontSize: 11 }}
+                          />
+                          <ChartTooltip 
+                            cursor={{ fill: 'transparent' }}
+                            content={<ChartTooltipContent className="bg-white [&_span]:text-black [&_div]:text-black" />} 
+                          />
+                          <Bar dataKey="percentage" fill="#03b3e2" radius={[4, 4, 0, 0]} stroke="none" />
                           </BarChart>
                         </ResponsiveContainer>
                       </ChartContainer>
                     </CardContent>
                   </Card>
 
-                  {/* Number of Briefs per Category - 25% */}
-                  <Card className="border border-[#ececec] bg-white md:col-span-1">
-                    <CardHeader className="pb-3">
-                      <CardTitle className="text-base font-bold leading-[21.28px] text-black">Number of Briefs per Category</CardTitle>
-                    </CardHeader>
-                    <CardContent className="space-y-4">
-                      <div className="h-[60px] flex items-center justify-center">
-                        {/* Spacer to match the 89% Average section height */}
-                      </div>
-                      <ChartContainer config={briefsPerCategoryConfig} className="h-[200px] w-full">
-                        <ResponsiveContainer width="100%" height="100%">
-                          <BarChart data={briefsPerCategoryData} margin={{ left: 10, right: 10, top: 10, bottom: 20 }}>
-                            <CartesianGrid strokeDasharray="3 3" stroke="#e0e0e0" vertical={false} />
-                            <XAxis 
-                              dataKey="category" 
-                              axisLine={false}
-                              tickLine={false}
-                              tick={{ fill: "#646464", fontSize: 12 }}
-                            />
-                            <YAxis 
-                              axisLine={false}
-                              tickLine={false}
-                              domain={[0, 80]}
-                              ticks={[0, 20, 40, 60, 80]}
-                              tick={{ fill: "#646464", fontSize: 12 }}
-                              label={{ value: "Number of Briefs", angle: -90, position: "insideLeft", offset: 15, style: { fill: "#646464", fontSize: 12, textAnchor: "middle" } }}
-                            />
-                            <ChartTooltip content={<ChartTooltipContent className="bg-white [&_span]:text-black [&_div]:text-black" />} />
-                            <Bar dataKey="briefs" fill="#03b3e2" radius={[4, 4, 0, 0]} />
-                          </BarChart>
-                        </ResponsiveContainer>
-                      </ChartContainer>
-                    </CardContent>
-                  </Card>
+                {/* 5. Number of Briefs per Category */}
+                <Card className="border border-[#ececec] bg-white col-span-1">
+                  <CardHeader className="pb-3">
+                    <CardTitle className="text-base font-bold leading-[21.28px] text-black">Number of Briefs per Category</CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    <div className="h-[60px]"></div>
+                    <ChartContainer config={briefsPerCategoryConfig} className="h-[200px] w-full">
+                      <ResponsiveContainer width="100%" height="100%">
+                        <BarChart data={briefsPerCategoryData} margin={{ left: 10, right: 10, top: 10, bottom: 20 }}>
+                          <CartesianGrid strokeDasharray="3 3" stroke="#e0e0e0" vertical={false} />
+                          <XAxis 
+                            dataKey="category" 
+                            axisLine={false}
+                            tickLine={false}
+                            tick={{ fill: "#646464", fontSize: 12 }}
+                          />
+                          <YAxis 
+                            axisLine={false}
+                            tickLine={false}
+                            domain={[0, 80]}
+                            ticks={[0, 20, 40, 60, 80]}
+                            tick={{ fill: "#646464", fontSize: 12 }}
+                            label={{ value: "Number of Briefs", angle: -90, position: "insideLeft", offset: 15, style: { fill: "#646464", fontSize: 12, textAnchor: "middle" } }}
+                          />
+                          <ChartTooltip content={<ChartTooltipContent className="bg-white [&_span]:text-black [&_div]:text-black" />} />
+                          <Bar dataKey="briefs" fill="#03b3e2" radius={[4, 4, 0, 0]} />
+                        </BarChart>
+                      </ResponsiveContainer>
+                    </ChartContainer>
+                  </CardContent>
+                </Card>
 
-                  {/* Brief Quality Score - 50% */}
-                  <Card className="border border-[#ececec] bg-white md:col-span-2">
-                    <CardHeader className="pb-3">
-                      <CardTitle className="text-base font-bold leading-[21.28px] text-black">Brief Quality Score</CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                      <div className="h-[60px] flex items-center justify-center">
-                        {/* Spacer to match the 89% Average section height */}
-                      </div>
-                      <HorizontalBarChart
-                        title=""
-                        bars={[
-                          { value: 52, color: "#0177c7", label: "Excellent" },
-                          { value: 67, color: "#03b3e2", label: "Good" },
-                          { value: 31, color: "#8092dc", label: "Needs improvement" },
-                          { value: 15, color: "#00c3b1", label: "Poor" },
-                        ]}
-                        legend={[
-                          { color: "#0177c7", label: "Excellent" },
-                          { color: "#03b3e2", label: "Good" },
-                          { color: "#8092dc", label: "Needs improvement" },
-                          { color: "#00c3b1", label: "Poor" },
-                        ]}
-                        totalText="Total: 165 briefs"
-                      />
-                    </CardContent>
-                  </Card>
+                {/* 6. Brief Quality Score */}
+                <Card className="border border-[#ececec] bg-white col-span-2">
+                  <CardHeader className="pb-3">
+                    <CardTitle className="text-base font-bold leading-[21.28px] text-black">Brief Quality Score</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="h-[60px]"></div>
+                    <HorizontalBarChart
+                      title=""
+                      bars={[
+                        { value: 52, color: "#0177c7", label: "Excellent" },
+                        { value: 67, color: "#03b3e2", label: "Good" },
+                        { value: 31, color: "#8092dc", label: "Needs improvement" },
+                        { value: 15, color: "#00c3b1", label: "Poor" },
+                      ]}
+                      legend={[
+                        { color: "#0177c7", label: "Excellent" },
+                        { color: "#03b3e2", label: "Good" },
+                        { color: "#8092dc", label: "Needs improvement" },
+                        { color: "#00c3b1", label: "Poor" },
+                      ]}
+                      totalText="Total: 165 briefs"
+                    />
+                  </CardContent>
+                </Card>
                 </div>
 
-                {/* Top Missing Details from Briefs */}
-                    <Card className="border border-[#ececec] bg-white">
+                {/* Third Row: Full width */}
+                {/* 7. Brief Top Missing Fields */}
+                  <Card className="border border-[#ececec] bg-white">
+                <CardHeader className="pb-3">
+                    <CardTitle className="text-base font-bold leading-[21.28px] text-black">Brief Top Missing Fields</CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    {/* Legend */}
+                    <div className="flex flex-wrap items-center gap-4 text-sm">
+                      <div className="flex items-center gap-2">
+                        <div className="w-3 h-3 rounded-full" style={{ backgroundColor: '#0177c7' }}></div>
+                        <span className="text-black">Mobile</span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <div className="w-3 h-3 rounded-full" style={{ backgroundColor: '#03b3e2' }}></div>
+                        <span className="text-black">Tablet</span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <div className="w-3 h-3 rounded-full" style={{ backgroundColor: '#00c3b1' }}></div>
+                        <span className="text-black">Wearable</span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <div className="w-3 h-3 rounded-full" style={{ backgroundColor: '#8092DC' }}></div>
+                        <span className="text-black">Ecosystem</span>
+                      </div>
+                    </div>
+
+                    <ChartContainer config={missingFieldsConfig} className="h-[400px] w-full">
+                      <ResponsiveContainer width="100%" height="100%">
+                        <BarChart data={missingFieldsData} layout="vertical" margin={{ top: 5, right: 30, left: 120, bottom: 20 }}>
+                          <CartesianGrid strokeDasharray="3 3" stroke="#e0e0e0" horizontal={true} vertical={false} />
+                          <XAxis 
+                            type="number" 
+                            axisLine={false}
+                            tickLine={false}
+                            domain={[0, 25]}
+                            ticks={[0, 5, 10, 15, 20, 25]}
+                            tick={{ fill: "#646464", fontSize: 12 }}
+                            label={{ value: "Number of Missing Fields", position: "insideBottom", offset: -5, style: { fill: "#646464", fontSize: 12 } }}
+                          />
+                          <YAxis 
+                            type="category" 
+                            dataKey="field" 
+                            axisLine={false}
+                            tickLine={false}
+                            tick={{ fill: "#646464", fontSize: 12 }}
+                            width={120}
+                          />
+                          <ChartTooltip cursor={false} content={<ChartTooltipContent className="bg-white [&_span]:text-black [&_div]:text-black" />} />
+                          <Bar dataKey="mobile" stackId="a" fill="#0177c7" radius={[6, 0, 0, 6]} />
+                          <Bar dataKey="tablet" stackId="a" fill="#03b3e2" radius={[0, 0, 0, 0]} />
+                          <Bar dataKey="wearable" stackId="a" fill="#00c3b1" radius={[0, 0, 0, 0]} />
+                          <Bar dataKey="ecosystem" stackId="a" fill="#8092DC" radius={[0, 6, 6, 0]} />
+                        </BarChart>
+                      </ResponsiveContainer>
+                    </ChartContainer>
+                  </CardContent>
+                </Card>
+              </div>
+
+              {/* Tablet/Mobile: Vertical Stack */}
+              <div className="lg:hidden space-y-6">
+                {/* 1. Brief quality score - All categories */}
+                <Card className="border border-[#ececec] bg-white">
+                  <CardHeader className="pb-3">
+                    <CardTitle className="text-base font-bold leading-[21.28px] text-black">Brief quality score - All categories</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-6">
+                  <ChartContainer config={qualityScoreConfig} className="h-[250px] md:h-[200px] w-full">
+                    <ResponsiveContainer width="100%" height="100%">
+                      <AreaChart data={qualityScoreData} margin={{ left: 10, right: 10, top: 10, bottom: 20 }}>
+                        <defs>
+                          <linearGradient id="qualityGradient" x1="0" y1="0" x2="0" y2="1">
+                            <stop offset="5%" stopColor="#0177c7" stopOpacity={0.3} />
+                            <stop offset="95%" stopColor="#0177c7" stopOpacity={0} />
+                          </linearGradient>
+                        </defs>
+                        <CartesianGrid strokeDasharray="3 3" stroke="#e0e0e0" vertical={true} />
+                        <XAxis 
+                          dataKey="quarter" 
+                          axisLine={false}
+                          tickLine={false}
+                          tick={{ fill: "#646464", fontSize: 12 }}
+                          label={{ value: "Quarter", position: "insideBottom", offset: -5, style: { fill: "#646464", fontSize: 12 } }}
+                        />
+                        <YAxis 
+                          axisLine={false}
+                          tickLine={false}
+                          domain={[70, 95]}
+                          ticks={[70, 75, 80, 85, 90, 95]}
+                          tick={{ fill: "#646464", fontSize: 12 }}
+                          label={{ value: "Quality score (%)", angle: -90, position: "insideLeft", offset: 15, style: { fill: "#646464", fontSize: 12, textAnchor: "middle" } }}
+                        />
+                        <ChartTooltip content={<ChartTooltipContent className="bg-white [&_span]:text-black [&_div]:text-black" />} />
+                        <Area
+                          type="monotone"
+                          dataKey="score"
+                          stroke="#0177c7"
+                          strokeWidth={2}
+                          fill="url(#qualityGradient)"
+                        />
+                      </AreaChart>
+                    </ResponsiveContainer>
+                  </ChartContainer>
+                  
+                  {/* Insight section */}
+                  <div className="flex flex-col gap-1 pt-2 pr-4 pb-2 pl-4 rounded-xl bg-[#F1F1F380]">
+                    <p className="text-xs leading-[15.96px] font-bold text-[#00C3B1]">
+                      Insight
+                    </p>
+                    <p className="text-xs leading-[18px] font-normal text-black">
+                      Brief quality score has improved to 89% with consistent upward trend
+                    </p>
+                  </div>
+                </CardContent>
+              </Card>
+
+                {/* 2. Number of Iterations */}
+                  <Card className="border border-[#ececec] bg-white">
+                    <CardHeader className="pb-3">
+                    <CardTitle className="text-base font-bold leading-[21.28px] text-black">Number of iterations</CardTitle>
+                    </CardHeader>
+                  <CardContent className="space-y-4">
+                    <ChartContainer config={iterationsConfig} className="h-[250px] w-full">
+                      <ResponsiveContainer width="100%" height="100%">
+                        <AreaChart data={iterationsData} margin={{ left: 10, right: 10, top: 10, bottom: 20 }}>
+                          <defs>
+                            <linearGradient id="iterationsGradient" x1="0" y1="0" x2="0" y2="1">
+                              <stop offset="5%" stopColor="#00c3b1" stopOpacity={0.3} />
+                              <stop offset="95%" stopColor="#00c3b1" stopOpacity={0} />
+                            </linearGradient>
+                          </defs>
+                          <CartesianGrid strokeDasharray="3 3" stroke="#e0e0e0" vertical={true} />
+                          <XAxis 
+                            dataKey="period" 
+                            axisLine={false}
+                            tickLine={false}
+                            tick={{ fill: "#646464", fontSize: 11 }}
+                          />
+                          <YAxis 
+                            axisLine={false}
+                            tickLine={false}
+                            domain={[1.5, 2.5]}
+                            ticks={[1.5, 1.75, 2.0, 2.25, 2.5]}
+                            tick={{ fill: "#646464", fontSize: 11 }}
+                          />
+                          <ChartTooltip content={<ChartTooltipContent className="bg-white [&_span]:text-black [&_div]:text-black" />} />
+                          <Area
+                            type="monotone"
+                            dataKey="iterations"
+                            stroke="#00c3b1"
+                            strokeWidth={2}
+                            fill="url(#iterationsGradient)"
+                          />
+                        </AreaChart>
+                      </ResponsiveContainer>
+                    </ChartContainer>
+                  </CardContent>
+                </Card>
+
+                {/* 3. Details Provided in Brief */}
+                <Card className="border border-[#ececec] bg-white">
+                  <CardHeader className="pb-3">
+                    <CardTitle className="text-base font-bold leading-[21.28px] text-black">Details provided in the brief</CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    <ChartContainer config={detailsProvidedConfig} className="h-[250px] w-full">
+                      <ResponsiveContainer width="100%" height="100%">
+                        <AreaChart data={detailsProvidedData} margin={{ left: 10, right: 10, top: 10, bottom: 20 }}>
+                          <defs>
+                            <linearGradient id="detailsProvidedGradient" x1="0" y1="0" x2="0" y2="1">
+                              <stop offset="5%" stopColor="#0177c7" stopOpacity={0.3} />
+                              <stop offset="95%" stopColor="#0177c7" stopOpacity={0} />
+                            </linearGradient>
+                          </defs>
+                          <CartesianGrid strokeDasharray="3 3" stroke="#e0e0e0" vertical={true} />
+                          <XAxis 
+                            dataKey="period" 
+                            axisLine={false}
+                            tickLine={false}
+                            tick={{ fill: "#646464", fontSize: 11 }}
+                          />
+                          <YAxis 
+                            axisLine={false}
+                            tickLine={false}
+                            domain={[0, 20]}
+                            ticks={[0, 5, 10, 15, 20]}
+                            tick={{ fill: "#646464", fontSize: 11 }}
+                          />
+                          <ChartTooltip content={<ChartTooltipContent className="bg-white [&_span]:text-black [&_div]:text-black" />} />
+                          <Area
+                            type="monotone"
+                            dataKey="fields"
+                            stroke="#0177c7"
+                            strokeWidth={2}
+                            fill="url(#detailsProvidedGradient)"
+                          />
+                        </AreaChart>
+                      </ResponsiveContainer>
+                    </ChartContainer>
+                  </CardContent>
+                </Card>
+
+                {/* 4. Right first-time */}
+                <Card className="border border-[#ececec] bg-white">
+                  <CardHeader className="pb-3">
+                    <CardTitle className="text-base font-bold leading-[21.28px] text-black">Right first-time</CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    <div className="flex items-center justify-center">
+                      <div className="text-center">
+                        <div className="text-[32px] font-bold leading-[38.4px]" style={{ color: "#03b3e2" }}>
+                          {rightFirstTimeAverage}%
+                          </div>
+                        <div className="text-xs leading-[15.96px] text-[#646464] mt-1">Average</div>
+                          </div>
+                          </div>
+                    <ChartContainer config={rightFirstTimeConfig} className="h-[200px] w-full [&_.recharts-bar-rectangle]:fill-[#03b3e2] [&_.recharts-bar-rectangle]:stroke-none [&_.recharts-tooltip-cursor]:fill-transparent [&_.recharts-rectangle.recharts-tooltip-cursor]:fill-transparent">
+                      <ResponsiveContainer width="100%" height="100%">
+                        <BarChart data={rightFirstTimeData} margin={{ left: 10, right: 10, top: 10, bottom: 20 }}>
+                          <CartesianGrid strokeDasharray="3 3" stroke="#e0e0e0" vertical={false} />
+                          <XAxis 
+                            dataKey="category" 
+                            axisLine={false}
+                            tickLine={false}
+                            tick={{ fill: "#646464", fontSize: 11 }}
+                          />
+                          <YAxis 
+                            axisLine={false}
+                            tickLine={false}
+                            domain={[0, 100]}
+                            ticks={[0, 25, 50, 75, 100]}
+                            tick={{ fill: "#646464", fontSize: 11 }}
+                          />
+                          <ChartTooltip 
+                            cursor={{ fill: 'transparent' }}
+                            content={<ChartTooltipContent className="bg-white [&_span]:text-black [&_div]:text-black" />} 
+                          />
+                          <Bar dataKey="percentage" fill="#03b3e2" radius={[4, 4, 0, 0]} stroke="none" />
+                        </BarChart>
+                      </ResponsiveContainer>
+                    </ChartContainer>
+                    </CardContent>
+                  </Card>
+
+                {/* 5. Number of Briefs per Category */}
+                <Card className="border border-[#ececec] bg-white">
+                  <CardHeader className="pb-3">
+                    <CardTitle className="text-base font-bold leading-[21.28px] text-black">Number of Briefs per Category</CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    <ChartContainer config={briefsPerCategoryConfig} className="h-[200px] w-full">
+                      <ResponsiveContainer width="100%" height="100%">
+                        <BarChart data={briefsPerCategoryData} margin={{ left: 10, right: 10, top: 10, bottom: 20 }}>
+                          <CartesianGrid strokeDasharray="3 3" stroke="#e0e0e0" vertical={false} />
+                          <XAxis 
+                            dataKey="category" 
+                            axisLine={false}
+                            tickLine={false}
+                            tick={{ fill: "#646464", fontSize: 12 }}
+                          />
+                          <YAxis 
+                            axisLine={false}
+                            tickLine={false}
+                            domain={[0, 80]}
+                            ticks={[0, 20, 40, 60, 80]}
+                            tick={{ fill: "#646464", fontSize: 12 }}
+                            label={{ value: "Number of Briefs", angle: -90, position: "insideLeft", offset: 15, style: { fill: "#646464", fontSize: 12, textAnchor: "middle" } }}
+                          />
+                          <ChartTooltip content={<ChartTooltipContent className="bg-white [&_span]:text-black [&_div]:text-black" />} />
+                          <Bar dataKey="briefs" fill="#03b3e2" radius={[4, 4, 0, 0]} />
+                        </BarChart>
+                      </ResponsiveContainer>
+                    </ChartContainer>
+                  </CardContent>
+                </Card>
+
+                {/* 6. Brief Quality Score */}
+                <Card className="border border-[#ececec] bg-white">
+                  <CardHeader className="pb-3">
+                    <CardTitle className="text-base font-bold leading-[21.28px] text-black">Brief Quality Score</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <HorizontalBarChart
+                      title=""
+                      bars={[
+                        { value: 52, color: "#0177c7", label: "Excellent" },
+                        { value: 67, color: "#03b3e2", label: "Good" },
+                        { value: 31, color: "#8092dc", label: "Needs improvement" },
+                        { value: 15, color: "#00c3b1", label: "Poor" },
+                      ]}
+                      legend={[
+                        { color: "#0177c7", label: "Excellent" },
+                        { color: "#03b3e2", label: "Good" },
+                        { color: "#8092dc", label: "Needs improvement" },
+                        { color: "#00c3b1", label: "Poor" },
+                      ]}
+                      totalText="Total: 165 briefs"
+                    />
+                  </CardContent>
+                </Card>
+
+                {/* 7. Brief Top Missing Fields */}
+                <Card className="border border-[#ececec] bg-white">
                   <CardHeader className="pb-3">
                     <CardTitle className="text-base font-bold leading-[21.28px] text-black">Brief Top Missing Fields</CardTitle>
                   </CardHeader>
@@ -1030,11 +1386,468 @@ export default function TrackerPage() {
 
             {/* Project Performance Tab Content */}
             <TabsContent value="project-performance" className="mt-6">
-              <div className="space-y-6">
-                {/* Row 1: Rounds of amends (30%) + CHANGE REQUESTS (70%) */}
-                <div className="grid grid-cols-1 md:grid-cols-10 gap-5">
-                  {/* Rounds of amends - 30% */}
-                  <Card className="border border-[#ececec] bg-white md:col-span-3 flex flex-col">
+              {/* Desktop: Grid Layout */}
+              <div className="hidden lg:block space-y-6">
+                {/* Row 1: Rounds 30% / Change Requests 70% */}
+                <div className="grid grid-cols-10 gap-5">
+                  {/* Rounds of amends */}
+                  <Card className="border border-[#ececec] bg-white col-span-3">
+                  <CardHeader className="pb-3">
+                    <CardTitle className="text-base font-bold leading-[21.28px] text-black">Rounds of amends</CardTitle>
+                  </CardHeader>
+                    <CardContent>
+                    <ChartContainer config={roundsOfAmendsConfig} className="h-[250px] md:h-[200px] w-full">
+                      <ResponsiveContainer width="100%" height="100%">
+                        <AreaChart data={roundsOfAmendsData} margin={{ left: 10, right: 10, top: 10, bottom: 20 }}>
+                          <defs>
+                            <linearGradient id="roundsGradient" x1="0" y1="0" x2="0" y2="1">
+                              <stop offset="5%" stopColor="#0177c7" stopOpacity={0.3} />
+                              <stop offset="95%" stopColor="#0177c7" stopOpacity={0} />
+                            </linearGradient>
+                          </defs>
+                          <CartesianGrid strokeDasharray="3 3" stroke="#e0e0e0" vertical={true} />
+                          <XAxis 
+                            dataKey="period" 
+                            axisLine={false}
+                            tickLine={false}
+                            tick={{ fill: "#646464", fontSize: 12 }}
+                            label={{ value: "Quarter", position: "insideBottom", offset: -5, style: { fill: "#646464", fontSize: 12 } }}
+                          />
+                          <YAxis 
+                            axisLine={false}
+                            tickLine={false}
+                            domain={[1.5, 3.0]}
+                            ticks={[1.5, 2.0, 2.5, 3.0]}
+                            tick={{ fill: "#646464", fontSize: 12 }}
+                            label={{ value: "Rounds", angle: -90, position: "insideLeft", offset: 15, style: { fill: "#646464", fontSize: 12, textAnchor: "middle" } }}
+                          />
+                          <ChartTooltip content={<ChartTooltipContent className="bg-white [&_span]:text-black [&_div]:text-black" />} />
+                          <Area
+                            type="monotone"
+                            dataKey="rounds"
+                            stroke="#0177c7"
+                            strokeWidth={2}
+                            fill="url(#roundsGradient)"
+                          />
+                        </AreaChart>
+                      </ResponsiveContainer>
+                    </ChartContainer>
+                  </CardContent>
+                </Card>
+
+                  {/* CHANGE REQUESTS */}
+                  <Card className="border border-[#ececec] bg-white col-span-7">
+                  <CardHeader className="pb-3">
+                    <div className="flex items-center gap-2">
+                      <FileText size={20} className="text-[#03b3e2]" />
+                      <CardTitle className="text-base font-bold leading-[21.28px] text-black">CHANGE REQUESTS</CardTitle>
+                    </div>
+                  </CardHeader>
+                  <CardContent className="space-y-6">
+                    {/* Main Metric */}
+                    <div className="flex flex-col gap-2">
+                      <div className="text-[48px] font-bold leading-[57.6px]" style={{ color: "#03b3e2" }}>5%</div>
+                      <div className="text-sm text-black">Q1 2025: 8% → Q2 2025: 5%</div>
+                      <div className="inline-flex items-center px-3 py-1 rounded-full bg-[#00C3B10F] w-fit">
+                        <span className="text-sm font-medium text-[#00C3B1]">-3% vs Q1 2025</span>
+                      </div>
+                    </div>
+
+                    {/* Breakdown by Product Line */}
+                    <div className="space-y-4">
+                      <h4 className="text-sm font-bold leading-[18.62px] text-black">Change in Request Rate by Product Line</h4>
+                      <div className="space-y-3">
+                        {changeRequestsData.map((item) => {
+                          const absValue = Math.abs(item.changeRate);
+                          const maxValue = 25;
+                          const widthPercent = (absValue / maxValue) * 100;
+                          const colorMap: Record<string, string> = {
+                            Mobile: "#0177c7",
+                            Tablet: "#03b3e2",
+                            Wearable: "#00c3b1",
+                            Ecosystem: "#00c3b1",
+                          };
+                          const color = colorMap[item.productLine] || "#0177c7";
+
+                          return (
+                            <div key={item.productLine} className="space-y-1">
+                              <div className="flex items-center justify-between">
+                                <span className="text-sm text-black">{item.productLine}</span>
+                                <span className="text-sm font-medium text-black">{item.changeRate}%</span>
+                              </div>
+                              <div className="relative h-6 w-full bg-[#f1f1f3] rounded-md overflow-hidden">
+                                <div
+                                  className="h-full flex items-center justify-end pr-2 rounded-md"
+                                  style={{
+                                    width: `${widthPercent}%`,
+                                    backgroundColor: color,
+                                  }}
+                                >
+                                  <span className="text-white text-xs font-medium">{absValue}%</span>
+                                </div>
+                              </div>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+                </div>
+
+                {/* Row 2: Brand Legal 30% / On-time 70% */}
+                <div className="grid grid-cols-10 gap-5">
+                  {/* Brand and Legal amends (right first time) */}
+                  <Card className="border border-[#ececec] bg-white col-span-3">
+                  <CardHeader className="pb-3">
+                    <CardTitle className="text-base font-bold leading-[21.28px] text-black">Brand and Legal amends (right first time)</CardTitle>
+                  </CardHeader>
+                    <CardContent>
+                    <ChartContainer config={brandLegalAmendsConfig} className="h-[250px] md:h-[200px] w-full">
+                      <ResponsiveContainer width="100%" height="100%">
+                        <AreaChart data={brandLegalAmendsData} margin={{ left: 10, right: 10, top: 10, bottom: 20 }}>
+                          <defs>
+                            <linearGradient id="brandLegalGradient" x1="0" y1="0" x2="0" y2="1">
+                              <stop offset="5%" stopColor="#00c3b1" stopOpacity={0.3} />
+                              <stop offset="95%" stopColor="#00c3b1" stopOpacity={0} />
+                            </linearGradient>
+                          </defs>
+                          <CartesianGrid strokeDasharray="3 3" stroke="#e0e0e0" vertical={true} />
+                          <XAxis 
+                            dataKey="period" 
+                            axisLine={false}
+                            tickLine={false}
+                            tick={{ fill: "#646464", fontSize: 12 }}
+                            label={{ value: "Quarter", position: "insideBottom", offset: -5, style: { fill: "#646464", fontSize: 12 } }}
+                          />
+                          <YAxis 
+                            axisLine={false}
+                            tickLine={false}
+                            domain={[80, 95]}
+                            ticks={[80, 85, 90, 95]}
+                            tick={{ fill: "#646464", fontSize: 12 }}
+                            label={{ value: "Right First Time (%)", angle: -90, position: "insideLeft", offset: 15, style: { fill: "#646464", fontSize: 12, textAnchor: "middle" } }}
+                          />
+                          <ChartTooltip content={<ChartTooltipContent className="bg-white [&_span]:text-black [&_div]:text-black" />} />
+                          <Area
+                            type="monotone"
+                            dataKey="percentage"
+                            stroke="#00c3b1"
+                            strokeWidth={2}
+                            fill="url(#brandLegalGradient)"
+                          />
+                        </AreaChart>
+                      </ResponsiveContainer>
+                    </ChartContainer>
+                  </CardContent>
+                </Card>
+
+                  {/* ON-TIME DELIVERY */}
+                  <Card className="border border-[#ececec] bg-white col-span-7">
+                  <CardHeader className="pb-3">
+                    <div className="flex items-center gap-2">
+                      <Clock size={20} className="text-[#03b3e2]" />
+                      <CardTitle className="text-base font-bold leading-[21.28px] text-black uppercase">ON-TIME DELIVERY</CardTitle>
+                    </div>
+                  </CardHeader>
+                  <CardContent className="space-y-6">
+                    {/* Main Metric */}
+                    <div className="flex flex-col gap-2">
+                      <div className="text-[48px] font-bold leading-[57.6px]" style={{ color: "#03b3e2" }}>91%</div>
+                      <div className="text-sm text-black">Q1 2025: 87% → Q2 2025: 91%</div>
+                      <div className="inline-flex items-center px-3 py-1 rounded-full bg-[#00C3B10F] border border-[#00C3B1]/20 w-fit">
+                        <span className="text-sm font-medium text-[#00C3B1]">+4% vs Q1 2025</span>
+                      </div>
+                    </div>
+
+                    {/* Breakdown by Product Line */}
+                    <div className="space-y-4">
+                      <h4 className="text-sm font-bold leading-[18.62px] text-black">Change in On-Time Delivery by Product Line</h4>
+                      <div className="space-y-3">
+                        {onTimeDeliveryData.map((item) => {
+                          const maxValue = 32;
+                          const widthPercent = (item.changeRate / maxValue) * 100;
+                          const colorMap: Record<string, string> = {
+                            Mobile: "#0177c7",
+                            Tablet: "#03b3e2",
+                            Wearable: "#00c3b1",
+                              Ecosystem: "#00c3b1",
+                          };
+                          const badgeColorMap: Record<string, string> = {
+                            Mobile: "#0177c7",
+                            Tablet: "#03b3e2",
+                            Wearable: "#00c3b1",
+                              Ecosystem: "#00c3b1",
+                          };
+                          const color = colorMap[item.productLine] || "#0177c7";
+                          const badgeColor = badgeColorMap[item.productLine] || "#0177c7";
+
+                          return (
+                            <div key={item.productLine} className="space-y-1">
+                              <div className="flex items-center justify-between">
+                                <span className="text-sm text-black">{item.productLine}</span>
+                                <div className="inline-flex items-center px-2 py-0.5 rounded-md" style={{ backgroundColor: `${badgeColor}1A`, color: badgeColor }}>
+                                  <span className="text-sm font-medium">+{item.changeRate}%</span>
+                                </div>
+                              </div>
+                              <div className="relative h-6 w-full bg-[#f1f1f3] rounded-md overflow-hidden">
+                                <div
+                                  className="h-full flex items-center justify-end pr-2 rounded-md"
+                                  style={{
+                                    width: `${widthPercent}%`,
+                                    backgroundColor: color,
+                                  }}
+                                >
+                                  <span className="text-white text-xs font-medium">+{item.changeRate}%</span>
+                                </div>
+                              </div>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+                </div>
+
+                {/* Row 3: Top Reasons for Issues - All Categories */}
+                <div className="space-y-4">
+                  <div className="flex flex-col gap-1">
+                    <h3 className="text-[22px] font-bold leading-[29.26px] text-black">Top Reasons for Issues - All Categories</h3>
+                    <p className="text-sm text-[#646464]">ANALYSIS OF PRIMARY FACTORS CAUSING PROJECT DELAYS AND PERFORMANCE ISSUES.</p>
+                  </div>
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+                    {/* Card 1: Late Briefs */}
+                    <Card className="border border-[#ececec] bg-white">
+                      <CardHeader className="pb-3">
+                        <CardTitle className="text-base font-bold leading-[21.28px] text-black">Late Briefs</CardTitle>
+                      </CardHeader>
+                      <CardContent className="space-y-4">
+                        <ChartContainer config={lateBriefsConfig} className="h-[200px] w-full">
+                          <ResponsiveContainer width="100%" height="100%">
+                            <PieChart>
+                              <ChartTooltip 
+                                content={({ active, payload }) => {
+                                  if (active && payload && payload.length) {
+                                    return <PieChartTooltip data={lateBriefsData.map(item => ({ name: item.name, value: item.value, color: item.color }))} config={lateBriefsConfig} />;
+                                  }
+                                  return null;
+                                }}
+                              />
+                              <Pie
+                                data={lateBriefsData}
+                                cx="50%"
+                                cy="50%"
+                                innerRadius={60}
+                                outerRadius={80}
+                                paddingAngle={2}
+                                dataKey="value"
+                              >
+                                {lateBriefsData.map((entry, index) => (
+                                  <Cell key={`cell-${index}`} fill={entry.color} />
+                                ))}
+                              </Pie>
+                            </PieChart>
+                          </ResponsiveContainer>
+                        </ChartContainer>
+                        <div className="flex flex-col gap-1">
+                          <div className="text-[32px] font-bold leading-[38.4px]" style={{ color: "#03b3e2" }}>13%</div>
+                          <p className="text-sm text-black">of projects were briefed later than expected.</p>
+                          <p className="text-xs text-[#646464]">Q2 2025: 8%</p>
+                        </div>
+                        {/* Results at bottom - Tablet only */}
+                        <div className="lg:hidden pt-4 border-t border-[#ececec] space-y-2">
+                          {lateBriefsData.map((item, index) => {
+                            const total = lateBriefsData.reduce((sum, entry) => sum + entry.value, 0);
+                            const percentage = ((item.value / total) * 100).toFixed(1);
+                            return (
+                              <div key={index} className="flex items-center justify-between gap-3">
+                                <div className="flex items-center gap-2">
+                                  <div className="w-3 h-3 rounded-full" style={{ backgroundColor: item.color }}></div>
+                                  <span className="text-xs text-black">{item.name}</span>
+                                </div>
+                                <div className="flex items-center gap-2">
+                                  <span className="text-xs font-medium text-black">{percentage}%</span>
+                                </div>
+                              </div>
+                            );
+                          })}
+                        </div>
+                      </CardContent>
+                    </Card>
+
+                    {/* Card 2: Extended / Delayed Projects */}
+                    <Card className="border border-[#ececec] bg-white">
+                      <CardHeader className="pb-3">
+                        <CardTitle className="text-base font-bold leading-[21.28px] text-black">Extended / Delayed Projects</CardTitle>
+                      </CardHeader>
+                      <CardContent className="space-y-4">
+                        <ChartContainer config={extendedProjectsConfig} className="h-[200px] w-full">
+                          <ResponsiveContainer width="100%" height="100%">
+                            <PieChart>
+                              <ChartTooltip 
+                                content={({ active, payload }) => {
+                                  if (active && payload && payload.length) {
+                                    return <PieChartTooltip data={extendedProjectsData.map(item => ({ name: item.name, value: item.value, color: item.color }))} config={extendedProjectsConfig} />;
+                                  }
+                                  return null;
+                                }}
+                              />
+                              <Pie
+                                data={extendedProjectsData}
+                                cx="50%"
+                                cy="50%"
+                                innerRadius={60}
+                                outerRadius={80}
+                                paddingAngle={2}
+                                dataKey="value"
+                              >
+                                {extendedProjectsData.map((entry, index) => (
+                                  <Cell key={`cell-${index}`} fill={entry.color} />
+                                ))}
+                              </Pie>
+                            </PieChart>
+                          </ResponsiveContainer>
+                        </ChartContainer>
+                        <div className="flex flex-col gap-1">
+                          <div className="text-[32px] font-bold leading-[38.4px]" style={{ color: "#03b3e2" }}>41%</div>
+                          <p className="text-sm text-black">of projects were delayed/extended in flight.</p>
+                          <p className="text-xs text-[#646464]">Q2 2025: 32%</p>
+                        </div>
+                        {/* Results at bottom - Tablet only */}
+                        <div className="lg:hidden pt-4 border-t border-[#ececec] space-y-2">
+                          {extendedProjectsData.map((item, index) => {
+                            const total = extendedProjectsData.reduce((sum, entry) => sum + entry.value, 0);
+                            const percentage = ((item.value / total) * 100).toFixed(1);
+                            return (
+                              <div key={index} className="flex items-center justify-between gap-3">
+                                <div className="flex items-center gap-2">
+                                  <div className="w-3 h-3 rounded-full" style={{ backgroundColor: item.color }}></div>
+                                  <span className="text-xs text-black">{item.name}</span>
+                                </div>
+                                <div className="flex items-center gap-2">
+                                  <span className="text-xs font-medium text-black">{percentage}%</span>
+                                </div>
+                              </div>
+                            );
+                          })}
+                        </div>
+                      </CardContent>
+                    </Card>
+
+                    {/* Card 3: Insufficient Time */}
+                    <Card className="border border-[#ececec] bg-white">
+                      <CardHeader className="pb-3">
+                        <CardTitle className="text-base font-bold leading-[21.28px] text-black">Insufficient Time</CardTitle>
+                      </CardHeader>
+                      <CardContent className="space-y-4">
+                        <ChartContainer config={insufficientTimeConfig} className="h-[200px] w-full">
+                          <ResponsiveContainer width="100%" height="100%">
+                            <PieChart>
+                              <ChartTooltip 
+                                content={({ active, payload }) => {
+                                  if (active && payload && payload.length) {
+                                    return <PieChartTooltip data={insufficientTimeData.map(item => ({ name: item.name, value: item.value, color: item.color }))} config={insufficientTimeConfig} />;
+                                  }
+                                  return null;
+                                }}
+                              />
+                              <Pie
+                                data={insufficientTimeData}
+                                cx="50%"
+                                cy="50%"
+                                innerRadius={60}
+                                outerRadius={80}
+                                paddingAngle={2}
+                                dataKey="value"
+                              >
+                                {insufficientTimeData.map((entry, index) => (
+                                  <Cell key={`cell-${index}`} fill={entry.color} />
+                                ))}
+                              </Pie>
+                            </PieChart>
+                          </ResponsiveContainer>
+                        </ChartContainer>
+                        <div className="flex flex-col gap-1">
+                          <div className="text-[32px] font-bold leading-[38.4px]" style={{ color: "#03b3e2" }}>30%</div>
+                          <p className="text-sm text-black">of projects were briefed with insufficient time.</p>
+                          <p className="text-xs text-[#646464]">Q2 2025: 22%</p>
+                        </div>
+                        {/* Results at bottom - Tablet only */}
+                        <div className="lg:hidden pt-4 border-t border-[#ececec] space-y-2">
+                          {insufficientTimeData.map((item, index) => {
+                            const total = insufficientTimeData.reduce((sum, entry) => sum + entry.value, 0);
+                            const percentage = ((item.value / total) * 100).toFixed(1);
+                            return (
+                              <div key={index} className="flex items-center justify-between gap-3">
+                                <div className="flex items-center gap-2">
+                                  <div className="w-3 h-3 rounded-full" style={{ backgroundColor: item.color }}></div>
+                                  <span className="text-xs text-black">{item.name}</span>
+                                </div>
+                                <div className="flex items-center gap-2">
+                                  <span className="text-xs font-medium text-black">{percentage}%</span>
+                                </div>
+                              </div>
+                            );
+                          })}
+                        </div>
+                      </CardContent>
+                    </Card>
+                  </div>
+                </div>
+
+                {/* Row 5: Issues Breakdown */}
+                <Card className="border border-[#ececec] bg-white">
+                  <CardHeader className="pb-3">
+                    <div className="flex items-center justify-between">
+                      <CardTitle className="text-base font-bold leading-[21.28px]" style={{ color: "#03b3e2" }}>Issues Breakdown</CardTitle>
+                        <Button variant="outline" className="h-10 px-6 border-none bg-[#ffb546] hover:opacity-90 text-black whitespace-nowrap">
+                          <span className="text-black font-semibold whitespace-nowrap">View All</span>
+                          <ChevronRight size={20} className="ml-2 text-black" />
+                      </Button>
+                    </div>
+                  </CardHeader>
+                  <CardContent>
+                    <Table>
+                      <TableHeader>
+                        <TableRow className="bg-[#f1f1f3] hover:bg-[#f1f1f3] border-b border-[#ececec]">
+                          <TableHead className="h-12 px-4 text-left font-bold text-black">Issue Type</TableHead>
+                          <TableHead className="h-12 px-4 text-left font-bold text-black">In Flight</TableHead>
+                          <TableHead className="h-12 px-4 text-left font-bold text-black">Resolved</TableHead>
+                          <TableHead className="h-12 px-4 text-left font-bold text-black">Impact</TableHead>
+                          <TableHead className="h-12 px-4 text-left font-bold text-black">Primary Product Line</TableHead>
+                        </TableRow>
+                      </TableHeader>
+                      <TableBody>
+                        {issuesBreakdownData.map((issue, index) => (
+                          <TableRow 
+                            key={issue.issueType} 
+                            className={`border-b border-[#ececec] ${index % 2 === 0 ? 'bg-white' : 'bg-[#f9f9f9]'} hover:bg-[#f1f1f3]`}
+                          >
+                            <TableCell className="px-4 py-4 text-black font-medium">{issue.issueType}</TableCell>
+                            <TableCell className="px-4 py-4 text-black">{issue.inFlight}</TableCell>
+                            <TableCell className="px-4 py-4 text-black">{issue.resolved}</TableCell>
+                            <TableCell className="px-4 py-4">
+                              <span className="inline-flex items-center px-2 py-1 rounded-md bg-[#00C3B10F] text-[#00C3B1] text-sm">
+                                {issue.impact}
+                              </span>
+                            </TableCell>
+                            <TableCell className="px-4 py-4 text-black text-sm">{issue.primaryProductLine}</TableCell>
+                          </TableRow>
+                        ))}
+                      </TableBody>
+                    </Table>
+                  </CardContent>
+                </Card>
+              </div>
+
+              {/* Tablet/Mobile: Vertical Stack */}
+              <div className="lg:hidden space-y-6">
+                {/* Keep all cards in vertical order as they currently are */}
+                {/* Row 1: Rounds of amends + Brand and Legal amends side by side */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                  {/* Rounds of amends */}
+                  <Card className="border border-[#ececec] bg-white flex flex-col">
                     <CardHeader className="pb-3">
                       <CardTitle className="text-base font-bold leading-[21.28px] text-black">Rounds of amends</CardTitle>
                     </CardHeader>
@@ -1078,70 +1891,8 @@ export default function TrackerPage() {
                     </CardContent>
                   </Card>
 
-                  {/* CHANGE REQUESTS - 70% */}
-                  <Card className="border border-[#ececec] bg-white md:col-span-7">
-                    <CardHeader className="pb-3">
-                      <div className="flex items-center gap-2">
-                        <FileText size={20} className="text-[#03b3e2]" />
-                        <CardTitle className="text-base font-bold leading-[21.28px] text-black">CHANGE REQUESTS</CardTitle>
-                      </div>
-                    </CardHeader>
-                    <CardContent className="space-y-6">
-                      {/* Main Metric */}
-                      <div className="flex flex-col gap-2">
-                        <div className="text-[48px] font-bold leading-[57.6px]" style={{ color: "#03b3e2" }}>5%</div>
-                        <div className="text-sm text-black">Q1 2025: 8% → Q2 2025: 5%</div>
-                        <div className="inline-flex items-center px-3 py-1 rounded-full bg-[#00C3B10F] w-fit">
-                          <span className="text-sm font-medium text-[#00C3B1]">-3% vs Q1 2025</span>
-                        </div>
-                      </div>
-
-                      {/* Breakdown by Product Line */}
-                      <div className="space-y-4">
-                        <h4 className="text-sm font-bold leading-[18.62px] text-black">Change in Request Rate by Product Line</h4>
-                        <div className="space-y-3">
-                          {changeRequestsData.map((item) => {
-                            const absValue = Math.abs(item.changeRate);
-                            const maxValue = 25;
-                            const widthPercent = (absValue / maxValue) * 100;
-                            const colorMap: Record<string, string> = {
-                              Mobile: "#0177c7",
-                              Tablet: "#03b3e2",
-                              Wearable: "#00c3b1",
-                              Ecosystem: "#00c3b1",
-                            };
-                            const color = colorMap[item.productLine] || "#0177c7";
-
-                            return (
-                              <div key={item.productLine} className="space-y-1">
-                                <div className="flex items-center justify-between">
-                                  <span className="text-sm text-black">{item.productLine}</span>
-                                  <span className="text-sm font-medium text-black">{item.changeRate}%</span>
-                                </div>
-                                <div className="relative h-6 w-full bg-[#f1f1f3] rounded-md overflow-hidden">
-                                  <div
-                                    className="h-full flex items-center justify-end pr-2 rounded-md"
-                                    style={{
-                                      width: `${widthPercent}%`,
-                                      backgroundColor: color,
-                                    }}
-                                  >
-                                    <span className="text-white text-xs font-medium">{absValue}%</span>
-                                  </div>
-                                </div>
-                              </div>
-                            );
-                          })}
-                        </div>
-                      </div>
-                    </CardContent>
-                  </Card>
-                </div>
-
-                {/* Row 2: Brand and Legal amends (30%) + ON-TIME DELIVERY (70%) */}
-                <div className="grid grid-cols-1 md:grid-cols-10 gap-5">
-                  {/* Brand and Legal amends (right first time) - 30% */}
-                  <Card className="border border-[#ececec] bg-white md:col-span-3 flex flex-col">
+                  {/* Brand and Legal amends (right first time) */}
+                  <Card className="border border-[#ececec] bg-white flex flex-col">
                     <CardHeader className="pb-3">
                       <CardTitle className="text-base font-bold leading-[21.28px] text-black">Brand and Legal amends (right first time)</CardTitle>
                     </CardHeader>
@@ -1184,76 +1935,135 @@ export default function TrackerPage() {
                       </ChartContainer>
                     </CardContent>
                   </Card>
-
-                  {/* ON-TIME DELIVERY - 70% */}
-                  <Card className="border border-[#ececec] bg-white md:col-span-7">
-                    <CardHeader className="pb-3">
-                      <div className="flex items-center gap-2">
-                        <Clock size={20} className="text-[#03b3e2]" />
-                        <CardTitle className="text-base font-bold leading-[21.28px] text-black uppercase">ON-TIME DELIVERY</CardTitle>
-                      </div>
-                    </CardHeader>
-                    <CardContent className="space-y-6">
-                      {/* Main Metric */}
-                      <div className="flex flex-col gap-2">
-                        <div className="text-[48px] font-bold leading-[57.6px]" style={{ color: "#03b3e2" }}>91%</div>
-                        <div className="text-sm text-black">Q1 2025: 87% → Q2 2025: 91%</div>
-                        <div className="inline-flex items-center px-3 py-1 rounded-full bg-[#00C3B10F] border border-[#00C3B1]/20 w-fit">
-                          <span className="text-sm font-medium text-[#00C3B1]">+4% vs Q1 2025</span>
-                        </div>
-                      </div>
-
-                      {/* Breakdown by Product Line */}
-                      <div className="space-y-4">
-                        <h4 className="text-sm font-bold leading-[18.62px] text-black">Change in On-Time Delivery by Product Line</h4>
-                        <div className="space-y-3">
-                          {onTimeDeliveryData.map((item) => {
-                            const maxValue = 32;
-                            const widthPercent = (item.changeRate / maxValue) * 100;
-                            const colorMap: Record<string, string> = {
-                              Mobile: "#0177c7",
-                              Tablet: "#03b3e2",
-                              Wearable: "#00c3b1",
-                              Ecosystem: "#00c3b1",
-                            };
-                            const badgeColorMap: Record<string, string> = {
-                              Mobile: "#0177c7",
-                              Tablet: "#03b3e2",
-                              Wearable: "#00c3b1",
-                              Ecosystem: "#00c3b1",
-                            };
-                            const color = colorMap[item.productLine] || "#0177c7";
-                            const badgeColor = badgeColorMap[item.productLine] || "#0177c7";
-
-                            return (
-                              <div key={item.productLine} className="space-y-1">
-                                <div className="flex items-center justify-between">
-                                  <span className="text-sm text-black">{item.productLine}</span>
-                                  <div className="inline-flex items-center px-2 py-0.5 rounded-md" style={{ backgroundColor: `${badgeColor}1A`, color: badgeColor }}>
-                                    <span className="text-sm font-medium">+{item.changeRate}%</span>
-                                  </div>
-                                </div>
-                                <div className="relative h-6 w-full bg-[#f1f1f3] rounded-md overflow-hidden">
-                                  <div
-                                    className="h-full flex items-center justify-end pr-2 rounded-md"
-                                    style={{
-                                      width: `${widthPercent}%`,
-                                      backgroundColor: color,
-                                    }}
-                                  >
-                                    <span className="text-white text-xs font-medium">+{item.changeRate}%</span>
-                                  </div>
-                                </div>
-                              </div>
-                            );
-                          })}
-                        </div>
-                      </div>
-                    </CardContent>
-                  </Card>
                 </div>
 
-                {/* Row 3: Top Reasons for Issues - All Categories */}
+                {/* Row 2: CHANGE REQUESTS */}
+                <Card className="border border-[#ececec] bg-white">
+                  <CardHeader className="pb-3">
+                    <div className="flex items-center gap-2">
+                      <FileText size={20} className="text-[#03b3e2]" />
+                      <CardTitle className="text-base font-bold leading-[21.28px] text-black">CHANGE REQUESTS</CardTitle>
+                    </div>
+                  </CardHeader>
+                  <CardContent className="space-y-6">
+                    {/* Main Metric */}
+                    <div className="flex flex-col gap-2">
+                      <div className="text-[48px] font-bold leading-[57.6px]" style={{ color: "#03b3e2" }}>5%</div>
+                      <div className="text-sm text-black">Q1 2025: 8% → Q2 2025: 5%</div>
+                      <div className="inline-flex items-center px-3 py-1 rounded-full bg-[#00C3B10F] w-fit">
+                        <span className="text-sm font-medium text-[#00C3B1]">-3% vs Q1 2025</span>
+                      </div>
+                    </div>
+
+                    {/* Breakdown by Product Line */}
+                    <div className="space-y-4">
+                      <h4 className="text-sm font-bold leading-[18.62px] text-black">Change in Request Rate by Product Line</h4>
+                      <div className="space-y-3">
+                        {changeRequestsData.map((item) => {
+                          const absValue = Math.abs(item.changeRate);
+                          const maxValue = 25;
+                          const widthPercent = (absValue / maxValue) * 100;
+                          const colorMap: Record<string, string> = {
+                            Mobile: "#0177c7",
+                            Tablet: "#03b3e2",
+                            Wearable: "#00c3b1",
+                            Ecosystem: "#00c3b1",
+                          };
+                          const color = colorMap[item.productLine] || "#0177c7";
+
+                          return (
+                            <div key={item.productLine} className="space-y-1">
+                              <div className="flex items-center justify-between">
+                                <span className="text-sm text-black">{item.productLine}</span>
+                                <span className="text-sm font-medium text-black">{item.changeRate}%</span>
+                              </div>
+                              <div className="relative h-6 w-full bg-[#f1f1f3] rounded-md overflow-hidden">
+                                <div
+                                  className="h-full flex items-center justify-end pr-2 rounded-md"
+                                  style={{
+                                    width: `${widthPercent}%`,
+                                    backgroundColor: color,
+                                  }}
+                                >
+                                  <span className="text-white text-xs font-medium">{absValue}%</span>
+                                </div>
+                              </div>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                {/* Row 3: ON-TIME DELIVERY */}
+                <Card className="border border-[#ececec] bg-white">
+                  <CardHeader className="pb-3">
+                    <div className="flex items-center gap-2">
+                      <Clock size={20} className="text-[#03b3e2]" />
+                      <CardTitle className="text-base font-bold leading-[21.28px] text-black uppercase">ON-TIME DELIVERY</CardTitle>
+                    </div>
+                  </CardHeader>
+                  <CardContent className="space-y-6">
+                    {/* Main Metric */}
+                    <div className="flex flex-col gap-2">
+                      <div className="text-[48px] font-bold leading-[57.6px]" style={{ color: "#03b3e2" }}>91%</div>
+                      <div className="text-sm text-black">Q1 2025: 87% → Q2 2025: 91%</div>
+                      <div className="inline-flex items-center px-3 py-1 rounded-full bg-[#00C3B10F] border border-[#00C3B1]/20 w-fit">
+                        <span className="text-sm font-medium text-[#00C3B1]">+4% vs Q1 2025</span>
+                      </div>
+                    </div>
+
+                    {/* Breakdown by Product Line */}
+                    <div className="space-y-4">
+                      <h4 className="text-sm font-bold leading-[18.62px] text-black">Change in On-Time Delivery by Product Line</h4>
+                      <div className="space-y-3">
+                        {onTimeDeliveryData.map((item) => {
+                          const maxValue = 32;
+                          const widthPercent = (item.changeRate / maxValue) * 100;
+                          const colorMap: Record<string, string> = {
+                            Mobile: "#0177c7",
+                            Tablet: "#03b3e2",
+                            Wearable: "#00c3b1",
+                            Ecosystem: "#00c3b1",
+                          };
+                          const badgeColorMap: Record<string, string> = {
+                            Mobile: "#0177c7",
+                            Tablet: "#03b3e2",
+                            Wearable: "#00c3b1",
+                            Ecosystem: "#00c3b1",
+                          };
+                          const color = colorMap[item.productLine] || "#0177c7";
+                          const badgeColor = badgeColorMap[item.productLine] || "#0177c7";
+
+                          return (
+                            <div key={item.productLine} className="space-y-1">
+                              <div className="flex items-center justify-between">
+                                <span className="text-sm text-black">{item.productLine}</span>
+                                <div className="inline-flex items-center px-2 py-0.5 rounded-md" style={{ backgroundColor: `${badgeColor}1A`, color: badgeColor }}>
+                                  <span className="text-sm font-medium">+{item.changeRate}%</span>
+                                </div>
+                              </div>
+                              <div className="relative h-6 w-full bg-[#f1f1f3] rounded-md overflow-hidden">
+                                <div
+                                  className="h-full flex items-center justify-end pr-2 rounded-md"
+                                  style={{
+                                    width: `${widthPercent}%`,
+                                    backgroundColor: color,
+                                  }}
+                                >
+                                  <span className="text-white text-xs font-medium">+{item.changeRate}%</span>
+                                </div>
+                              </div>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                {/* Row 4: Top Reasons for Issues - All Categories */}
                 <div className="space-y-4">
                   <div className="flex flex-col gap-1">
                     <h3 className="text-[22px] font-bold leading-[29.26px] text-black">Top Reasons for Issues - All Categories</h3>
@@ -1282,14 +2092,6 @@ export default function TrackerPage() {
                                   <Cell key={`cell-${index}`} fill={entry.color} />
                                 ))}
                               </Pie>
-                              <ChartTooltip 
-                                content={(props) => {
-                                  if (props.active && lateBriefsData) {
-                                    return <PieChartTooltip data={lateBriefsData} config={lateBriefsConfig} />;
-                                  }
-                                  return null;
-                                }}
-                              />
                             </PieChart>
                           </ResponsiveContainer>
                         </ChartContainer>
@@ -1297,6 +2099,24 @@ export default function TrackerPage() {
                           <div className="text-[32px] font-bold leading-[38.4px]" style={{ color: "#03b3e2" }}>13%</div>
                           <p className="text-sm text-black">of projects were briefed later than expected.</p>
                           <p className="text-xs text-[#646464]">Q2 2025: 8%</p>
+                        </div>
+                        {/* Results at bottom - Tablet only */}
+                        <div className="pt-4 border-t border-[#ececec] space-y-2">
+                          {lateBriefsData.map((item, index) => {
+                            const total = lateBriefsData.reduce((sum, entry) => sum + entry.value, 0);
+                            const percentage = ((item.value / total) * 100).toFixed(1);
+                            return (
+                              <div key={index} className="flex items-center justify-between gap-3">
+                                <div className="flex items-center gap-2">
+                                  <div className="w-3 h-3 rounded-full" style={{ backgroundColor: item.color }}></div>
+                                  <span className="text-xs text-black">{item.name}</span>
+                                </div>
+                                <div className="flex items-center gap-2">
+                                  <span className="text-xs font-medium text-black">{percentage}%</span>
+                                </div>
+                              </div>
+                            );
+                          })}
                         </div>
                       </CardContent>
                     </Card>
@@ -1323,14 +2143,6 @@ export default function TrackerPage() {
                                   <Cell key={`cell-${index}`} fill={entry.color} />
                                 ))}
                               </Pie>
-                              <ChartTooltip 
-                                content={(props) => {
-                                  if (props.active && extendedProjectsData) {
-                                    return <PieChartTooltip data={extendedProjectsData} config={extendedProjectsConfig} />;
-                                  }
-                                  return null;
-                                }}
-                              />
                             </PieChart>
                           </ResponsiveContainer>
                         </ChartContainer>
@@ -1338,6 +2150,24 @@ export default function TrackerPage() {
                           <div className="text-[32px] font-bold leading-[38.4px]" style={{ color: "#03b3e2" }}>41%</div>
                           <p className="text-sm text-black">of projects were delayed/extended in flight.</p>
                           <p className="text-xs text-[#646464]">Q2 2025: 32%</p>
+                        </div>
+                        {/* Results at bottom - Tablet only */}
+                        <div className="pt-4 border-t border-[#ececec] space-y-2">
+                          {extendedProjectsData.map((item, index) => {
+                            const total = extendedProjectsData.reduce((sum, entry) => sum + entry.value, 0);
+                            const percentage = ((item.value / total) * 100).toFixed(1);
+                            return (
+                              <div key={index} className="flex items-center justify-between gap-3">
+                                <div className="flex items-center gap-2">
+                                  <div className="w-3 h-3 rounded-full" style={{ backgroundColor: item.color }}></div>
+                                  <span className="text-xs text-black">{item.name}</span>
+                                </div>
+                                <div className="flex items-center gap-2">
+                                  <span className="text-xs font-medium text-black">{percentage}%</span>
+                                </div>
+                              </div>
+                            );
+                          })}
                         </div>
                       </CardContent>
                     </Card>
@@ -1364,14 +2194,6 @@ export default function TrackerPage() {
                                   <Cell key={`cell-${index}`} fill={entry.color} />
                                 ))}
                               </Pie>
-                              <ChartTooltip 
-                                content={(props) => {
-                                  if (props.active && insufficientTimeData) {
-                                    return <PieChartTooltip data={insufficientTimeData} config={insufficientTimeConfig} />;
-                                  }
-                                  return null;
-                                }}
-                              />
                             </PieChart>
                           </ResponsiveContainer>
                         </ChartContainer>
@@ -1380,21 +2202,39 @@ export default function TrackerPage() {
                           <p className="text-sm text-black">of projects were briefed with insufficient time.</p>
                           <p className="text-xs text-[#646464]">Q2 2025: 22%</p>
                         </div>
+                        {/* Results at bottom - Tablet only */}
+                        <div className="pt-4 border-t border-[#ececec] space-y-2">
+                          {insufficientTimeData.map((item, index) => {
+                            const total = insufficientTimeData.reduce((sum, entry) => sum + entry.value, 0);
+                            const percentage = ((item.value / total) * 100).toFixed(1);
+                            return (
+                              <div key={index} className="flex items-center justify-between gap-3">
+                                <div className="flex items-center gap-2">
+                                  <div className="w-3 h-3 rounded-full" style={{ backgroundColor: item.color }}></div>
+                                  <span className="text-xs text-black">{item.name}</span>
+                                </div>
+                                <div className="flex items-center gap-2">
+                                  <span className="text-xs font-medium text-black">{percentage}%</span>
+                                </div>
+                              </div>
+                            );
+                          })}
+                        </div>
                       </CardContent>
                     </Card>
                   </div>
                 </div>
 
-                {/* Row 4: Issues Breakdown */}
-                    <Card className="border border-[#ececec] bg-white">
+                {/* Row 5: Issues Breakdown */}
+                <Card className="border border-[#ececec] bg-white">
                   <CardHeader className="pb-3">
-                      <div className="flex items-center justify-between">
-                        <CardTitle className="text-base font-bold leading-[21.28px]" style={{ color: "#03b3e2" }}>Issues Breakdown</CardTitle>
-                        <Button variant="outline" className="h-10 px-6 border-none bg-[#ffb546] hover:opacity-90 text-black whitespace-nowrap">
-                          <span className="text-black font-semibold whitespace-nowrap">View All</span>
-                          <ChevronRight size={20} className="ml-2 text-black" />
-                        </Button>
-                      </div>
+                    <div className="flex items-center justify-between">
+                      <CardTitle className="text-base font-bold leading-[21.28px]" style={{ color: "#03b3e2" }}>Issues Breakdown</CardTitle>
+                      <Button variant="outline" className="h-10 px-6 border-none bg-[#ffb546] hover:opacity-90 text-black whitespace-nowrap">
+                        <span className="text-black font-semibold whitespace-nowrap">View All</span>
+                        <ChevronRight size={20} className="ml-2 text-black" />
+                      </Button>
+                    </div>
                   </CardHeader>
                   <CardContent>
                     <Table>
@@ -1434,11 +2274,10 @@ export default function TrackerPage() {
             {/* Budget Tab Content */}
             <TabsContent value="budget" className="mt-6">
               <TooltipProvider>
-                <div className="space-y-6">
-                  {/* Wallet and Token Distribution - 70% / 30% */}
-                  <div className="grid grid-cols-1 md:grid-cols-10 gap-5">
-                    {/* Wallet Component - 70% */}
-                    <Card className="border border-[#ececec] bg-white md:col-span-7">
+                {/* Desktop: Side-by-side layout */}
+                <div className="hidden lg:grid lg:grid-cols-10 lg:gap-5">
+                  {/* Wallet Component */}
+                  <Card className="border border-[#ececec] bg-white lg:col-span-7">
                       <CardHeader className="pb-3">
                         <div className="flex items-center justify-between">
                           <div className="flex items-center gap-2">
@@ -1555,142 +2394,401 @@ export default function TrackerPage() {
                       </CardContent>
                     </Card>
 
-                    {/* Token Distribution by Category - 30% */}
-                    <Card className="border border-[#ececec] bg-white md:col-span-3 flex flex-col">
-                      <CardHeader className="pb-3">
-                        <CardTitle className="text-base font-bold leading-[21.28px] text-black">Token distribution</CardTitle>
-                      </CardHeader>
-                      <CardContent className="flex-1 flex items-center justify-center">
-                        <ChartContainer config={tokenDistributionCategoryConfig} className="h-[300px] md:h-[250px] w-full">
-                          <ResponsiveContainer width="100%" height="100%">
-                            <BarChart data={tokenDistributionByCategoryData} margin={{ left: 10, right: 10, top: 10, bottom: 20 }}>
-                              <CartesianGrid strokeDasharray="3 3" stroke="#e0e0e0" vertical={false} />
-                              <XAxis 
-                                dataKey="category" 
-                                axisLine={false}
-                                tickLine={false}
-                                tick={{ fill: "#646464", fontSize: 12 }}
-                              />
-                              <YAxis 
-                                axisLine={false}
-                                tickLine={false}
-                                domain={[0, 8000]}
-                                ticks={[0, 2000, 4000, 6000, 8000]}
-                                tick={{ fill: "#646464", fontSize: 12 }}
-                                label={{ value: "Tokens", angle: -90, position: "insideLeft", offset: 15, style: { fill: "#646464", fontSize: 12, textAnchor: "middle" } }}
-                              />
-                              <ChartTooltip content={<ChartTooltipContent className="bg-white [&_span]:text-black [&_div]:text-black" />} />
-                              <Bar dataKey="tokens" fill="#03b3e2" radius={[4, 4, 0, 0]} />
-                            </BarChart>
-                          </ResponsiveContainer>
-                        </ChartContainer>
-                      </CardContent>
-                    </Card>
-                  </div>
+                  {/* Token Distribution by Category */}
+                  <Card className="border border-[#ececec] bg-white lg:col-span-3">
+                    <CardHeader className="pb-3">
+                      <CardTitle className="text-base font-bold leading-[21.28px] text-black">Token distribution</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <ChartContainer config={tokenDistributionCategoryConfig} className="h-[300px] md:h-[250px] w-full">
+                        <ResponsiveContainer width="100%" height="100%">
+                          <BarChart data={tokenDistributionByCategoryData} margin={{ left: 10, right: 10, top: 10, bottom: 20 }}>
+                            <CartesianGrid strokeDasharray="3 3" stroke="#e0e0e0" vertical={false} />
+                            <XAxis 
+                              dataKey="category" 
+                              axisLine={false}
+                              tickLine={false}
+                              tick={{ fill: "#646464", fontSize: 12 }}
+                            />
+                            <YAxis 
+                              axisLine={false}
+                              tickLine={false}
+                              domain={[0, 8000]}
+                              ticks={[0, 2000, 4000, 6000, 8000]}
+                              tick={{ fill: "#646464", fontSize: 12 }}
+                              label={{ value: "Tokens", angle: -90, position: "insideLeft", offset: 15, style: { fill: "#646464", fontSize: 12, textAnchor: "middle" } }}
+                            />
+                            <ChartTooltip content={<ChartTooltipContent className="bg-white [&_span]:text-black [&_div]:text-black" />} />
+                            <Bar dataKey="tokens" fill="#03b3e2" radius={[4, 4, 0, 0]} />
+                          </BarChart>
+                        </ResponsiveContainer>
+                      </ChartContainer>
+                    </CardContent>
+                  </Card>
+                </div>
+
+                {/* Tablet/Mobile: Vertical Stack */}
+                <div className="lg:hidden space-y-6">
+                  {/* Wallet Component */}
+                  <Card className="border border-[#ececec] bg-white">
+                    <CardHeader className="pb-3">
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-2">
+                          <Wallet size={20} className="text-[#03b3e2]" />
+                          <CardTitle className="text-base font-bold leading-[21.28px] text-black">Wallet</CardTitle>
+                        </div>
+                        <div className="flex items-center gap-2 bg-[#f1f1f3] rounded-md p-1">
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => setBudgetView("quarter")}
+                            className={`h-8 px-3 text-sm ${budgetView === "quarter" ? "bg-white text-black shadow-sm" : "text-[#646464]"}`}
+                          >
+                            Quarter
+                          </Button>
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => setBudgetView("annual")}
+                            className={`h-8 px-3 text-sm ${budgetView === "annual" ? "bg-white text-black shadow-sm" : "text-[#646464]"}`}
+                          >
+                            Annual
+                          </Button>
+                        </div>
+                      </div>
+                    </CardHeader>
+                    <CardContent className="space-y-6">
+                      {(() => {
+                        const budgetData = budgetView === "quarter" ? quarterBudgetData : annualBudgetData;
+                        const periodLabel = budgetView === "quarter" ? "this quarter" : "per annum";
+                        
+                        return (
+                          <>
+                            <div className="space-y-4">
+                              <div className="flex items-center justify-between">
+                                <span className="text-sm text-black">Total Budget {periodLabel}</span>
+                                <span className="text-lg font-bold text-black">{budgetData.totalBudget.toLocaleString()} tokens</span>
+                              </div>
+                              
+                                {/* Metrics Grid - 2x2 */}
+                                <div className="grid grid-cols-2 gap-4">
+                                {/* Tokens Spent */}
+                                <div className="border border-[#ececec] rounded-lg p-4 bg-white">
+                                  <div className="flex items-center justify-between mb-2">
+                                    <span className="text-sm text-black">Tokens Spent</span>
+                                    <Tooltip>
+                                      <TooltipTrigger asChild>
+                                        <HelpCircle size={16} className="text-[#646464] cursor-help" />
+                                      </TooltipTrigger>
+                                      <TooltipContent className="bg-white border border-[#ececec] text-black max-w-xs">
+                                        <p className="text-xs">Tokens used for completed projects. This amount reflects budget already spent.</p>
+                                      </TooltipContent>
+                                    </Tooltip>
+                                  </div>
+                                  <div className="text-2xl font-bold text-black">{budgetData.tokensSpent.toLocaleString()}</div>
+                                  <div className="text-xs text-[#646464] mt-1">{((budgetData.tokensSpent / budgetData.totalBudget) * 100).toFixed(1)}% of budget</div>
+                                </div>
+
+                                {/* Tokens Committed */}
+                                <div className="border border-[#ececec] rounded-lg p-4 bg-white">
+                                  <div className="flex items-center justify-between mb-2">
+                                    <span className="text-sm text-black">Tokens Committed</span>
+                                    <Tooltip>
+                                      <TooltipTrigger asChild>
+                                        <HelpCircle size={16} className="text-[#646464] cursor-help" />
+                                      </TooltipTrigger>
+                                      <TooltipContent className="bg-white border border-[#ececec] text-black max-w-xs">
+                                        <p className="text-xs">Tokens allocated to projects currently in progress. If a project is paused or stopped, unused tokens may be reinstated depending on its stage.</p>
+                                      </TooltipContent>
+                                    </Tooltip>
+                                  </div>
+                                  <div className="text-2xl font-bold text-black">{budgetData.tokensCommitted.toLocaleString()}</div>
+                                  <div className="text-xs text-[#646464] mt-1">{((budgetData.tokensCommitted / budgetData.totalBudget) * 100).toFixed(1)}% of budget</div>
+                                </div>
+
+                                {/* Tokens Remaining */}
+                                <div className="border border-[#ececec] rounded-lg p-4 bg-white">
+                                  <div className="flex items-center justify-between mb-2">
+                                    <span className="text-sm text-black">Tokens Remaining</span>
+                                    <Tooltip>
+                                      <TooltipTrigger asChild>
+                                        <HelpCircle size={16} className="text-[#646464] cursor-help" />
+                                      </TooltipTrigger>
+                                      <TooltipContent className="bg-white border border-[#ececec] text-black max-w-xs">
+                                        <p className="text-xs">Tokens still available in your overall budget that have not yet been used or allocated.</p>
+                                      </TooltipContent>
+                                    </Tooltip>
+                                  </div>
+                                  <div className="text-2xl font-bold text-[#03b3e2]">{budgetData.tokensRemaining.toLocaleString()}</div>
+                                  <div className="text-xs text-[#646464] mt-1">{((budgetData.tokensRemaining / budgetData.totalBudget) * 100).toFixed(1)}% of budget</div>
+                                </div>
+
+                                {/* Tokens Pending */}
+                                <div className="border border-[#ececec] rounded-lg p-4 bg-white">
+                                  <div className="flex items-center justify-between mb-2">
+                                    <span className="text-sm text-black">Tokens Pending</span>
+                                    <Tooltip>
+                                      <TooltipTrigger asChild>
+                                        <HelpCircle size={16} className="text-[#646464] cursor-help" />
+                                      </TooltipTrigger>
+                                      <TooltipContent className="bg-white border border-[#ececec] text-black max-w-xs">
+                                        <p className="text-xs">Estimated token amounts assigned to briefs in progress that are awaiting confirmation or project start.</p>
+                                      </TooltipContent>
+                                    </Tooltip>
+                                  </div>
+                                  <div className="text-2xl font-bold text-black">{budgetData.tokensPending.toLocaleString()}</div>
+                                  <div className="text-xs text-[#646464] mt-1">{((budgetData.tokensPending / budgetData.totalBudget) * 100).toFixed(1)}% of budget</div>
+                                </div>
+                              </div>
+                            </div>
+                          </>
+                        );
+                      })()}
+                    </CardContent>
+                  </Card>
+
+                  {/* Token Distribution by Category */}
+                  <Card className="border border-[#ececec] bg-white">
+                    <CardHeader className="pb-3">
+                      <CardTitle className="text-base font-bold leading-[21.28px] text-black">Token distribution</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <ChartContainer config={tokenDistributionCategoryConfig} className="h-[300px] md:h-[250px] w-full">
+                        <ResponsiveContainer width="100%" height="100%">
+                          <BarChart data={tokenDistributionByCategoryData} margin={{ left: 10, right: 10, top: 10, bottom: 20 }}>
+                            <CartesianGrid strokeDasharray="3 3" stroke="#e0e0e0" vertical={false} />
+                            <XAxis 
+                              dataKey="category" 
+                              axisLine={false}
+                              tickLine={false}
+                              tick={{ fill: "#646464", fontSize: 12 }}
+                            />
+                            <YAxis 
+                              axisLine={false}
+                              tickLine={false}
+                              domain={[0, 8000]}
+                              ticks={[0, 2000, 4000, 6000, 8000]}
+                              tick={{ fill: "#646464", fontSize: 12 }}
+                              label={{ value: "Tokens", angle: -90, position: "insideLeft", offset: 15, style: { fill: "#646464", fontSize: 12, textAnchor: "middle" } }}
+                            />
+                            <ChartTooltip content={<ChartTooltipContent className="bg-white [&_span]:text-black [&_div]:text-black" />} />
+                            <Bar dataKey="tokens" fill="#03b3e2" radius={[4, 4, 0, 0]} />
+                          </BarChart>
+                        </ResponsiveContainer>
+                      </ChartContainer>
+                    </CardContent>
+                  </Card>
                 </div>
               </TooltipProvider>
             </TabsContent>
 
             {/* Predictive Analytics & Insights Tab Content */}
             <TabsContent value="predictive-analytics" className="mt-6">
-              <div className="space-y-6">
-                {/* Ask TIKO a Question (70%) + Client Satisfaction (30%) */}
-                <div className="grid grid-cols-1 md:grid-cols-10 gap-5">
-                  {/* Ask TIKO a Question - 70% */}
-                  <Card className="border border-[#ececec] bg-white rounded-xl overflow-hidden relative md:col-span-7">
-                    <CardHeader className="pb-4">
-                      <div className="flex items-start gap-3">
+              {/* Desktop: Side-by-side layout */}
+              <div className="hidden lg:block space-y-6">
+                {/* Row 1: Ask TIKO 70% / Client Satisfaction 30% */}
+                <div className="grid grid-cols-10 gap-5">
+                {/* Ask TIKO a Question */}
+                  <Card className="border border-[#ececec] bg-white rounded-xl overflow-hidden relative col-span-7">
+                    <CardHeader className="pb-3">
+                    <div className="flex items-start gap-3">
                         <div className="w-12 h-12 rounded-full bg-[#ffb546] flex items-center justify-center flex-shrink-0">
-                          <Bot size={24} className="text-white" />
-                        </div>
-                        <div className="flex-1">
-                          <CardTitle className="text-base font-bold leading-[21.28px] text-black mb-1">Ask TIKO a Question</CardTitle>
-                          <p className="text-sm text-[#646464]">Get AI-powered insights on any aspect of your project data</p>
-                        </div>
+                        <Bot size={24} className="text-white" />
                       </div>
-                    </CardHeader>
-                    <CardContent className="space-y-4 pb-6">
-                      <div className="relative">
-                        <Textarea
-                          value={tikoQuestion}
-                          onChange={(e) => setTikoQuestion(e.target.value)}
-                          placeholder="e.g., Why are Mobile campaigns taking longer than Tablet campaigns?"
-                          className="min-h-[120px] w-full bg-[#f9f9f9] border border-[#ececec] rounded-lg px-4 py-3 text-sm text-black placeholder:text-[#646464] focus:outline-none focus:ring-2 focus:ring-[#03b3e2] focus:ring-offset-2 resize-none"
-                          onKeyDown={(e) => {
-                            if (e.key === "Enter" && e.ctrlKey) {
-                              handleAskTiko();
-                            }
-                          }}
-                        />
+                      <div className="flex-1">
+                        <CardTitle className="text-base font-bold leading-[21.28px] text-black mb-1">Ask TIKO a Question</CardTitle>
+                        <p className="text-sm text-[#646464]">Get AI-powered insights on any aspect of your project data</p>
                       </div>
-                      <div className="flex justify-end">
-                        <Button
-                          onClick={handleAskTiko}
+                    </div>
+                  </CardHeader>
+                    <CardContent className="space-y-4 pb-4">
+                    <div className="relative">
+                      <Textarea
+                        value={tikoQuestion}
+                        onChange={(e) => setTikoQuestion(e.target.value)}
+                        placeholder="e.g., Why are Mobile campaigns taking longer than Tablet campaigns?"
+                          className="min-h-[80px] w-full bg-[#f9f9f9] border border-[#ececec] rounded-lg px-4 py-3 text-sm text-black placeholder:text-[#646464] focus:outline-none focus:ring-2 focus:ring-[#03b3e2] focus:ring-offset-2 resize-none"
+                        onKeyDown={(e) => {
+                          if (e.key === "Enter" && e.ctrlKey) {
+                            handleAskTiko();
+                          }
+                        }}
+                      />
+                    </div>
+                    <div className="flex justify-end">
+                      <Button
+                        onClick={handleAskTiko}
                           variant="outline"
                           className="h-10 px-6 border-none bg-[#ffb546] hover:opacity-90 text-black whitespace-nowrap"
-                        >
+                      >
                           <span className="text-black font-semibold whitespace-nowrap">Ask TIKO</span>
                           <ChevronRight size={20} className="ml-2 text-black" />
-                        </Button>
-                      </div>
-                    </CardContent>
-                  </Card>
+                      </Button>
+                    </div>
+                  </CardContent>
+                </Card>
 
-                  {/* Client Satisfaction & Feedback - 30% */}
-                  <Card className="border border-[#ececec] bg-white md:col-span-3">
-                    <CardHeader className="pb-3">
+                  {/* Client Satisfaction - Centered for desktop */}
+                  <Card className="border border-[#ececec] bg-white col-span-3">
+                  <CardHeader className="pb-3">
                       <div className="flex items-center gap-2">
                         <BarChart2 size={20} className="text-black" />
                         <CardTitle className="text-base font-bold leading-[21.28px] text-black">Client Satisfaction</CardTitle>
-                      </div>
-                    </CardHeader>
-                    <CardContent className="space-y-4">
-                      <div className="flex justify-center">
+                    </div>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    <div className="flex justify-center">
                         <div className="w-full max-w-[80%]">
                           <ChartContainer config={clientSatisfactionConfig} className="h-[400px] w-full">
-                            <ResponsiveContainer width="100%" height="100%">
-                              <RadarChart data={clientSatisfactionData} margin={{ top: 20, right: 30, bottom: 20, left: 30 }}>
-                                <PolarGrid stroke="#e0e0e0" />
-                                <PolarAngleAxis
-                                  dataKey="category"
-                                  tick={{ fill: "#646464", fontSize: 12 }}
-                                  className="text-xs"
-                                />
-                                <PolarRadiusAxis
-                                  angle={90}
-                                  domain={[0, 5]}
-                                  tickCount={4}
-                                  tick={{ fill: "#646464", fontSize: 12 }}
-                                  axisLine={false}
-                                />
-                                <Radar
-                                  name="Overall Average"
-                                  dataKey="score"
-                                  stroke="#03b3e2"
-                                  fill="#03b3e2"
-                                  fillOpacity={0.3}
-                                  strokeWidth={2}
-                                />
+                          <ResponsiveContainer width="100%" height="100%">
+                            <RadarChart data={clientSatisfactionData} margin={{ top: 20, right: 30, bottom: 20, left: 30 }}>
                                 <ChartTooltip 
-                                  content={(props) => {
-                                    if (props.active && clientSatisfactionData) {
+                                  content={({ active }) => {
+                                    if (active) {
                                       return <RadarChartTooltip data={clientSatisfactionData} />;
                                     }
                                     return null;
                                   }}
                                 />
-                              </RadarChart>
-                            </ResponsiveContainer>
-                          </ChartContainer>
+                              <PolarGrid stroke="#e0e0e0" />
+                              <PolarAngleAxis
+                                dataKey="category"
+                                tick={{ fill: "#646464", fontSize: 12 }}
+                                className="text-xs"
+                              />
+                              <PolarRadiusAxis
+                                angle={90}
+                                domain={[0, 5]}
+                                  tickCount={4}
+                                tick={{ fill: "#646464", fontSize: 12 }}
+                                axisLine={false}
+                              />
+                              <Radar
+                                name="Overall Average"
+                                dataKey="score"
+                                stroke="#03b3e2"
+                                fill="#03b3e2"
+                                fillOpacity={0.3}
+                                strokeWidth={2}
+                              />
+                            </RadarChart>
+                          </ResponsiveContainer>
+                        </ChartContainer>
+                      </div>
+                    </div>
+                    <div className="flex items-center justify-center gap-2">
+                      <div className="w-4 h-0.5 bg-[#03b3e2]"></div>
+                      <span className="text-sm text-black">Overall Average</span>
+                    </div>
+                  </CardContent>
+                </Card>
+                </div>
+              </div>
+
+              {/* Tablet/Mobile: Vertical Stack */}
+              <div className="lg:hidden space-y-6">
+                {/* 1. Ask TIKO a Question */}
+                <Card className="border border-[#ececec] bg-white rounded-xl overflow-hidden relative">
+                  <CardHeader className="pb-3">
+                    <div className="flex items-start gap-3">
+                      <div className="w-12 h-12 rounded-full bg-[#ffb546] flex items-center justify-center flex-shrink-0">
+                        <Bot size={24} className="text-white" />
+                      </div>
+                      <div className="flex-1">
+                        <CardTitle className="text-base font-bold leading-[21.28px] text-black mb-1">Ask TIKO a Question</CardTitle>
+                        <p className="text-sm text-[#646464]">Get AI-powered insights on any aspect of your project data</p>
+                      </div>
+                    </div>
+                  </CardHeader>
+                  <CardContent className="space-y-4 pb-4">
+                    <div className="relative">
+                      <Textarea
+                        value={tikoQuestion}
+                        onChange={(e) => setTikoQuestion(e.target.value)}
+                        placeholder="e.g., Why are Mobile campaigns taking longer than Tablet campaigns?"
+                        className="min-h-[80px] w-full bg-[#f9f9f9] border border-[#ececec] rounded-lg px-4 py-3 text-sm text-black placeholder:text-[#646464] focus:outline-none focus:ring-2 focus:ring-[#03b3e2] focus:ring-offset-2 resize-none"
+                        onKeyDown={(e) => {
+                          if (e.key === "Enter" && e.ctrlKey) {
+                            handleAskTiko();
+                          }
+                        }}
+                      />
+                    </div>
+                    <div className="flex justify-end">
+                      <Button
+                        onClick={handleAskTiko}
+                        variant="outline"
+                        className="h-10 px-6 border-none bg-[#ffb546] hover:opacity-90 text-black whitespace-nowrap"
+                      >
+                        <span className="text-black font-semibold whitespace-nowrap">Ask TIKO</span>
+                        <ChevronRight size={20} className="ml-2 text-black" />
+                      </Button>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                {/* 2. Client Satisfaction */}
+                <Card className="border border-[#ececec] bg-white">
+                  <CardHeader className="pb-3">
+                    <div className="flex items-center gap-2">
+                      <BarChart2 size={20} className="text-black" />
+                      <CardTitle className="text-base font-bold leading-[21.28px] text-black">Client Satisfaction</CardTitle>
+                    </div>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    <div className="flex flex-col lg:flex-row items-start gap-6">
+                      {/* Graph on top/left */}
+                      <div className="flex-1 w-full">
+                        <ChartContainer config={clientSatisfactionConfig} className="h-[400px] w-full">
+                          <ResponsiveContainer width="100%" height="100%">
+                            <RadarChart data={clientSatisfactionData} margin={{ top: 20, right: 30, bottom: 20, left: 30 }}>
+                              <PolarGrid stroke="#e0e0e0" />
+                              <PolarAngleAxis
+                                dataKey="category"
+                                tick={{ fill: "#646464", fontSize: 12 }}
+                                className="text-xs"
+                              />
+                              <PolarRadiusAxis
+                                angle={90}
+                                domain={[0, 5]}
+                                tickCount={4}
+                                tick={{ fill: "#646464", fontSize: 12 }}
+                                axisLine={false}
+                              />
+                              <Radar
+                                name="Overall Average"
+                                dataKey="score"
+                                stroke="#03b3e2"
+                                fill="#03b3e2"
+                                fillOpacity={0.3}
+                                strokeWidth={2}
+                              />
+                            </RadarChart>
+                          </ResponsiveContainer>
+                        </ChartContainer>
+                      </div>
+                      
+                      {/* Results below (tablet) or on the right (desktop) */}
+                      <div className="w-full lg:w-[250px] flex-shrink-0">
+                        <div className="space-y-3">
+                          <div className="flex items-center gap-2 mb-4">
+                            <div className="w-4 h-0.5 bg-[#03b3e2]"></div>
+                            <span className="text-sm font-bold text-black">Overall Average</span>
+                          </div>
+                          {clientSatisfactionData.map((item, index) => (
+                            <div key={index} className="flex items-center justify-between gap-3">
+                              <span className="text-xs text-black">{item.category}</span>
+                              <div className="flex items-center gap-2">
+                                <span className="text-xs font-medium text-black">{item.score}/5</span>
+                              </div>
+                            </div>
+                          ))}
                         </div>
                       </div>
-                      <div className="flex items-center justify-center gap-2">
-                        <div className="w-4 h-0.5 bg-[#03b3e2]"></div>
-                        <span className="text-sm text-black">Overall Average</span>
-                      </div>
-                    </CardContent>
-                  </Card>
-                </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
 
                 {/* Optimization Opportunities */}
                 <div className="space-y-4">
@@ -1698,8 +2796,9 @@ export default function TrackerPage() {
                     <h3 className="text-[22px] font-bold leading-[29.26px] text-black">Optimization Opportunities</h3>
                     <p className="text-sm text-[#646464]">DATA-DRIVEN INSIGHTS FOR PERFORMANCE IMPROVEMENT, BUDGET OPTIMIZATION, AND PROCESS ENHANCEMENT</p>
                   </div>
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-                    {/* Card 1: Performance Driver */}
+                {/* Desktop: 3 columns inline */}
+                <div className="hidden lg:grid lg:grid-cols-3 lg:gap-5">
+                  {/* 1. Performance Driver */}
                     <Card className="border border-[#ececec] bg-white">
                       <CardHeader className="pb-3">
                         <div className="flex items-center gap-2">
@@ -1742,7 +2841,7 @@ export default function TrackerPage() {
                       </CardContent>
                     </Card>
 
-                    {/* Card 2: Budget Risk Alert */}
+                  {/* 2. Budget Risk Alert */}
                     <Card className="border border-[#ececec] bg-white">
                       <CardHeader className="pb-3">
                         <div className="flex items-center gap-2">
@@ -1801,11 +2900,11 @@ export default function TrackerPage() {
                       </CardContent>
                     </Card>
 
-                    {/* Card 3: Process Optimization */}
+                  {/* 3. Process Optimization */}
                     <Card className="border border-[#ececec] bg-white">
                       <CardHeader className="pb-3">
                         <div className="flex items-center gap-2">
-                          <TrendingUp size={20} className="text-[#00C3B1]" />
+                        <TrendingUp size={20} className="text-[#00C3B1]" />
                           <CardTitle className="text-base font-bold leading-[21.28px] text-black">Process Optimization</CardTitle>
                         </div>
                       </CardHeader>
@@ -1844,6 +2943,154 @@ export default function TrackerPage() {
                       </CardContent>
                     </Card>
                   </div>
+
+                {/* Tablet/Mobile: Vertical Stack */}
+                <div className="lg:hidden space-y-5">
+                  {/* 1. Performance Driver */}
+                  <Card className="border border-[#ececec] bg-white">
+                    <CardHeader className="pb-3">
+                      <div className="flex items-center gap-2">
+                        <Target size={20} className="text-[#03b3e2]" />
+                        <CardTitle className="text-base font-bold leading-[21.28px] text-black">Performance Driver</CardTitle>
+                      </div>
+                    </CardHeader>
+                    <CardContent className="space-y-4">
+                      <p className="text-sm text-black leading-[18.62px]">
+                        Complete briefing templates score 4.9/5 vs 3.1/5 for incomplete briefs. Missing "target operator" field = 34% more change requests.
+                      </p>
+                      <ChartContainer config={performanceDriverConfig} className="h-[200px] w-full">
+                        <ResponsiveContainer width="100%" height="100%">
+                          <BarChart data={performanceDriverData} margin={{ left: 10, right: 10, top: 10, bottom: 20 }}>
+                            <CartesianGrid strokeDasharray="3 3" stroke="#e0e0e0" vertical={false} />
+                            <XAxis 
+                              dataKey="category" 
+                              axisLine={false}
+                              tickLine={false}
+                              tick={{ fill: "#646464", fontSize: 12 }}
+                            />
+                            <YAxis 
+                              axisLine={false}
+                              tickLine={false}
+                              domain={[0, 28]}
+                              ticks={[0, 7, 14, 21, 28]}
+                              tick={{ fill: "#646464", fontSize: 12 }}
+                            />
+                            <ChartTooltip content={<ChartTooltipContent className="bg-white [&_span]:text-black [&_div]:text-black" />} />
+                            <Legend />
+                            <Bar dataKey="satisfaction" fill="#0177c7" radius={[4, 4, 0, 0]} />
+                            <Bar dataKey="changeRequests" fill="#03b3e2" radius={[4, 4, 0, 0]} />
+                          </BarChart>
+                        </ResponsiveContainer>
+                      </ChartContainer>
+                      <div className="border border-[#00C3B1] rounded-lg bg-[#00C3B10F] p-3">
+                        <p className="text-xs font-bold text-[#00C3B1] mb-1">Key Driver</p>
+                        <p className="text-xs text-black">Implement mandatory field validation. Projected: 65% fewer change requests.</p>
+                      </div>
+                    </CardContent>
+                  </Card>
+
+                  {/* 2. Budget Risk Alert */}
+                  <Card className="border border-[#ececec] bg-white">
+                    <CardHeader className="pb-3">
+                      <div className="flex items-center gap-2">
+                        <AlertTriangle size={20} className="text-[#8092DC]" />
+                        <CardTitle className="text-base font-bold leading-[21.28px] text-black">Budget Risk Alert</CardTitle>
+                      </div>
+                    </CardHeader>
+                    <CardContent className="space-y-4">
+                      <p className="text-sm text-black leading-[18.62px]">
+                        Mobile division tracking 97% token utilization with 23% Q4 overrun risk. Current token usage vs. allocated tokens shows escalating variance.
+                      </p>
+                      <ChartContainer config={budgetRiskConfig} className="h-[200px] w-full">
+                        <ResponsiveContainer width="100%" height="100%">
+                          <LineChart data={budgetRiskData} margin={{ left: 10, right: 10, top: 10, bottom: 20 }}>
+                            <CartesianGrid strokeDasharray="3 3" stroke="#e0e0e0" vertical={false} />
+                            <XAxis 
+                              dataKey="month" 
+                              axisLine={false}
+                              tickLine={false}
+                              tick={{ fill: "#646464", fontSize: 12 }}
+                            />
+                            <YAxis 
+                              axisLine={false}
+                              tickLine={false}
+                              domain={[700, 1300]}
+                              ticks={[800, 950, 1100, 1250]}
+                              tick={{ fill: "#646464", fontSize: 12 }}
+                              label={{ value: "Tokens", angle: -90, position: "insideLeft", offset: 15, style: { fill: "#646464", fontSize: 12, textAnchor: "middle" } }}
+                            />
+                            <ChartTooltip content={<ChartTooltipContent className="bg-white [&_span]:text-black [&_div]:text-black" />} />
+                            <Legend />
+                            <Line 
+                              type="monotone" 
+                              dataKey="tokensUsed" 
+                              stroke="#0177c7" 
+                              strokeWidth={2} 
+                              dot={{ fill: "#0177c7", r: 4 }}
+                              name="Tokens Used"
+                            />
+                            <Line 
+                              type="monotone" 
+                              dataKey="tokensAllocated" 
+                              stroke="#03b3e2" 
+                              strokeWidth={2} 
+                              strokeDasharray="5 5"
+                              dot={{ fill: "#03b3e2", r: 4 }}
+                              name="Tokens Allocated"
+                            />
+                          </LineChart>
+                        </ResponsiveContainer>
+                      </ChartContainer>
+                      <div className="border border-[#00C3B1] rounded-lg bg-[#00C3B10F] p-3">
+                        <p className="text-xs font-bold text-[#00C3B1] mb-1">Mitigation</p>
+                        <p className="text-xs text-black">Expedite HQ asset prioritization. Implement bi-weekly delivery checkpoints.</p>
+                      </div>
+                    </CardContent>
+                  </Card>
+
+                  {/* 3. Process Optimization */}
+                  <Card className="border border-[#ececec] bg-white">
+                    <CardHeader className="pb-3">
+                      <div className="flex items-center gap-2">
+                        <TrendingUp size={20} className="text-[#00C3B1]" />
+                        <CardTitle className="text-base font-bold leading-[21.28px] text-black">Process Optimization</CardTitle>
+                      </div>
+                    </CardHeader>
+                    <CardContent className="space-y-4">
+                      <p className="text-sm text-black leading-[18.62px]">
+                        JFDI: 35% faster, 0.9 lower satisfaction. Creative: highest satisfaction, 3x longer.
+                      </p>
+                      <ChartContainer config={processOptimizationConfig} className="h-[200px] w-full">
+                        <ResponsiveContainer width="100%" height="100%">
+                          <BarChart data={processOptimizationData} margin={{ left: 10, right: 10, top: 10, bottom: 20 }}>
+                            <CartesianGrid strokeDasharray="3 3" stroke="#e0e0e0" vertical={false} />
+                            <XAxis 
+                              dataKey="method" 
+                              axisLine={false}
+                              tickLine={false}
+                              tick={{ fill: "#646464", fontSize: 12 }}
+                            />
+                            <YAxis 
+                              axisLine={false}
+                              tickLine={false}
+                              domain={[0, 12]}
+                              ticks={[0, 3, 6, 9, 12]}
+                              tick={{ fill: "#646464", fontSize: 12 }}
+                            />
+                            <ChartTooltip content={<ChartTooltipContent className="bg-white [&_span]:text-black [&_div]:text-black" />} />
+                            <Legend />
+                            <Bar dataKey="days" fill="#0177c7" radius={[4, 4, 0, 0]} />
+                            <Bar dataKey="satisfaction" fill="#03b3e2" radius={[4, 4, 0, 0]} />
+                          </BarChart>
+                        </ResponsiveContainer>
+                      </ChartContainer>
+                      <div className="border border-[#00C3B1] rounded-lg bg-[#00C3B10F] p-3">
+                        <p className="text-xs font-bold text-[#00C3B1] mb-1">Opportunity</p>
+                        <p className="text-xs text-black">Create hybrid approach: JFDI execution with creative consultation checkpoints.</p>
+                      </div>
+                    </CardContent>
+                  </Card>
+                </div>
                 </div>
 
                 {/* Predictive Insights */}
@@ -1984,7 +3231,6 @@ export default function TrackerPage() {
                         </div>
                       </CardContent>
                     </Card>
-                  </div>
                 </div>
               </div>
             </TabsContent>
