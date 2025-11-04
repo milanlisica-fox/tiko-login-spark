@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { Home, FileText, Folder, BarChart2, LogOut, Bell, ChevronDown, ArrowRight, Coins, ChevronRight, Clock, Bot, Target, AlertTriangle, TrendingUp, CheckCircle2, DollarSign, Menu } from "lucide-react";
+import { Home, FileText, Folder, BarChart2, LogOut, Bell, ChevronDown, ArrowRight, Coins, ChevronRight, Clock, Bot, Target, AlertTriangle, TrendingUp, CheckCircle2, DollarSign, Menu, Wallet, HelpCircle } from "lucide-react";
 import { toast } from "sonner";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -8,6 +8,7 @@ import { Badge } from "@/components/ui/badge";
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
 import { AreaChart, Area, BarChart, Bar, XAxis, YAxis, CartesianGrid, ResponsiveContainer, PieChart, Pie, Cell, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Radar, LineChart, Line, Legend } from "recharts";
 import { Popover, PopoverTrigger, PopoverContent } from "@/components/ui/popover";
+import { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider } from "@/components/ui/tooltip";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from "@/components/ui/table";
 import { Textarea } from "@/components/ui/textarea";
@@ -36,6 +37,7 @@ export default function TrackerPage() {
   const activeTab = tabParam || "leaderboard";
   const [tikoQuestion, setTikoQuestion] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("all");
+  const [budgetView, setBudgetView] = useState<"quarter" | "annual">("quarter");
 
   // nav items centralized via DashboardLayout
   const { activeName } = useActiveNav();
@@ -391,6 +393,40 @@ export default function TrackerPage() {
     { type: "Wearable", spent: 400, committed: 400, remaining: 1310, total: 2100 },
     { type: "Ecosystem", spent: 400, committed: 250, remaining: 1000, total: 1650 },
   ];
+
+  // Mock data for budget wallet (quarter view)
+  const quarterBudgetData = {
+    totalBudget: 10000,
+    tokensSpent: 2750,
+    tokensCommitted: 2000,
+    tokensRemaining: 4500,
+    tokensPending: 750,
+  };
+
+  // Mock data for budget wallet (annual view)
+  const annualBudgetData = {
+    totalBudget: 40000,
+    tokensSpent: 11000,
+    tokensCommitted: 8000,
+    tokensRemaining: 18000,
+    tokensPending: 3000,
+  };
+
+  // Mock data for token distribution by category
+  const tokenDistributionByCategoryData = [
+    { category: "SMP", tokens: 4500 },
+    { category: "Ecosystem", tokens: 3200 },
+    { category: "Promotions", tokens: 2800 },
+    { category: "B2B", tokens: 1800 },
+    { category: "Historical spend", tokens: 7700 },
+  ];
+
+  const tokenDistributionCategoryConfig = {
+    tokens: {
+      label: "Tokens",
+      color: "#03b3e2",
+    },
+  };
 
   const spendConfig = {
     spent: {
@@ -1363,34 +1399,159 @@ export default function TrackerPage() {
 
             {/* Budget Tab Content */}
             <TabsContent value="budget" className="mt-6">
-              <div className="space-y-6">
-                <Card className="border border-[#ececec] bg-white">
-                <CardHeader className="pb-3">
-                  <CardTitle className="text-base font-bold leading-[21.28px] text-black">Token distribution</CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-6">
-                    <ChartContainer config={spendConfig} className="h-[300px] md:h-[250px] w-full">
-                    <ResponsiveContainer width="100%" height="100%">
-                      <BarChart data={spendByTypeData} layout="vertical" margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
-                        <CartesianGrid strokeDasharray="3 3" stroke="#e0e0e0" horizontal={true} vertical={true} />
-                        <XAxis type="number" axisLine={false} tickLine={false} domain={[0, 4500]} ticks={[0, 500, 1000, 1500, 2000, 2500, 3000, 3500, 4000, 4500]} tick={{ fill: "#646464", fontSize: 12 }} />
-                        <YAxis type="category" dataKey="type" axisLine={false} tickLine={false} tick={{ fill: "#646464", fontSize: 12 }} width={60} />
-                        <ChartTooltip cursor={false} content={<ChartTooltipContent className="bg-white [&_span]:text-black [&_div]:text-black" />} />
-                        <Bar dataKey="remaining" stackId="a" fill="#0177c7" radius={[6, 6, 6, 6]} />
-                        <Bar dataKey="committed" stackId="a" fill="#03b3e2" radius={[6, 6, 6, 6]} />
-                        <Bar dataKey="spent" stackId="a" fill="#00c3b1" radius={[6, 6, 6, 6]} />
-                      </BarChart>
-                    </ResponsiveContainer>
-                  </ChartContainer>
+              <TooltipProvider>
+                <div className="space-y-6">
+                  {/* Wallet Component */}
+                  <Card className="border border-[#ececec] bg-white">
+                    <CardHeader className="pb-3">
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-2">
+                          <Wallet size={20} className="text-[#03b3e2]" />
+                          <CardTitle className="text-base font-bold leading-[21.28px] text-black">Wallet</CardTitle>
+                        </div>
+                        <div className="flex items-center gap-2 bg-[#f1f1f3] rounded-md p-1">
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => setBudgetView("quarter")}
+                            className={`h-8 px-3 text-sm ${budgetView === "quarter" ? "bg-white text-black shadow-sm" : "text-[#646464]"}`}
+                          >
+                            Quarter
+                          </Button>
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => setBudgetView("annual")}
+                            className={`h-8 px-3 text-sm ${budgetView === "annual" ? "bg-white text-black shadow-sm" : "text-[#646464]"}`}
+                          >
+                            Annual
+                          </Button>
+                        </div>
+                      </div>
+                    </CardHeader>
+                    <CardContent className="space-y-6">
+                      {(() => {
+                        const budgetData = budgetView === "quarter" ? quarterBudgetData : annualBudgetData;
+                        const periodLabel = budgetView === "quarter" ? "this quarter" : "per annum";
+                        
+                        return (
+                          <>
+                            <div className="space-y-4">
+                              <div className="flex items-center justify-between">
+                                <span className="text-sm text-black">Total Budget {periodLabel}</span>
+                                <span className="text-lg font-bold text-black">{budgetData.totalBudget.toLocaleString()} tokens</span>
+                              </div>
+                              
+                              {/* Metrics Grid */}
+                              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                                {/* Tokens Spent */}
+                                <div className="border border-[#ececec] rounded-lg p-4 bg-white">
+                                  <div className="flex items-center justify-between mb-2">
+                                    <span className="text-sm text-black">Tokens Spent</span>
+                                    <Tooltip>
+                                      <TooltipTrigger asChild>
+                                        <HelpCircle size={16} className="text-[#646464] cursor-help" />
+                                      </TooltipTrigger>
+                                      <TooltipContent className="bg-white border border-[#ececec] text-black max-w-xs">
+                                        <p className="text-xs">Tokens used for completed projects. This amount reflects budget already spent.</p>
+                                      </TooltipContent>
+                                    </Tooltip>
+                                  </div>
+                                  <div className="text-2xl font-bold text-black">{budgetData.tokensSpent.toLocaleString()}</div>
+                                  <div className="text-xs text-[#646464] mt-1">{((budgetData.tokensSpent / budgetData.totalBudget) * 100).toFixed(1)}% of budget</div>
+                                </div>
 
-                  <div className="flex items-center justify-center gap-6 text-xs">
-                    <LegendItem color="#00c3b1" label="Tokens Spent" />
-                    <LegendItem color="#03b3e2" label="Tokens Committed" />
-                    <LegendItem color="#0177c7" label="Tokens Remaining" />
-                  </div>
-                </CardContent>
-              </Card>
-            </div>
+                                {/* Tokens Committed */}
+                                <div className="border border-[#ececec] rounded-lg p-4 bg-white">
+                                  <div className="flex items-center justify-between mb-2">
+                                    <span className="text-sm text-black">Tokens Committed</span>
+                                    <Tooltip>
+                                      <TooltipTrigger asChild>
+                                        <HelpCircle size={16} className="text-[#646464] cursor-help" />
+                                      </TooltipTrigger>
+                                      <TooltipContent className="bg-white border border-[#ececec] text-black max-w-xs">
+                                        <p className="text-xs">Tokens allocated to projects currently in progress. If a project is paused or stopped, unused tokens may be reinstated depending on its stage.</p>
+                                      </TooltipContent>
+                                    </Tooltip>
+                                  </div>
+                                  <div className="text-2xl font-bold text-black">{budgetData.tokensCommitted.toLocaleString()}</div>
+                                  <div className="text-xs text-[#646464] mt-1">{((budgetData.tokensCommitted / budgetData.totalBudget) * 100).toFixed(1)}% of budget</div>
+                                </div>
+
+                                {/* Tokens Remaining */}
+                                <div className="border border-[#ececec] rounded-lg p-4 bg-white">
+                                  <div className="flex items-center justify-between mb-2">
+                                    <span className="text-sm text-black">Tokens Remaining</span>
+                                    <Tooltip>
+                                      <TooltipTrigger asChild>
+                                        <HelpCircle size={16} className="text-[#646464] cursor-help" />
+                                      </TooltipTrigger>
+                                      <TooltipContent className="bg-white border border-[#ececec] text-black max-w-xs">
+                                        <p className="text-xs">Tokens still available in your overall budget that have not yet been used or allocated.</p>
+                                      </TooltipContent>
+                                    </Tooltip>
+                                  </div>
+                                  <div className="text-2xl font-bold text-[#03b3e2]">{budgetData.tokensRemaining.toLocaleString()}</div>
+                                  <div className="text-xs text-[#646464] mt-1">{((budgetData.tokensRemaining / budgetData.totalBudget) * 100).toFixed(1)}% of budget</div>
+                                </div>
+
+                                {/* Tokens Pending */}
+                                <div className="border border-[#ececec] rounded-lg p-4 bg-white">
+                                  <div className="flex items-center justify-between mb-2">
+                                    <span className="text-sm text-black">Tokens Pending</span>
+                                    <Tooltip>
+                                      <TooltipTrigger asChild>
+                                        <HelpCircle size={16} className="text-[#646464] cursor-help" />
+                                      </TooltipTrigger>
+                                      <TooltipContent className="bg-white border border-[#ececec] text-black max-w-xs">
+                                        <p className="text-xs">Estimated token amounts assigned to briefs in progress that are awaiting confirmation or project start.</p>
+                                      </TooltipContent>
+                                    </Tooltip>
+                                  </div>
+                                  <div className="text-2xl font-bold text-black">{budgetData.tokensPending.toLocaleString()}</div>
+                                  <div className="text-xs text-[#646464] mt-1">{((budgetData.tokensPending / budgetData.totalBudget) * 100).toFixed(1)}% of budget</div>
+                                </div>
+                              </div>
+                            </div>
+                          </>
+                        );
+                      })()}
+                    </CardContent>
+                  </Card>
+
+                  {/* Token Distribution by Category */}
+                  <Card className="border border-[#ececec] bg-white">
+                    <CardHeader className="pb-3">
+                      <CardTitle className="text-base font-bold leading-[21.28px] text-black">Token distribution</CardTitle>
+                    </CardHeader>
+                    <CardContent className="space-y-6">
+                      <ChartContainer config={tokenDistributionCategoryConfig} className="h-[300px] md:h-[250px] w-full">
+                        <ResponsiveContainer width="100%" height="100%">
+                          <BarChart data={tokenDistributionByCategoryData} margin={{ left: 10, right: 10, top: 10, bottom: 20 }}>
+                            <CartesianGrid strokeDasharray="3 3" stroke="#e0e0e0" vertical={false} />
+                            <XAxis 
+                              dataKey="category" 
+                              axisLine={false}
+                              tickLine={false}
+                              tick={{ fill: "#646464", fontSize: 12 }}
+                            />
+                            <YAxis 
+                              axisLine={false}
+                              tickLine={false}
+                              domain={[0, 8000]}
+                              ticks={[0, 2000, 4000, 6000, 8000]}
+                              tick={{ fill: "#646464", fontSize: 12 }}
+                              label={{ value: "Tokens", angle: -90, position: "insideLeft", offset: 15, style: { fill: "#646464", fontSize: 12, textAnchor: "middle" } }}
+                            />
+                            <ChartTooltip content={<ChartTooltipContent className="bg-white [&_span]:text-black [&_div]:text-black" />} />
+                            <Bar dataKey="tokens" fill="#03b3e2" radius={[4, 4, 0, 0]} />
+                          </BarChart>
+                        </ResponsiveContainer>
+                      </ChartContainer>
+                    </CardContent>
+                  </Card>
+                </div>
+              </TooltipProvider>
             </TabsContent>
 
             {/* Predictive Analytics & Insights Tab Content */}
