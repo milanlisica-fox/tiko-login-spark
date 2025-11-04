@@ -150,7 +150,7 @@ export default function SOWPage() {
                 <button
                   key={sow.id}
                   onClick={() => handleSOWClick(sow)}
-                  className="text-left w-full"
+                  className="card-brief text-left w-full"
                 >
                   <BriefCard
                     title={sow.title}
@@ -183,7 +183,7 @@ export default function SOWPage() {
                 <button
                   key={sow.id}
                   onClick={() => handleSOWClick(sow)}
-                  className="text-left w-full"
+                  className="card-brief text-left w-full"
                 >
                   <BriefCard
                     title={sow.title}

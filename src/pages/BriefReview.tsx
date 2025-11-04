@@ -360,7 +360,7 @@ export default function BriefReview() {
               </button>
               <button
                 onClick={handleSubmit}
-                className="flex-1 min-w-0 h-8 px-2 md:px-4 bg-[#ffb546] hover:opacity-90 rounded-[28px] flex items-center justify-center gap-1 md:gap-[10px] transition"
+                className="btn flex-1 min-w-0 h-8 px-2 md:px-4 bg-[#ffb546] hover:opacity-90 rounded-[28px] flex items-center justify-center gap-1 md:gap-[10px] transition"
               >
                 <span className="text-[13px] font-semibold leading-[18.62px] text-black whitespace-nowrap">Submit brief</span>
                 <img src={createBriefArrowIcon} alt="" className="h-[14px] w-[15.567px] shrink-0" />

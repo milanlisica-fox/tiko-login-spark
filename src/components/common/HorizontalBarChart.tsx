@@ -48,7 +48,7 @@ export default function HorizontalBarChart({
         {flexRatios.map((bar, index) => (
           <div
             key={index}
-            className="h-full rounded-[12.718px] flex items-center justify-center min-w-[60px]"
+            className="chart-item h-full rounded-[12.718px] flex items-center justify-center min-w-[60px]"
             style={{
               backgroundColor: bar.color,
               flex: bar.flexRatio,

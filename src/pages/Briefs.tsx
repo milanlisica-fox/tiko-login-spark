@@ -181,7 +181,7 @@ export default function BriefsPage() {
                 <div className="flex flex-col sm:flex-row gap-2.5 items-stretch sm:items-center md:justify-center lg:justify-start">
                   <button
                     onClick={() => navigate("/dashboard/calculator")}
-                    className="w-full sm:w-[216px] h-[48px] bg-[#03b3e2] backdrop-blur-sm rounded-[28px] flex items-center justify-center gap-[10px] px-[24px] py-[18px] hover:opacity-90 transition"
+                    className="btn w-full sm:w-[216px] h-[48px] bg-[#03b3e2] backdrop-blur-sm rounded-[28px] flex items-center justify-center gap-[10px] px-[24px] py-[18px] hover:opacity-90 transition"
                   >
                     <Icons.calculator size={16} className="text-black" />
                     <span className="text-base font-semibold leading-[23.94px] text-black whitespace-nowrap">
@@ -190,7 +190,7 @@ export default function BriefsPage() {
                   </button>
                   <button 
                     onClick={() => setIsCreatingBrief(true)}
-                    className="w-full sm:w-[216px] h-[48px] backdrop-blur-[6px] backdrop-filter bg-[#ffb546] px-[24px] py-[18px] rounded-[28px] flex items-center justify-center gap-[10px] hover:opacity-90 transition"
+                    className="btn w-full sm:w-[216px] h-[48px] backdrop-blur-[6px] backdrop-filter bg-[#ffb546] px-[24px] py-[18px] rounded-[28px] flex items-center justify-center gap-[10px] hover:opacity-90 transition"
                   >
                     <span className="text-[16px] font-semibold leading-[23.94px] text-black whitespace-nowrap">
                       Create brief
@@ -241,7 +241,7 @@ export default function BriefsPage() {
                       <button
                         key={card.title}
                         onClick={() => navigate("/dashboard/sow")}
-                        className="relative overflow-hidden hover:opacity-90 transition cursor-pointer w-full text-left"
+                        className="card-brief relative overflow-hidden hover:opacity-90 transition cursor-pointer w-full text-left"
                       >
                         <StatCard title={card.title} value={card.value} className="rounded-xl p-6" titleBold={card.titleBold} />
                         {card.icon}
@@ -440,7 +440,7 @@ function TemplateSelectionScreen({ onCancel, onCreateBrief }: { onCancel: () => 
         <div className="flex flex-col sm:flex-row gap-2.5 items-center w-full sm:w-auto">
           <button
             onClick={() => navigate("/dashboard/calculator")}
-            className="w-full sm:w-[216px] h-[48px] bg-[#03b3e2] backdrop-blur-sm rounded-[28px] flex items-center justify-center gap-[10px] px-[24px] py-[18px] hover:opacity-90 transition"
+            className="btn w-full sm:w-[216px] h-[48px] bg-[#03b3e2] backdrop-blur-sm rounded-[28px] flex items-center justify-center gap-[10px] px-[24px] py-[18px] hover:opacity-90 transition"
           >
             <Icons.calculator size={16} className="text-black" />
             <span className="text-base font-semibold leading-[23.94px] text-black whitespace-nowrap">
@@ -449,7 +449,7 @@ function TemplateSelectionScreen({ onCancel, onCreateBrief }: { onCancel: () => 
           </button>
           <button 
             onClick={onCreateBrief}
-            className="w-full sm:w-[216px] h-[48px] backdrop-blur-[6px] backdrop-filter bg-[#ffb546] px-[24px] py-[18px] rounded-[28px] flex items-center justify-center gap-[10px] hover:opacity-90 transition"
+            className="btn w-full sm:w-[216px] h-[48px] backdrop-blur-[6px] backdrop-filter bg-[#ffb546] px-[24px] py-[18px] rounded-[28px] flex items-center justify-center gap-[10px] hover:opacity-90 transition"
           >
             <span className="text-[16px] font-semibold leading-[23.94px] text-black whitespace-nowrap">
               Create brief
@@ -577,7 +577,7 @@ function NewBriefForm({ onCancel, onNext }: { onCancel: () => void; onNext: () =
         <div className="flex flex-row gap-4 w-full h-full">
       {/* Left Form Section */}
         <div className="flex flex-col gap-2 p-4 md:p-6 rounded-xl flex-[1_1_0%] min-w-0 h-full overflow-hidden">
-          <div className="flex flex-col gap-4 flex-1 min-h-0 overflow-y-auto">
+          <div className="flex flex-col gap-4 flex-1 min-h-0 overflow-y-auto p-2">
           <p className="text-sm leading-[18.62px] text-[#424242] w-full">
             Start your brief by filling out these required fields.
           </p>
@@ -696,7 +696,7 @@ function NewBriefForm({ onCancel, onNext }: { onCancel: () => void; onNext: () =
               <div className="flex gap-1 items-center w-[60%] min-w-0">
                 <button 
                   onClick={handleSaveDraft}
-                  className="flex-1 min-w-0 h-8 px-2 md:px-4 bg-[#ffb546] hover:opacity-90 rounded-[28px] flex items-center justify-center gap-1 md:gap-[10px] transition"
+                  className="btn flex-1 min-w-0 h-8 px-2 md:px-4 bg-[#ffb546] hover:opacity-90 rounded-[28px] flex items-center justify-center gap-1 md:gap-[10px] transition"
                 >
                   <span className="text-[13px] font-semibold leading-[18.62px] text-black whitespace-nowrap truncate">Save draft</span>
                   <img src={createBriefArrowIcon} alt="" className="h-[14px] w-[15.567px] shrink-0" />
@@ -704,7 +704,7 @@ function NewBriefForm({ onCancel, onNext }: { onCancel: () => void; onNext: () =
                 <button
                 type="button"
                 onClick={() => navigate("/dashboard/briefs/review")}
-                  className="flex-1 min-w-0 h-8 px-2 md:px-4 bg-[#ffb546] hover:opacity-90 rounded-[28px] flex items-center justify-center gap-1 md:gap-[10px] transition"
+                  className="btn flex-1 min-w-0 h-8 px-2 md:px-4 bg-[#ffb546] hover:opacity-90 rounded-[28px] flex items-center justify-center gap-1 md:gap-[10px] transition"
               >
                 <span className="text-[13px] font-semibold leading-[18.62px] text-black whitespace-nowrap truncate">Review brief</span>
                   <img src={createBriefArrowIcon} alt="" className="h-[14px] w-[15.567px] shrink-0" />
@@ -1042,14 +1042,14 @@ function DeliverablesSelectionScreen({ onCancel, onBack, onNavigateToAiResponse 
               <div className="flex gap-1 items-center flex-1 min-w-0">
                 <button 
                   onClick={handleSaveDraft}
-                  className="flex-1 min-w-0 h-8 px-2 md:px-4 bg-[#ffb546] hover:opacity-90 rounded-[28px] flex items-center justify-center gap-1 md:gap-[10px] transition"
+                  className="btn flex-1 min-w-0 h-8 px-2 md:px-4 bg-[#ffb546] hover:opacity-90 rounded-[28px] flex items-center justify-center gap-1 md:gap-[10px] transition"
                 >
                   <span className="text-[13px] font-semibold leading-[18.62px] text-black whitespace-nowrap">Save draft</span>
                   <img src={createBriefArrowIcon} alt="" className="h-[14px] w-[15.567px] shrink-0" />
                 </button>
                 <button
                   onClick={() => navigate("/dashboard/briefs/review")}
-                  className="flex-1 min-w-0 h-8 px-2 md:px-4 bg-[#ffb546] hover:opacity-90 rounded-[28px] flex items-center justify-center gap-1 md:gap-[10px] transition"
+                  className="btn flex-1 min-w-0 h-8 px-2 md:px-4 bg-[#ffb546] hover:opacity-90 rounded-[28px] flex items-center justify-center gap-1 md:gap-[10px] transition"
                 >
                   <span className="text-[13px] font-semibold leading-[18.62px] text-black whitespace-nowrap">Review brief</span>
                   <img src={createBriefArrowIcon} alt="" className="h-[14px] w-[15.567px] shrink-0" />
@@ -1363,14 +1363,14 @@ function AIResponseScreen({ userInput, onBack, onCancel }: { userInput: string; 
               <div className="flex gap-1 items-center flex-1 min-w-0">
                 <button 
                   onClick={handleSaveDraft}
-                  className="flex-1 min-w-0 h-8 px-2 md:px-4 bg-[#ffb546] hover:opacity-90 rounded-[28px] flex items-center justify-center gap-1 md:gap-[10px] transition"
+                  className="btn flex-1 min-w-0 h-8 px-2 md:px-4 bg-[#ffb546] hover:opacity-90 rounded-[28px] flex items-center justify-center gap-1 md:gap-[10px] transition"
                 >
                   <span className="text-[13px] font-semibold leading-[18.62px] text-black whitespace-nowrap">Save draft</span>
                   <img src={createBriefArrowIcon} alt="" className="h-[14px] w-[15.567px] shrink-0" />
                 </button>
                 <button
                   onClick={() => navigate("/dashboard/briefs/review")}
-                  className="flex-1 min-w-0 h-8 px-2 md:px-4 bg-[#ffb546] hover:opacity-90 rounded-[28px] flex items-center justify-center gap-1 md:gap-[10px] transition"
+                  className="btn flex-1 min-w-0 h-8 px-2 md:px-4 bg-[#ffb546] hover:opacity-90 rounded-[28px] flex items-center justify-center gap-1 md:gap-[10px] transition"
                 >
                   <span className="text-[13px] font-semibold leading-[18.62px] text-black whitespace-nowrap">Review brief</span>
                   <img src={createBriefArrowIcon} alt="" className="h-[14px] w-[15.567px] shrink-0" />

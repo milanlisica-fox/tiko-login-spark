@@ -481,6 +481,57 @@ h1.h1-heading, .leading-tight {
   padding-bottom: 33%;
 }
 
+@keyframes move {
+  0% {
+       right: -20px;
+  }
+  50% {
+    right: 0;
+  }
+  100% {
+   right: -20px;
+  }
+}
+
+ @keyframes bounce-right {
+    0%, 100% {
+      transform: translateX(0);
+    }
+    50% {
+      transform: translateX(8px);
+    }
+  }
+
+.card-item,
+.card-brief svg,
+.btn,
+.btn svg,
+.btn img,
+.card-item img,
+.chart-item,
+.chart-item .text-base {
+  transition: 0.3s ease-in-out;
+}
+
+.card-item:hover img {
+  animation: move 0.6s ease-in-out;
+}
+
+.chart-item:hover {
+  transform: scale(1.02);
+}
+.chart-item:hover .text-base {
+  transform: scale(1.2);
+}
+.card-brief:hover svg {
+    animation: bounce-right 0.6s ease;
+}
+
+.btn:hover img,
+.btn:hover svg {
+  transform: scale(1.2);
+}
+
 @media only screen and (max-width: 767px) {
   .animate-scale2 {
     width: 110vh;

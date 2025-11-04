@@ -70,7 +70,7 @@ export default function TikoDashboard() {
                     // Navigate after animation
                     navigate("/dashboard/calculator");
                   }}
-                  className="w-full sm:w-[216px] h-[48px] bg-[#03b3e2] backdrop-blur-sm rounded-[28px] flex items-center justify-center gap-[10px] px-[24px] py-[18px] hover:opacity-90 transition"
+                  className="btn w-full sm:w-[216px] h-[48px] bg-[#03b3e2] backdrop-blur-sm rounded-[28px] flex items-center justify-center gap-[10px] px-[24px] py-[18px] hover:opacity-90 transition"
                 >
                   <Calculator size={16} className="text-black" />
                   <span className="text-base font-semibold leading-[23.94px] text-black whitespace-nowrap">
@@ -79,7 +79,7 @@ export default function TikoDashboard() {
                 </button>
                 <button 
                   onClick={() => navigate("/dashboard/briefs", { state: { createBrief: true } })}
-                  className="w-full sm:w-[216px] h-[48px] backdrop-blur-[6px] backdrop-filter bg-[#ffb546] px-[24px] py-[18px] rounded-[28px] flex items-center justify-center gap-[10px] hover:opacity-90 transition"
+                  className="btn w-full sm:w-[216px] h-[48px] backdrop-blur-[6px] backdrop-filter bg-[#ffb546] px-[24px] py-[18px] rounded-[28px] flex items-center justify-center gap-[10px] hover:opacity-90 transition"
                 >
                   <span className="text-[16px] font-semibold leading-[23.94px] text-black whitespace-nowrap">
                     Create brief
@@ -102,7 +102,7 @@ export default function TikoDashboard() {
                   </div>
                   <button 
                     onClick={() => navigate("/dashboard/briefs")}
-                    className="flex items-center gap-2 px-2 py-1 rounded-[28px] backdrop-blur-sm hover:bg-gray-50 transition self-start sm:self-auto"
+                    className="card-brief flex items-center gap-2 px-2 py-1 rounded-[28px] backdrop-blur-sm hover:bg-gray-50 transition self-start sm:self-auto"
                   >
                     <span className="text-xs font-semibold leading-[23.94px] text-[#848487] whitespace-nowrap">
                       View all briefs
@@ -129,7 +129,7 @@ export default function TikoDashboard() {
                   {/* SOW Ready to sign */}
                   <button
                     onClick={() => navigate("/dashboard/sow")}
-                    className="flex-1 bg-[#f9f9f9] rounded-[12px] p-4 md:p-[20px] flex flex-col gap-[10px] relative overflow-clip hover:bg-[#f0f0f0] transition cursor-pointer text-left"
+                    className="card-item flex-1 bg-[#f9f9f9] rounded-[12px] p-4 md:p-[20px] flex flex-col gap-[10px] relative overflow-clip hover:bg-[#f0f0f0] transition cursor-pointer text-left"
                   >
                     <p className="text-xs md:text-sm font-bold leading-[18.62px] text-black">SOW Ready to sign</p>
                     <p className="text-2xl md:text-[40px] font-medium leading-[45.6px] text-black">3</p>
@@ -149,7 +149,7 @@ export default function TikoDashboard() {
                   </div>
                   <button 
                     onClick={() => navigate("/dashboard/projects")}
-                    className="flex items-center gap-2 px-2 py-1 rounded-[28px] backdrop-blur-sm hover:bg-gray-50 transition self-start sm:self-auto"
+                    className="card-brief flex items-center gap-2 px-2 py-1 rounded-[28px] backdrop-blur-sm hover:bg-gray-50 transition self-start sm:self-auto"
                   >
                     <span className="text-xs font-semibold leading-[23.94px] text-[#848487] whitespace-nowrap">
                       View all projects
@@ -177,7 +177,7 @@ export default function TikoDashboard() {
                 </div>
                 <button 
                   onClick={() => navigate("/dashboard/tracker")}
-                  className="flex items-center gap-2 px-2 py-1 rounded-[28px] backdrop-blur-sm hover:bg-gray-50 transition self-start sm:self-auto"
+                  className="card-brief flex items-center gap-2 px-2 py-1 rounded-[28px] backdrop-blur-sm hover:bg-gray-50 transition self-start sm:self-auto"
                 >
                   <span className="text-xs font-semibold leading-[23.94px] text-[#848487] whitespace-nowrap">
                     View all insights
