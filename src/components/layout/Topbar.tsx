@@ -51,10 +51,13 @@ export default function Topbar({
         {Right ?? (
           <>
             <NotificationsPopover />
-            <div className="items-center gap-1">
+            <button 
+              onClick={() => navigate("/dashboard/tracker?tab=budget")}
+              className="flex items-center gap-1 hover:opacity-70 transition cursor-pointer"
+            >
               <TokensIcon size={18} className="text-[#848487] lg:w-5 lg:h-5" />
               <span className="text-xs leading-[15.96px] text-[#646464]">372 Tokens</span>
-            </div>
+            </button>
             <UserMenu name="Henry Bray" dept="Marcomms" onClick={() => navigate("/dashboard/profile")} />
           </>
         )}
