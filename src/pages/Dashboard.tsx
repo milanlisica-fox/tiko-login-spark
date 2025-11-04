@@ -53,9 +53,9 @@ export default function TikoDashboard() {
             </div>
 
             {/* Briefs Section */}
-            <div className="bg-white rounded-xl p-4 md:p-6 flex flex-col gap-4">
+            <div className="section bg-white rounded-xl p-4 md:p-6 flex flex-col gap-4 border-o">
               <div className="flex flex-col gap-1">
-                <h2 className="text-[22px] font-bold leading-[29.26px] text-[#03b3e2]">Briefs</h2>
+                <h2 className="text-[22px] font-bold leading-[29.26px] text-[#fa9f41]">Briefs</h2>
                 <p className="text-sm leading-[18.62px] text-black">
                   Kickstart your next project with clarity and ease
                 </p>
@@ -137,10 +137,10 @@ export default function TikoDashboard() {
             </div>
 
             {/* Tracker Section */}
-            <div className="bg-white rounded-xl p-4 md:p-6 flex flex-col gap-4">
+            <div className="section bg-white rounded-xl p-4 md:p-6 flex flex-col gap-4 border-bl">
               <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3 sm:gap-0 pb-1">
                 <div className="flex flex-col gap-1">
-                  <h2 className="text-lg md:text-[22px] font-bold leading-[29.26px] text-[#03b3e2]">Tracker</h2>
+                  <h2 className="text-lg md:text-[22px] font-bold leading-[29.26px] text-[#36bbfb]">Tracker</h2>
                   <p className="text-xs md:text-sm leading-[18.62px] text-black">
                     Get the full picture of your team's performance
                   </p>
@@ -209,10 +209,10 @@ export default function TikoDashboard() {
             </div>
 
             {/* Projects Section */}
-            <div className="bg-white rounded-xl p-4 md:p-6 flex flex-col gap-4">
+            <div className="section bg-white rounded-xl p-4 md:p-6 flex flex-col gap-4 border-c">
               <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3 sm:gap-0 pb-1">
                 <div className="flex flex-col gap-1">
-                  <h2 className="text-[22px] font-bold leading-[29.26px] text-[#03b3e2]">Projects</h2>
+                  <h2 className="text-[22px] font-bold leading-[29.26px] text-[#18c3b1]">Projects</h2>
                   <p className="text-sm leading-[18.62px] text-black">
                     Never miss a thing, keep things moving
                   </p>

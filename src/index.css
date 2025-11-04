@@ -571,6 +571,22 @@ h1.h1-heading, .leading-tight {
   transform: none;
 }
 
+.section {
+  border: 3px solid;
+}
+
+.border-o {
+  border-color: #fa9f41;
+}
+
+.border-bl {
+  border-color: #36bbfb;
+}
+
+.border-c {
+  border-color: #18c3b1;
+}
+
 @media only screen and (max-width: 767px) {
   .animate-scale2 {
     width: 110vh;
