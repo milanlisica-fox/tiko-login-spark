@@ -629,7 +629,7 @@ export default function TrackerPage() {
     >
       <div className="px-4 md:px-6 pt-[40px] pb-[40px] ">
         {/* Sticky Header and Tabs */}
-        <div className="sticky top-0 z-50 bg-[#f9f9f9] -mx-4 md:-mx-6 px-4 md:px-6 pt-[40px] pb-4 -mt-[40px] border-b border-[#ececec]">
+        <div className="sticky -top-px z-50 bg-[#f9f9f9] -mx-4 md:-mx-6 px-4 md:px-6 pt-[40px] pb-4 -mt-[40px] border-b border-[#ececec]">
           <div className="space-y-6">
             {/* Header */}
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
@@ -659,34 +659,34 @@ export default function TrackerPage() {
               }
               navigate(`/dashboard/tracker?tab=${value}`, { replace: true });
             }} className="w-full">
-              <TabsList className="inline-flex h-10 items-center justify-start rounded-md bg-transparent p-0 text-muted-foreground border-b border-[#ececec] w-full">
+              <TabsList className="inline-flex h-12 md:h-14 items-center justify-start rounded-md bg-transparent p-0 text-muted-foreground border-b-2 border-[#ececec] w-full">
                 <TabsTrigger 
                   value="leaderboard" 
-                  className="inline-flex items-center justify-center whitespace-nowrap rounded-none px-4 py-2 text-sm font-medium ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:bg-transparent data-[state=active]:text-[#03b3e2] data-[state=active]:shadow-none border-b-2 border-transparent data-[state=active]:border-[#03b3e2]"
+                  className="flex-1 inline-flex items-center justify-center whitespace-nowrap rounded-none px-2 md:px-3 lg:px-4 py-2 md:py-3 text-xs md:text-sm lg:text-base font-medium md:font-semibold ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:bg-transparent data-[state=active]:text-[#03b3e2] data-[state=active]:shadow-none border-b-[3px] border-transparent data-[state=active]:border-[#03b3e2]"
                 >
                   Leaderboard
                 </TabsTrigger>
                 <TabsTrigger 
                   value="brief-quality" 
-                  className="inline-flex items-center justify-center whitespace-nowrap rounded-none px-4 py-2 text-sm font-medium ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:bg-transparent data-[state=active]:text-[#8092dc] data-[state=active]:shadow-none border-b-2 border-transparent data-[state=active]:border-[#8092dc]"
+                  className="flex-1 inline-flex items-center justify-center whitespace-nowrap rounded-none px-2 md:px-3 lg:px-4 py-2 md:py-3 text-xs md:text-sm lg:text-base font-medium md:font-semibold ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:bg-transparent data-[state=active]:text-[#8092dc] data-[state=active]:shadow-none border-b-[3px] border-transparent data-[state=active]:border-[#8092dc]"
                 >
                   Brief quality
                 </TabsTrigger>
                 <TabsTrigger 
                   value="project-performance" 
-                  className="inline-flex items-center justify-center whitespace-nowrap rounded-none px-4 py-2 text-sm font-medium ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:bg-transparent data-[state=active]:text-[#ffb546] data-[state=active]:shadow-none border-b-2 border-transparent data-[state=active]:border-[#ffb546]"
+                  className="flex-1 inline-flex items-center justify-center whitespace-nowrap rounded-none px-2 md:px-3 lg:px-4 py-2 md:py-3 text-xs md:text-sm lg:text-base font-medium md:font-semibold ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:bg-transparent data-[state=active]:text-[#ffb546] data-[state=active]:shadow-none border-b-[3px] border-transparent data-[state=active]:border-[#ffb546]"
                 >
                   Project performance
                 </TabsTrigger>
                 <TabsTrigger 
                   value="budget" 
-                  className="inline-flex items-center justify-center whitespace-nowrap rounded-none px-4 py-2 text-sm font-medium ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:bg-transparent data-[state=active]:text-[#0177c7] data-[state=active]:shadow-none border-b-2 border-transparent data-[state=active]:border-[#0177c7]"
+                  className="flex-1 inline-flex items-center justify-center whitespace-nowrap rounded-none px-2 md:px-3 lg:px-4 py-2 md:py-3 text-xs md:text-sm lg:text-base font-medium md:font-semibold ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:bg-transparent data-[state=active]:text-[#0177c7] data-[state=active]:shadow-none border-b-[3px] border-transparent data-[state=active]:border-[#0177c7]"
                 >
                   Budget
                 </TabsTrigger>
                 <TabsTrigger 
                   value="predictive-analytics" 
-                  className="inline-flex items-center justify-center whitespace-nowrap rounded-none px-4 py-2 text-sm font-medium ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:bg-transparent data-[state=active]:text-[#ff4337] data-[state=active]:shadow-none border-b-2 border-transparent data-[state=active]:border-[#ff4337]"
+                  className="flex-1 inline-flex items-center justify-center whitespace-nowrap rounded-none px-2 md:px-3 lg:px-4 py-2 md:py-3 text-xs md:text-sm lg:text-base font-medium md:font-semibold ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:bg-transparent data-[state=active]:text-[#ff4337] data-[state=active]:shadow-none border-b-[3px] border-transparent data-[state=active]:border-[#ff4337]"
                 >
                   Predictive Analytics & Insights
                 </TabsTrigger>
@@ -3065,10 +3065,10 @@ export default function TrackerPage() {
                 </Card>
               </div>
 
-                {/* Optimization Opportunities */}
-                <div className="space-y-4">
-                  <div className="flex flex-col gap-1">
-                    <h3 className="text-[22px] font-bold leading-[29.26px] text-black">Optimization Opportunities</h3>
+              {/* Optimization Opportunities */}
+              <div className="space-y-4 pt-6">
+                <div className="flex flex-col gap-1">
+                  <h3 className="text-[22px] font-bold leading-[29.26px] text-black">Optimization Opportunities</h3>
                     <p className="text-sm text-[#646464]">DATA-DRIVEN INSIGHTS FOR PERFORMANCE IMPROVEMENT, BUDGET OPTIMIZATION, AND PROCESS ENHANCEMENT</p>
                   </div>
                 {/* Desktop: 3 columns inline */}
@@ -3368,10 +3368,10 @@ export default function TrackerPage() {
                 </div>
                 </div>
 
-                {/* Predictive Insights */}
-                <div className="space-y-4">
-                  <div className="flex flex-col gap-1">
-                    <h3 className="text-[22px] font-bold leading-[29.26px] text-black">Predictive Insights</h3>
+              {/* Predictive Insights */}
+              <div className="space-y-4 pt-6">
+                <div className="flex flex-col gap-1">
+                  <h3 className="text-[22px] font-bold leading-[29.26px] text-black">Predictive Insights</h3>
                     <p className="text-sm text-[#646464]">AI-POWERED FORECASTING AND TREND PREDICTIONS BASED ON CURRENT DATA PATTERNS.</p>
                   </div>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
