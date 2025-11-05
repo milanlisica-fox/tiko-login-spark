@@ -87,6 +87,41 @@ export default function TrackerPage() {
   // nav items centralized via DashboardLayout
   const { activeName } = useActiveNav();
 
+  // Tab labels mapping
+  const tabLabels: Record<string, string> = {
+    leaderboard: "Leaderboard",
+    "brief-quality": "Brief quality",
+    "project-performance": "Project performance",
+    budget: "Budget",
+    "predictive-analytics": "Predictive Analytics & Insights",
+  };
+
+  // Tab colors mapping
+  const tabColors: Record<string, string> = {
+    leaderboard: "#03b3e2",
+    "brief-quality": "#8092dc",
+    "project-performance": "#ffb546",
+    budget: "#0177c7",
+    "predictive-analytics": "#ff4337",
+  };
+
+  // Handle tab change with scroll to top
+  const handleTabChange = (value: string) => {
+    // Scroll to top immediately before navigation
+    const scrollContainer = document.querySelector('section.overflow-y-auto') ||
+                           document.querySelector('section.flex-1.overflow-y-auto') ||
+                           document.querySelector('main section') ||
+                           document.querySelector('.overflow-y-auto');
+    if (scrollContainer) {
+      scrollContainer.scrollTop = 0;
+    } else {
+      window.scrollTo(0, 0);
+      document.documentElement.scrollTop = 0;
+      document.body.scrollTop = 0;
+    }
+    navigate(`/dashboard/tracker?tab=${value}`, { replace: true });
+  };
+
   // Scroll to top when tab changes
   useEffect(() => {
     // Use requestAnimationFrame for immediate scroll without delay
@@ -643,22 +678,8 @@ export default function TrackerPage() {
               </Button>
             </div>
 
-            {/* Tabs */}
-            <Tabs value={activeTab} onValueChange={(value) => {
-              // Scroll to top immediately before navigation
-              const scrollContainer = document.querySelector('section.overflow-y-auto') ||
-                                   document.querySelector('section.flex-1.overflow-y-auto') ||
-                                   document.querySelector('main section') ||
-                                   document.querySelector('.overflow-y-auto');
-              if (scrollContainer) {
-                scrollContainer.scrollTop = 0;
-              } else {
-                window.scrollTo(0, 0);
-                document.documentElement.scrollTop = 0;
-                document.body.scrollTop = 0;
-              }
-              navigate(`/dashboard/tracker?tab=${value}`, { replace: true });
-            }} className="w-full">
+            {/* Tabs - Desktop */}
+            <Tabs value={activeTab} onValueChange={handleTabChange} className="w-full hidden md:block">
               <TabsList className="inline-flex h-12 md:h-14 items-center justify-start rounded-md bg-transparent p-0 text-muted-foreground border-b-2 border-[#ececec] w-full">
                 <TabsTrigger 
                   value="leaderboard" 
@@ -692,26 +713,40 @@ export default function TrackerPage() {
                 </TabsTrigger>
               </TabsList>
             </Tabs>
+
+            {/* Mobile Dropdown */}
+            <div className="md:hidden w-full">
+              <Select value={activeTab} onValueChange={handleTabChange}>
+                <SelectTrigger className="w-full border-[#e0e0e0] rounded-[85px] px-5 py-[15px] h-auto bg-[#f9f9f9] [&_span]:text-black [&_span]:text-center [&>span]:absolute [&>span]:left-0 [&>span]:right-0 [&>span]:text-center [&_svg]:absolute [&_svg]:right-3">
+                  <SelectValue className="text-center text-black">
+                    {tabLabels[activeTab] || "Select a tab"}
+                  </SelectValue>
+                </SelectTrigger>
+                <SelectContent className="bg-[#f9f9f9]">
+                  <SelectItem value="leaderboard" className="text-black [&>span:last-child]:text-center [&>span:last-child]:w-full">
+                    Leaderboard
+                  </SelectItem>
+                  <SelectItem value="brief-quality" className="text-black [&>span:last-child]:text-center [&>span:last-child]:w-full">
+                    Brief quality
+                  </SelectItem>
+                  <SelectItem value="project-performance" className="text-black [&>span:last-child]:text-center [&>span:last-child]:w-full">
+                    Project performance
+                  </SelectItem>
+                  <SelectItem value="budget" className="text-black [&>span:last-child]:text-center [&>span:last-child]:w-full">
+                    Budget
+                  </SelectItem>
+                  <SelectItem value="predictive-analytics" className="text-black [&>span:last-child]:text-center [&>span:last-child]:w-full">
+                    Predictive Analytics & Insights
+                  </SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
           </div>
         </div>
 
         <div className="space-y-6 md:space-y-10">
           {/* Tabs Content */}
-          <Tabs value={activeTab} onValueChange={(value) => {
-            // Scroll to top immediately before navigation
-            const scrollContainer = document.querySelector('section.overflow-y-auto') ||
-                                 document.querySelector('section.flex-1.overflow-y-auto') ||
-                                 document.querySelector('main section') ||
-                                 document.querySelector('.overflow-y-auto');
-            if (scrollContainer) {
-              scrollContainer.scrollTop = 0;
-            } else {
-              window.scrollTo(0, 0);
-              document.documentElement.scrollTop = 0;
-              document.body.scrollTop = 0;
-            }
-            navigate(`/dashboard/tracker?tab=${value}`, { replace: true });
-          }} className="w-full">
+          <Tabs value={activeTab} onValueChange={handleTabChange} className="w-full">
             {/* Leaderboard Tab Content */}
             <TabsContent value="leaderboard" className="mt-6">
               <div className="space-y-6 md:space-y-10">
