@@ -555,6 +555,18 @@ h1.h1-heading, .leading-tight {
   transform: translateX(100%);
 }
 
+.board-o path {
+   fill: #fa9f41;
+}
+
+.board-b path {
+   fill: #36bbfb;
+}
+
+.board-c path {
+   fill: #18c3b1;
+}
+
 .board-o::after {
   background-color: #fa9f41;
 }

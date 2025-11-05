@@ -153,11 +153,9 @@ export default function TikoDashboard() {
                     <span className="text-base font-semibold leading-[23.94px] text-black whitespace-nowrap">
                       Create brief
                     </span>
-                    <img 
-                      src={createBriefArrowIcon} 
-                      alt="" 
-                      className="h-[14px] w-[15.567px]"
-                    />
+                   <svg className="h-[14px] w-[15.567px]" width="45" height="40" viewBox="0 0 45 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M23.8229 40H5.80935C2.59694 40 0 37.4332 0 34.2582V31.8843C0 30.5935 0.795591 29.4362 2.0115 28.9614L14.9212 22.908C17.5932 21.8546 17.5932 18.1306 14.9362 17.0623L1.99648 10.8902C0.795576 10.4154 0 9.25816 0 7.96736V5.74184C0 2.56677 2.59694 0 5.80935 0H23.8229C25.0838 0 26.3147 0.400603 27.3205 1.15728L42.692 15.4154C45.7693 17.7151 45.7693 22.27 42.692 24.5697L27.3205 38.8279C26.3147 39.5846 25.0838 39.9852 23.8229 39.9852V40Z" fill="#000"></path>
+                    </svg>
                   </button>
                   <button
                     onClick={async (e) => {
@@ -412,29 +410,25 @@ export default function TikoDashboard() {
                 <div className="board-card board-b bg-[#f9f9f9] rounded-xl p-5 flex flex-col gap-2.5 relative overflow-clip">
                   <p className="text-sm font-bold leading-[18.62px] text-black">Complete</p>
                   <p className="text-[40px] font-medium leading-[45.6px] text-black">3</p>
-                  <img 
-                    src={projectsVector} 
-                    alt="" 
-                    className="absolute right-[-35px] sm:right-[-38px] md:right-[-80px] top-[-33px] sm:top-[-34px] md:top-[-36px] w-[150px] h-[185px] sm:w-[175px] sm:h-[190px] md:w-[212px] md:h-[189px]"
-                    style={{ filter: 'brightness(0) saturate(100%) invert(67%) sepia(89%) saturate(2146%) hue-rotate(169deg) brightness(98%) contrast(101%)' }}
-                  />
+                  <svg className="absolute right-[-35px] top-[-0px] sm:top-[-34px] md:top-[0px] w-[250px] h-[114px] sm:w-[175px] sm:h-[190px] md:w-[212px] md:h-[114px]" xmlns="http://www.w3.org/2000/svg" width="106" height="115" viewBox="0 0 106 115" fill="none">
+                    <path d="M112.364 152.333H27.4008C12.2489 152.333 0 140.227 0 125.251V114.054C0 107.966 3.75254 102.507 9.48759 100.268L70.3783 71.7162C82.9812 66.7476 82.9811 49.1826 70.449 44.144L9.41672 15.0322C3.75247 12.7929 0 7.33441 0 1.24614V-9.25089C0 -24.2267 12.2489 -36.3333 27.4008 -36.3333H112.364C118.312 -36.3333 124.118 -34.4437 128.861 -30.8748L201.364 36.3762C215.879 47.2232 215.879 68.7071 201.364 79.554L128.861 146.805C124.118 150.374 118.312 152.263 112.364 152.263V152.333Z" fill="#00C3B1"/>
+                  </svg>
                 </div>
                 {/* In progress */}
                 <div className="board-card board-c bg-[#f9f9f9] rounded-xl p-5 flex flex-col gap-2.5 relative overflow-clip">
                   <p className="text-sm font-bold leading-[18.62px] text-black">In progress</p>
                   <p className="text-[40px] font-medium leading-[45.6px] text-black">9</p>
-                  <img src={projectsVector} alt="" className="absolute right-[-35px] sm:right-[-38px] md:right-[-80px] top-[-33px] sm:top-[-34px] md:top-[-36px] w-[150px] h-[185px] sm:w-[175px] sm:h-[190px] md:w-[212px] md:h-[189px]" />
+                   <svg className="absolute right-[-35px] top-[-0px] sm:top-[-34px] md:top-[0px] w-[250px] h-[114px] sm:w-[175px] sm:h-[190px] md:w-[212px] md:h-[114px]"  xmlns="http://www.w3.org/2000/svg" width="106" height="115" viewBox="0 0 106 115" fill="none">
+                    <path d="M112.364 152.333H27.4008C12.2489 152.333 0 140.227 0 125.251V114.054C0 107.966 3.75254 102.507 9.48759 100.268L70.3783 71.7162C82.9812 66.7476 82.9811 49.1826 70.449 44.144L9.41672 15.0322C3.75247 12.7929 0 7.33441 0 1.24614V-9.25089C0 -24.2267 12.2489 -36.3333 27.4008 -36.3333H112.364C118.312 -36.3333 124.118 -34.4437 128.861 -30.8748L201.364 36.3762C215.879 47.2232 215.879 68.7071 201.364 79.554L128.861 146.805C124.118 150.374 118.312 152.263 112.364 152.263V152.333Z" fill="#00C3B1"/>
+                  </svg>
                 </div>
                 {/* For review */}
                 <div className="board-card board-o bg-[#f9f9f9] rounded-xl p-5 flex flex-col gap-2.5 relative overflow-clip">
                   <p className="text-sm font-bold leading-[18.62px] text-black">For review</p>
                   <p className="text-[40px] font-medium leading-[45.6px] text-black">4</p>
-                  <img 
-                    src={projectsVector} 
-                    alt="" 
-                    className="absolute right-[-35px] sm:right-[-38px] md:right-[-80px] top-[-33px] sm:top-[-34px] md:top-[-36px] w-[150px] h-[185px] sm:w-[175px] sm:h-[190px] md:w-[212px] md:h-[189px]"
-                    style={{ filter: 'brightness(0) saturate(100%) invert(71%) sepia(95%) saturate(1352%) hue-rotate(329deg) brightness(102%) contrast(96%)' }}
-                  />
+                     <svg className="absolute right-[-35px] top-[-0px] sm:top-[-34px] md:top-[0px] w-[250px] h-[114px] sm:w-[175px] sm:h-[190px] md:w-[212px] md:h-[114px]"  xmlns="http://www.w3.org/2000/svg" width="106" height="115" viewBox="0 0 106 115" fill="none">
+                    <path d="M112.364 152.333H27.4008C12.2489 152.333 0 140.227 0 125.251V114.054C0 107.966 3.75254 102.507 9.48759 100.268L70.3783 71.7162C82.9812 66.7476 82.9811 49.1826 70.449 44.144L9.41672 15.0322C3.75247 12.7929 0 7.33441 0 1.24614V-9.25089C0 -24.2267 12.2489 -36.3333 27.4008 -36.3333H112.364C118.312 -36.3333 124.118 -34.4437 128.861 -30.8748L201.364 36.3762C215.879 47.2232 215.879 68.7071 201.364 79.554L128.861 146.805C124.118 150.374 118.312 152.263 112.364 152.263V152.333Z" fill="#00C3B1"/>
+                  </svg>
                 </div>
               </div>
               
