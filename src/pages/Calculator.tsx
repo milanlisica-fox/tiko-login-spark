@@ -397,13 +397,13 @@ export default function CalculatorPage() {
               </button>
               
               {/* Decorative Background Elements */}
-              <div className="hidden lg:block absolute bottom-0 right-[-17px] w-full h-[54px] pointer-events-none overflow-hidden z-0">
+              {/* <div className="hidden lg:block absolute bottom-0 right-[-17px] w-full h-[54px] pointer-events-none overflow-hidden z-0">
                 <img
                   src="https://www.figma.com/api/mcp/asset/5fe2ecb6-5d0e-42f1-b3e1-1f7e44923017"
                   alt=""
                   className="absolute bottom-0 right-0 w-full h-[54px] object-cover opacity-70"
                 />
-              </div>
+              </div> */}
             </div>
           </div>
         
