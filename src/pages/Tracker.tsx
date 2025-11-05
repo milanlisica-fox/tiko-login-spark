@@ -13,6 +13,7 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from "@/components/ui/table";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import bronzeMedalImg from "@/assets/images/bronze-medal.png";
 import silverMedalImg from "@/assets/images/silver-medal.png";
 import firstPlaceMedalImg from "@/assets/images/first-place.png";
@@ -83,6 +84,9 @@ export default function TrackerPage() {
   const [tikoQuestion, setTikoQuestion] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [budgetView, setBudgetView] = useState<"quarter" | "annual">("quarter");
+  const [showTikoResponse, setShowTikoResponse] = useState(false);
+  const [showAdminModal, setShowAdminModal] = useState(false);
+  const [adminQuestion, setAdminQuestion] = useState("");
 
   // nav items centralized via DashboardLayout
   const { activeName } = useActiveNav();
@@ -147,8 +151,22 @@ export default function TrackerPage() {
 
   const handleAskTiko = () => {
     if (tikoQuestion.trim()) {
-      toast.success("Your question has been sent to TIKO admins!");
+      setShowTikoResponse(true);
+    }
+  };
+
+  const handleSendToAdmin = () => {
+    setAdminQuestion(tikoQuestion);
+    setShowAdminModal(true);
+  };
+
+  const handleSubmitAdminQuestion = () => {
+    if (adminQuestion.trim()) {
+      toast.success("Your question was sent to Admin");
+      setShowAdminModal(false);
+      setAdminQuestion("");
       setTikoQuestion("");
+      setShowTikoResponse(false);
     }
   };
 
@@ -2951,6 +2969,32 @@ export default function TrackerPage() {
                           <ChevronRight size={20} className="ml-2 text-black" />
                       </Button>
                     </div>
+                    {showTikoResponse && (
+                      <div className="space-y-4 pt-2 border-t border-[#ececec]">
+                        <p className="text-sm text-black">
+                          Status of your project you can find at the{" "}
+                          <button
+                            onClick={() => navigate("/dashboard/projects")}
+                            className="text-[#03b3e2] hover:underline font-medium"
+                          >
+                            Projects
+                          </button>{" "}
+                          page.
+                        </p>
+                        <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3">
+                          <p className="text-sm text-[#646464]">
+                            If this doesn't answer your question fully, feel free to send your question to Admin.
+                          </p>
+                          <Button
+                            onClick={handleSendToAdmin}
+                            variant="outline"
+                            className="h-10 px-6 border border-[#ececec] bg-white hover:bg-[#f9f9f9] text-black whitespace-nowrap"
+                          >
+                            Send to Admin
+                          </Button>
+                        </div>
+                      </div>
+                    )}
                   </CardContent>
                 </Card>
 
@@ -3050,6 +3094,32 @@ export default function TrackerPage() {
                         <ChevronRight size={20} className="ml-2 text-black" />
                       </Button>
                     </div>
+                    {showTikoResponse && (
+                      <div className="space-y-4 pt-2 border-t border-[#ececec]">
+                        <p className="text-sm text-black">
+                          Status of your project you can find at the{" "}
+                          <button
+                            onClick={() => navigate("/dashboard/projects")}
+                            className="text-[#03b3e2] hover:underline font-medium"
+                          >
+                            Projects
+                          </button>{" "}
+                          page.
+                        </p>
+                        <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3">
+                          <p className="text-sm text-[#646464]">
+                            If this doesn't answer your question fully, feel free to send your question to Admin.
+                          </p>
+                          <Button
+                            onClick={handleSendToAdmin}
+                            variant="outline"
+                            className="h-10 px-6 border border-[#ececec] bg-white hover:bg-[#f9f9f9] text-black whitespace-nowrap"
+                          >
+                            Send to Admin
+                          </Button>
+                        </div>
+                      </div>
+                    )}
                   </CardContent>
                 </Card>
 
@@ -3563,6 +3633,45 @@ export default function TrackerPage() {
           </Tabs>
         </div>
       </div>
+
+      {/* Send Question to Admin Modal */}
+      <Dialog open={showAdminModal} onOpenChange={setShowAdminModal}>
+        <DialogContent className="bg-white border border-[#ececec] max-w-lg">
+          <DialogHeader>
+            <DialogTitle className="text-base font-bold leading-[21.28px] text-black">Send Question to Admin</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4 py-4">
+            <div>
+              <label className="text-sm font-medium text-black mb-2 block">Your Question</label>
+              <Textarea
+                value={adminQuestion}
+                onChange={(e) => setAdminQuestion(e.target.value)}
+                placeholder="Enter your question..."
+                className="min-h-[100px] w-full bg-[#f9f9f9] border border-[#ececec] rounded-lg px-4 py-3 text-sm text-black placeholder:text-[#646464] focus:outline-none focus:ring-2 focus:ring-[#03b3e2] focus:ring-offset-2 resize-none"
+              />
+            </div>
+          </div>
+          <DialogFooter className="flex flex-row justify-end gap-3">
+            <Button
+              variant="outline"
+              onClick={() => {
+                setShowAdminModal(false);
+                setAdminQuestion("");
+              }}
+              className="h-10 px-6 border border-[#ececec] bg-white hover:bg-[#f9f9f9] text-black"
+            >
+              Cancel
+            </Button>
+            <Button
+              onClick={handleSubmitAdminQuestion}
+              variant="outline"
+              className="h-10 px-6 border-none bg-[#ffb546] hover:opacity-90 text-black"
+            >
+              Send
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </DashboardLayout>
   );
 }
