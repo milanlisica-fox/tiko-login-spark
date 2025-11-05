@@ -1,6 +1,7 @@
 // Centralized branding and asset constants
+import logoImage from "@/assets/images/Tiko.png";
 
-export const BRAND_LOGO_SRC = "https://www.figma.com/api/mcp/asset/e6ec2a32-b26b-4e3a-bd4a-4e803cad7b85";
+export const BRAND_LOGO_SRC = logoImage;
 export const BRAND_LOGO_DOT_SRC = "https://www.figma.com/api/mcp/asset/04d711ff-9aa1-4e99-ae1a-4fe72b6fa22c";
 export const BRAND_DIVIDER_SRC = "https://www.figma.com/api/mcp/asset/ed109f8c-67ff-4f01-943f-65f17570f9e7";
 

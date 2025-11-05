@@ -12,13 +12,16 @@ import { useActiveNav } from "@/hooks/useActiveNav";
 import HorizontalBarChart from "@/components/common/HorizontalBarChart";
 import { BRAND } from "@/constants/branding";
 import { DASHBOARD_ASSETS } from "@/constants/dashboard-assets";
+import draftBriefsIcon from "@/assets/images/Vector-yellow.png";
+import inReviewIcon from "@/assets/images/Vector-gray.png";
+import sowReadyIcon from "@/assets/images/Vector-blue.png";
 
 // Figma image URLs
 const logoImage = BRAND.logo;
 const logoDot = BRAND.logoDot;
-const briefsVector1 = DASHBOARD_ASSETS.briefsVector1;
-const briefsVector2 = DASHBOARD_ASSETS.briefsVector2;
-const briefsVector3 = DASHBOARD_ASSETS.briefsVector3;
+const briefsVector1 = draftBriefsIcon;
+const briefsVector2 = inReviewIcon;
+const briefsVector3 = sowReadyIcon;
 const projectsVector = DASHBOARD_ASSETS.projectsVector;
 const createBriefArrowIcon = DASHBOARD_ASSETS.createBriefArrowIcon;
 
@@ -108,14 +111,22 @@ export default function TikoDashboard() {
                   <div className="flex-1 bg-[#f9f9f9] rounded-[12px] p-4 md:p-[20px] flex flex-col gap-[10px] relative overflow-clip">
                     <p className="text-xs md:text-sm font-bold leading-[18.62px] text-black">Draft briefs</p>
                     <p className="text-2xl md:text-[40px] font-medium leading-[45.6px] text-black">5</p>
-                    <img src={briefsVector1} alt="" className="absolute right-[-10px] md:right-[-20px] top-[10px] md:top-[20px] w-6 h-6 md:w-[45px] md:h-10" />
+                    <img 
+                      src={briefsVector1} 
+                      alt="" 
+                      className="absolute right-0 top-[10px] md:top-[20px] w-[35px] h-[45px]"
+                    />
                   </div>
 
                   {/* In review */}
                   <div className="flex-1 bg-[#f9f9f9] rounded-[12px] p-4 md:p-[20px] flex flex-col gap-[10px] relative overflow-clip">
                     <p className="text-xs md:text-sm font-bold leading-[18.62px] text-black">In review</p>
                     <p className="text-2xl md:text-[40px] font-medium leading-[45.6px] text-black">4</p>
-                    <img src={briefsVector2} alt="" className="absolute right-[-10px] md:right-[-20px] top-[10px] md:top-[20px] w-6 h-6 md:w-[45px] md:h-10" />
+                    <img 
+                      src={briefsVector2} 
+                      alt="" 
+                      className="absolute right-0 top-[10px] md:top-[20px] w-[35px] h-[45px]"
+                    />
                   </div>
 
                   {/* SOW Ready to sign */}
@@ -125,7 +136,11 @@ export default function TikoDashboard() {
                   >
                     <p className="text-xs md:text-sm font-bold leading-[18.62px] text-black">SOW Ready to sign</p>
                     <p className="text-2xl md:text-[40px] font-medium leading-[45.6px] text-black">3</p>
-                    <img src={briefsVector3} alt="" className="absolute right-[-10px] md:right-[-20px] top-[10px] md:top-[20px] w-6 h-6 md:w-[45px] md:h-10" />
+                    <img 
+                      src={briefsVector3} 
+                      alt="" 
+                      className="absolute right-0 top-[10px] md:top-[20px] w-[35px] h-[45px]"
+                    />
                   </button>
                 </div>
 
@@ -138,7 +153,11 @@ export default function TikoDashboard() {
                     <span className="text-base font-semibold leading-[23.94px] text-black whitespace-nowrap">
                       Create brief
                     </span>
-                    <img src={createBriefArrowIcon} alt="" className="h-[14px] w-[15.567px]" />
+                    <img 
+                      src={createBriefArrowIcon} 
+                      alt="" 
+                      className="h-[14px] w-[15.567px]"
+                    />
                   </button>
                   <button
                     onClick={async (e) => {
