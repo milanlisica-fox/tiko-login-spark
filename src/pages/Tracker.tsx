@@ -666,52 +666,52 @@ export default function TrackerPage() {
         {/* Sticky Header and Tabs */}
         <div className="sticky -top-px z-50 bg-[#f9f9f9] -mx-4 md:-mx-6 px-4 md:px-6 pt-[40px] pb-4 -mt-[40px] border-b border-[#ececec]">
           <div className="space-y-6">
-            {/* Header */}
-            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-              <div className="flex flex-col gap-1">
-                <h1 className="h1-heading text-xl md:text-h1 text-black">Real-time insights to guide your spend</h1>
-                <p className="text-body text-black">Stay on top of spend, progress, and priorities—all in one place.</p>
-              </div>
-              <Button variant="outline" className="h-10 px-6 border-none bg-[#ffb546] hover:opacity-90 text-black whitespace-nowrap">
-                <span className="text-black font-semibold whitespace-nowrap">View all</span>
-                <ChevronRight size={20} className="ml-2 text-black" />
-              </Button>
+          {/* Header */}
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+            <div className="flex flex-col gap-1">
+              <h1 className="h1-heading text-xl md:text-h1 text-black">Real-time insights to guide your spend</h1>
+              <p className="text-body text-black">Stay on top of spend, progress, and priorities—all in one place.</p>
             </div>
+            <Button variant="outline" className="h-10 px-6 border-none bg-[#ffb546] hover:opacity-90 text-black whitespace-nowrap">
+              <span className="text-black font-semibold whitespace-nowrap">View all</span>
+              <ChevronRight size={20} className="ml-2 text-black" />
+            </Button>
+          </div>
 
             {/* Tabs - Desktop */}
             <Tabs value={activeTab} onValueChange={handleTabChange} className="w-full hidden md:block">
               <TabsList className="inline-flex h-12 md:h-14 items-center justify-start rounded-md bg-transparent p-0 text-muted-foreground border-b-2 border-[#ececec] w-full">
-                <TabsTrigger 
-                  value="leaderboard" 
+              <TabsTrigger 
+                value="leaderboard" 
                   className="flex-1 inline-flex items-center justify-center whitespace-nowrap rounded-none px-2 md:px-3 lg:px-4 py-2 md:py-3 text-xs md:text-sm lg:text-base font-medium md:font-semibold ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:bg-transparent data-[state=active]:text-[#03b3e2] data-[state=active]:shadow-none border-b-[3px] border-transparent data-[state=active]:border-[#03b3e2]"
-                >
-                  Leaderboard
-                </TabsTrigger>
-                <TabsTrigger 
-                  value="brief-quality" 
+              >
+                Leaderboard
+              </TabsTrigger>
+              <TabsTrigger 
+                value="brief-quality" 
                   className="flex-1 inline-flex items-center justify-center whitespace-nowrap rounded-none px-2 md:px-3 lg:px-4 py-2 md:py-3 text-xs md:text-sm lg:text-base font-medium md:font-semibold ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:bg-transparent data-[state=active]:text-[#8092dc] data-[state=active]:shadow-none border-b-[3px] border-transparent data-[state=active]:border-[#8092dc]"
-                >
-                  Brief quality
-                </TabsTrigger>
-                <TabsTrigger 
-                  value="project-performance" 
+              >
+                Brief quality
+              </TabsTrigger>
+              <TabsTrigger 
+                value="project-performance" 
                   className="flex-1 inline-flex items-center justify-center whitespace-nowrap rounded-none px-2 md:px-3 lg:px-4 py-2 md:py-3 text-xs md:text-sm lg:text-base font-medium md:font-semibold ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:bg-transparent data-[state=active]:text-[#ffb546] data-[state=active]:shadow-none border-b-[3px] border-transparent data-[state=active]:border-[#ffb546]"
-                >
-                  Project performance
-                </TabsTrigger>
-                <TabsTrigger 
-                  value="budget" 
+              >
+                Project performance
+              </TabsTrigger>
+              <TabsTrigger 
+                value="budget" 
                   className="flex-1 inline-flex items-center justify-center whitespace-nowrap rounded-none px-2 md:px-3 lg:px-4 py-2 md:py-3 text-xs md:text-sm lg:text-base font-medium md:font-semibold ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:bg-transparent data-[state=active]:text-[#0177c7] data-[state=active]:shadow-none border-b-[3px] border-transparent data-[state=active]:border-[#0177c7]"
-                >
-                  Budget
-                </TabsTrigger>
-                <TabsTrigger 
-                  value="predictive-analytics" 
+              >
+                Budget
+              </TabsTrigger>
+              <TabsTrigger 
+                value="predictive-analytics" 
                   className="flex-1 inline-flex items-center justify-center whitespace-nowrap rounded-none px-2 md:px-3 lg:px-4 py-2 md:py-3 text-xs md:text-sm lg:text-base font-medium md:font-semibold ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:bg-transparent data-[state=active]:text-[#ff4337] data-[state=active]:shadow-none border-b-[3px] border-transparent data-[state=active]:border-[#ff4337]"
-                >
-                  Predictive Analytics & Insights
-                </TabsTrigger>
-              </TabsList>
+              >
+                Predictive Analytics & Insights
+              </TabsTrigger>
+            </TabsList>
             </Tabs>
 
             {/* Mobile Dropdown */}
@@ -753,9 +753,9 @@ export default function TrackerPage() {
           {/* Teams' Leaderboard */}
           <div className="space-y-4">
             <h2 className="text-[22px] font-bold leading-[29.26px] text-black">Teams' Leaderboard</h2>
-            <div className="px-[20%] lg:px-0 space-y-5 lg:space-y-0 lg:grid lg:grid-cols-3 lg:gap-5">
+            <div className="px-[15%] lg:px-0 space-y-5 lg:space-y-0 lg:grid lg:grid-cols-3 lg:gap-5">
                     {teamsData.filter((team) => team.title !== "Omni & Digital" && team.title !== "IMG").map((team) => (
-                <Card key={team.id} className="border border-[#ececec] bg-white relative">
+                <Card key={team.id} className={`border border-[#ececec] bg-white relative ${team.title === "Marcomms" ? "-mx-[15%] lg:mx-0" : ""}`}>
                   {team.isMyTeam && (
                     <div className="absolute top-4 right-4">
                       <Badge variant="secondary" className="bg-[#f1f1f3] text-black border-none text-xs">My team</Badge>
@@ -1201,11 +1201,11 @@ export default function TrackerPage() {
                 </div>
 
                 {/* Key Stats and Number of Briefs Section */}
-                <div className="space-y-6">
-                  {/* Key Stats */}
-                  <div className="space-y-4">
+                <div className="flex flex-col md:flex-row gap-5 md:space-y-0">
+                  {/* Key Stats - 50% */}
+                  <div className="w-full md:w-1/2 space-y-4">
                     <h3 className="text-[22px] font-bold leading-[29.26px] text-black">Key Stats</h3>
-                    <div className="grid grid-cols-4 gap-5">
+                    <div className="grid grid-cols-2 gap-5">
                       <Card className="border border-[#ececec] bg-white">
                         <CardContent className="pt-6">
                           <div className="flex flex-col gap-2">
@@ -1241,50 +1241,54 @@ export default function TrackerPage() {
                     </div>
                   </div>
 
-                  {/* Number of Briefs Chart */}
-                  <Card className="border border-[#ececec] bg-white">
-                    <CardHeader className="pb-3">
-                      <CardTitle className="text-base font-bold leading-[21.28px] text-black">Number of Briefs</CardTitle>
-                    </CardHeader>
-                    <CardContent className="space-y-4">
-                      <ChartContainer config={numberOfBriefsConfig} className="h-[300px] w-full">
-                        <ResponsiveContainer width="100%" height="100%">
-                          <BarChart data={numberOfBriefsData} margin={{ left: 10, right: 10, top: 10, bottom: 20 }}>
-                            <CartesianGrid strokeDasharray="3 3" stroke="#e0e0e0" vertical={false} />
-                            <XAxis 
-                              dataKey="month" 
-                              axisLine={false}
-                              tickLine={false}
-                              tick={{ fill: "#646464", fontSize: 12 }}
-                            />
-                            <YAxis 
-                              axisLine={false}
-                              tickLine={false}
-                              domain={[0, 110]}
-                              ticks={[0, 20, 40, 60, 80, 100]}
-                              tick={{ fill: "#646464", fontSize: 12 }}
-                              label={{ value: "Number of Briefs", angle: -90, position: "insideLeft", offset: 15, style: { fill: "#646464", fontSize: 12, textAnchor: "middle" } }}
-                            />
-                            <ChartTooltip content={<ChartTooltipContent className="bg-white [&_span]:text-black [&_div]:text-black" />} />
-                            <Legend />
-                            <Bar dataKey="mobile" stackId="a" fill="#0177c7" radius={[4, 4, 0, 0]} />
-                            <Bar dataKey="tablet" stackId="a" fill="#03b3e2" radius={[0, 0, 0, 0]} />
-                            <Bar dataKey="wearable" stackId="a" fill="#00c3b1" radius={[0, 0, 0, 0]} />
-                            <Bar dataKey="ecosystem" stackId="a" fill="#8092DC" radius={[0, 4, 4, 0]} />
-                          </BarChart>
-                        </ResponsiveContainer>
-                      </ChartContainer>
-                    </CardContent>
-                  </Card>
+                  {/* Number of Briefs Chart - 50% */}
+                  <div className="w-full md:w-1/2">
+                    <Card className="border border-[#ececec] bg-white">
+                      <CardHeader className="pb-3">
+                        <CardTitle className="text-base font-bold leading-[21.28px] text-black">Number of Briefs</CardTitle>
+                      </CardHeader>
+                      <CardContent className="space-y-4">
+                        <ChartContainer config={numberOfBriefsConfig} className="h-[300px] w-full">
+                          <ResponsiveContainer width="100%" height="100%">
+                            <BarChart data={numberOfBriefsData} margin={{ left: 10, right: 10, top: 10, bottom: 20 }}>
+                              <CartesianGrid strokeDasharray="3 3" stroke="#e0e0e0" vertical={false} />
+                              <XAxis 
+                                dataKey="month" 
+                                axisLine={false}
+                                tickLine={false}
+                                tick={{ fill: "#646464", fontSize: 12 }}
+                              />
+                              <YAxis 
+                                axisLine={false}
+                                tickLine={false}
+                                domain={[0, 110]}
+                                ticks={[0, 20, 40, 60, 80, 100]}
+                                tick={{ fill: "#646464", fontSize: 12 }}
+                                label={{ value: "Number of Briefs", angle: -90, position: "insideLeft", offset: 15, style: { fill: "#646464", fontSize: 12, textAnchor: "middle" } }}
+                              />
+                              <ChartTooltip content={<ChartTooltipContent className="bg-white [&_span]:text-black [&_div]:text-black" />} />
+                              <Legend />
+                              <Bar dataKey="mobile" stackId="a" fill="#0177c7" radius={[4, 4, 0, 0]} />
+                              <Bar dataKey="tablet" stackId="a" fill="#03b3e2" radius={[0, 0, 0, 0]} />
+                              <Bar dataKey="wearable" stackId="a" fill="#00c3b1" radius={[0, 0, 0, 0]} />
+                              <Bar dataKey="ecosystem" stackId="a" fill="#8092DC" radius={[0, 4, 4, 0]} />
+                            </BarChart>
+                          </ResponsiveContainer>
+                        </ChartContainer>
+                      </CardContent>
+                    </Card>
+                  </div>
                 </div>
               </div>
 
               {/* Tablet/Mobile: Vertical Stack */}
               <div className="lg:hidden space-y-6">
-                {/* 1. Brief quality score - All categories */}
-                <Card className="border border-[#ececec] bg-white">
-                  <CardHeader className="pb-3">
-                    <CardTitle className="text-base font-bold leading-[21.28px] text-black">Brief quality score - All categories</CardTitle>
+                {/* Row 1: Brief quality score - All categories | Number of iterations */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                  {/* 1. Brief quality score - All categories */}
+                  <Card className="border border-[#ececec] bg-white">
+                <CardHeader className="pb-3">
+                      <CardTitle className="text-base font-bold leading-[21.28px] text-black">Brief quality score - All categories</CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-6">
                   <ChartContainer config={qualityScoreConfig} className="h-[250px] md:h-[200px] w-full">
@@ -1336,141 +1340,147 @@ export default function TrackerPage() {
                 </CardContent>
               </Card>
 
-                {/* 2. Number of Iterations */}
+                  {/* 2. Number of Iterations */}
                   <Card className="border border-[#ececec] bg-white">
                     <CardHeader className="pb-3">
-                    <CardTitle className="text-base font-bold leading-[21.28px] text-black">Number of iterations</CardTitle>
+                      <CardTitle className="text-base font-bold leading-[21.28px] text-black">Number of iterations</CardTitle>
                     </CardHeader>
-                  <CardContent className="space-y-4">
-                    <ChartContainer config={iterationsConfig} className="h-[250px] w-full">
-                      <ResponsiveContainer width="100%" height="100%">
-                        <AreaChart data={iterationsData} margin={{ left: 10, right: 10, top: 10, bottom: 20 }}>
-                          <defs>
-                            <linearGradient id="iterationsGradient" x1="0" y1="0" x2="0" y2="1">
-                              <stop offset="5%" stopColor="#00c3b1" stopOpacity={0.3} />
-                              <stop offset="95%" stopColor="#00c3b1" stopOpacity={0} />
-                            </linearGradient>
-                          </defs>
-                          <CartesianGrid strokeDasharray="3 3" stroke="#e0e0e0" vertical={true} />
-                          <XAxis 
-                            dataKey="period" 
-                            axisLine={false}
-                            tickLine={false}
-                            tick={{ fill: "#646464", fontSize: 11 }}
-                          />
-                          <YAxis 
-                            axisLine={false}
-                            tickLine={false}
-                            domain={[1.5, 2.5]}
-                            ticks={[1.5, 1.75, 2.0, 2.25, 2.5]}
-                            tick={{ fill: "#646464", fontSize: 11 }}
-                          />
-                          <ChartTooltip content={<ChartTooltipContent className="bg-white [&_span]:text-black [&_div]:text-black" />} />
-                          <Area
-                            type="monotone"
-                            dataKey="iterations"
-                            stroke="#00c3b1"
-                            strokeWidth={2}
-                            fill="url(#iterationsGradient)"
-                          />
-                        </AreaChart>
-                      </ResponsiveContainer>
-                    </ChartContainer>
-                  </CardContent>
-                </Card>
+                    <CardContent className="space-y-4">
+                      <ChartContainer config={iterationsConfig} className="h-[250px] w-full">
+                        <ResponsiveContainer width="100%" height="100%">
+                          <AreaChart data={iterationsData} margin={{ left: 10, right: 10, top: 10, bottom: 20 }}>
+                            <defs>
+                              <linearGradient id="iterationsGradient" x1="0" y1="0" x2="0" y2="1">
+                                <stop offset="5%" stopColor="#00c3b1" stopOpacity={0.3} />
+                                <stop offset="95%" stopColor="#00c3b1" stopOpacity={0} />
+                              </linearGradient>
+                            </defs>
+                            <CartesianGrid strokeDasharray="3 3" stroke="#e0e0e0" vertical={true} />
+                            <XAxis 
+                              dataKey="period" 
+                              axisLine={false}
+                              tickLine={false}
+                              tick={{ fill: "#646464", fontSize: 11 }}
+                            />
+                            <YAxis 
+                              axisLine={false}
+                              tickLine={false}
+                              domain={[1.5, 2.5]}
+                              ticks={[1.5, 1.75, 2.0, 2.25, 2.5]}
+                              tick={{ fill: "#646464", fontSize: 11 }}
+                            />
+                            <ChartTooltip content={<ChartTooltipContent className="bg-white [&_span]:text-black [&_div]:text-black" />} />
+                            <Area
+                              type="monotone"
+                              dataKey="iterations"
+                              stroke="#00c3b1"
+                              strokeWidth={2}
+                              fill="url(#iterationsGradient)"
+                            />
+                          </AreaChart>
+                        </ResponsiveContainer>
+                      </ChartContainer>
+                    </CardContent>
+                  </Card>
+                        </div>
 
-                {/* 3. Details Provided in Brief */}
-                <Card className="border border-[#ececec] bg-white">
-                  <CardHeader className="pb-3">
-                    <CardTitle className="text-base font-bold leading-[21.28px] text-black">Details provided in the brief</CardTitle>
-                  </CardHeader>
-                  <CardContent className="space-y-4">
-                    <ChartContainer config={detailsProvidedConfig} className="h-[250px] w-full">
-                      <ResponsiveContainer width="100%" height="100%">
-                        <AreaChart data={detailsProvidedData} margin={{ left: 10, right: 10, top: 10, bottom: 20 }}>
-                          <defs>
-                            <linearGradient id="detailsProvidedGradient" x1="0" y1="0" x2="0" y2="1">
-                              <stop offset="5%" stopColor="#0177c7" stopOpacity={0.3} />
-                              <stop offset="95%" stopColor="#0177c7" stopOpacity={0} />
-                            </linearGradient>
-                          </defs>
-                          <CartesianGrid strokeDasharray="3 3" stroke="#e0e0e0" vertical={true} />
-                          <XAxis 
-                            dataKey="period" 
-                            axisLine={false}
-                            tickLine={false}
-                            tick={{ fill: "#646464", fontSize: 11 }}
-                          />
-                          <YAxis 
-                            axisLine={false}
-                            tickLine={false}
-                            domain={[0, 20]}
-                            ticks={[0, 5, 10, 15, 20]}
-                            tick={{ fill: "#646464", fontSize: 11 }}
-                          />
-                          <ChartTooltip content={<ChartTooltipContent className="bg-white [&_span]:text-black [&_div]:text-black" />} />
-                          <Area
-                            type="monotone"
-                            dataKey="fields"
-                            stroke="#0177c7"
-                            strokeWidth={2}
-                            fill="url(#detailsProvidedGradient)"
-                          />
-                        </AreaChart>
-                      </ResponsiveContainer>
-                    </ChartContainer>
-                  </CardContent>
-                </Card>
-
-                {/* 4. Right first-time */}
-                <Card className="border border-[#ececec] bg-white">
-                  <CardHeader className="pb-3">
-                    <CardTitle className="text-base font-bold leading-[21.28px] text-black">Right first-time</CardTitle>
-                  </CardHeader>
-                  <CardContent className="space-y-4">
-                    <div className="flex items-center justify-center">
-                      <div className="text-center">
-                        <div className="text-[32px] font-bold leading-[38.4px]" style={{ color: "#03b3e2" }}>
-                          {rightFirstTimeAverage}%
-                          </div>
-                        <div className="text-xs leading-[15.96px] text-[#646464] mt-1">Average</div>
-                          </div>
-                          </div>
-                    <ChartContainer config={rightFirstTimeConfig} className="h-[200px] w-full [&_.recharts-bar-rectangle]:fill-[#03b3e2] [&_.recharts-bar-rectangle]:stroke-none [&_.recharts-tooltip-cursor]:fill-transparent [&_.recharts-rectangle.recharts-tooltip-cursor]:fill-transparent">
-                      <ResponsiveContainer width="100%" height="100%">
-                        <BarChart data={rightFirstTimeData} margin={{ left: 10, right: 10, top: 10, bottom: 20 }}>
-                          <CartesianGrid strokeDasharray="3 3" stroke="#e0e0e0" vertical={false} />
-                          <XAxis 
-                            dataKey="category" 
-                            axisLine={false}
-                            tickLine={false}
-                            tick={{ fill: "#646464", fontSize: 11 }}
-                          />
-                          <YAxis 
-                            axisLine={false}
-                            tickLine={false}
-                            domain={[0, 100]}
-                            ticks={[0, 25, 50, 75, 100]}
-                            tick={{ fill: "#646464", fontSize: 11 }}
-                          />
-                          <ChartTooltip 
-                            cursor={{ fill: 'transparent' }}
-                            content={<ChartTooltipContent className="bg-white [&_span]:text-black [&_div]:text-black" />} 
-                          />
-                          <Bar dataKey="percentage" fill="#03b3e2" radius={[4, 4, 0, 0]} stroke="none" />
-                        </BarChart>
-                      </ResponsiveContainer>
-                    </ChartContainer>
+                {/* Row 2: Details provided in the brief | Right first-time */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                  {/* 3. Details Provided in Brief */}
+                  <Card className="border border-[#ececec] bg-white">
+                    <CardHeader className="pb-3">
+                      <CardTitle className="text-base font-bold leading-[21.28px] text-black">Details provided in the brief</CardTitle>
+                    </CardHeader>
+                    <CardContent className="space-y-4">
+                      <ChartContainer config={detailsProvidedConfig} className="h-[250px] w-full">
+                        <ResponsiveContainer width="100%" height="100%">
+                          <AreaChart data={detailsProvidedData} margin={{ left: 10, right: 10, top: 10, bottom: 20 }}>
+                            <defs>
+                              <linearGradient id="detailsProvidedGradient" x1="0" y1="0" x2="0" y2="1">
+                                <stop offset="5%" stopColor="#0177c7" stopOpacity={0.3} />
+                                <stop offset="95%" stopColor="#0177c7" stopOpacity={0} />
+                              </linearGradient>
+                            </defs>
+                            <CartesianGrid strokeDasharray="3 3" stroke="#e0e0e0" vertical={true} />
+                            <XAxis 
+                              dataKey="period" 
+                              axisLine={false}
+                              tickLine={false}
+                              tick={{ fill: "#646464", fontSize: 11 }}
+                            />
+                            <YAxis 
+                              axisLine={false}
+                              tickLine={false}
+                              domain={[0, 20]}
+                              ticks={[0, 5, 10, 15, 20]}
+                              tick={{ fill: "#646464", fontSize: 11 }}
+                            />
+                            <ChartTooltip content={<ChartTooltipContent className="bg-white [&_span]:text-black [&_div]:text-black" />} />
+                            <Area
+                              type="monotone"
+                              dataKey="fields"
+                              stroke="#0177c7"
+                              strokeWidth={2}
+                              fill="url(#detailsProvidedGradient)"
+                            />
+                          </AreaChart>
+                        </ResponsiveContainer>
+                      </ChartContainer>
                     </CardContent>
                   </Card>
 
-                {/* 5. Number of Briefs per Category */}
+                  {/* 4. Right first-time */}
+                  <Card className="border border-[#ececec] bg-white">
+                    <CardHeader className="pb-3">
+                      <CardTitle className="text-base font-bold leading-[21.28px] text-black">Right first-time</CardTitle>
+                    </CardHeader>
+                    <CardContent className="space-y-4">
+                      <div className="flex items-center justify-center">
+                        <div className="text-center">
+                          <div className="text-[32px] font-bold leading-[38.4px]" style={{ color: "#03b3e2" }}>
+                            {rightFirstTimeAverage}%
+                          </div>
+                          <div className="text-xs leading-[15.96px] text-[#646464] mt-1">Average</div>
+                          </div>
+                          </div>
+                      <ChartContainer config={rightFirstTimeConfig} className="h-[200px] w-full [&_.recharts-bar-rectangle]:fill-[#03b3e2] [&_.recharts-bar-rectangle]:stroke-none [&_.recharts-tooltip-cursor]:fill-transparent [&_.recharts-rectangle.recharts-tooltip-cursor]:fill-transparent">
+                        <ResponsiveContainer width="100%" height="100%">
+                          <BarChart data={rightFirstTimeData} margin={{ left: 10, right: 10, top: 10, bottom: 20 }}>
+                            <CartesianGrid strokeDasharray="3 3" stroke="#e0e0e0" vertical={false} />
+                            <XAxis 
+                              dataKey="category" 
+                              axisLine={false}
+                              tickLine={false}
+                              tick={{ fill: "#646464", fontSize: 11 }}
+                            />
+                            <YAxis 
+                              axisLine={false}
+                              tickLine={false}
+                              domain={[0, 100]}
+                              ticks={[0, 25, 50, 75, 100]}
+                              tick={{ fill: "#646464", fontSize: 11 }}
+                            />
+                            <ChartTooltip 
+                              cursor={{ fill: 'transparent' }}
+                              content={<ChartTooltipContent className="bg-white [&_span]:text-black [&_div]:text-black" />} 
+                            />
+                            <Bar dataKey="percentage" fill="#03b3e2" radius={[4, 4, 0, 0]} stroke="none" />
+                          </BarChart>
+                        </ResponsiveContainer>
+                      </ChartContainer>
+                    </CardContent>
+                  </Card>
+                </div>
+
+                {/* Row 3: Number of Briefs per Category | Briefs Quality by Category */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                  {/* 5. Number of Briefs per Category */}
                 <Card className="border border-[#ececec] bg-white">
                   <CardHeader className="pb-3">
                     <CardTitle className="text-base font-bold leading-[21.28px] text-black">Number of Briefs per Category</CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-4">
-                    <ChartContainer config={briefsPerCategoryConfig} className="h-[200px] w-full">
+                      <ChartContainer config={briefsPerCategoryConfig} className="h-[200px] w-full">
                       <ResponsiveContainer width="100%" height="100%">
                         <BarChart data={briefsPerCategoryData} margin={{ left: 10, right: 10, top: 10, bottom: 20 }}>
                           <CartesianGrid strokeDasharray="3 3" stroke="#e0e0e0" vertical={false} />
@@ -1496,40 +1506,41 @@ export default function TrackerPage() {
                   </CardContent>
                 </Card>
 
-                {/* 6. Briefs Quality by Category */}
+                  {/* 6. Briefs Quality by Category */}
                 <Card className="border border-[#ececec] bg-white">
                   <CardHeader className="pb-3">
-                    <CardTitle className="text-base font-bold leading-[21.28px] text-black">Briefs Quality by Category</CardTitle>
+                      <CardTitle className="text-base font-bold leading-[21.28px] text-black">Briefs Quality by Category</CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-4">
-                    <ChartContainer config={briefsQualityByCategoryConfig} className="h-[200px] w-full">
-                      <ResponsiveContainer width="100%" height="100%">
-                        <BarChart data={briefsQualityByCategoryData} margin={{ left: 10, right: 10, top: 10, bottom: 20 }}>
-                          <CartesianGrid strokeDasharray="3 3" stroke="#e0e0e0" vertical={false} />
-                          <XAxis 
-                            dataKey="category" 
-                            axisLine={false}
-                            tickLine={false}
-                            tick={{ fill: "#646464", fontSize: 12 }}
-                          />
-                          <YAxis 
-                            axisLine={false}
-                            tickLine={false}
-                            domain={[80, 95]}
-                            ticks={[80, 85, 90, 95]}
-                            tick={{ fill: "#646464", fontSize: 12 }}
-                            label={{ value: "Quality Score (%)", angle: -90, position: "insideLeft", offset: 15, style: { fill: "#646464", fontSize: 12, textAnchor: "middle" } }}
-                          />
-                          <ChartTooltip content={<ChartTooltipContent className="bg-white [&_span]:text-black [&_div]:text-black" />} />
-                          <Bar dataKey="qualityScore" fill="#0177c7" radius={[4, 4, 0, 0]} />
-                        </BarChart>
-                      </ResponsiveContainer>
-                    </ChartContainer>
-                  </CardContent>
-                </Card>
+                      <ChartContainer config={briefsQualityByCategoryConfig} className="h-[200px] w-full">
+                        <ResponsiveContainer width="100%" height="100%">
+                          <BarChart data={briefsQualityByCategoryData} margin={{ left: 10, right: 10, top: 10, bottom: 20 }}>
+                            <CartesianGrid strokeDasharray="3 3" stroke="#e0e0e0" vertical={false} />
+                            <XAxis 
+                              dataKey="category" 
+                              axisLine={false}
+                              tickLine={false}
+                              tick={{ fill: "#646464", fontSize: 12 }}
+                            />
+                            <YAxis 
+                              axisLine={false}
+                              tickLine={false}
+                              domain={[80, 95]}
+                              ticks={[80, 85, 90, 95]}
+                              tick={{ fill: "#646464", fontSize: 12 }}
+                              label={{ value: "Quality Score (%)", angle: -90, position: "insideLeft", offset: 15, style: { fill: "#646464", fontSize: 12, textAnchor: "middle" } }}
+                            />
+                            <ChartTooltip content={<ChartTooltipContent className="bg-white [&_span]:text-black [&_div]:text-black" />} />
+                            <Bar dataKey="qualityScore" fill="#0177c7" radius={[4, 4, 0, 0]} />
+                          </BarChart>
+                        </ResponsiveContainer>
+                      </ChartContainer>
+                    </CardContent>
+                  </Card>
+                </div>
 
-                {/* 7. Brief Quality Score and Brief Top Missing Fields side by side */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                {/* 7. Brief Quality Score and Brief Top Missing Fields - stacked on tablet */}
+                <div className="grid grid-cols-1 gap-5">
                 {/* Brief Quality Score */}
                 <Card className="border border-[#ececec] bg-white">
                   <CardHeader className="pb-3">
@@ -1556,11 +1567,11 @@ export default function TrackerPage() {
                 </Card>
 
                 {/* Brief Top Missing Fields */}
-                <Card className="border border-[#ececec] bg-white">
-                  <CardHeader className="pb-3">
+                <Card className="border border-[#ececec] bg-white overflow-x-visible">
+                  <CardHeader className="pb-3 px-3 md:px-6">
                     <CardTitle className="text-base font-bold leading-[21.28px] text-black">Brief Top Missing Fields</CardTitle>
                   </CardHeader>
-                  <CardContent className="space-y-4">
+                  <CardContent className="space-y-4 overflow-x-visible px-3 md:px-6">
                     {/* Legend */}
                     <div className="flex flex-wrap items-center gap-4 text-sm">
                       <div className="flex items-center gap-2">
@@ -1581,6 +1592,7 @@ export default function TrackerPage() {
                       </div>
                     </div>
 
+                    <div className="w-[calc(100%+80px)] -ml-[80px] md:w-full md:ml-0">
                     <ChartContainer config={missingFieldsConfig} className="h-[400px] w-full">
                       <ResponsiveContainer width="100%" height="100%">
                         <BarChart data={missingFieldsData} layout="vertical" margin={{ top: 5, right: 30, left: 120, bottom: 20 }}>
@@ -1600,7 +1612,8 @@ export default function TrackerPage() {
                             axisLine={false}
                             tickLine={false}
                             tick={{ fill: "#646464", fontSize: 12 }}
-                            width={120}
+                              width={60}
+                              className="md:!w-[120px]"
                           />
                           <ChartTooltip cursor={false} content={<ChartTooltipContent className="bg-white [&_span]:text-black [&_div]:text-black" />} />
                           <Bar dataKey="mobile" stackId="a" fill="#0177c7" radius={[6, 0, 0, 6]} />
@@ -1610,16 +1623,17 @@ export default function TrackerPage() {
                         </BarChart>
                       </ResponsiveContainer>
                     </ChartContainer>
+                    </div>
                   </CardContent>
                 </Card>
                 </div>
 
                 {/* Key Stats and Number of Briefs Section */}
-                <div className="space-y-6">
-                  {/* Key Stats */}
-                  <div className="space-y-4">
+                <div className="flex flex-col md:flex-row gap-5 md:space-y-0">
+                  {/* Key Stats - 50% */}
+                  <div className="w-full md:w-1/2 space-y-4">
                     <h3 className="text-[22px] font-bold leading-[29.26px] text-black">Key Stats</h3>
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-5">
+                    <div className="grid grid-cols-2 gap-5">
                       <Card className="border border-[#ececec] bg-white">
                         <CardContent className="pt-6">
                           <div className="flex flex-col gap-2">
@@ -1655,41 +1669,43 @@ export default function TrackerPage() {
                     </div>
                   </div>
 
-                  {/* Number of Briefs Chart */}
-                  <Card className="border border-[#ececec] bg-white">
-                    <CardHeader className="pb-3">
-                      <CardTitle className="text-base font-bold leading-[21.28px] text-black">Number of Briefs</CardTitle>
-                    </CardHeader>
-                    <CardContent className="space-y-4">
-                      <ChartContainer config={numberOfBriefsConfig} className="h-[300px] w-full">
-                        <ResponsiveContainer width="100%" height="100%">
-                          <BarChart data={numberOfBriefsData} margin={{ left: 10, right: 10, top: 10, bottom: 20 }}>
-                            <CartesianGrid strokeDasharray="3 3" stroke="#e0e0e0" vertical={false} />
-                            <XAxis 
-                              dataKey="month" 
-                              axisLine={false}
-                              tickLine={false}
-                              tick={{ fill: "#646464", fontSize: 12 }}
-                            />
-                            <YAxis 
-                              axisLine={false}
-                              tickLine={false}
-                              domain={[0, 110]}
-                              ticks={[0, 20, 40, 60, 80, 100]}
-                              tick={{ fill: "#646464", fontSize: 12 }}
-                              label={{ value: "Number of Briefs", angle: -90, position: "insideLeft", offset: 15, style: { fill: "#646464", fontSize: 12, textAnchor: "middle" } }}
-                            />
-                            <ChartTooltip content={<ChartTooltipContent className="bg-white [&_span]:text-black [&_div]:text-black" />} />
-                            <Legend />
-                            <Bar dataKey="mobile" stackId="a" fill="#0177c7" radius={[4, 4, 0, 0]} />
-                            <Bar dataKey="tablet" stackId="a" fill="#03b3e2" radius={[0, 0, 0, 0]} />
-                            <Bar dataKey="wearable" stackId="a" fill="#00c3b1" radius={[0, 0, 0, 0]} />
-                            <Bar dataKey="ecosystem" stackId="a" fill="#8092DC" radius={[0, 4, 4, 0]} />
-                          </BarChart>
-                        </ResponsiveContainer>
-                      </ChartContainer>
-                    </CardContent>
-                  </Card>
+                  {/* Number of Briefs Chart - 50% */}
+                  <div className="w-full md:w-1/2">
+                    <Card className="border border-[#ececec] bg-white">
+                      <CardHeader className="pb-3">
+                        <CardTitle className="text-base font-bold leading-[21.28px] text-black">Number of Briefs</CardTitle>
+                      </CardHeader>
+                      <CardContent className="space-y-4">
+                        <ChartContainer config={numberOfBriefsConfig} className="h-[300px] w-full">
+                          <ResponsiveContainer width="100%" height="100%">
+                            <BarChart data={numberOfBriefsData} margin={{ left: 10, right: 10, top: 10, bottom: 20 }}>
+                              <CartesianGrid strokeDasharray="3 3" stroke="#e0e0e0" vertical={false} />
+                              <XAxis 
+                                dataKey="month" 
+                                axisLine={false}
+                                tickLine={false}
+                                tick={{ fill: "#646464", fontSize: 12 }}
+                              />
+                              <YAxis 
+                                axisLine={false}
+                                tickLine={false}
+                                domain={[0, 110]}
+                                ticks={[0, 20, 40, 60, 80, 100]}
+                                tick={{ fill: "#646464", fontSize: 12 }}
+                                label={{ value: "Number of Briefs", angle: -90, position: "insideLeft", offset: 15, style: { fill: "#646464", fontSize: 12, textAnchor: "middle" } }}
+                              />
+                              <ChartTooltip content={<ChartTooltipContent className="bg-white [&_span]:text-black [&_div]:text-black" />} />
+                              <Legend />
+                              <Bar dataKey="mobile" stackId="a" fill="#0177c7" radius={[4, 4, 0, 0]} />
+                              <Bar dataKey="tablet" stackId="a" fill="#03b3e2" radius={[0, 0, 0, 0]} />
+                              <Bar dataKey="wearable" stackId="a" fill="#00c3b1" radius={[0, 0, 0, 0]} />
+                              <Bar dataKey="ecosystem" stackId="a" fill="#8092DC" radius={[0, 4, 4, 0]} />
+                            </BarChart>
+                          </ResponsiveContainer>
+                        </ChartContainer>
+                      </CardContent>
+                    </Card>
+                  </div>
                 </div>
               </div>
             </TabsContent>
@@ -3100,10 +3116,10 @@ export default function TrackerPage() {
                 </Card>
               </div>
 
-              {/* Optimization Opportunities */}
+                {/* Optimization Opportunities */}
               <div className="space-y-4 pt-6">
-                <div className="flex flex-col gap-1">
-                  <h3 className="text-[22px] font-bold leading-[29.26px] text-black">Optimization Opportunities</h3>
+                  <div className="flex flex-col gap-1">
+                    <h3 className="text-[22px] font-bold leading-[29.26px] text-black">Optimization Opportunities</h3>
                     <p className="text-sm text-[#646464]">DATA-DRIVEN INSIGHTS FOR PERFORMANCE IMPROVEMENT, BUDGET OPTIMIZATION, AND PROCESS ENHANCEMENT</p>
                   </div>
                 {/* Desktop: 3 columns inline */}
@@ -3403,10 +3419,10 @@ export default function TrackerPage() {
                 </div>
                 </div>
 
-              {/* Predictive Insights */}
+                {/* Predictive Insights */}
               <div className="space-y-4 pt-6">
-                <div className="flex flex-col gap-1">
-                  <h3 className="text-[22px] font-bold leading-[29.26px] text-black">Predictive Insights</h3>
+                  <div className="flex flex-col gap-1">
+                    <h3 className="text-[22px] font-bold leading-[29.26px] text-black">Predictive Insights</h3>
                     <p className="text-sm text-[#646464]">AI-POWERED FORECASTING AND TREND PREDICTIONS BASED ON CURRENT DATA PATTERNS.</p>
                   </div>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
