@@ -508,12 +508,11 @@ function TemplateSelectionScreen({ onCancel, onCreateBrief }: { onCancel: () => 
             >
               <div className="flex items-center justify-between">
                 <h3 className="text-lg font-bold leading-[23.94px] text-black">{template.title}</h3>
-                <div className={`brief-icon absolute right-4 top-1/2 -translate-y-1/2 ${template.hasRotation ? "rotate-[50.525deg]" : ""}`}>
-                  <img
-                    src={template.icon}
-                    alt=""
-                    className={`${template.hasRotation ? "h-[32.164px] w-[32.163px]" : "h-6 w-6"}`}
-                  />
+                <div className={`brief-icon`}>
+                   <div
+                      className="template-icon"
+                      dangerouslySetInnerHTML={{ __html: template.icon }}
+                    />
                 </div>
               </div>
             </button>
