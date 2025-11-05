@@ -302,6 +302,55 @@ export default function TrackerPage() {
     },
   };
 
+  // Mock data for briefs quality by category
+  const briefsQualityByCategoryData = [
+    { category: "SMP", qualityScore: 92 },
+    { category: "Ecosystem", qualityScore: 88 },
+    { category: "Promotions", qualityScore: 85 },
+    { category: "B2B", qualityScore: 90 },
+  ];
+
+  const briefsQualityByCategoryConfig = {
+    qualityScore: {
+      label: "Quality Score (%)",
+      color: "#0177c7",
+    },
+  };
+
+  // Mock data for key stats
+  const keyStatsData = {
+    draftBrief: 12,
+    briefsInReview: 8,
+    sowsReadyToSign: 5,
+    briefsApproved: 142,
+  };
+
+  // Mock data for number of briefs by month (stacked bar chart)
+  const numberOfBriefsData = [
+    { month: "Jun", mobile: 49, tablet: 21, wearable: 18, ecosystem: 10 },
+    { month: "Jul", mobile: 55, tablet: 25, wearable: 15, ecosystem: 7 },
+    { month: "Aug", mobile: 42, tablet: 18, wearable: 12, ecosystem: 7 },
+  ];
+
+  const numberOfBriefsConfig = {
+    mobile: {
+      label: "Mobile",
+      color: "#0177c7",
+    },
+    tablet: {
+      label: "Tablet",
+      color: "#03b3e2",
+    },
+    wearable: {
+      label: "Wearable",
+      color: "#00c3b1",
+    },
+    ecosystem: {
+      label: "Ecosystem",
+      color: "#8092DC",
+    },
+  };
+
   // Mock data for top missing fields from briefs
   const missingFieldsData = [
     { field: "Delivery Date", mobile: 10, tablet: 7, wearable: 5, ecosystem: 1 },
@@ -486,7 +535,6 @@ export default function TrackerPage() {
     { category: "Ecosystem", tokens: 3200 },
     { category: "Promotions", tokens: 2800 },
     { category: "B2B", tokens: 1800 },
-    { category: "Historical spend", tokens: 7700 },
   ];
 
   const tokenDistributionCategoryConfig = {
@@ -918,10 +966,10 @@ export default function TrackerPage() {
                 </Card>
                 </div>
 
-                {/* Second Row: 25% / 25% / 50% */}
-                <div className="grid grid-cols-4 gap-5">
+                {/* Second Row: Three graphs in the same line */}
+                <div className="grid grid-cols-3 gap-5">
                 {/* 4. Right first-time */}
-                <Card className="border border-[#ececec] bg-white col-span-1">
+                <Card className="border border-[#ececec] bg-white">
                   <CardHeader className="pb-3">
                     <CardTitle className="text-base font-bold leading-[21.28px] text-black">Right first-time</CardTitle>
                   </CardHeader>
@@ -963,7 +1011,7 @@ export default function TrackerPage() {
                   </Card>
 
                 {/* 5. Number of Briefs per Category */}
-                <Card className="border border-[#ececec] bg-white col-span-1">
+                <Card className="border border-[#ececec] bg-white">
                   <CardHeader className="pb-3">
                     <CardTitle className="text-base font-bold leading-[21.28px] text-black">Number of Briefs per Category</CardTitle>
                   </CardHeader>
@@ -995,8 +1043,45 @@ export default function TrackerPage() {
                   </CardContent>
                 </Card>
 
-                {/* 6. Brief Quality Score */}
-                <Card className="border border-[#ececec] bg-white col-span-2">
+                {/* 6. Briefs Quality by Category */}
+                <Card className="border border-[#ececec] bg-white">
+                  <CardHeader className="pb-3">
+                    <CardTitle className="text-base font-bold leading-[21.28px] text-black">Briefs Quality by Category</CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    <div className="h-[60px]"></div>
+                    <ChartContainer config={briefsQualityByCategoryConfig} className="h-[200px] w-full">
+                      <ResponsiveContainer width="100%" height="100%">
+                        <BarChart data={briefsQualityByCategoryData} margin={{ left: 10, right: 10, top: 10, bottom: 20 }}>
+                          <CartesianGrid strokeDasharray="3 3" stroke="#e0e0e0" vertical={false} />
+                          <XAxis 
+                            dataKey="category" 
+                            axisLine={false}
+                            tickLine={false}
+                            tick={{ fill: "#646464", fontSize: 12 }}
+                          />
+                          <YAxis 
+                            axisLine={false}
+                            tickLine={false}
+                            domain={[80, 95]}
+                            ticks={[80, 85, 90, 95]}
+                            tick={{ fill: "#646464", fontSize: 12 }}
+                            label={{ value: "Quality Score (%)", angle: -90, position: "insideLeft", offset: 15, style: { fill: "#646464", fontSize: 12, textAnchor: "middle" } }}
+                          />
+                          <ChartTooltip content={<ChartTooltipContent className="bg-white [&_span]:text-black [&_div]:text-black" />} />
+                          <Bar dataKey="qualityScore" fill="#0177c7" radius={[4, 4, 0, 0]} />
+                        </BarChart>
+                      </ResponsiveContainer>
+                    </ChartContainer>
+                  </CardContent>
+                </Card>
+
+                </div>
+
+                {/* Third Row: Brief Quality Score and Brief Top Missing Fields side by side */}
+                <div className="grid grid-cols-2 gap-5">
+                {/* 7. Brief Quality Score */}
+                <Card className="border border-[#ececec] bg-white">
                   <CardHeader className="pb-3">
                     <CardTitle className="text-base font-bold leading-[21.28px] text-black">Brief Quality Score</CardTitle>
                   </CardHeader>
@@ -1020,10 +1105,8 @@ export default function TrackerPage() {
                     />
                   </CardContent>
                 </Card>
-                </div>
 
-                {/* Third Row: Full width */}
-                {/* 7. Brief Top Missing Fields */}
+                {/* 8. Brief Top Missing Fields */}
                   <Card className="border border-[#ececec] bg-white">
                 <CardHeader className="pb-3">
                     <CardTitle className="text-base font-bold leading-[21.28px] text-black">Brief Top Missing Fields</CardTitle>
@@ -1080,6 +1163,85 @@ export default function TrackerPage() {
                     </ChartContainer>
                   </CardContent>
                 </Card>
+                </div>
+
+                {/* Key Stats and Number of Briefs Section */}
+                <div className="space-y-6">
+                  {/* Key Stats */}
+                  <div className="space-y-4">
+                    <h3 className="text-[22px] font-bold leading-[29.26px] text-black">Key Stats</h3>
+                    <div className="grid grid-cols-4 gap-5">
+                      <Card className="border border-[#ececec] bg-white">
+                        <CardContent className="pt-6">
+                          <div className="flex flex-col gap-2">
+                            <span className="text-sm text-[#646464]">Draft brief</span>
+                            <span className="text-[32px] font-bold leading-[38.4px] text-black">{keyStatsData.draftBrief}</span>
+                          </div>
+                        </CardContent>
+                      </Card>
+                      <Card className="border border-[#ececec] bg-white">
+                        <CardContent className="pt-6">
+                          <div className="flex flex-col gap-2">
+                            <span className="text-sm text-[#646464]">Briefs in review</span>
+                            <span className="text-[32px] font-bold leading-[38.4px] text-black">{keyStatsData.briefsInReview}</span>
+                          </div>
+                        </CardContent>
+                      </Card>
+                      <Card className="border border-[#ececec] bg-white">
+                        <CardContent className="pt-6">
+                          <div className="flex flex-col gap-2">
+                            <span className="text-sm text-[#646464]">SOWs ready to sign</span>
+                            <span className="text-[32px] font-bold leading-[38.4px] text-black">{keyStatsData.sowsReadyToSign}</span>
+                          </div>
+                        </CardContent>
+                      </Card>
+                      <Card className="border border-[#ececec] bg-white">
+                        <CardContent className="pt-6">
+                          <div className="flex flex-col gap-2">
+                            <span className="text-sm text-[#646464]">Briefs approved</span>
+                            <span className="text-[32px] font-bold leading-[38.4px] text-black">{keyStatsData.briefsApproved}</span>
+                          </div>
+                        </CardContent>
+                      </Card>
+                    </div>
+                  </div>
+
+                  {/* Number of Briefs Chart */}
+                  <Card className="border border-[#ececec] bg-white">
+                    <CardHeader className="pb-3">
+                      <CardTitle className="text-base font-bold leading-[21.28px] text-black">Number of Briefs</CardTitle>
+                    </CardHeader>
+                    <CardContent className="space-y-4">
+                      <ChartContainer config={numberOfBriefsConfig} className="h-[300px] w-full">
+                        <ResponsiveContainer width="100%" height="100%">
+                          <BarChart data={numberOfBriefsData} margin={{ left: 10, right: 10, top: 10, bottom: 20 }}>
+                            <CartesianGrid strokeDasharray="3 3" stroke="#e0e0e0" vertical={false} />
+                            <XAxis 
+                              dataKey="month" 
+                              axisLine={false}
+                              tickLine={false}
+                              tick={{ fill: "#646464", fontSize: 12 }}
+                            />
+                            <YAxis 
+                              axisLine={false}
+                              tickLine={false}
+                              domain={[0, 110]}
+                              ticks={[0, 20, 40, 60, 80, 100]}
+                              tick={{ fill: "#646464", fontSize: 12 }}
+                              label={{ value: "Number of Briefs", angle: -90, position: "insideLeft", offset: 15, style: { fill: "#646464", fontSize: 12, textAnchor: "middle" } }}
+                            />
+                            <ChartTooltip content={<ChartTooltipContent className="bg-white [&_span]:text-black [&_div]:text-black" />} />
+                            <Legend />
+                            <Bar dataKey="mobile" stackId="a" fill="#0177c7" radius={[4, 4, 0, 0]} />
+                            <Bar dataKey="tablet" stackId="a" fill="#03b3e2" radius={[0, 0, 0, 0]} />
+                            <Bar dataKey="wearable" stackId="a" fill="#00c3b1" radius={[0, 0, 0, 0]} />
+                            <Bar dataKey="ecosystem" stackId="a" fill="#8092DC" radius={[0, 4, 4, 0]} />
+                          </BarChart>
+                        </ResponsiveContainer>
+                      </ChartContainer>
+                    </CardContent>
+                  </Card>
+                </div>
               </div>
 
               {/* Tablet/Mobile: Vertical Stack */}
@@ -1299,7 +1461,41 @@ export default function TrackerPage() {
                   </CardContent>
                 </Card>
 
-                {/* 6. Brief Quality Score */}
+                {/* 6. Briefs Quality by Category */}
+                <Card className="border border-[#ececec] bg-white">
+                  <CardHeader className="pb-3">
+                    <CardTitle className="text-base font-bold leading-[21.28px] text-black">Briefs Quality by Category</CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    <ChartContainer config={briefsQualityByCategoryConfig} className="h-[200px] w-full">
+                      <ResponsiveContainer width="100%" height="100%">
+                        <BarChart data={briefsQualityByCategoryData} margin={{ left: 10, right: 10, top: 10, bottom: 20 }}>
+                          <CartesianGrid strokeDasharray="3 3" stroke="#e0e0e0" vertical={false} />
+                          <XAxis 
+                            dataKey="category" 
+                            axisLine={false}
+                            tickLine={false}
+                            tick={{ fill: "#646464", fontSize: 12 }}
+                          />
+                          <YAxis 
+                            axisLine={false}
+                            tickLine={false}
+                            domain={[80, 95]}
+                            ticks={[80, 85, 90, 95]}
+                            tick={{ fill: "#646464", fontSize: 12 }}
+                            label={{ value: "Quality Score (%)", angle: -90, position: "insideLeft", offset: 15, style: { fill: "#646464", fontSize: 12, textAnchor: "middle" } }}
+                          />
+                          <ChartTooltip content={<ChartTooltipContent className="bg-white [&_span]:text-black [&_div]:text-black" />} />
+                          <Bar dataKey="qualityScore" fill="#0177c7" radius={[4, 4, 0, 0]} />
+                        </BarChart>
+                      </ResponsiveContainer>
+                    </ChartContainer>
+                  </CardContent>
+                </Card>
+
+                {/* 7. Brief Quality Score and Brief Top Missing Fields side by side */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                {/* Brief Quality Score */}
                 <Card className="border border-[#ececec] bg-white">
                   <CardHeader className="pb-3">
                     <CardTitle className="text-base font-bold leading-[21.28px] text-black">Brief Quality Score</CardTitle>
@@ -1324,7 +1520,7 @@ export default function TrackerPage() {
                   </CardContent>
                 </Card>
 
-                {/* 7. Brief Top Missing Fields */}
+                {/* Brief Top Missing Fields */}
                 <Card className="border border-[#ececec] bg-white">
                   <CardHeader className="pb-3">
                     <CardTitle className="text-base font-bold leading-[21.28px] text-black">Brief Top Missing Fields</CardTitle>
@@ -1381,6 +1577,85 @@ export default function TrackerPage() {
                     </ChartContainer>
                   </CardContent>
                 </Card>
+                </div>
+
+                {/* Key Stats and Number of Briefs Section */}
+                <div className="space-y-6">
+                  {/* Key Stats */}
+                  <div className="space-y-4">
+                    <h3 className="text-[22px] font-bold leading-[29.26px] text-black">Key Stats</h3>
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-5">
+                      <Card className="border border-[#ececec] bg-white">
+                        <CardContent className="pt-6">
+                          <div className="flex flex-col gap-2">
+                            <span className="text-sm text-[#646464]">Draft brief</span>
+                            <span className="text-[32px] font-bold leading-[38.4px] text-black">{keyStatsData.draftBrief}</span>
+                          </div>
+                        </CardContent>
+                      </Card>
+                      <Card className="border border-[#ececec] bg-white">
+                        <CardContent className="pt-6">
+                          <div className="flex flex-col gap-2">
+                            <span className="text-sm text-[#646464]">Briefs in review</span>
+                            <span className="text-[32px] font-bold leading-[38.4px] text-black">{keyStatsData.briefsInReview}</span>
+                          </div>
+                        </CardContent>
+                      </Card>
+                      <Card className="border border-[#ececec] bg-white">
+                        <CardContent className="pt-6">
+                          <div className="flex flex-col gap-2">
+                            <span className="text-sm text-[#646464]">SOWs ready to sign</span>
+                            <span className="text-[32px] font-bold leading-[38.4px] text-black">{keyStatsData.sowsReadyToSign}</span>
+                          </div>
+                        </CardContent>
+                      </Card>
+                      <Card className="border border-[#ececec] bg-white">
+                        <CardContent className="pt-6">
+                          <div className="flex flex-col gap-2">
+                            <span className="text-sm text-[#646464]">Briefs approved</span>
+                            <span className="text-[32px] font-bold leading-[38.4px] text-black">{keyStatsData.briefsApproved}</span>
+                          </div>
+                        </CardContent>
+                      </Card>
+                    </div>
+                  </div>
+
+                  {/* Number of Briefs Chart */}
+                  <Card className="border border-[#ececec] bg-white">
+                    <CardHeader className="pb-3">
+                      <CardTitle className="text-base font-bold leading-[21.28px] text-black">Number of Briefs</CardTitle>
+                    </CardHeader>
+                    <CardContent className="space-y-4">
+                      <ChartContainer config={numberOfBriefsConfig} className="h-[300px] w-full">
+                        <ResponsiveContainer width="100%" height="100%">
+                          <BarChart data={numberOfBriefsData} margin={{ left: 10, right: 10, top: 10, bottom: 20 }}>
+                            <CartesianGrid strokeDasharray="3 3" stroke="#e0e0e0" vertical={false} />
+                            <XAxis 
+                              dataKey="month" 
+                              axisLine={false}
+                              tickLine={false}
+                              tick={{ fill: "#646464", fontSize: 12 }}
+                            />
+                            <YAxis 
+                              axisLine={false}
+                              tickLine={false}
+                              domain={[0, 110]}
+                              ticks={[0, 20, 40, 60, 80, 100]}
+                              tick={{ fill: "#646464", fontSize: 12 }}
+                              label={{ value: "Number of Briefs", angle: -90, position: "insideLeft", offset: 15, style: { fill: "#646464", fontSize: 12, textAnchor: "middle" } }}
+                            />
+                            <ChartTooltip content={<ChartTooltipContent className="bg-white [&_span]:text-black [&_div]:text-black" />} />
+                            <Legend />
+                            <Bar dataKey="mobile" stackId="a" fill="#0177c7" radius={[4, 4, 0, 0]} />
+                            <Bar dataKey="tablet" stackId="a" fill="#03b3e2" radius={[0, 0, 0, 0]} />
+                            <Bar dataKey="wearable" stackId="a" fill="#00c3b1" radius={[0, 0, 0, 0]} />
+                            <Bar dataKey="ecosystem" stackId="a" fill="#8092DC" radius={[0, 4, 4, 0]} />
+                          </BarChart>
+                        </ResponsiveContainer>
+                      </ChartContainer>
+                    </CardContent>
+                  </Card>
+                </div>
               </div>
             </TabsContent>
 
