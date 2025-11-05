@@ -79,7 +79,7 @@ export default function TrackerPage() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const tabParam = searchParams.get("tab");
-  const activeTab = tabParam || "leaderboard";
+  const activeTab = tabParam || "budget";
   const [tikoQuestion, setTikoQuestion] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [budgetView, setBudgetView] = useState<"quarter" | "annual">("quarter");
@@ -152,7 +152,7 @@ export default function TrackerPage() {
     }
   };
 
-  // Mock data for client satisfaction radar chart
+  // Mock data for Client satisfaction radar chart
   const clientSatisfactionData = [
     { category: "Quality", score: 4.5 },
     { category: "Timeliness", score: 4.0 },
@@ -168,7 +168,7 @@ export default function TrackerPage() {
     },
   };
 
-  // Mock data for Performance Driver chart
+  // Mock data for Performance driver chart
   const performanceDriverData = [
     { category: "Complete", satisfaction: 4.9, changeRequests: 2.5 },
     { category: "Incomplete", satisfaction: 3.1, changeRequests: 34 },
@@ -185,7 +185,7 @@ export default function TrackerPage() {
     },
   };
 
-  // Mock data for Budget Risk Alert chart
+  // Mock data for Budget risk alert chart
   const budgetRiskData = [
     { month: "Jul", tokensUsed: 800, tokensAllocated: 950 },
     { month: "Aug", tokensUsed: 850, tokensAllocated: 950 },
@@ -206,7 +206,7 @@ export default function TrackerPage() {
     },
   };
 
-  // Mock data for Process Optimization chart
+  // Mock data for Process optimization chart
   const processOptimizationData = [
     { method: "JFDI", days: 3.5, satisfaction: 4.1 },
     { method: "Creative", days: 9.5, satisfaction: 7.5 },
@@ -262,9 +262,33 @@ export default function TrackerPage() {
       progressBarColor: "#00c3b1", // teal/green
       isMyTeam: false,
     },
+    {
+      id: 4,
+      title: "Product Marketing",
+      icon: firstPlaceMedalImg as string,
+      isEmoji: false,
+      iconColor: "text-yellow-500",
+      overallScore: 96,
+      briefQualityScore: 96,
+      tokenEfficiency: 97,
+      progressBarColor: "#0177c7", // blue
+      isMyTeam: false,
+    },
+    {
+      id: 5,
+      title: "Brand Experience",
+      icon: bronzeMedalImg as string,
+      isEmoji: false,
+      iconColor: "text-amber-600",
+      overallScore: 93,
+      briefQualityScore: 93,
+      tokenEfficiency: 94,
+      progressBarColor: "#ffb546", // orange
+      isMyTeam: false,
+    },
   ];
 
-  // Mock data for brief quality score chart
+  // Mock data for Brief quality score chart
   const qualityScoreData = [
     { quarter: "Q4 2024", score: 85 },
     { quarter: "Q1 2025", score: 87 },
@@ -322,7 +346,7 @@ export default function TrackerPage() {
     },
   };
 
-  // Mock data for number of briefs per category
+  // Mock data for Number of briefs per category
   const briefsPerCategoryData = [
     { category: "SMP", briefs: 68 },
     { category: "Ecosystem", briefs: 45 },
@@ -332,12 +356,12 @@ export default function TrackerPage() {
 
   const briefsPerCategoryConfig = {
     briefs: {
-      label: "Number of Briefs",
+      label: "Number of briefs",
       color: "#03b3e2",
     },
   };
 
-  // Mock data for briefs quality by category
+  // Mock data for Briefs quality by category
   const briefsQualityByCategoryData = [
     { category: "SMP", qualityScore: 92 },
     { category: "Ecosystem", qualityScore: 88 },
@@ -360,59 +384,59 @@ export default function TrackerPage() {
     briefsApproved: 142,
   };
 
-  // Mock data for number of briefs by month (stacked bar chart)
+  // Mock data for Number of briefs by month (stacked bar chart)
   const numberOfBriefsData = [
-    { month: "Jun", mobile: 49, tablet: 21, wearable: 18, ecosystem: 10 },
-    { month: "Jul", mobile: 55, tablet: 25, wearable: 15, ecosystem: 7 },
-    { month: "Aug", mobile: 42, tablet: 18, wearable: 12, ecosystem: 7 },
+    { month: "Jun", smp: 49, ecosystem: 21, promotions: 18, b2b: 10 },
+    { month: "Jul", smp: 55, ecosystem: 25, promotions: 15, b2b: 7 },
+    { month: "Aug", smp: 42, ecosystem: 18, promotions: 12, b2b: 7 },
   ];
 
   const numberOfBriefsConfig = {
-    mobile: {
-      label: "Mobile",
+    smp: {
+      label: "SMP",
       color: "#0177c7",
-    },
-    tablet: {
-      label: "Tablet",
-      color: "#03b3e2",
-    },
-    wearable: {
-      label: "Wearable",
-      color: "#00c3b1",
     },
     ecosystem: {
       label: "Ecosystem",
+      color: "#03b3e2",
+    },
+    promotions: {
+      label: "Promotions",
+      color: "#00c3b1",
+    },
+    b2b: {
+      label: "B2B",
       color: "#8092DC",
     },
   };
 
   // Mock data for top missing fields from briefs
   const missingFieldsData = [
-    { field: "Delivery Date", mobile: 10, tablet: 7, wearable: 5, ecosystem: 1 },
-    { field: "Budget Range", mobile: 7, tablet: 6, wearable: 4, ecosystem: 1 },
-    { field: "Key Message", mobile: 5, tablet: 5, wearable: 3, ecosystem: 2 },
-    { field: "Target Audience", mobile: 4, tablet: 4, wearable: 2, ecosystem: 2 },
-    { field: "Creative Requirements", mobile: 3, tablet: 3, wearable: 1, ecosystem: 1 },
-    { field: "Brand Guidelines", mobile: 3, tablet: 3, wearable: 1, ecosystem: 1 },
-    { field: "Success Metrics", mobile: 2, tablet: 2, wearable: 2, ecosystem: 1 },
-    { field: "Approval Process", mobile: 2, tablet: 3, wearable: 1, ecosystem: 0 },
+    { field: "Delivery Date", smp: 10, ecosystem: 7, promotions: 5, b2b: 1 },
+    { field: "Budget Range", smp: 7, ecosystem: 6, promotions: 4, b2b: 1 },
+    { field: "Key Message", smp: 5, ecosystem: 5, promotions: 3, b2b: 2 },
+    { field: "Target Audience", smp: 4, ecosystem: 4, promotions: 2, b2b: 2 },
+    { field: "Creative Requirements", smp: 3, ecosystem: 3, promotions: 1, b2b: 1 },
+    { field: "Brand Guidelines", smp: 3, ecosystem: 3, promotions: 1, b2b: 1 },
+    { field: "Success Metrics", smp: 2, ecosystem: 2, promotions: 2, b2b: 1 },
+    { field: "Approval Process", smp: 2, ecosystem: 3, promotions: 1, b2b: 0 },
   ];
 
   const missingFieldsConfig = {
-    mobile: {
-      label: "Mobile",
+    smp: {
+      label: "SMP",
       color: "#0177c7",
-    },
-    tablet: {
-      label: "Tablet",
-      color: "#03b3e2",
-    },
-    wearable: {
-      label: "Wearable",
-      color: "#00c3b1",
     },
     ecosystem: {
       label: "Ecosystem",
+      color: "#03b3e2",
+    },
+    promotions: {
+      label: "Promotions",
+      color: "#00c3b1",
+    },
+    b2b: {
+      label: "B2B",
       color: "#8092DC",
     },
   };
@@ -433,18 +457,18 @@ export default function TrackerPage() {
 
   // Mock data for change requests by product line
   const changeRequestsData = [
-    { productLine: "Mobile", changeRate: -25 },
-    { productLine: "Tablet", changeRate: -20 },
-    { productLine: "Wearable", changeRate: -18 },
-    { productLine: "Ecosystem", changeRate: -15 },
+    { productLine: "SMP", changeRate: -25 },
+    { productLine: "Ecosystem", changeRate: -20 },
+    { productLine: "Promotions", changeRate: -18 },
+    { productLine: "B2B", changeRate: -15 },
   ];
 
   // Mock data for on-time delivery by product line
   const onTimeDeliveryData = [
-    { productLine: "Mobile", changeRate: 32 },
-    { productLine: "Tablet", changeRate: 28 },
-    { productLine: "Wearable", changeRate: 24 },
-    { productLine: "Ecosystem", changeRate: 18 },
+    { productLine: "SMP", changeRate: 32 },
+    { productLine: "Ecosystem", changeRate: 28 },
+    { productLine: "Promotions", changeRate: 24 },
+    { productLine: "B2B", changeRate: 18 },
   ];
 
   // Mock data for issues breakdown
@@ -454,21 +478,21 @@ export default function TrackerPage() {
       inFlight: 2,
       resolved: 12,
       impact: "2 week delay avg",
-      primaryProductLine: "Mobile (1), Tablet (1)",
+      primaryProductLine: "SMP (1), Ecosystem (1)",
     },
     {
       issueType: "Change in Promotion",
       inFlight: 1,
       resolved: 8,
       impact: "1 week delay avg",
-      primaryProductLine: "Tablet (1)",
+      primaryProductLine: "Ecosystem (1)",
     },
     {
       issueType: "Internal Brief Sign-off",
       inFlight: 1,
       resolved: 9,
       impact: "0.5 week delay avg",
-      primaryProductLine: "Wearable (1)",
+      primaryProductLine: "Promotions (1)",
     },
     {
       issueType: "3rd Party Changes",
@@ -479,7 +503,7 @@ export default function TrackerPage() {
     },
   ];
 
-  // Mock data for late briefs donut chart
+  // Mock data for Late briefs donut chart
   const lateBriefsData = [
     { name: "No Issues", value: 87, color: "#0177c7" },
     { name: "Stakeholder Delay", value: 6, color: "#03b3e2" },
@@ -513,18 +537,18 @@ export default function TrackerPage() {
     "External Dependencies": { label: "External Dependencies", color: "#ff9800" },
   };
 
-  // Mock data for insufficient time donut chart
+  // Mock data for Insufficient time donut chart
   const insufficientTimeData = [
     { name: "Sufficient Time", value: 70, color: "#0177c7" },
-    { name: "Insufficient Time", value: 30, color: "#8092DC" },
+    { name: "Insufficient time", value: 30, color: "#8092DC" },
   ];
 
   const insufficientTimeConfig = {
     "Sufficient Time": { label: "Sufficient Time", color: "#0177c7" },
-    "Insufficient Time": { label: "Insufficient Time", color: "#8092DC" },
+    "Insufficient time": { label: "Insufficient time", color: "#8092DC" },
   };
 
-  // Mock data for brand and legal amends (right first time)
+  // Mock data for Brand and legal amends (right first time)
   const brandLegalAmendsData = [
     { period: "Q4 2024", percentage: 85 },
     { period: "Q1 2025", percentage: 88 },
@@ -682,6 +706,12 @@ export default function TrackerPage() {
             <Tabs value={activeTab} onValueChange={handleTabChange} className="w-full hidden md:block">
               <TabsList className="inline-flex h-12 md:h-14 items-center justify-start rounded-md bg-transparent p-0 text-muted-foreground border-b-2 border-[#ececec] w-full">
               <TabsTrigger 
+                value="budget" 
+                  className="flex-1 inline-flex items-center justify-center whitespace-nowrap rounded-none px-2 md:px-3 lg:px-4 py-2 md:py-3 text-xs md:text-sm lg:text-base font-medium md:font-semibold ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:bg-transparent data-[state=active]:text-[#0177c7] data-[state=active]:shadow-none border-b-[3px] border-transparent data-[state=active]:border-[#0177c7]"
+              >
+                Budget
+              </TabsTrigger>
+              <TabsTrigger 
                 value="leaderboard" 
                   className="flex-1 inline-flex items-center justify-center whitespace-nowrap rounded-none px-2 md:px-3 lg:px-4 py-2 md:py-3 text-xs md:text-sm lg:text-base font-medium md:font-semibold ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:bg-transparent data-[state=active]:text-[#03b3e2] data-[state=active]:shadow-none border-b-[3px] border-transparent data-[state=active]:border-[#03b3e2]"
               >
@@ -698,12 +728,6 @@ export default function TrackerPage() {
                   className="flex-1 inline-flex items-center justify-center whitespace-nowrap rounded-none px-2 md:px-3 lg:px-4 py-2 md:py-3 text-xs md:text-sm lg:text-base font-medium md:font-semibold ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:bg-transparent data-[state=active]:text-[#ffb546] data-[state=active]:shadow-none border-b-[3px] border-transparent data-[state=active]:border-[#ffb546]"
               >
                 Project performance
-              </TabsTrigger>
-              <TabsTrigger 
-                value="budget" 
-                  className="flex-1 inline-flex items-center justify-center whitespace-nowrap rounded-none px-2 md:px-3 lg:px-4 py-2 md:py-3 text-xs md:text-sm lg:text-base font-medium md:font-semibold ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:bg-transparent data-[state=active]:text-[#0177c7] data-[state=active]:shadow-none border-b-[3px] border-transparent data-[state=active]:border-[#0177c7]"
-              >
-                Budget
               </TabsTrigger>
               <TabsTrigger 
                 value="predictive-analytics" 
@@ -723,6 +747,9 @@ export default function TrackerPage() {
                   </SelectValue>
                 </SelectTrigger>
                 <SelectContent className="bg-[#f9f9f9]">
+                  <SelectItem value="budget" className="text-black [&>span:last-child]:text-center [&>span:last-child]:w-full">
+                    Budget
+                  </SelectItem>
                   <SelectItem value="leaderboard" className="text-black [&>span:last-child]:text-center [&>span:last-child]:w-full">
                     Leaderboard
                   </SelectItem>
@@ -731,9 +758,6 @@ export default function TrackerPage() {
                   </SelectItem>
                   <SelectItem value="project-performance" className="text-black [&>span:last-child]:text-center [&>span:last-child]:w-full">
                     Project performance
-                  </SelectItem>
-                  <SelectItem value="budget" className="text-black [&>span:last-child]:text-center [&>span:last-child]:w-full">
-                    Budget
                   </SelectItem>
                   <SelectItem value="predictive-analytics" className="text-black [&>span:last-child]:text-center [&>span:last-child]:w-full">
                     Predictive Analytics & Insights
@@ -753,9 +777,63 @@ export default function TrackerPage() {
           {/* Teams' Leaderboard */}
           <div className="space-y-4">
             <h2 className="text-[22px] font-bold leading-[29.26px] text-black">Teams' Leaderboard</h2>
-            <div className="px-[15%] lg:px-0 space-y-5 lg:space-y-0 lg:grid lg:grid-cols-3 lg:gap-5">
-                    {teamsData.filter((team) => team.title !== "Omni & Digital" && team.title !== "IMG").map((team) => (
-                <Card key={team.id} className={`border border-[#ececec] bg-white relative ${team.title === "Marcomms" ? "-mx-[15%] lg:mx-0" : ""}`}>
+            {/* Desktop: Show 3 teams with My team first */}
+            <div className="hidden lg:grid lg:grid-cols-3 lg:gap-5">
+              {(() => {
+                // Show in order: Marcomms | Omni & Digital | IMG
+                const marcomms = teamsData.find(team => team.title === "Marcomms");
+                const omniDigital = teamsData.find(team => team.title === "Omni & Digital");
+                const img = teamsData.find(team => team.title === "IMG");
+                const displayTeams = [marcomms, omniDigital, img].filter(Boolean);
+                return displayTeams.map((team) => (
+                  <Card key={team.id} className="border border-[#ececec] bg-white relative">
+                    {team.isMyTeam && (
+                      <div className="absolute top-4 right-4">
+                        <Badge variant="secondary" className="bg-[#f1f1f3] text-black border-none text-xs">My team</Badge>
+                      </div>
+                    )}
+                    <CardHeader className="pb-3 pt-6">
+                      <div className="flex flex-col items-start gap-2">
+                        {team.isEmoji ? (
+                          <span className="inline-block" style={{ width: '22px', height: '30px', fontSize: '30px', lineHeight: '30px' }}>{team.icon}</span>
+                        ) : (
+                          <img src={team.icon} alt={`${team.title} medal`} className="w-[30px] h-[30px] object-contain" />
+                        )}
+                        <CardTitle className="text-black font-bold text-[18px] leading-[23.94px]">{team.title}</CardTitle>
+                      </div>
+                    </CardHeader>
+                    <CardContent className="space-y-4">
+                      <div className="space-y-2">
+                        <div className="flex items-center justify-between">
+                          <span className="text-sm leading-[18.62px] text-black">Overall score</span>
+                          <span className="text-[32px] font-bold leading-[38.4px]" style={{ color: team.progressBarColor }}>{team.overallScore}%</span>
+                        </div>
+                        <div className="relative h-4 w-full bg-[#f1f1f3] rounded-full overflow-hidden">
+                          <div className="h-full rounded-full transition-all" style={{ width: `${team.overallScore}%`, backgroundColor: team.progressBarColor }} />
+                        </div>
+                      </div>
+                      <div className="flex items-center justify-between"><span className="text-sm leading-[18.62px] text-black">Brief quality score</span><span className="text-sm leading-[18.62px] text-black font-normal">{team.briefQualityScore}%</span></div>
+                      <div className="flex items-center justify-between"><span className="text-sm leading-[18.62px] text-black">Token Efficiency</span><span className="text-sm leading-[18.62px] text-black font-normal">{team.tokenEfficiency}%</span></div>
+                      <div className="flex items-center gap-2 pt-2">
+                        <div className="w-8 h-8 rounded-full border border-[#03b3e2] overflow-hidden"><img src={boltImg} alt="Bolt" className="w-full h-full object-cover" /></div>
+                        <div className="w-8 h-8 rounded-full border border-[#ff9800] overflow-hidden"><img src={shakingHandsImg} alt="Shaking Hands" className="w-full h-full object-cover" /></div>
+                        <div className="w-8 h-8 rounded-full border border-[#e91e63] overflow-hidden"><img src={bullseyeImg} alt="Bullseye" className="w-full h-full object-cover" /></div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                ));
+              })()}
+            </div>
+            {/* Mobile/Tablet: Show 3 teams with padding */}
+            <div className="px-[15%] lg:hidden space-y-5">
+              {(() => {
+                // Show in order: Marcomms | Omni & Digital | IMG
+                const marcomms = teamsData.find(team => team.title === "Marcomms");
+                const omniDigital = teamsData.find(team => team.title === "Omni & Digital");
+                const img = teamsData.find(team => team.title === "IMG");
+                const displayTeams = [marcomms, omniDigital, img].filter(Boolean);
+                return displayTeams.map((team) => (
+                <Card key={team.id} className="border border-[#ececec] bg-white relative">
                   {team.isMyTeam && (
                     <div className="absolute top-4 right-4">
                       <Badge variant="secondary" className="bg-[#f1f1f3] text-black border-none text-xs">My team</Badge>
@@ -781,7 +859,7 @@ export default function TrackerPage() {
                         <div className="h-full rounded-full transition-all" style={{ width: `${team.overallScore}%`, backgroundColor: team.progressBarColor }} />
                       </div>
                     </div>
-                    <div className="flex items-center justify-between"><span className="text-sm leading-[18.62px] text-black">Brief Quality Score</span><span className="text-sm leading-[18.62px] text-black font-normal">{team.briefQualityScore}%</span></div>
+                    <div className="flex items-center justify-between"><span className="text-sm leading-[18.62px] text-black">Brief quality score</span><span className="text-sm leading-[18.62px] text-black font-normal">{team.briefQualityScore}%</span></div>
                     <div className="flex items-center justify-between"><span className="text-sm leading-[18.62px] text-black">Token Efficiency</span><span className="text-sm leading-[18.62px] text-black font-normal">{team.tokenEfficiency}%</span></div>
                     <div className="flex items-center gap-2 pt-2">
                       <div className="w-8 h-8 rounded-full border border-[#03b3e2] overflow-hidden"><img src={boltImg} alt="Bolt" className="w-full h-full object-cover" /></div>
@@ -790,14 +868,15 @@ export default function TrackerPage() {
                     </div>
                   </CardContent>
                 </Card>
-              ))}
+                ));
+              })()}
             </div>
           </div>
 
                 {/* Detailed Performance Metrics Table */}
           <div className="space-y-4">
                   <div className="flex flex-col gap-2">
-                    <h3 className="text-[22px] font-bold leading-[29.26px]" style={{ color: '#03b3e2' }}>Detailed Performance Metrics</h3>
+                    <h3 className="text-[22px] font-bold leading-[29.26px]" style={{ color: '#03b3e2' }}>Detailed performance metrics</h3>
                     <p className="text-sm text-[#646464]">{getLastUpdated()}</p>
                   </div>
                   <Card className="border border-[#ececec] bg-white overflow-hidden rounded-lg">
@@ -859,10 +938,10 @@ export default function TrackerPage() {
               <div className="hidden lg:block space-y-6">
                 {/* First Row: 3 equal columns */}
                 <div className="grid grid-cols-3 gap-5">
-                {/* 1. Brief quality score - All categories */}
+                {/* 1. Brief quality score - all categories */}
                   <Card className="border border-[#ececec] bg-white">
                     <CardHeader className="pb-3">
-                    <CardTitle className="text-base font-bold leading-[21.28px] text-black">Brief quality score - All categories</CardTitle>
+                    <CardTitle className="text-base font-bold leading-[21.28px] text-black">Brief quality score - all categories</CardTitle>
                     </CardHeader>
                   <CardContent className="space-y-6">
                     <ChartContainer config={qualityScoreConfig} className="h-[250px] md:h-[200px] w-full">
@@ -919,8 +998,8 @@ export default function TrackerPage() {
                     <CardHeader className="pb-3">
                       <CardTitle className="text-base font-bold leading-[21.28px] text-black">Number of iterations</CardTitle>
                     </CardHeader>
-                    <CardContent className="space-y-4">
-                      <ChartContainer config={iterationsConfig} className="h-[250px] w-full">
+                    <CardContent className="space-y-6">
+                      <ChartContainer config={iterationsConfig} className="h-[250px] md:h-[200px] w-full">
                         <ResponsiveContainer width="100%" height="100%">
                           <AreaChart data={iterationsData} margin={{ left: 10, right: 10, top: 10, bottom: 20 }}>
                             <defs>
@@ -954,6 +1033,16 @@ export default function TrackerPage() {
                           </AreaChart>
                         </ResponsiveContainer>
                       </ChartContainer>
+                      
+                      {/* Insight section */}
+                      <div className="flex flex-col gap-1 pt-2 pr-4 pb-2 pl-4 rounded-xl bg-[#F1F1F380]">
+                        <p className="text-xs leading-[15.96px] font-bold text-[#00C3B1]">
+                          Insight
+                        </p>
+                        <p className="text-xs leading-[18px] font-normal text-black">
+                          Average iterations reduced to 1.8, indicating faster brief approval process
+                        </p>
+                      </div>
                     </CardContent>
                   </Card>
 
@@ -962,8 +1051,8 @@ export default function TrackerPage() {
                     <CardHeader className="pb-3">
                       <CardTitle className="text-base font-bold leading-[21.28px] text-black">Details provided in the brief</CardTitle>
                     </CardHeader>
-                    <CardContent className="space-y-4">
-                      <ChartContainer config={detailsProvidedConfig} className="h-[250px] w-full">
+                    <CardContent className="space-y-6">
+                      <ChartContainer config={detailsProvidedConfig} className="h-[250px] md:h-[200px] w-full">
                         <ResponsiveContainer width="100%" height="100%">
                         <AreaChart data={detailsProvidedData} margin={{ left: 10, right: 10, top: 10, bottom: 20 }}>
                           <defs>
@@ -997,6 +1086,16 @@ export default function TrackerPage() {
                         </AreaChart>
                       </ResponsiveContainer>
                     </ChartContainer>
+                    
+                    {/* Insight section */}
+                    <div className="flex flex-col gap-1 pt-2 pr-4 pb-2 pl-4 rounded-xl bg-[#F1F1F380]">
+                      <p className="text-xs leading-[15.96px] font-bold text-[#00C3B1]">
+                        Insight
+                      </p>
+                      <p className="text-xs leading-[18px] font-normal text-black">
+                        Average details provided increased to 14 fields, showing improved brief completeness
+                      </p>
+                    </div>
                   </CardContent>
                 </Card>
                 </div>
@@ -1045,10 +1144,10 @@ export default function TrackerPage() {
                     </CardContent>
                   </Card>
 
-                {/* 5. Number of Briefs per Category */}
+                {/* 5. Number of briefs per category */}
                 <Card className="border border-[#ececec] bg-white">
                   <CardHeader className="pb-3">
-                    <CardTitle className="text-base font-bold leading-[21.28px] text-black">Number of Briefs per Category</CardTitle>
+                    <CardTitle className="text-base font-bold leading-[21.28px] text-black">Number of briefs per category</CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-4">
                     <div className="h-[60px]"></div>
@@ -1068,7 +1167,7 @@ export default function TrackerPage() {
                             domain={[0, 80]}
                             ticks={[0, 20, 40, 60, 80]}
                             tick={{ fill: "#646464", fontSize: 12 }}
-                            label={{ value: "Number of Briefs", angle: -90, position: "insideLeft", offset: 15, style: { fill: "#646464", fontSize: 12, textAnchor: "middle" } }}
+                            label={{ value: "Number of briefs", angle: -90, position: "insideLeft", offset: 15, style: { fill: "#646464", fontSize: 12, textAnchor: "middle" } }}
                           />
                           <ChartTooltip content={<ChartTooltipContent className="bg-white [&_span]:text-black [&_div]:text-black" />} />
                           <Bar dataKey="briefs" fill="#03b3e2" radius={[4, 4, 0, 0]} />
@@ -1078,10 +1177,10 @@ export default function TrackerPage() {
                   </CardContent>
                 </Card>
 
-                {/* 6. Briefs Quality by Category */}
+                {/* 6. Briefs quality by category */}
                 <Card className="border border-[#ececec] bg-white">
                   <CardHeader className="pb-3">
-                    <CardTitle className="text-base font-bold leading-[21.28px] text-black">Briefs Quality by Category</CardTitle>
+                    <CardTitle className="text-base font-bold leading-[21.28px] text-black">Briefs quality by category</CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-4">
                     <div className="h-[60px]"></div>
@@ -1113,12 +1212,12 @@ export default function TrackerPage() {
 
                 </div>
 
-                {/* Third Row: Brief Quality Score and Brief Top Missing Fields side by side */}
+                {/* Third Row: Brief quality score and Brief top missing fields side by side */}
                 <div className="grid grid-cols-2 gap-5">
-                {/* 7. Brief Quality Score */}
+                {/* 7. Brief quality score */}
                 <Card className="border border-[#ececec] bg-white">
                   <CardHeader className="pb-3">
-                    <CardTitle className="text-base font-bold leading-[21.28px] text-black">Brief Quality Score</CardTitle>
+                    <CardTitle className="text-base font-bold leading-[21.28px] text-black">Brief quality score</CardTitle>
                   </CardHeader>
                   <CardContent>
                     <div className="h-[60px]"></div>
@@ -1141,29 +1240,29 @@ export default function TrackerPage() {
                   </CardContent>
                 </Card>
 
-                {/* 8. Brief Top Missing Fields */}
+                {/* 8. Brief top missing fields */}
                   <Card className="border border-[#ececec] bg-white">
                 <CardHeader className="pb-3">
-                    <CardTitle className="text-base font-bold leading-[21.28px] text-black">Brief Top Missing Fields</CardTitle>
+                    <CardTitle className="text-base font-bold leading-[21.28px] text-black">Brief top missing fields</CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-4">
                     {/* Legend */}
                     <div className="flex flex-wrap items-center gap-4 text-sm">
                       <div className="flex items-center gap-2">
                         <div className="w-3 h-3 rounded-full" style={{ backgroundColor: '#0177c7' }}></div>
-                        <span className="text-black">Mobile</span>
+                        <span className="text-black">SMP</span>
                       </div>
                       <div className="flex items-center gap-2">
                         <div className="w-3 h-3 rounded-full" style={{ backgroundColor: '#03b3e2' }}></div>
-                        <span className="text-black">Tablet</span>
+                        <span className="text-black">Ecosystem</span>
                       </div>
                       <div className="flex items-center gap-2">
                         <div className="w-3 h-3 rounded-full" style={{ backgroundColor: '#00c3b1' }}></div>
-                        <span className="text-black">Wearable</span>
+                        <span className="text-black">Promotions</span>
                       </div>
                       <div className="flex items-center gap-2">
                         <div className="w-3 h-3 rounded-full" style={{ backgroundColor: '#8092DC' }}></div>
-                        <span className="text-black">Ecosystem</span>
+                        <span className="text-black">B2B</span>
                       </div>
                     </div>
 
@@ -1189,10 +1288,10 @@ export default function TrackerPage() {
                             width={120}
                           />
                           <ChartTooltip cursor={false} content={<ChartTooltipContent className="bg-white [&_span]:text-black [&_div]:text-black" />} />
-                          <Bar dataKey="mobile" stackId="a" fill="#0177c7" radius={[6, 0, 0, 6]} />
-                          <Bar dataKey="tablet" stackId="a" fill="#03b3e2" radius={[0, 0, 0, 0]} />
-                          <Bar dataKey="wearable" stackId="a" fill="#00c3b1" radius={[0, 0, 0, 0]} />
-                          <Bar dataKey="ecosystem" stackId="a" fill="#8092DC" radius={[0, 6, 6, 0]} />
+                          <Bar dataKey="smp" stackId="a" fill="#0177c7" radius={[6, 0, 0, 6]} />
+                          <Bar dataKey="ecosystem" stackId="a" fill="#03b3e2" radius={[0, 0, 0, 0]} />
+                          <Bar dataKey="promotions" stackId="a" fill="#00c3b1" radius={[0, 0, 0, 0]} />
+                          <Bar dataKey="b2b" stackId="a" fill="#8092DC" radius={[0, 6, 6, 0]} />
                         </BarChart>
                       </ResponsiveContainer>
                     </ChartContainer>
@@ -1200,11 +1299,11 @@ export default function TrackerPage() {
                 </Card>
                 </div>
 
-                {/* Key Stats and Number of Briefs Section */}
+                {/* Key Stats and Number of briefs Section */}
                 <div className="flex flex-col md:flex-row gap-5 md:space-y-0">
                   {/* Key Stats - 50% */}
                   <div className="w-full md:w-1/2 space-y-4">
-                    <h3 className="text-[22px] font-bold leading-[29.26px] text-black">Key Stats</h3>
+                    <h3 className="text-[22px] font-bold leading-[29.26px] text-black">Key stats</h3>
                     <div className="grid grid-cols-2 gap-5">
                       <Card className="border border-[#ececec] bg-white">
                         <CardContent className="pt-6">
@@ -1241,11 +1340,11 @@ export default function TrackerPage() {
                     </div>
                   </div>
 
-                  {/* Number of Briefs Chart - 50% */}
+                  {/* Number of briefs Chart - 50% */}
                   <div className="w-full md:w-1/2">
                     <Card className="border border-[#ececec] bg-white">
                       <CardHeader className="pb-3">
-                        <CardTitle className="text-base font-bold leading-[21.28px] text-black">Number of Briefs</CardTitle>
+                        <CardTitle className="text-base font-bold leading-[21.28px] text-black">Number of briefs</CardTitle>
                       </CardHeader>
                       <CardContent className="space-y-4">
                         <ChartContainer config={numberOfBriefsConfig} className="h-[300px] w-full">
@@ -1264,14 +1363,14 @@ export default function TrackerPage() {
                                 domain={[0, 110]}
                                 ticks={[0, 20, 40, 60, 80, 100]}
                                 tick={{ fill: "#646464", fontSize: 12 }}
-                                label={{ value: "Number of Briefs", angle: -90, position: "insideLeft", offset: 15, style: { fill: "#646464", fontSize: 12, textAnchor: "middle" } }}
+                                label={{ value: "Number of briefs", angle: -90, position: "insideLeft", offset: 15, style: { fill: "#646464", fontSize: 12, textAnchor: "middle" } }}
                               />
                               <ChartTooltip content={<ChartTooltipContent className="bg-white [&_span]:text-black [&_div]:text-black" />} />
                               <Legend />
-                              <Bar dataKey="mobile" stackId="a" fill="#0177c7" radius={[4, 4, 0, 0]} />
-                              <Bar dataKey="tablet" stackId="a" fill="#03b3e2" radius={[0, 0, 0, 0]} />
-                              <Bar dataKey="wearable" stackId="a" fill="#00c3b1" radius={[0, 0, 0, 0]} />
-                              <Bar dataKey="ecosystem" stackId="a" fill="#8092DC" radius={[0, 4, 4, 0]} />
+                              <Bar dataKey="smp" stackId="a" fill="#0177c7" radius={[4, 4, 0, 0]} />
+                              <Bar dataKey="ecosystem" stackId="a" fill="#03b3e2" radius={[0, 0, 0, 0]} />
+                              <Bar dataKey="promotions" stackId="a" fill="#00c3b1" radius={[0, 0, 0, 0]} />
+                              <Bar dataKey="b2b" stackId="a" fill="#8092DC" radius={[0, 4, 4, 0]} />
                             </BarChart>
                           </ResponsiveContainer>
                         </ChartContainer>
@@ -1283,14 +1382,14 @@ export default function TrackerPage() {
 
               {/* Tablet/Mobile: Vertical Stack */}
               <div className="lg:hidden space-y-6">
-                {/* Row 1: Brief quality score - All categories | Number of iterations */}
+                {/* Row 1: Brief quality score - all categories | Number of iterations */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-                  {/* 1. Brief quality score - All categories */}
-                  <Card className="border border-[#ececec] bg-white">
+                  {/* 1. Brief quality score - all categories */}
+                  <Card className="border border-[#ececec] bg-white flex flex-col">
                 <CardHeader className="pb-3">
-                      <CardTitle className="text-base font-bold leading-[21.28px] text-black">Brief quality score - All categories</CardTitle>
+                      <CardTitle className="text-base font-bold leading-[21.28px] text-black">Brief quality score - all categories</CardTitle>
                 </CardHeader>
-                <CardContent className="space-y-6">
+                <CardContent className="space-y-6 flex-1 flex flex-col">
                   <ChartContainer config={qualityScoreConfig} className="h-[250px] md:h-[200px] w-full">
                     <ResponsiveContainer width="100%" height="100%">
                       <AreaChart data={qualityScoreData} margin={{ left: 10, right: 10, top: 10, bottom: 20 }}>
@@ -1341,12 +1440,12 @@ export default function TrackerPage() {
               </Card>
 
                   {/* 2. Number of Iterations */}
-                  <Card className="border border-[#ececec] bg-white">
+                  <Card className="border border-[#ececec] bg-white flex flex-col">
                     <CardHeader className="pb-3">
                       <CardTitle className="text-base font-bold leading-[21.28px] text-black">Number of iterations</CardTitle>
                     </CardHeader>
-                    <CardContent className="space-y-4">
-                      <ChartContainer config={iterationsConfig} className="h-[250px] w-full">
+                    <CardContent className="space-y-6 flex-1 flex flex-col">
+                      <ChartContainer config={iterationsConfig} className="h-[250px] md:h-[200px] w-full">
                         <ResponsiveContainer width="100%" height="100%">
                           <AreaChart data={iterationsData} margin={{ left: 10, right: 10, top: 10, bottom: 20 }}>
                             <defs>
@@ -1360,14 +1459,14 @@ export default function TrackerPage() {
                               dataKey="period" 
                               axisLine={false}
                               tickLine={false}
-                              tick={{ fill: "#646464", fontSize: 11 }}
+                              tick={{ fill: "#646464", fontSize: 12 }}
                             />
                             <YAxis 
                               axisLine={false}
                               tickLine={false}
                               domain={[1.5, 2.5]}
                               ticks={[1.5, 1.75, 2.0, 2.25, 2.5]}
-                              tick={{ fill: "#646464", fontSize: 11 }}
+                              tick={{ fill: "#646464", fontSize: 12 }}
                             />
                             <ChartTooltip content={<ChartTooltipContent className="bg-white [&_span]:text-black [&_div]:text-black" />} />
                             <Area
@@ -1380,6 +1479,16 @@ export default function TrackerPage() {
                           </AreaChart>
                         </ResponsiveContainer>
                       </ChartContainer>
+                      
+                      {/* Insight section */}
+                      <div className="flex flex-col gap-1 pt-2 pr-4 pb-2 pl-4 rounded-xl bg-[#F1F1F380]">
+                        <p className="text-xs leading-[15.96px] font-bold text-[#00C3B1]">
+                          Insight
+                        </p>
+                        <p className="text-xs leading-[18px] font-normal text-black">
+                          Average iterations reduced to 1.8, indicating faster brief approval process
+                        </p>
+                      </div>
                     </CardContent>
                   </Card>
                         </div>
@@ -1426,6 +1535,16 @@ export default function TrackerPage() {
                           </AreaChart>
                         </ResponsiveContainer>
                       </ChartContainer>
+                      
+                      {/* Insight section */}
+                      <div className="flex flex-col gap-1 pt-2 pr-4 pb-2 pl-4 rounded-xl bg-[#F1F1F380]">
+                        <p className="text-xs leading-[15.96px] font-bold text-[#00C3B1]">
+                          Insight
+                        </p>
+                        <p className="text-xs leading-[18px] font-normal text-black">
+                          Average details provided increased to 14 fields, showing improved brief completeness
+                        </p>
+                      </div>
                     </CardContent>
                   </Card>
 
@@ -1472,12 +1591,12 @@ export default function TrackerPage() {
                   </Card>
                 </div>
 
-                {/* Row 3: Number of Briefs per Category | Briefs Quality by Category */}
+                {/* Row 3: Number of briefs per category | Briefs quality by category */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-                  {/* 5. Number of Briefs per Category */}
+                  {/* 5. Number of briefs per category */}
                 <Card className="border border-[#ececec] bg-white">
                   <CardHeader className="pb-3">
-                    <CardTitle className="text-base font-bold leading-[21.28px] text-black">Number of Briefs per Category</CardTitle>
+                    <CardTitle className="text-base font-bold leading-[21.28px] text-black">Number of briefs per category</CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-4">
                       <ChartContainer config={briefsPerCategoryConfig} className="h-[200px] w-full">
@@ -1496,7 +1615,7 @@ export default function TrackerPage() {
                             domain={[0, 80]}
                             ticks={[0, 20, 40, 60, 80]}
                             tick={{ fill: "#646464", fontSize: 12 }}
-                            label={{ value: "Number of Briefs", angle: -90, position: "insideLeft", offset: 15, style: { fill: "#646464", fontSize: 12, textAnchor: "middle" } }}
+                            label={{ value: "Number of briefs", angle: -90, position: "insideLeft", offset: 15, style: { fill: "#646464", fontSize: 12, textAnchor: "middle" } }}
                           />
                           <ChartTooltip content={<ChartTooltipContent className="bg-white [&_span]:text-black [&_div]:text-black" />} />
                           <Bar dataKey="briefs" fill="#03b3e2" radius={[4, 4, 0, 0]} />
@@ -1506,10 +1625,10 @@ export default function TrackerPage() {
                   </CardContent>
                 </Card>
 
-                  {/* 6. Briefs Quality by Category */}
+                  {/* 6. Briefs quality by category */}
                 <Card className="border border-[#ececec] bg-white">
                   <CardHeader className="pb-3">
-                      <CardTitle className="text-base font-bold leading-[21.28px] text-black">Briefs Quality by Category</CardTitle>
+                      <CardTitle className="text-base font-bold leading-[21.28px] text-black">Briefs quality by category</CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-4">
                       <ChartContainer config={briefsQualityByCategoryConfig} className="h-[200px] w-full">
@@ -1539,12 +1658,12 @@ export default function TrackerPage() {
                   </Card>
                 </div>
 
-                {/* 7. Brief Quality Score and Brief Top Missing Fields - stacked on tablet */}
+                {/* 7. Brief quality score and Brief top missing fields - stacked on tablet */}
                 <div className="grid grid-cols-1 gap-5">
-                {/* Brief Quality Score */}
+                {/* Brief quality score */}
                 <Card className="border border-[#ececec] bg-white">
                   <CardHeader className="pb-3">
-                    <CardTitle className="text-base font-bold leading-[21.28px] text-black">Brief Quality Score</CardTitle>
+                    <CardTitle className="text-base font-bold leading-[21.28px] text-black">Brief quality score</CardTitle>
                   </CardHeader>
                   <CardContent>
                     <HorizontalBarChart
@@ -1566,29 +1685,29 @@ export default function TrackerPage() {
                   </CardContent>
                 </Card>
 
-                {/* Brief Top Missing Fields */}
+                {/* Brief top missing fields */}
                 <Card className="border border-[#ececec] bg-white overflow-x-visible">
                   <CardHeader className="pb-3 px-3 md:px-6">
-                    <CardTitle className="text-base font-bold leading-[21.28px] text-black">Brief Top Missing Fields</CardTitle>
+                    <CardTitle className="text-base font-bold leading-[21.28px] text-black">Brief top missing fields</CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-4 overflow-x-visible px-3 md:px-6">
                     {/* Legend */}
                     <div className="flex flex-wrap items-center gap-4 text-sm">
                       <div className="flex items-center gap-2">
                         <div className="w-3 h-3 rounded-full" style={{ backgroundColor: '#0177c7' }}></div>
-                        <span className="text-black">Mobile</span>
+                        <span className="text-black">SMP</span>
                       </div>
                       <div className="flex items-center gap-2">
                         <div className="w-3 h-3 rounded-full" style={{ backgroundColor: '#03b3e2' }}></div>
-                        <span className="text-black">Tablet</span>
+                        <span className="text-black">Ecosystem</span>
                       </div>
                       <div className="flex items-center gap-2">
                         <div className="w-3 h-3 rounded-full" style={{ backgroundColor: '#00c3b1' }}></div>
-                        <span className="text-black">Wearable</span>
+                        <span className="text-black">Promotions</span>
                       </div>
                       <div className="flex items-center gap-2">
                         <div className="w-3 h-3 rounded-full" style={{ backgroundColor: '#8092DC' }}></div>
-                        <span className="text-black">Ecosystem</span>
+                        <span className="text-black">B2B</span>
                       </div>
                     </div>
 
@@ -1616,10 +1735,10 @@ export default function TrackerPage() {
                               className="md:!w-[120px]"
                           />
                           <ChartTooltip cursor={false} content={<ChartTooltipContent className="bg-white [&_span]:text-black [&_div]:text-black" />} />
-                          <Bar dataKey="mobile" stackId="a" fill="#0177c7" radius={[6, 0, 0, 6]} />
-                          <Bar dataKey="tablet" stackId="a" fill="#03b3e2" radius={[0, 0, 0, 0]} />
-                          <Bar dataKey="wearable" stackId="a" fill="#00c3b1" radius={[0, 0, 0, 0]} />
-                          <Bar dataKey="ecosystem" stackId="a" fill="#8092DC" radius={[0, 6, 6, 0]} />
+                          <Bar dataKey="smp" stackId="a" fill="#0177c7" radius={[6, 0, 0, 6]} />
+                          <Bar dataKey="ecosystem" stackId="a" fill="#03b3e2" radius={[0, 0, 0, 0]} />
+                          <Bar dataKey="promotions" stackId="a" fill="#00c3b1" radius={[0, 0, 0, 0]} />
+                          <Bar dataKey="b2b" stackId="a" fill="#8092DC" radius={[0, 6, 6, 0]} />
                         </BarChart>
                       </ResponsiveContainer>
                     </ChartContainer>
@@ -1628,11 +1747,11 @@ export default function TrackerPage() {
                 </Card>
                 </div>
 
-                {/* Key Stats and Number of Briefs Section */}
+                {/* Key Stats and Number of briefs Section */}
                 <div className="flex flex-col md:flex-row gap-5 md:space-y-0">
                   {/* Key Stats - 50% */}
                   <div className="w-full md:w-1/2 space-y-4">
-                    <h3 className="text-[22px] font-bold leading-[29.26px] text-black">Key Stats</h3>
+                    <h3 className="text-[22px] font-bold leading-[29.26px] text-black">Key stats</h3>
                     <div className="grid grid-cols-2 gap-5">
                       <Card className="border border-[#ececec] bg-white">
                         <CardContent className="pt-6">
@@ -1669,11 +1788,11 @@ export default function TrackerPage() {
                     </div>
                   </div>
 
-                  {/* Number of Briefs Chart - 50% */}
+                  {/* Number of briefs Chart - 50% */}
                   <div className="w-full md:w-1/2">
                     <Card className="border border-[#ececec] bg-white">
                       <CardHeader className="pb-3">
-                        <CardTitle className="text-base font-bold leading-[21.28px] text-black">Number of Briefs</CardTitle>
+                        <CardTitle className="text-base font-bold leading-[21.28px] text-black">Number of briefs</CardTitle>
                       </CardHeader>
                       <CardContent className="space-y-4">
                         <ChartContainer config={numberOfBriefsConfig} className="h-[300px] w-full">
@@ -1692,14 +1811,14 @@ export default function TrackerPage() {
                                 domain={[0, 110]}
                                 ticks={[0, 20, 40, 60, 80, 100]}
                                 tick={{ fill: "#646464", fontSize: 12 }}
-                                label={{ value: "Number of Briefs", angle: -90, position: "insideLeft", offset: 15, style: { fill: "#646464", fontSize: 12, textAnchor: "middle" } }}
+                                label={{ value: "Number of briefs", angle: -90, position: "insideLeft", offset: 15, style: { fill: "#646464", fontSize: 12, textAnchor: "middle" } }}
                               />
                               <ChartTooltip content={<ChartTooltipContent className="bg-white [&_span]:text-black [&_div]:text-black" />} />
                               <Legend />
-                              <Bar dataKey="mobile" stackId="a" fill="#0177c7" radius={[4, 4, 0, 0]} />
-                              <Bar dataKey="tablet" stackId="a" fill="#03b3e2" radius={[0, 0, 0, 0]} />
-                              <Bar dataKey="wearable" stackId="a" fill="#00c3b1" radius={[0, 0, 0, 0]} />
-                              <Bar dataKey="ecosystem" stackId="a" fill="#8092DC" radius={[0, 4, 4, 0]} />
+                              <Bar dataKey="smp" stackId="a" fill="#0177c7" radius={[4, 4, 0, 0]} />
+                              <Bar dataKey="ecosystem" stackId="a" fill="#03b3e2" radius={[0, 0, 0, 0]} />
+                              <Bar dataKey="promotions" stackId="a" fill="#00c3b1" radius={[0, 0, 0, 0]} />
+                              <Bar dataKey="b2b" stackId="a" fill="#8092DC" radius={[0, 4, 4, 0]} />
                             </BarChart>
                           </ResponsiveContainer>
                         </ChartContainer>
@@ -1717,11 +1836,11 @@ export default function TrackerPage() {
                 {/* Row 1: Rounds 30% / Change Requests 70% */}
                 <div className="grid grid-cols-10 gap-5">
                   {/* Rounds of amends */}
-                  <Card className="border border-[#ececec] bg-white col-span-3">
+                  <Card className="border border-[#ececec] bg-white col-span-3 flex flex-col">
                   <CardHeader className="pb-3">
                     <CardTitle className="text-base font-bold leading-[21.28px] text-black">Rounds of amends</CardTitle>
                   </CardHeader>
-                    <CardContent>
+                    <CardContent className="flex-1 flex items-center justify-center">
                     <ChartContainer config={roundsOfAmendsConfig} className="h-[250px] md:h-[200px] w-full">
                       <ResponsiveContainer width="100%" height="100%">
                         <AreaChart data={roundsOfAmendsData} margin={{ left: 10, right: 10, top: 10, bottom: 20 }}>
@@ -1781,17 +1900,17 @@ export default function TrackerPage() {
 
                     {/* Breakdown by Product Line */}
                     <div className="space-y-4">
-                      <h4 className="text-sm font-bold leading-[18.62px] text-black">Change in Request Rate by Product Line</h4>
+                      <h4 className="text-sm font-bold leading-[18.62px] text-black">Change in request rate by product line</h4>
                       <div className="space-y-3">
                         {changeRequestsData.map((item) => {
                           const absValue = Math.abs(item.changeRate);
                           const maxValue = 25;
                           const widthPercent = (absValue / maxValue) * 100;
                           const colorMap: Record<string, string> = {
-                            Mobile: "#0177c7",
-                            Tablet: "#03b3e2",
-                            Wearable: "#00c3b1",
-                            Ecosystem: "#00c3b1",
+                            SMP: "#0177c7",
+                            Ecosystem: "#03b3e2",
+                            Promotions: "#00c3b1",
+                            B2B: "#8092DC",
                           };
                           const color = colorMap[item.productLine] || "#0177c7";
 
@@ -1823,12 +1942,12 @@ export default function TrackerPage() {
 
                 {/* Row 2: Brand Legal 30% / On-time 70% */}
                 <div className="grid grid-cols-10 gap-5">
-                  {/* Brand and Legal amends (right first time) */}
-                  <Card className="border border-[#ececec] bg-white col-span-3">
+                  {/* Brand and legal amends (right first time) */}
+                  <Card className="border border-[#ececec] bg-white col-span-3 flex flex-col">
                   <CardHeader className="pb-3">
-                    <CardTitle className="text-base font-bold leading-[21.28px] text-black">Brand and Legal amends (right first time)</CardTitle>
+                    <CardTitle className="text-base font-bold leading-[21.28px] text-black">Brand and legal amends (right first time)</CardTitle>
                   </CardHeader>
-                    <CardContent>
+                    <CardContent className="flex-1 flex items-center justify-center">
                     <ChartContainer config={brandLegalAmendsConfig} className="h-[250px] md:h-[200px] w-full">
                       <ResponsiveContainer width="100%" height="100%">
                         <AreaChart data={brandLegalAmendsData} margin={{ left: 10, right: 10, top: 10, bottom: 20 }}>
@@ -1888,7 +2007,7 @@ export default function TrackerPage() {
 
                     {/* Breakdown by Product Line */}
                     <div className="space-y-4">
-                      <h4 className="text-sm font-bold leading-[18.62px] text-black">Change in On-Time Delivery by Product Line</h4>
+                      <h4 className="text-sm font-bold leading-[18.62px] text-black">Change in on-time delivery by product line</h4>
                       <div className="space-y-3">
                         {onTimeDeliveryData.map((item) => {
                           const maxValue = 32;
@@ -1939,14 +2058,14 @@ export default function TrackerPage() {
                 {/* Row 3: Top Reasons for Issues - All Categories */}
                 <div className="space-y-4">
                   <div className="flex flex-col gap-1">
-                    <h3 className="text-[22px] font-bold leading-[29.26px] text-black">Top Reasons for Issues - All Categories</h3>
+                    <h3 className="text-[22px] font-bold leading-[29.26px] text-black">Top reasons for issues - all categories</h3>
                     <p className="text-sm text-[#646464]">ANALYSIS OF PRIMARY FACTORS CAUSING PROJECT DELAYS AND PERFORMANCE ISSUES.</p>
                   </div>
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-                    {/* Card 1: Late Briefs */}
+                    {/* Card 1: Late briefs */}
                     <Card className="border border-[#ececec] bg-white">
                       <CardHeader className="pb-3">
-                        <CardTitle className="text-base font-bold leading-[21.28px] text-black">Late Briefs</CardTitle>
+                        <CardTitle className="text-base font-bold leading-[21.28px] text-black">Late briefs</CardTitle>
                       </CardHeader>
                       <CardContent className="space-y-4">
                         <ChartContainer config={lateBriefsConfig} className="h-[200px] w-full">
@@ -2002,10 +2121,10 @@ export default function TrackerPage() {
                       </CardContent>
                     </Card>
 
-                    {/* Card 2: Extended / Delayed Projects */}
+                    {/* Card 2: Extended / delayed projects */}
                     <Card className="border border-[#ececec] bg-white">
                       <CardHeader className="pb-3">
-                        <CardTitle className="text-base font-bold leading-[21.28px] text-black">Extended / Delayed Projects</CardTitle>
+                        <CardTitle className="text-base font-bold leading-[21.28px] text-black">Extended / delayed projects</CardTitle>
                       </CardHeader>
                       <CardContent className="space-y-4">
                         <ChartContainer config={extendedProjectsConfig} className="h-[200px] w-full">
@@ -2037,7 +2156,7 @@ export default function TrackerPage() {
                         </ChartContainer>
                         <div className="flex flex-col gap-1">
                           <div className="text-[32px] font-bold leading-[38.4px]" style={{ color: "#03b3e2" }}>41%</div>
-                          <p className="text-sm text-black">of projects were delayed/extended in flight.</p>
+                          <p className="text-sm text-black">of projects were delayed/extended In flight.</p>
                           <p className="text-xs text-[#646464]">Q2 2025: 32%</p>
                         </div>
                         {/* Results at bottom - Tablet only */}
@@ -2061,10 +2180,10 @@ export default function TrackerPage() {
                       </CardContent>
                     </Card>
 
-                    {/* Card 3: Insufficient Time */}
+                    {/* Card 3: Insufficient time */}
                     <Card className="border border-[#ececec] bg-white">
                       <CardHeader className="pb-3">
-                        <CardTitle className="text-base font-bold leading-[21.28px] text-black">Insufficient Time</CardTitle>
+                        <CardTitle className="text-base font-bold leading-[21.28px] text-black">Insufficient time</CardTitle>
                       </CardHeader>
                       <CardContent className="space-y-4">
                         <ChartContainer config={insufficientTimeConfig} className="h-[200px] w-full">
@@ -2096,7 +2215,7 @@ export default function TrackerPage() {
                         </ChartContainer>
                         <div className="flex flex-col gap-1">
                           <div className="text-[32px] font-bold leading-[38.4px]" style={{ color: "#03b3e2" }}>30%</div>
-                          <p className="text-sm text-black">of projects were briefed with insufficient time.</p>
+                          <p className="text-sm text-black">of projects were briefed with Insufficient time.</p>
                           <p className="text-xs text-[#646464]">Q2 2025: 22%</p>
                         </div>
                         {/* Results at bottom - Tablet only */}
@@ -2125,23 +2244,17 @@ export default function TrackerPage() {
                 {/* Row 5: Issues Breakdown */}
                 <Card className="border border-[#ececec] bg-white">
                   <CardHeader className="pb-3">
-                    <div className="flex items-center justify-between">
-                      <CardTitle className="text-base font-bold leading-[21.28px]" style={{ color: "#03b3e2" }}>Issues Breakdown</CardTitle>
-                        <Button variant="outline" className="h-10 px-6 border-none bg-[#ffb546] hover:opacity-90 text-black whitespace-nowrap">
-                          <span className="text-black font-semibold whitespace-nowrap">View All</span>
-                          <ChevronRight size={20} className="ml-2 text-black" />
-                      </Button>
-                    </div>
+                    <CardTitle className="text-base font-bold leading-[21.28px]" style={{ color: "#03b3e2" }}>Issues Breakdown</CardTitle>
                   </CardHeader>
                   <CardContent>
                     <Table>
                       <TableHeader>
                         <TableRow className="bg-[#f1f1f3] hover:bg-[#f1f1f3] border-b border-[#ececec]">
-                          <TableHead className="h-12 px-4 text-left font-bold text-black">Issue Type</TableHead>
-                          <TableHead className="h-12 px-4 text-left font-bold text-black">In Flight</TableHead>
+                          <TableHead className="h-12 px-4 text-left font-bold text-black">Issue type</TableHead>
+                          <TableHead className="h-12 px-4 text-left font-bold text-black">In flight</TableHead>
                           <TableHead className="h-12 px-4 text-left font-bold text-black">Resolved</TableHead>
                           <TableHead className="h-12 px-4 text-left font-bold text-black">Impact</TableHead>
-                          <TableHead className="h-12 px-4 text-left font-bold text-black">Primary Product Line</TableHead>
+                          <TableHead className="h-12 px-4 text-left font-bold text-black">Primary product line</TableHead>
                         </TableRow>
                       </TableHeader>
                       <TableBody>
@@ -2217,10 +2330,10 @@ export default function TrackerPage() {
                     </CardContent>
                   </Card>
 
-                  {/* Brand and Legal amends (right first time) */}
+                  {/* Brand and legal amends (right first time) */}
                   <Card className="border border-[#ececec] bg-white flex flex-col">
                     <CardHeader className="pb-3">
-                      <CardTitle className="text-base font-bold leading-[21.28px] text-black">Brand and Legal amends (right first time)</CardTitle>
+                      <CardTitle className="text-base font-bold leading-[21.28px] text-black">Brand and legal amends (right first time)</CardTitle>
                     </CardHeader>
                     <CardContent className="flex-1 flex items-center justify-center">
                       <ChartContainer config={brandLegalAmendsConfig} className="h-[250px] md:h-[200px] w-full">
@@ -2283,17 +2396,17 @@ export default function TrackerPage() {
 
                     {/* Breakdown by Product Line */}
                     <div className="space-y-4">
-                      <h4 className="text-sm font-bold leading-[18.62px] text-black">Change in Request Rate by Product Line</h4>
+                      <h4 className="text-sm font-bold leading-[18.62px] text-black">Change in request rate by product line</h4>
                       <div className="space-y-3">
                         {changeRequestsData.map((item) => {
                           const absValue = Math.abs(item.changeRate);
                           const maxValue = 25;
                           const widthPercent = (absValue / maxValue) * 100;
                           const colorMap: Record<string, string> = {
-                            Mobile: "#0177c7",
-                            Tablet: "#03b3e2",
-                            Wearable: "#00c3b1",
-                            Ecosystem: "#00c3b1",
+                            SMP: "#0177c7",
+                            Ecosystem: "#03b3e2",
+                            Promotions: "#00c3b1",
+                            B2B: "#8092DC",
                           };
                           const color = colorMap[item.productLine] || "#0177c7";
 
@@ -2342,22 +2455,22 @@ export default function TrackerPage() {
 
                     {/* Breakdown by Product Line */}
                     <div className="space-y-4">
-                      <h4 className="text-sm font-bold leading-[18.62px] text-black">Change in On-Time Delivery by Product Line</h4>
+                      <h4 className="text-sm font-bold leading-[18.62px] text-black">Change in on-time delivery by product line</h4>
                       <div className="space-y-3">
                         {onTimeDeliveryData.map((item) => {
                           const maxValue = 32;
                           const widthPercent = (item.changeRate / maxValue) * 100;
                           const colorMap: Record<string, string> = {
-                            Mobile: "#0177c7",
-                            Tablet: "#03b3e2",
-                            Wearable: "#00c3b1",
-                            Ecosystem: "#00c3b1",
+                            SMP: "#0177c7",
+                            Ecosystem: "#03b3e2",
+                            Promotions: "#00c3b1",
+                            B2B: "#8092DC",
                           };
                           const badgeColorMap: Record<string, string> = {
-                            Mobile: "#0177c7",
-                            Tablet: "#03b3e2",
-                            Wearable: "#00c3b1",
-                            Ecosystem: "#00c3b1",
+                            SMP: "#0177c7",
+                            Ecosystem: "#03b3e2",
+                            Promotions: "#00c3b1",
+                            B2B: "#8092DC",
                           };
                           const color = colorMap[item.productLine] || "#0177c7";
                           const badgeColor = badgeColorMap[item.productLine] || "#0177c7";
@@ -2392,14 +2505,14 @@ export default function TrackerPage() {
                 {/* Row 4: Top Reasons for Issues - All Categories */}
                 <div className="space-y-4">
                   <div className="flex flex-col gap-1">
-                    <h3 className="text-[22px] font-bold leading-[29.26px] text-black">Top Reasons for Issues - All Categories</h3>
+                    <h3 className="text-[22px] font-bold leading-[29.26px] text-black">Top reasons for issues - all categories</h3>
                     <p className="text-sm text-[#646464]">ANALYSIS OF PRIMARY FACTORS CAUSING PROJECT DELAYS AND PERFORMANCE ISSUES.</p>
                   </div>
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-                    {/* Card 1: Late Briefs */}
+                    {/* Card 1: Late briefs */}
                     <Card className="border border-[#ececec] bg-white">
                       <CardHeader className="pb-3">
-                        <CardTitle className="text-base font-bold leading-[21.28px] text-black">Late Briefs</CardTitle>
+                        <CardTitle className="text-base font-bold leading-[21.28px] text-black">Late briefs</CardTitle>
                       </CardHeader>
                       <CardContent className="space-y-4">
                         <ChartContainer config={lateBriefsConfig} className="h-[200px] w-full">
@@ -2447,10 +2560,10 @@ export default function TrackerPage() {
                       </CardContent>
                     </Card>
 
-                    {/* Card 2: Extended / Delayed Projects */}
+                    {/* Card 2: Extended / delayed projects */}
                     <Card className="border border-[#ececec] bg-white">
                       <CardHeader className="pb-3">
-                        <CardTitle className="text-base font-bold leading-[21.28px] text-black">Extended / Delayed Projects</CardTitle>
+                        <CardTitle className="text-base font-bold leading-[21.28px] text-black">Extended / delayed projects</CardTitle>
                       </CardHeader>
                       <CardContent className="space-y-4">
                         <ChartContainer config={extendedProjectsConfig} className="h-[200px] w-full">
@@ -2474,7 +2587,7 @@ export default function TrackerPage() {
                         </ChartContainer>
                         <div className="flex flex-col gap-1">
                           <div className="text-[32px] font-bold leading-[38.4px]" style={{ color: "#03b3e2" }}>41%</div>
-                          <p className="text-sm text-black">of projects were delayed/extended in flight.</p>
+                          <p className="text-sm text-black">of projects were delayed/extended In flight.</p>
                           <p className="text-xs text-[#646464]">Q2 2025: 32%</p>
                         </div>
                         {/* Results at bottom - Tablet only */}
@@ -2498,10 +2611,10 @@ export default function TrackerPage() {
                       </CardContent>
                     </Card>
 
-                    {/* Card 3: Insufficient Time */}
+                    {/* Card 3: Insufficient time */}
                     <Card className="border border-[#ececec] bg-white">
                       <CardHeader className="pb-3">
-                        <CardTitle className="text-base font-bold leading-[21.28px] text-black">Insufficient Time</CardTitle>
+                        <CardTitle className="text-base font-bold leading-[21.28px] text-black">Insufficient time</CardTitle>
                       </CardHeader>
                       <CardContent className="space-y-4">
                         <ChartContainer config={insufficientTimeConfig} className="h-[200px] w-full">
@@ -2525,7 +2638,7 @@ export default function TrackerPage() {
                         </ChartContainer>
                         <div className="flex flex-col gap-1">
                           <div className="text-[32px] font-bold leading-[38.4px]" style={{ color: "#03b3e2" }}>30%</div>
-                          <p className="text-sm text-black">of projects were briefed with insufficient time.</p>
+                          <p className="text-sm text-black">of projects were briefed with Insufficient time.</p>
                           <p className="text-xs text-[#646464]">Q2 2025: 22%</p>
                         </div>
                         {/* Results at bottom - Tablet only */}
@@ -2554,23 +2667,17 @@ export default function TrackerPage() {
                 {/* Row 5: Issues Breakdown */}
                 <Card className="border border-[#ececec] bg-white">
                   <CardHeader className="pb-3">
-                    <div className="flex items-center justify-between">
-                      <CardTitle className="text-base font-bold leading-[21.28px]" style={{ color: "#03b3e2" }}>Issues Breakdown</CardTitle>
-                      <Button variant="outline" className="h-10 px-6 border-none bg-[#ffb546] hover:opacity-90 text-black whitespace-nowrap">
-                        <span className="text-black font-semibold whitespace-nowrap">View All</span>
-                        <ChevronRight size={20} className="ml-2 text-black" />
-                      </Button>
-                    </div>
+                    <CardTitle className="text-base font-bold leading-[21.28px]" style={{ color: "#03b3e2" }}>Issues Breakdown</CardTitle>
                   </CardHeader>
                   <CardContent>
                     <Table>
                       <TableHeader>
                         <TableRow className="bg-[#f1f1f3] hover:bg-[#f1f1f3] border-b border-[#ececec]">
-                          <TableHead className="h-12 px-4 text-left font-bold text-black">Issue Type</TableHead>
-                          <TableHead className="h-12 px-4 text-left font-bold text-black">In Flight</TableHead>
+                          <TableHead className="h-12 px-4 text-left font-bold text-black">Issue type</TableHead>
+                          <TableHead className="h-12 px-4 text-left font-bold text-black">In flight</TableHead>
                           <TableHead className="h-12 px-4 text-left font-bold text-black">Resolved</TableHead>
                           <TableHead className="h-12 px-4 text-left font-bold text-black">Impact</TableHead>
-                          <TableHead className="h-12 px-4 text-left font-bold text-black">Primary Product Line</TableHead>
+                          <TableHead className="h-12 px-4 text-left font-bold text-black">Primary product line</TableHead>
                         </TableRow>
                       </TableHeader>
                       <TableBody>
@@ -2728,12 +2835,13 @@ export default function TrackerPage() {
                     <CardContent>
                       <ChartContainer config={tokenDistributionCategoryConfig} className="h-[300px] md:h-[250px] w-full">
                         <ResponsiveContainer width="100%" height="100%">
-                          <BarChart data={tokenDistributionByCategoryData} margin={{ left: 10, right: 10, top: 10, bottom: 20 }}>
+                          <BarChart data={tokenDistributionByCategoryData} margin={{ left: 10, right: 10, top: 10, bottom: 35 }}>
                             <CartesianGrid strokeDasharray="3 3" stroke="#e0e0e0" vertical={false} />
                             <XAxis 
                               dataKey="category" 
                               axisLine={false}
                               tickLine={false}
+                              interval={0}
                               tick={{ fill: "#646464", fontSize: 12 }}
                             />
                             <YAxis 
@@ -2881,12 +2989,13 @@ export default function TrackerPage() {
                     <CardContent>
                       <ChartContainer config={tokenDistributionCategoryConfig} className="h-[300px] md:h-[250px] w-full">
                         <ResponsiveContainer width="100%" height="100%">
-                          <BarChart data={tokenDistributionByCategoryData} margin={{ left: 10, right: 10, top: 10, bottom: 20 }}>
+                          <BarChart data={tokenDistributionByCategoryData} margin={{ left: 10, right: 10, top: 10, bottom: 35 }}>
                             <CartesianGrid strokeDasharray="3 3" stroke="#e0e0e0" vertical={false} />
                             <XAxis 
                               dataKey="category" 
                               axisLine={false}
                               tickLine={false}
+                              interval={0}
                               tick={{ fill: "#646464", fontSize: 12 }}
                             />
                             <YAxis 
@@ -2912,7 +3021,7 @@ export default function TrackerPage() {
             <TabsContent value="predictive-analytics" className="mt-6">
               {/* Desktop: Side-by-side layout */}
               <div className="hidden lg:block space-y-6">
-                {/* Row 1: Ask TIKO 70% / Client Satisfaction 30% */}
+                {/* Row 1: Ask TIKO 70% / Client satisfaction 30% */}
                 <div className="grid grid-cols-10 gap-5">
                 {/* Ask TIKO a Question */}
                   <Card className="border border-[#ececec] bg-white rounded-xl overflow-hidden relative col-span-7">
@@ -2954,12 +3063,12 @@ export default function TrackerPage() {
                   </CardContent>
                 </Card>
 
-                  {/* Client Satisfaction - Centered for desktop */}
+                  {/* Client satisfaction - Centered for desktop */}
                   <Card className="border border-[#ececec] bg-white col-span-3">
                   <CardHeader className="pb-3">
                       <div className="flex items-center gap-2">
                         <BarChart2 size={20} className="text-black" />
-                        <CardTitle className="text-base font-bold leading-[21.28px] text-black">Client Satisfaction</CardTitle>
+                        <CardTitle className="text-base font-bold leading-[21.28px] text-black">Client satisfaction</CardTitle>
                     </div>
                   </CardHeader>
                   <CardContent className="space-y-4">
@@ -3053,12 +3162,12 @@ export default function TrackerPage() {
                   </CardContent>
                 </Card>
 
-                {/* 2. Client Satisfaction */}
+                {/* 2. Client satisfaction */}
                 <Card className="border border-[#ececec] bg-white">
                   <CardHeader className="pb-3">
                     <div className="flex items-center gap-2">
                       <BarChart2 size={20} className="text-black" />
-                      <CardTitle className="text-base font-bold leading-[21.28px] text-black">Client Satisfaction</CardTitle>
+                      <CardTitle className="text-base font-bold leading-[21.28px] text-black">Client satisfaction</CardTitle>
                     </div>
                   </CardHeader>
                   <CardContent className="space-y-4">
@@ -3119,47 +3228,49 @@ export default function TrackerPage() {
                 {/* Optimization Opportunities */}
               <div className="space-y-4 pt-6">
                   <div className="flex flex-col gap-1">
-                    <h3 className="text-[22px] font-bold leading-[29.26px] text-black">Optimization Opportunities</h3>
-                    <p className="text-sm text-[#646464]">DATA-DRIVEN INSIGHTS FOR PERFORMANCE IMPROVEMENT, BUDGET OPTIMIZATION, AND PROCESS ENHANCEMENT</p>
+                    <h3 className="text-[22px] font-bold leading-[29.26px] text-black">Optimization opportunities</h3>
+                    <p className="text-sm text-[#646464]">DATA-DRIVEN INSIGHTS FOR PERFORMANCE IMPROVEMENT, Budget optimization, AND PROCESS ENHANCEMENT</p>
                   </div>
                 {/* Desktop: 3 columns inline */}
                 <div className="hidden lg:grid lg:grid-cols-3 lg:gap-5">
-                  {/* 1. Performance Driver */}
-                    <Card className="border border-[#ececec] bg-white">
+                  {/* 1. Performance driver */}
+                    <Card className="border border-[#ececec] bg-white flex flex-col">
                       <CardHeader className="pb-3">
                         <div className="flex items-center gap-2">
                           <Target size={20} className="text-[#03b3e2]" />
-                          <CardTitle className="text-base font-bold leading-[21.28px] text-black">Performance Driver</CardTitle>
+                          <CardTitle className="text-base font-bold leading-[21.28px] text-black">Performance driver</CardTitle>
                         </div>
                       </CardHeader>
-                      <CardContent className="space-y-4">
+                      <CardContent className="space-y-4 flex-1 flex flex-col">
                         <p className="text-sm text-black leading-[18.62px]">
                           Complete briefing templates score 4.9/5 vs 3.1/5 for incomplete briefs. Missing "target operator" field = 34% more change requests.
                         </p>
-                        <ChartContainer config={performanceDriverConfig} className="h-[200px] w-full">
-                          <ResponsiveContainer width="100%" height="100%">
-                            <BarChart data={performanceDriverData} margin={{ left: 10, right: 10, top: 10, bottom: 20 }}>
-                              <CartesianGrid strokeDasharray="3 3" stroke="#e0e0e0" vertical={false} />
-                              <XAxis 
-                                dataKey="category" 
-                                axisLine={false}
-                                tickLine={false}
-                                tick={{ fill: "#646464", fontSize: 12 }}
-                              />
-                              <YAxis 
-                                axisLine={false}
-                                tickLine={false}
-                                domain={[0, 28]}
-                                ticks={[0, 7, 14, 21, 28]}
-                                tick={{ fill: "#646464", fontSize: 12 }}
-                              />
-                              <ChartTooltip content={<ChartTooltipContent className="bg-white [&_span]:text-black [&_div]:text-black" />} />
-                              <Legend />
-                              <Bar dataKey="satisfaction" fill="#0177c7" radius={[4, 4, 0, 0]} />
-                              <Bar dataKey="changeRequests" fill="#03b3e2" radius={[4, 4, 0, 0]} />
-                            </BarChart>
-                          </ResponsiveContainer>
-                        </ChartContainer>
+                        <div className="flex-1 flex flex-col">
+                          <ChartContainer config={performanceDriverConfig} className="h-[200px] w-full">
+                            <ResponsiveContainer width="100%" height="100%">
+                              <BarChart data={performanceDriverData} margin={{ left: 10, right: 10, top: 10, bottom: 20 }}>
+                                <CartesianGrid strokeDasharray="3 3" stroke="#e0e0e0" vertical={false} />
+                                <XAxis 
+                                  dataKey="category" 
+                                  axisLine={false}
+                                  tickLine={false}
+                                  tick={{ fill: "#646464", fontSize: 12 }}
+                                />
+                                <YAxis 
+                                  axisLine={false}
+                                  tickLine={false}
+                                  domain={[0, 28]}
+                                  ticks={[0, 7, 14, 21, 28]}
+                                  tick={{ fill: "#646464", fontSize: 12 }}
+                                />
+                                <ChartTooltip content={<ChartTooltipContent className="bg-white [&_span]:text-black [&_div]:text-black" />} />
+                                <Legend />
+                                <Bar dataKey="satisfaction" fill="#0177c7" radius={[4, 4, 0, 0]} />
+                                <Bar dataKey="changeRequests" fill="#03b3e2" radius={[4, 4, 0, 0]} />
+                              </BarChart>
+                            </ResponsiveContainer>
+                          </ChartContainer>
+                        </div>
                         <div className="border border-[#00C3B1] rounded-lg bg-[#00C3B10F] p-3">
                           <p className="text-xs font-bold text-[#00C3B1] mb-1">Key Driver</p>
                           <p className="text-xs text-black">Implement mandatory field validation. Projected: 65% fewer change requests.</p>
@@ -3167,58 +3278,60 @@ export default function TrackerPage() {
                       </CardContent>
                     </Card>
 
-                  {/* 2. Budget Risk Alert */}
-                    <Card className="border border-[#ececec] bg-white">
+                  {/* 2. Budget risk alert */}
+                    <Card className="border border-[#ececec] bg-white flex flex-col">
                       <CardHeader className="pb-3">
                         <div className="flex items-center gap-2">
                           <AlertTriangle size={20} className="text-[#8092DC]" />
-                          <CardTitle className="text-base font-bold leading-[21.28px] text-black">Budget Risk Alert</CardTitle>
+                          <CardTitle className="text-base font-bold leading-[21.28px] text-black">Budget risk alert</CardTitle>
                         </div>
                       </CardHeader>
-                      <CardContent className="space-y-4">
+                      <CardContent className="space-y-4 flex-1 flex flex-col">
                         <p className="text-sm text-black leading-[18.62px]">
                           Mobile division tracking 97% token utilization with 23% Q4 overrun risk. Current token usage vs. allocated tokens shows escalating variance.
                         </p>
-                        <ChartContainer config={budgetRiskConfig} className="h-[200px] w-full">
-                          <ResponsiveContainer width="100%" height="100%">
-                            <LineChart data={budgetRiskData} margin={{ left: 10, right: 10, top: 10, bottom: 20 }}>
-                              <CartesianGrid strokeDasharray="3 3" stroke="#e0e0e0" vertical={false} />
-                              <XAxis 
-                                dataKey="month" 
-                                axisLine={false}
-                                tickLine={false}
-                                tick={{ fill: "#646464", fontSize: 12 }}
-                              />
-                              <YAxis 
-                                axisLine={false}
-                                tickLine={false}
-                                domain={[700, 1300]}
-                                ticks={[800, 950, 1100, 1250]}
-                                tick={{ fill: "#646464", fontSize: 12 }}
-                                label={{ value: "Tokens", angle: -90, position: "insideLeft", offset: 15, style: { fill: "#646464", fontSize: 12, textAnchor: "middle" } }}
-                              />
-                              <ChartTooltip content={<ChartTooltipContent className="bg-white [&_span]:text-black [&_div]:text-black" />} />
-                              <Legend />
-                              <Line 
-                                type="monotone" 
-                                dataKey="tokensUsed" 
-                                stroke="#0177c7" 
-                                strokeWidth={2} 
-                                dot={{ fill: "#0177c7", r: 4 }}
-                                name="Tokens Used"
-                              />
-                              <Line 
-                                type="monotone" 
-                                dataKey="tokensAllocated" 
-                                stroke="#03b3e2" 
-                                strokeWidth={2} 
-                                strokeDasharray="5 5"
-                                dot={{ fill: "#03b3e2", r: 4 }}
-                                name="Tokens Allocated"
-                              />
-                            </LineChart>
-                          </ResponsiveContainer>
-                        </ChartContainer>
+                        <div className="flex-1 flex flex-col">
+                          <ChartContainer config={budgetRiskConfig} className="h-[200px] w-full">
+                            <ResponsiveContainer width="100%" height="100%">
+                              <LineChart data={budgetRiskData} margin={{ left: 10, right: 10, top: 10, bottom: 20 }}>
+                                <CartesianGrid strokeDasharray="3 3" stroke="#e0e0e0" vertical={false} />
+                                <XAxis 
+                                  dataKey="month" 
+                                  axisLine={false}
+                                  tickLine={false}
+                                  tick={{ fill: "#646464", fontSize: 12 }}
+                                />
+                                <YAxis 
+                                  axisLine={false}
+                                  tickLine={false}
+                                  domain={[700, 1300]}
+                                  ticks={[800, 950, 1100, 1250]}
+                                  tick={{ fill: "#646464", fontSize: 12 }}
+                                  label={{ value: "Tokens", angle: -90, position: "insideLeft", offset: 15, style: { fill: "#646464", fontSize: 12, textAnchor: "middle" } }}
+                                />
+                                <ChartTooltip content={<ChartTooltipContent className="bg-white [&_span]:text-black [&_div]:text-black" />} />
+                                <Legend />
+                                <Line 
+                                  type="monotone" 
+                                  dataKey="tokensUsed" 
+                                  stroke="#0177c7" 
+                                  strokeWidth={2} 
+                                  dot={{ fill: "#0177c7", r: 4 }}
+                                  name="Tokens Used"
+                                />
+                                <Line 
+                                  type="monotone" 
+                                  dataKey="tokensAllocated" 
+                                  stroke="#03b3e2" 
+                                  strokeWidth={2} 
+                                  strokeDasharray="5 5"
+                                  dot={{ fill: "#03b3e2", r: 4 }}
+                                  name="Tokens Allocated"
+                                />
+                              </LineChart>
+                            </ResponsiveContainer>
+                          </ChartContainer>
+                        </div>
                         <div className="border border-[#00C3B1] rounded-lg bg-[#00C3B10F] p-3">
                           <p className="text-xs font-bold text-[#00C3B1] mb-1">Mitigation</p>
                           <p className="text-xs text-black">Expedite HQ asset prioritization. Implement bi-weekly delivery checkpoints.</p>
@@ -3226,42 +3339,44 @@ export default function TrackerPage() {
                       </CardContent>
                     </Card>
 
-                  {/* 3. Process Optimization */}
-                    <Card className="border border-[#ececec] bg-white">
+                  {/* 3. Process optimization */}
+                    <Card className="border border-[#ececec] bg-white flex flex-col">
                       <CardHeader className="pb-3">
                         <div className="flex items-center gap-2">
                         <TrendingUp size={20} className="text-[#00C3B1]" />
-                          <CardTitle className="text-base font-bold leading-[21.28px] text-black">Process Optimization</CardTitle>
+                          <CardTitle className="text-base font-bold leading-[21.28px] text-black">Process optimization</CardTitle>
                         </div>
                       </CardHeader>
-                      <CardContent className="space-y-4">
+                      <CardContent className="space-y-4 flex-1 flex flex-col">
                         <p className="text-sm text-black leading-[18.62px]">
                           JFDI: 35% faster, 0.9 lower satisfaction. Creative: highest satisfaction, 3x longer.
                         </p>
-                        <ChartContainer config={processOptimizationConfig} className="h-[200px] w-full">
-                          <ResponsiveContainer width="100%" height="100%">
-                            <BarChart data={processOptimizationData} margin={{ left: 10, right: 10, top: 10, bottom: 20 }}>
-                              <CartesianGrid strokeDasharray="3 3" stroke="#e0e0e0" vertical={false} />
-                              <XAxis 
-                                dataKey="method" 
-                                axisLine={false}
-                                tickLine={false}
-                                tick={{ fill: "#646464", fontSize: 12 }}
-                              />
-                              <YAxis 
-                                axisLine={false}
-                                tickLine={false}
-                                domain={[0, 12]}
-                                ticks={[0, 3, 6, 9, 12]}
-                                tick={{ fill: "#646464", fontSize: 12 }}
-                              />
-                              <ChartTooltip content={<ChartTooltipContent className="bg-white [&_span]:text-black [&_div]:text-black" />} />
-                              <Legend />
-                              <Bar dataKey="days" fill="#0177c7" radius={[4, 4, 0, 0]} />
-                              <Bar dataKey="satisfaction" fill="#03b3e2" radius={[4, 4, 0, 0]} />
-                            </BarChart>
-                          </ResponsiveContainer>
-                        </ChartContainer>
+                        <div className="flex-1 flex flex-col">
+                          <ChartContainer config={processOptimizationConfig} className="h-[200px] w-full">
+                            <ResponsiveContainer width="100%" height="100%">
+                              <BarChart data={processOptimizationData} margin={{ left: 10, right: 10, top: 10, bottom: 20 }}>
+                                <CartesianGrid strokeDasharray="3 3" stroke="#e0e0e0" vertical={false} />
+                                <XAxis 
+                                  dataKey="method" 
+                                  axisLine={false}
+                                  tickLine={false}
+                                  tick={{ fill: "#646464", fontSize: 12 }}
+                                />
+                                <YAxis 
+                                  axisLine={false}
+                                  tickLine={false}
+                                  domain={[0, 12]}
+                                  ticks={[0, 3, 6, 9, 12]}
+                                  tick={{ fill: "#646464", fontSize: 12 }}
+                                />
+                                <ChartTooltip content={<ChartTooltipContent className="bg-white [&_span]:text-black [&_div]:text-black" />} />
+                                <Legend />
+                                <Bar dataKey="days" fill="#0177c7" radius={[4, 4, 0, 0]} />
+                                <Bar dataKey="satisfaction" fill="#03b3e2" radius={[4, 4, 0, 0]} />
+                              </BarChart>
+                            </ResponsiveContainer>
+                          </ChartContainer>
+                        </div>
                         <div className="border border-[#00C3B1] rounded-lg bg-[#00C3B10F] p-3">
                           <p className="text-xs font-bold text-[#00C3B1] mb-1">Opportunity</p>
                           <p className="text-xs text-black">Create hybrid approach: JFDI execution with creative consultation checkpoints.</p>
@@ -3272,12 +3387,12 @@ export default function TrackerPage() {
 
                 {/* Tablet/Mobile: Vertical Stack */}
                 <div className="lg:hidden space-y-5">
-                  {/* 1. Performance Driver */}
+                  {/* 1. Performance driver */}
                   <Card className="border border-[#ececec] bg-white">
                     <CardHeader className="pb-3">
                       <div className="flex items-center gap-2">
                         <Target size={20} className="text-[#03b3e2]" />
-                        <CardTitle className="text-base font-bold leading-[21.28px] text-black">Performance Driver</CardTitle>
+                        <CardTitle className="text-base font-bold leading-[21.28px] text-black">Performance driver</CardTitle>
                       </div>
                     </CardHeader>
                     <CardContent className="space-y-4">
@@ -3315,12 +3430,12 @@ export default function TrackerPage() {
                     </CardContent>
                   </Card>
 
-                  {/* 2. Budget Risk Alert */}
+                  {/* 2. Budget risk alert */}
                   <Card className="border border-[#ececec] bg-white">
                     <CardHeader className="pb-3">
                       <div className="flex items-center gap-2">
                         <AlertTriangle size={20} className="text-[#8092DC]" />
-                        <CardTitle className="text-base font-bold leading-[21.28px] text-black">Budget Risk Alert</CardTitle>
+                        <CardTitle className="text-base font-bold leading-[21.28px] text-black">Budget risk alert</CardTitle>
                       </div>
                     </CardHeader>
                     <CardContent className="space-y-4">
@@ -3374,12 +3489,12 @@ export default function TrackerPage() {
                     </CardContent>
                   </Card>
 
-                  {/* 3. Process Optimization */}
+                  {/* 3. Process optimization */}
                   <Card className="border border-[#ececec] bg-white">
                     <CardHeader className="pb-3">
                       <div className="flex items-center gap-2">
                         <TrendingUp size={20} className="text-[#00C3B1]" />
-                        <CardTitle className="text-base font-bold leading-[21.28px] text-black">Process Optimization</CardTitle>
+                        <CardTitle className="text-base font-bold leading-[21.28px] text-black">Process optimization</CardTitle>
                       </div>
                     </CardHeader>
                     <CardContent className="space-y-4">
@@ -3422,16 +3537,16 @@ export default function TrackerPage() {
                 {/* Predictive Insights */}
               <div className="space-y-4 pt-6">
                   <div className="flex flex-col gap-1">
-                    <h3 className="text-[22px] font-bold leading-[29.26px] text-black">Predictive Insights</h3>
+                    <h3 className="text-[22px] font-bold leading-[29.26px] text-black">Predictive insights</h3>
                     <p className="text-sm text-[#646464]">AI-POWERED FORECASTING AND TREND PREDICTIONS BASED ON CURRENT DATA PATTERNS.</p>
                   </div>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-                    {/* Top-Left: Process Efficiency Gains */}
+                    {/* Top-Left: Process efficiency gains */}
                     <Card className="border border-[#ececec] bg-white">
                       <CardHeader className="pb-3">
                         <div className="flex items-center gap-2">
                           <CheckCircle2 size={20} className="text-[#00C3B1]" />
-                          <CardTitle className="text-base font-bold leading-[21.28px] text-black">Process Efficiency Gains</CardTitle>
+                          <CardTitle className="text-base font-bold leading-[21.28px] text-black">Process efficiency gains</CardTitle>
                         </div>
                       </CardHeader>
                       <CardContent className="space-y-4">
@@ -3459,12 +3574,12 @@ export default function TrackerPage() {
                       </CardContent>
                     </Card>
 
-                    {/* Top-Right: Budget Optimization */}
+                    {/* Top-Right: Budget optimization */}
                     <Card className="border border-[#ececec] bg-white">
                       <CardHeader className="pb-3">
                         <div className="flex items-center gap-2">
                           <DollarSign size={20} className="text-[#ff9800]" />
-                          <CardTitle className="text-base font-bold leading-[21.28px] text-black">Budget Optimization</CardTitle>
+                          <CardTitle className="text-base font-bold leading-[21.28px] text-black">Budget optimization</CardTitle>
                         </div>
                       </CardHeader>
                       <CardContent className="space-y-4">
@@ -3492,12 +3607,12 @@ export default function TrackerPage() {
                       </CardContent>
                     </Card>
 
-                    {/* Bottom-Left: Quality Enhancement */}
+                    {/* Bottom-Left: Quality enhancement */}
                     <Card className="border border-[#ececec] bg-white">
                       <CardHeader className="pb-3">
                         <div className="flex items-center gap-2">
                           <CheckCircle2 size={20} className="text-[#03b3e2]" />
-                          <CardTitle className="text-base font-bold leading-[21.28px] text-black">Quality Enhancement</CardTitle>
+                          <CardTitle className="text-base font-bold leading-[21.28px] text-black">Quality enhancement</CardTitle>
                         </div>
                       </CardHeader>
                       <CardContent className="space-y-4">
@@ -3525,12 +3640,12 @@ export default function TrackerPage() {
                       </CardContent>
                     </Card>
 
-                    {/* Bottom-Right: Resource Allocation */}
+                    {/* Bottom-Right: Resource allocation */}
                     <Card className="border border-[#ececec] bg-white">
                       <CardHeader className="pb-3">
                         <div className="flex items-center gap-2">
                           <Menu size={20} className="text-[#8092DC]" />
-                          <CardTitle className="text-base font-bold leading-[21.28px] text-black">Resource Allocation</CardTitle>
+                          <CardTitle className="text-base font-bold leading-[21.28px] text-black">Resource allocation</CardTitle>
                         </div>
                       </CardHeader>
                       <CardContent className="space-y-4">
