@@ -717,7 +717,7 @@ export default function TrackerPage() {
             {/* Mobile Dropdown */}
             <div className="md:hidden w-full">
               <Select value={activeTab} onValueChange={handleTabChange}>
-                <SelectTrigger className="w-full border-[#e0e0e0] rounded-[85px] px-5 py-[15px] h-auto bg-[#f9f9f9] [&_span]:text-black [&_span]:text-center [&>span]:absolute [&>span]:left-0 [&>span]:right-0 [&>span]:text-center [&_svg]:absolute [&_svg]:right-3">
+                <SelectTrigger className="w-full border-[#e0e0e0] rounded-[85px] px-5 py-[15px] h-auto bg-[#f9f9f9] [&_span]:text-black [&_span]:text-center [&>span]:absolute [&>span]:left-0 [&>span]:right-0 [&>span]:text-center [&>svg]:absolute [&>svg]:right-7 [&>svg]:opacity-100 [&>svg]:text-black [&>svg]:h-5 [&>svg]:w-5">
                   <SelectValue className="text-center text-black">
                     {tabLabels[activeTab] || "Select a tab"}
                   </SelectValue>
