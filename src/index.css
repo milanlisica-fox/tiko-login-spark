@@ -451,12 +451,13 @@ h1.h1-heading, .leading-tight {
   object-fit: contain;
   object-position: center;
 }
-.next + .plus {
+.next + .text-black + .plus {
   background-color: #03B3E2;
 }
 
-.next + .plus .plusicon {
-  filter: brightness(0) invert(1);
+.next + .text-black + .plus .plusicon path {
+  fill: #fff;
+  stroke: #fff;
 }
 
 @keyframes bounce-once {
