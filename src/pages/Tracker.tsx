@@ -87,6 +87,7 @@ export default function TrackerPage() {
   const [showTikoResponse, setShowTikoResponse] = useState(false);
   const [showAdminModal, setShowAdminModal] = useState(false);
   const [adminQuestion, setAdminQuestion] = useState("");
+  const [selectedYear, setSelectedYear] = useState<string>("2025");
 
   // nav items centralized via DashboardLayout
   const { activeName } = useActiveNav();
@@ -636,6 +637,35 @@ export default function TrackerPage() {
     },
   };
 
+  // Mock data for historical spend per category by year
+  const historicalSpendData = {
+    "2023": [
+      { category: "SMP", spend: 4200 },
+      { category: "Ecosystem", spend: 3100 },
+      { category: "Promotions", spend: 2600 },
+      { category: "B2B", spend: 1700 },
+    ],
+    "2024": [
+      { category: "SMP", spend: 4400 },
+      { category: "Ecosystem", spend: 3150 },
+      { category: "Promotions", spend: 2700 },
+      { category: "B2B", spend: 1750 },
+    ],
+    "2025": [
+      { category: "SMP", spend: 4500 },
+      { category: "Ecosystem", spend: 3200 },
+      { category: "Promotions", spend: 2800 },
+      { category: "B2B", spend: 1800 },
+    ],
+  };
+
+  const historicalSpendConfig = {
+    spend: {
+      label: "Spend (Tokens)",
+      color: "#0177c7",
+    },
+  };
+
   const spendConfig = {
     spent: {
       label: "Tokens Spent",
@@ -870,7 +900,11 @@ export default function TrackerPage() {
                 const img = teamsData.find(team => team.title === "IMG");
                 const displayTeams = [marcomms, omniDigital, img].filter(Boolean);
                 return displayTeams.map((team) => (
-                <Card key={team.id} className="border border-[#ececec] bg-white relative">
+                <Card key={team.id}
+                 className={`border border-[#ececec] bg-white relative ${
+                    team.isMyTeam ? 'card-active' : ''
+                  }`}
+                >
                   {team.isMyTeam && (
                     <div className="absolute top-4 right-4">
                       <Badge variant="secondary" className="bg-[#f1f1f3] text-black border-none text-xs">My team</Badge>
@@ -2962,6 +2996,52 @@ export default function TrackerPage() {
                   </Card>
                 </div>
 
+                {/* Historical Spend per Category */}
+                <div className="hidden lg:block mt-6">
+                  <Card className="border border-[#ececec] bg-white">
+                    <CardHeader className="pb-3">
+                      <div className="flex items-center justify-between">
+                        <CardTitle className="text-base font-bold leading-[21.28px] text-black">Historical spend per category</CardTitle>
+                        <Select value={selectedYear} onValueChange={setSelectedYear}>
+                          <SelectTrigger className="w-[120px] border-[#e0e0e0] rounded-md px-3 py-2 h-auto bg-white [&_span]:text-black [&>svg]:text-black">
+                            <SelectValue />
+                          </SelectTrigger>
+                          <SelectContent className="bg-white">
+                            <SelectItem value="2023" className="text-black">2023</SelectItem>
+                            <SelectItem value="2024" className="text-black">2024</SelectItem>
+                            <SelectItem value="2025" className="text-black">2025</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
+                    </CardHeader>
+                    <CardContent>
+                      <ChartContainer config={historicalSpendConfig} className="h-[300px] w-full">
+                        <ResponsiveContainer width="100%" height="100%">
+                          <BarChart data={historicalSpendData[selectedYear as keyof typeof historicalSpendData]} margin={{ left: 10, right: 10, top: 10, bottom: 20 }}>
+                            <CartesianGrid strokeDasharray="3 3" stroke="#e0e0e0" vertical={false} />
+                            <XAxis 
+                              dataKey="category" 
+                              axisLine={false}
+                              tickLine={false}
+                              tick={{ fill: "#646464", fontSize: 12 }}
+                            />
+                            <YAxis 
+                              axisLine={false}
+                              tickLine={false}
+                              domain={[0, 5000]}
+                              ticks={[0, 1000, 2000, 3000, 4000, 5000]}
+                              tick={{ fill: "#646464", fontSize: 12 }}
+                              label={{ value: "Spend (Tokens)", angle: -90, position: "insideLeft", offset: 15, style: { fill: "#646464", fontSize: 12, textAnchor: "middle" } }}
+                            />
+                            <ChartTooltip content={<ChartTooltipContent className="bg-white [&_span]:text-black [&_div]:text-black" />} />
+                            <Bar dataKey="spend" fill="#0177c7" radius={[4, 4, 0, 0]} />
+                          </BarChart>
+                        </ResponsiveContainer>
+                      </ChartContainer>
+                    </CardContent>
+                  </Card>
+                </div>
+
                 {/* Tablet/Mobile: Vertical Stack */}
                 <div className="lg:hidden space-y-6">
                   {/* Wallet Component */}
@@ -3109,6 +3189,50 @@ export default function TrackerPage() {
                             />
                             <ChartTooltip content={<ChartTooltipContent className="bg-white [&_span]:text-black [&_div]:text-black" />} />
                             <Bar dataKey="tokens" fill="#03b3e2" radius={[4, 4, 0, 0]} />
+                          </BarChart>
+                        </ResponsiveContainer>
+                      </ChartContainer>
+                    </CardContent>
+                  </Card>
+
+                  {/* Historical Spend per Category */}
+                  <Card className="border border-[#ececec] bg-white">
+                    <CardHeader className="pb-3">
+                      <div className="flex items-center justify-between">
+                        <CardTitle className="text-base font-bold leading-[21.28px] text-black">Historical spend per category</CardTitle>
+                        <Select value={selectedYear} onValueChange={setSelectedYear}>
+                          <SelectTrigger className="w-[120px] border-[#e0e0e0] rounded-md px-3 py-2 h-auto bg-white [&_span]:text-black [&>svg]:text-black">
+                            <SelectValue />
+                          </SelectTrigger>
+                          <SelectContent className="bg-white">
+                            <SelectItem value="2023" className="text-black">2023</SelectItem>
+                            <SelectItem value="2024" className="text-black">2024</SelectItem>
+                            <SelectItem value="2025" className="text-black">2025</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
+                    </CardHeader>
+                    <CardContent>
+                      <ChartContainer config={historicalSpendConfig} className="h-[300px] md:h-[250px] w-full">
+                        <ResponsiveContainer width="100%" height="100%">
+                          <BarChart data={historicalSpendData[selectedYear as keyof typeof historicalSpendData]} margin={{ left: 10, right: 10, top: 10, bottom: 20 }}>
+                            <CartesianGrid strokeDasharray="3 3" stroke="#e0e0e0" vertical={false} />
+                            <XAxis 
+                              dataKey="category" 
+                              axisLine={false}
+                              tickLine={false}
+                              tick={{ fill: "#646464", fontSize: 12 }}
+                            />
+                            <YAxis 
+                              axisLine={false}
+                              tickLine={false}
+                              domain={[0, 5000]}
+                              ticks={[0, 1000, 2000, 3000, 4000, 5000]}
+                              tick={{ fill: "#646464", fontSize: 12 }}
+                              label={{ value: "Spend (Tokens)", angle: -90, position: "insideLeft", offset: 15, style: { fill: "#646464", fontSize: 12, textAnchor: "middle" } }}
+                            />
+                            <ChartTooltip content={<ChartTooltipContent className="bg-white [&_span]:text-black [&_div]:text-black" />} />
+                            <Bar dataKey="spend" fill="#0177c7" radius={[4, 4, 0, 0]} />
                           </BarChart>
                         </ResponsiveContainer>
                       </ChartContainer>
