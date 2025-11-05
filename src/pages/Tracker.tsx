@@ -609,7 +609,7 @@ export default function TrackerPage() {
   // Mock data for token distribution by category
   const tokenDistributionByCategoryData = [
     { category: "SMP", tokens: 4500 },
-    { category: "Ecosystem", tokens: 3200 },
+    { category: "Ecosys..", tokens: 3200 },
     { category: "Promotions", tokens: 2800 },
     { category: "B2B", tokens: 1800 },
   ];
