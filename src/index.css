@@ -634,6 +634,30 @@ h1.h1-heading, .leading-tight {
   }
 }
 
+[data-state="active"] .card-active {
+  border: 2px solid #ececec;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Add active animation */
+[data-state="active"] .card-active {
+  border-color: #ffb546;
+  animation: pulseBorder 2s infinite;
+}
+
+@keyframes pulseBorder {
+  0% {
+    box-shadow: 0 0 0 0 #ffb546;
+  }
+  70% {
+    box-shadow: 0 0 0 10px rgba(3, 179, 226, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(3, 179, 226, 0);
+  }
+}
+
 @media only screen and (max-width: 767px) {
   .animate-scale2 {
     width: 110vh;

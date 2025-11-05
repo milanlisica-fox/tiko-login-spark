@@ -819,7 +819,11 @@ export default function TrackerPage() {
                 const img = teamsData.find(team => team.title === "IMG");
                 const displayTeams = [marcomms, omniDigital, img].filter(Boolean);
                 return displayTeams.map((team) => (
-                  <Card key={team.id} className="border border-[#ececec] bg-white relative">
+                  <Card key={team.id} 
+                   className={`border border-[#ececec] bg-white relative ${
+                    team.isMyTeam ? 'card-active' : ''
+                  }`}
+                  >
                     {team.isMyTeam && (
                       <div className="absolute top-4 right-4">
                         <Badge variant="secondary" className="bg-[#f1f1f3] text-black border-none text-xs">My team</Badge>
