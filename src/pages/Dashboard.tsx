@@ -72,7 +72,7 @@ export default function TikoDashboard() {
             <div className="flex flex-col gap-1 md:text-center lg:text-left">
                <h1 className="h1-heading text-2xl md:text-h1 text-black wavy-text">
     {/* Animate "Welcome back," */}
-    {"Welcome back,".split("").map((char, i) => (
+    {"Welcome back, ".split("").map((char, i) => (
       <span key={i} style={{ animationDelay: `${i * 0.1}s` }}>
         {char === " " ? "\u00A0" : char}
       </span>
