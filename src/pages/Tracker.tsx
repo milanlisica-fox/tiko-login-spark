@@ -566,6 +566,21 @@ export default function TrackerPage() {
     "Insufficient time": { label: "Insufficient time", color: "#8092DC" },
   };
 
+  // Mock data for Additional token spend by category
+  const additionalTokenSpendData = [
+    { category: "SMP", tokens: 450 },
+    { category: "Ecosystem", tokens: 320 },
+    { category: "Promotions", tokens: 280 },
+    { category: "B2B", tokens: 180 },
+  ];
+
+  const additionalTokenSpendConfig = {
+    tokens: {
+      label: "Additional Tokens",
+      color: "#8092DC",
+    },
+  };
+
   // Mock data for Brand and legal amends (right first time)
   const brandLegalAmendsData = [
     { period: "Q4 2024", percentage: 85 },
@@ -1966,10 +1981,42 @@ export default function TrackerPage() {
                 </Card>
                 </div>
 
-                {/* Row 2: Brand Legal 30% / On-time 70% */}
+                {/* Row 2: Additional token spend / Brand Legal / On-time */}
                 <div className="grid grid-cols-10 gap-5">
-                  {/* Brand and legal amends (right first time) */}
+                  {/* Additional token spend */}
                   <Card className="border border-[#ececec] bg-white col-span-3 flex flex-col">
+                    <CardHeader className="pb-3">
+                      <CardTitle className="text-base font-bold leading-[21.28px] text-black">Additional token spend</CardTitle>
+                    </CardHeader>
+                    <CardContent className="flex-1 flex items-center justify-center">
+                      <ChartContainer config={additionalTokenSpendConfig} className="h-[250px] md:h-[200px] w-full">
+                        <ResponsiveContainer width="100%" height="100%">
+                          <BarChart data={additionalTokenSpendData} margin={{ left: 10, right: 10, top: 10, bottom: 20 }}>
+                            <CartesianGrid strokeDasharray="3 3" stroke="#e0e0e0" vertical={false} />
+                            <XAxis 
+                              dataKey="category" 
+                              axisLine={false}
+                              tickLine={false}
+                              tick={{ fill: "#646464", fontSize: 11 }}
+                            />
+                            <YAxis 
+                              axisLine={false}
+                              tickLine={false}
+                              domain={[0, 500]}
+                              ticks={[0, 100, 200, 300, 400, 500]}
+                              tick={{ fill: "#646464", fontSize: 11 }}
+                              label={{ value: "Tokens", angle: -90, position: "insideLeft", offset: 10, style: { fill: "#646464", fontSize: 11, textAnchor: "middle" } }}
+                            />
+                            <ChartTooltip content={<ChartTooltipContent className="bg-white [&_span]:text-black [&_div]:text-black" />} />
+                            <Bar dataKey="tokens" fill="#8092DC" radius={[4, 4, 0, 0]} />
+                          </BarChart>
+                        </ResponsiveContainer>
+                      </ChartContainer>
+                    </CardContent>
+                  </Card>
+
+                  {/* Brand and legal amends (right first time) */}
+                  <Card className="border border-[#ececec] bg-white col-span-2 flex flex-col">
                   <CardHeader className="pb-3">
                     <CardTitle className="text-base font-bold leading-[21.28px] text-black">Brand and legal amends (right first time)</CardTitle>
                   </CardHeader>
@@ -2014,7 +2061,7 @@ export default function TrackerPage() {
                 </Card>
 
                   {/* ON-TIME DELIVERY */}
-                  <Card className="border border-[#ececec] bg-white col-span-7">
+                  <Card className="border border-[#ececec] bg-white col-span-5">
                   <CardHeader className="pb-3">
                     <div className="flex items-center gap-2">
                       <Clock size={20} className="text-[#03b3e2]" />
@@ -2309,7 +2356,39 @@ export default function TrackerPage() {
               {/* Tablet/Mobile: Vertical Stack */}
               <div className="lg:hidden space-y-6">
                 {/* Keep all cards in vertical order as they currently are */}
-                {/* Row 1: Rounds of amends + Brand and Legal amends side by side */}
+                {/* Row 1: Additional token spend */}
+                <Card className="border border-[#ececec] bg-white flex flex-col">
+                  <CardHeader className="pb-3">
+                    <CardTitle className="text-base font-bold leading-[21.28px] text-black">Additional token spend</CardTitle>
+                  </CardHeader>
+                  <CardContent className="flex-1 flex items-center justify-center">
+                    <ChartContainer config={additionalTokenSpendConfig} className="h-[250px] md:h-[200px] w-full">
+                      <ResponsiveContainer width="100%" height="100%">
+                        <BarChart data={additionalTokenSpendData} margin={{ left: 10, right: 10, top: 10, bottom: 20 }}>
+                          <CartesianGrid strokeDasharray="3 3" stroke="#e0e0e0" vertical={false} />
+                          <XAxis 
+                            dataKey="category" 
+                            axisLine={false}
+                            tickLine={false}
+                            tick={{ fill: "#646464", fontSize: 11 }}
+                          />
+                          <YAxis 
+                            axisLine={false}
+                            tickLine={false}
+                            domain={[0, 500]}
+                            ticks={[0, 100, 200, 300, 400, 500]}
+                            tick={{ fill: "#646464", fontSize: 11 }}
+                            label={{ value: "Tokens", angle: -90, position: "insideLeft", offset: 10, style: { fill: "#646464", fontSize: 11, textAnchor: "middle" } }}
+                          />
+                          <ChartTooltip content={<ChartTooltipContent className="bg-white [&_span]:text-black [&_div]:text-black" />} />
+                          <Bar dataKey="tokens" fill="#8092DC" radius={[4, 4, 0, 0]} />
+                        </BarChart>
+                      </ResponsiveContainer>
+                    </ChartContainer>
+                  </CardContent>
+                </Card>
+
+                {/* Row 2: Rounds of amends + Brand and Legal amends side by side */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                   {/* Rounds of amends */}
                   <Card className="border border-[#ececec] bg-white flex flex-col">
