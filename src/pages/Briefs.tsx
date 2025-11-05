@@ -456,7 +456,7 @@ function TemplateSelectionScreen({ onCancel, onCreateBrief }: { onCancel: () => 
             <span className="text-[16px] font-semibold leading-[23.94px] text-black whitespace-nowrap">
               Create brief
             </span>
-            <img src={createBriefArrowIcon} alt="" className="h-[14px] w-[15.567px]" />
+        <svg className="h-[14px] w-[15.567px]" width="45" height="40" viewBox="0 0 45 40" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M23.8229 40H5.80935C2.59694 40 0 37.4332 0 34.2582V31.8843C0 30.5935 0.795591 29.4362 2.0115 28.9614L14.9212 22.908C17.5932 21.8546 17.5932 18.1306 14.9362 17.0623L1.99648 10.8902C0.795576 10.4154 0 9.25816 0 7.96736V5.74184C0 2.56677 2.59694 0 5.80935 0H23.8229C25.0838 0 26.3147 0.400603 27.3205 1.15728L42.692 15.4154C45.7693 17.7151 45.7693 22.27 42.692 24.5697L27.3205 38.8279C26.3147 39.5846 25.0838 39.9852 23.8229 39.9852V40Z" fill="#000"></path></svg>
           </button>
         </div>
 
@@ -473,7 +473,11 @@ function TemplateSelectionScreen({ onCancel, onCreateBrief }: { onCancel: () => 
               onClick={() => uploadInputRef.current?.click()}
             >
               <div className="overflow-clip relative shrink-0 size-[20px]">
-                <img src={uploadIcon} alt="Upload" className="block max-w-none size-full" />
+                 <svg className="h-[18px]" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none">
+<path d="M18.5 20L18.5 14M18.5 14L21 16.5M18.5 14L16 16.5" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M12 19H5C3.89543 19 3 18.1046 3 17V7C3 5.89543 3.89543 5 5 5H9.58579C9.851 5 10.1054 5.10536 10.2929 5.29289L12 7H19C20.1046 7 21 7.89543 21 9V11" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
+               
               </div>
               <p className="text-[14px] font-bold leading-[18.62px] text-[#09090a]">Upload</p>
             </button>
