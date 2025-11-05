@@ -253,7 +253,9 @@ export default function CalculatorPage() {
                   </div>
                   <div className="shrink-0">
                     <div className="w-8 h-8 rounded-full bg-[#ffb546] flex items-center justify-center">
-                      <img src={imgFilterIcon} alt="Filter" className="w-4 h-4" />
+                      <svg   className="w-4 h-4"  xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 12 12" fill="none">
+  <path d="M11.026 0.0996094C11.3327 0.0996094 11.5816 0.348498 11.5816 0.655165C11.5816 0.962572 11.3327 1.21072 11.026 1.21072H0.655653C0.348987 1.21072 0.100098 0.962572 0.100098 0.655165C0.100098 0.348498 0.348987 0.0996094 0.655653 0.0996094H11.026ZM5.2801 4.91146C5.58602 4.91146 5.83565 5.16035 5.83565 5.46702C5.83565 5.77442 5.58602 6.02257 5.2801 6.02257L0.655653 6.02554C0.348987 6.02554 0.100098 5.77739 0.100098 5.46998C0.100098 5.16331 0.348987 4.91442 0.655653 4.91442L5.2801 4.91146ZM5.2801 9.72776C5.58602 9.72776 5.83565 9.97665 5.83565 10.2833C5.83565 10.5907 5.58602 10.8389 5.2801 10.8389L0.655653 10.8404C0.348987 10.8404 0.100098 10.5922 0.100098 10.2848C0.100098 9.97813 0.348987 9.72924 0.655653 9.72924L5.2801 9.72776ZM11.1031 4.63294C11.4008 4.63294 11.5119 4.80331 11.546 4.87665C11.5801 4.94998 11.6386 5.14479 11.4453 5.37146L9.7401 7.31739V10.6129C9.7401 10.9189 9.49121 11.1678 9.18528 11.1678C8.87936 11.1678 8.63047 10.9189 8.63047 10.6129V7.30998L6.9238 5.37146C6.73121 5.14479 6.78899 4.94998 6.82306 4.87665C6.85713 4.80331 6.96825 4.63294 7.26676 4.63294H11.1031Z" fill="black" stroke="black" stroke-width="0.2"/>
+</svg>
                     </div>
                   </div>
                 </button>
@@ -289,7 +291,7 @@ export default function CalculatorPage() {
                               <>
                                 <button
                                   onClick={() => handleRemoveAsset(asset.id)}
-                                  className="w-8 h-8 rounded-full bg-[#03B3E2] flex items-center justify-center hover:bg-[#e5e5e5] transition"
+                                  className="next w-8 h-8 rounded-full bg-[#03B3E2] flex items-center justify-center hover:bg-[#e5e5e5] transition"
                                 >
                                   <span className="text-[#fff] text-lg">−</span>
                                 </button>
@@ -302,7 +304,9 @@ export default function CalculatorPage() {
                               onClick={() => handleAddAsset(asset)}
                               className="plus w-8 h-8 rounded-full bg-[#f1f1f3] flex items-center justify-center hover:bg-[#e5e5e5] transition"
                             >
-                              <img src={imgAddIcon} alt="Add" className="plusicon w-[17.778px] h-[17.778px]" />
+                              <svg className="plusicon w-[17.778px] h-[17.778px]" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 14 14" fill="none">
+                                <path d="M13.0631 6.30331H7.41491V0.655165C7.41491 0.348498 7.16602 0.0996094 6.85936 0.0996094C6.55269 0.0996094 6.3038 0.348498 6.3038 0.655165V6.30331H0.655653C0.348987 6.30331 0.100098 6.5522 0.100098 6.85887C0.100098 7.16554 0.348987 7.41442 0.655653 7.41442H6.3038V13.0626C6.3038 13.3692 6.55269 13.6181 6.85936 13.6181C7.16602 13.6181 7.41491 13.3692 7.41491 13.0626V7.41442H13.0631C13.3697 7.41442 13.6186 7.16554 13.6186 6.85887C13.6186 6.5522 13.3697 6.30331 13.0631 6.30331Z" fill="#03B3E2" stroke="#03B3E2" stroke-width="0.2"/>
+                              </svg>
                             </button>
                           </div>
                         </div>
@@ -412,11 +416,13 @@ export default function CalculatorPage() {
             </DialogTitle>
             <button
               onClick={() => setIsFilterOpen(false)}
-              className="absolute right-[20px] top-[20px] w-[58px] p-4 flex items-center justify-center hover:bg-[#f1f1f3] rounded-[8px] transition"
+              className="absolute right-[0px] top-[0px] w-[58px] p-4 flex items-center justify-center hover:bg-[#f1f1f3] rounded-[8px] transition"
             >
               <div className="w-6 h-6 overflow-hidden relative">
-                <img src={imgCloseIconNew} alt="Close" className="w-full h-full" />
-              </div>
+                <svg className="w-full h-full" xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 15 15" fill="none">
+                    <path d="M8.31075 7.24875L14.2818 1.27975C14.5748 0.98675 14.5748 0.51275 14.2818 0.21975C13.9888 -0.07325 13.5127 -0.07325 13.2207 0.21975L7.24975 6.18775L1.28075 0.21975C0.98775 -0.07325 0.51275 -0.07325 0.21975 0.21975C-0.07325 0.51275 -0.07325 0.98675 0.21975 1.27975L6.18975 7.24875L0.21975 13.2198C-0.07325 13.5128 -0.07325 13.9867 0.21975 14.2797C0.36675 14.4268 0.55775 14.4987 0.74975 14.4987C0.94275 14.4987 1.13375 14.4268 1.28075 14.2797L7.24975 8.31075L13.2207 14.2797C13.3667 14.4268 13.5588 14.4987 13.7508 14.4987C13.9428 14.4987 14.1348 14.4268 14.2818 14.2797C14.5748 13.9867 14.5748 13.5128 14.2818 13.2198L8.31075 7.24875Z" fill="black"/>
+                  </svg>
+                </div>
             </button>
           </DialogHeader>
 

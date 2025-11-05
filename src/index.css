@@ -451,14 +451,14 @@ h1.h1-heading, .leading-tight {
   object-fit: contain;
   object-position: center;
 }
-.next + .plus {
+.next + .text-black + .plus {
   background-color: #03B3E2;
 }
 
-.next + .plus .plusicon {
-  filter: brightness(0) invert(1);
+.next + .text-black + .plus .plusicon path {
+  fill: #fff;
+  stroke: #fff;
 }
-
 
 @keyframes bounce-once {
   0%, 100% {
@@ -613,6 +613,26 @@ h1.h1-heading, .leading-tight {
     50% { transform: translateY(4px); }
     75% { transform: translateY(-3px); }
     }
+
+    .sections-wrap {
+      display: flex;
+    flex-direction: column;
+    }
+    @media only screen and (min-width: 1200px) {
+  .sections-wrap {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+  }
+  .sections-wrap .section {
+    flex: 1 1 calc(50% - 8px);
+    max-width: calc(50% - 8px);
+  }
+  .sections-wrap .section:first-child {
+    flex: 1 1 100%;
+    max-width: 100%;
+  }
+}
 
 @media only screen and (max-width: 767px) {
   .animate-scale2 {
