@@ -243,7 +243,7 @@ export default function BriefsPage() {
                       <button
                         key={card.title}
                         onClick={() => navigate("/dashboard/sow")}
-                        className="card-brief relative overflow-hidden hover:opacity-90 transition cursor-pointer w-full text-left"
+                        className="card-brief cb2 relative overflow-hidden hover:opacity-90 transition cursor-pointer w-full text-left"
                       >
                         <StatCard title={card.title} value={card.value} className="rounded-xl p-6" titleBold={card.titleBold} />
                         {card.icon}

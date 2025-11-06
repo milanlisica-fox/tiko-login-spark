@@ -26,7 +26,7 @@ export default function HorizontalBarChart({
   bars,
   legend,
   totalText,
-  barHeight = 87,
+  barHeight = 65,
   minWidth = 40,
   className = "",
 }: HorizontalBarChartProps) {
@@ -40,7 +40,7 @@ export default function HorizontalBarChart({
   }));
 
   return (
-    <div className={`flex flex-col gap-8 ${className}`}>
+    <div className={`flex flex-col gap-4 ${className}`}>
       <h3 className="text-lg font-bold leading-[23.94px] text-black">{title}</h3>
       
       {/* Horizontal bars */}

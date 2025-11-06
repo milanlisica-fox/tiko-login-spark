@@ -184,7 +184,7 @@ export default function TikoDashboard() {
                     </button>
                     <button 
                       onClick={() => navigate("/dashboard/briefs")}
-                      className="btn w-full sm:flex-1 lg:flex-none h-[48px] bg-[#ffb546] backdrop-blur-sm rounded-[28px] flex items-center justify-center gap-[10px] px-[24px] py-[18px] hover:opacity-90 transition"
+                      className="btn btn-transp w-full sm:flex-1 lg:flex-none h-[48px] bg-[#ffb546] backdrop-blur-sm rounded-[28px] flex items-center justify-center gap-[10px] px-[24px] py-[18px] hover:opacity-90 transition"
                     >
                       <span className="text-base font-semibold leading-[23.94px] text-black whitespace-nowrap">
                         View all
@@ -217,7 +217,7 @@ export default function TikoDashboard() {
 
                 <div className="flex flex-col gap-4">
                   {/* Token Summary */}
-                  <div className="flex-1 bg-[#f9f9f9] rounded-xl px-4 md:px-8 py-4 md:py-6">
+                  {/* <div className="flex-1 bg-[#f9f9f9] rounded-xl px-4 md:px-8 py-4 md:py-6">
                     <HorizontalBarChart
                       title="Token summary"
                       bars={[
@@ -232,7 +232,7 @@ export default function TikoDashboard() {
                       ]}
                       totalText="Total: 11,600 tokens"
                     />
-                  </div>
+                  </div> */}
 
                   {/* Brief Quality Score */}
                   <div className="flex-1 bg-[#f9f9f9] rounded-xl px-4 md:px-8 py-4 md:py-6">
@@ -298,10 +298,10 @@ export default function TikoDashboard() {
                               </div>
                               
                               {/* Metrics Grid - 2x2 */}
-                              <div className="grid grid-cols-2 gap-4">
+                              <div className="grid grid-cols-4 gap-4">
                                 {/* Tokens Spent */}
                                 <div className="border border-[#ececec] rounded-lg p-4 bg-white">
-                                  <div className="flex items-center justify-between mb-2">
+                                  <div className="flex items-center justify-between mb-2 gap-1">
                                     <span className="text-sm text-black">Tokens Spent</span>
                                     <Tooltip>
                                       <TooltipTrigger asChild>
@@ -318,7 +318,7 @@ export default function TikoDashboard() {
 
                                 {/* Tokens Committed */}
                                 <div className="border border-[#ececec] rounded-lg p-4 bg-white">
-                                  <div className="flex items-center justify-between mb-2">
+                                  <div className="flex items-center justify-between mb-2 gap-1">
                                     <span className="text-sm text-black">Tokens Committed</span>
                                     <Tooltip>
                                       <TooltipTrigger asChild>
@@ -335,7 +335,7 @@ export default function TikoDashboard() {
 
                                 {/* Tokens Remaining */}
                                 <div className="border border-[#ececec] rounded-lg p-4 bg-white">
-                                  <div className="flex items-center justify-between mb-2">
+                                  <div className="flex items-center justify-between mb-2 gap-1">
                                     <span className="text-sm text-black">Tokens Remaining</span>
                                     <Tooltip>
                                       <TooltipTrigger asChild>
@@ -352,7 +352,7 @@ export default function TikoDashboard() {
 
                                 {/* Tokens Pending */}
                                 <div className="border border-[#ececec] rounded-lg p-4 bg-white">
-                                  <div className="flex items-center justify-between mb-2">
+                                  <div className="flex items-center justify-between mb-2 gap-1">
                                     <span className="text-sm text-black">Tokens Pending</span>
                                     <Tooltip>
                                       <TooltipTrigger asChild>
@@ -407,12 +407,12 @@ export default function TikoDashboard() {
                   </button>
                 </div>
 
-                <div className="grid gap-4">
+                <div className="grid gap-4 md:grid-cols-3">
                   {/* Complete */}
                   <div className="board-card board-b bg-[#f9f9f9] rounded-xl p-5 flex flex-col gap-2.5 relative overflow-clip">
                     <p className="text-sm font-bold leading-[18.62px] text-black">Complete</p>
                     <p className="text-[40px] font-medium leading-[45.6px] text-black">3</p>
-                    <svg className="absolute right-[-35px] top-[-0px] sm:top-[-34px] md:top-[0px] w-[250px] h-[114px] sm:w-[175px] sm:h-[190px] md:w-[212px] md:h-[114px]" xmlns="http://www.w3.org/2000/svg" width="106" height="115" viewBox="0 0 106 115" fill="none">
+                    <svg className="absolute right-[-45px] top-[-0px] sm:top-[-34px] md:top-[0px] w-[250px] h-[114px] sm:w-[175px] sm:h-[190px] md:w-[212px] md:h-[114px]" xmlns="http://www.w3.org/2000/svg" width="106" height="115" viewBox="0 0 106 115" fill="none">
                       <path d="M112.364 152.333H27.4008C12.2489 152.333 0 140.227 0 125.251V114.054C0 107.966 3.75254 102.507 9.48759 100.268L70.3783 71.7162C82.9812 66.7476 82.9811 49.1826 70.449 44.144L9.41672 15.0322C3.75247 12.7929 0 7.33441 0 1.24614V-9.25089C0 -24.2267 12.2489 -36.3333 27.4008 -36.3333H112.364C118.312 -36.3333 124.118 -34.4437 128.861 -30.8748L201.364 36.3762C215.879 47.2232 215.879 68.7071 201.364 79.554L128.861 146.805C124.118 150.374 118.312 152.263 112.364 152.263V152.333Z" fill="#00C3B1"/>
                     </svg>
                   </div>
@@ -420,7 +420,7 @@ export default function TikoDashboard() {
                   <div className="board-card board-c bg-[#f9f9f9] rounded-xl p-5 flex flex-col gap-2.5 relative overflow-clip">
                     <p className="text-sm font-bold leading-[18.62px] text-black">In progress</p>
                     <p className="text-[40px] font-medium leading-[45.6px] text-black">9</p>
-                    <svg className="absolute right-[-35px] top-[-0px] sm:top-[-34px] md:top-[0px] w-[250px] h-[114px] sm:w-[175px] sm:h-[190px] md:w-[212px] md:h-[114px]"  xmlns="http://www.w3.org/2000/svg" width="106" height="115" viewBox="0 0 106 115" fill="none">
+                    <svg className="absolute right-[-45px] top-[-0px] sm:top-[-34px] md:top-[0px] w-[250px] h-[114px] sm:w-[175px] sm:h-[190px] md:w-[212px] md:h-[114px]"  xmlns="http://www.w3.org/2000/svg" width="106" height="115" viewBox="0 0 106 115" fill="none">
                       <path d="M112.364 152.333H27.4008C12.2489 152.333 0 140.227 0 125.251V114.054C0 107.966 3.75254 102.507 9.48759 100.268L70.3783 71.7162C82.9812 66.7476 82.9811 49.1826 70.449 44.144L9.41672 15.0322C3.75247 12.7929 0 7.33441 0 1.24614V-9.25089C0 -24.2267 12.2489 -36.3333 27.4008 -36.3333H112.364C118.312 -36.3333 124.118 -34.4437 128.861 -30.8748L201.364 36.3762C215.879 47.2232 215.879 68.7071 201.364 79.554L128.861 146.805C124.118 150.374 118.312 152.263 112.364 152.263V152.333Z" fill="#00C3B1"/>
                     </svg>
                   </div>
@@ -428,7 +428,7 @@ export default function TikoDashboard() {
                   <div className="board-card board-o bg-[#f9f9f9] rounded-xl p-5 flex flex-col gap-2.5 relative overflow-clip">
                     <p className="text-sm font-bold leading-[18.62px] text-black">For review</p>
                     <p className="text-[40px] font-medium leading-[45.6px] text-black">4</p>
-                      <svg className="absolute right-[-35px] top-[-0px] sm:top-[-34px] md:top-[0px] w-[250px] h-[114px] sm:w-[175px] sm:h-[190px] md:w-[212px] md:h-[114px]"  xmlns="http://www.w3.org/2000/svg" width="106" height="115" viewBox="0 0 106 115" fill="none">
+                      <svg className="absolute right-[-45px] top-[-0px] sm:top-[-34px] md:top-[0px] w-[250px] h-[114px] sm:w-[175px] sm:h-[190px] md:w-[212px] md:h-[114px]"  xmlns="http://www.w3.org/2000/svg" width="106" height="115" viewBox="0 0 106 115" fill="none">
                       <path d="M112.364 152.333H27.4008C12.2489 152.333 0 140.227 0 125.251V114.054C0 107.966 3.75254 102.507 9.48759 100.268L70.3783 71.7162C82.9812 66.7476 82.9811 49.1826 70.449 44.144L9.41672 15.0322C3.75247 12.7929 0 7.33441 0 1.24614V-9.25089C0 -24.2267 12.2489 -36.3333 27.4008 -36.3333H112.364C118.312 -36.3333 124.118 -34.4437 128.861 -30.8748L201.364 36.3762C215.879 47.2232 215.879 68.7071 201.364 79.554L128.861 146.805C124.118 150.374 118.312 152.263 112.364 152.263V152.333Z" fill="#00C3B1"/>
                     </svg>
                   </div>
