@@ -212,24 +212,29 @@ export default function ProjectsPage() {
 
           <div className="bg-white rounded-xl overflow-hidden">
             <div className="overflow-x-auto">
-              <div className="min-w-[600px] p-[16px] space-y-0">
+              <div className="w-full p-[16px] space-y-0">
+                <div className="grid grid-cols-[minmax(0,35%)_minmax(0,5%)_minmax(0,20%)_minmax(0,10%)_minmax(0,20%)_minmax(0,10%)] items-center py-[12px] px-[8px] gap-4 text-xs font-semibold uppercase text-[#646464] tracking-wide">
+                  <div className="col-span-2 text-center">Projects</div>
+                  <div className="text-center">Members</div>
+                  <div className="text-left">Importance</div>
+                  <div className="text-center">Progress</div>
+                  <div className="text-center">Due date</div>
+                </div>
                 {projects.map((project, index) => (
                   <div key={project.id}>
-                    <div className="flex items-center py-[12px] px-[8px] gap-4">
-                      <div className="flex items-center gap-2 w-[35%]">
-                        <div className="flex flex-col gap-[4px]">
-                          <p className={`text-sm leading-[19px] text-black ${project.notifications ? "font-bold" : "font-normal"}`}>{project.name}</p>
-                          <p className="text-xs leading-[16px] text-[#646464]">{project.team}</p>
-                        </div>
+                    <div className="grid grid-cols-[minmax(0,35%)_minmax(0,5%)_minmax(0,20%)_minmax(0,10%)_minmax(0,20%)_minmax(0,10%)] items-center py-[12px] px-[8px] gap-4">
+                      <div className="flex flex-col gap-[4px]">
+                        <p className={`text-sm leading-[19px] text-black ${project.notifications ? "font-bold" : "font-normal"}`}>{project.name}</p>
+                        <p className="text-xs leading-[16px] text-[#646464]">{project.team}</p>
                       </div>
-                      <div className="flex items-center justify-center w-[5%]">
+                      <div className="flex items-center justify-center">
                         {project.notifications && project.notifications > 0 && (
                           <div className="w-8 h-8 rounded-full bg-amber-100 flex items-center justify-center text-xs font-semibold text-amber-600">
                             {project.notifications}
                           </div>
                         )}
                       </div>
-                      <div className="flex items-center justify-center gap-2 w-[20%]">
+                      <div className="flex items-center justify-center gap-2">
                         <div className="flex -space-x-2">
                           {project.owners.map((owner, idx) => {
                             const seed = `${owner}_${project.id}_${idx}`;
@@ -242,21 +247,17 @@ export default function ProjectsPage() {
                           })}
                         </div>
                       </div>
-                      <div className="w-[10%]">
-                        <div className="flex items-center gap-2">
-                          <div className="w-2 h-2 rounded-full" style={{ backgroundColor: getPriorityColor(project.priority) }} />
-                          <span className="text-xs font-normal" style={{ color: getPriorityColor(project.priority) }}>{project.priority}</span>
+                      <div className="flex items-center justify-start gap-2">
+                        <div className="w-2 h-2 rounded-full" style={{ backgroundColor: getPriorityColor(project.priority) }} />
+                        <span className="text-xs font-normal" style={{ color: getPriorityColor(project.priority) }}>{project.priority}</span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <div className="relative h-2 flex-1 bg-[#f1f1f3] rounded-full overflow-hidden">
+                          <div className="h-full rounded-full transition-all" style={{ width: `${project.progress}%`, backgroundColor: getProgressBarColor(project.progress) }} />
                         </div>
                       </div>
-                      <div className="w-[20%]">
-                        <div className="flex items-center gap-2">
-                          <div className="relative h-2 flex-1 bg-[#f1f1f3] rounded-full overflow-hidden">
-                            <div className="h-full rounded-full transition-all" style={{ width: `${project.progress}%`, backgroundColor: getProgressBarColor(project.progress) }} />
-                          </div>
-                        </div>
-                      </div>
-                      <div className="w-[10%]">
-                        <span className="text-xs text-black font-medium flex justify-center">{project.dueDate}</span>
+                      <div className="text-xs text-black font-medium text-center">
+                        {project.dueDate}
                       </div>
                     </div>
                     {index < projects.length - 1 && <div className="h-px bg-[#ececec] mx-[16px]" />}
