@@ -193,7 +193,12 @@ export default function CalculatorPage() {
 
   const handleCreateBrief = () => {
     toast.success("Creating brief with selected assets...");
-    navigate("/dashboard/briefs");
+    navigate("/dashboard/briefs", {
+      state: {
+        createBrief: true,
+        showForm: true,
+      },
+    });
   };
 
   const handleResetFilters = () => {

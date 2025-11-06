@@ -4,9 +4,9 @@ export type NavItem = { name: string; icon: LucideIcon; path: string };
 
 export const DASHBOARD_NAV: NavItem[] = [
   { name: "Central", icon: Home, path: "/dashboard" },
+  { name: "Tracker", icon: BarChart2, path: "/dashboard/tracker" },
   { name: "Briefs", icon: FileText, path: "/dashboard/briefs" },
   { name: "Projects", icon: Folder, path: "/dashboard/projects" },
-  { name: "Tracker", icon: BarChart2, path: "/dashboard/tracker" },
 ];
 
 export function matchActiveName(pathname: string): string {
