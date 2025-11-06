@@ -62,7 +62,7 @@ const RadarChartTooltip = ({ data }: { data: Array<{ category: string; score: nu
   return (
     <div className="bg-white border border-[#ececec] rounded-lg p-3 shadow-lg min-w-[180px]">
       <div className="space-y-2">
-        <div className="text-xs font-bold text-black mb-2">Overall Average</div>
+        <div className="text-xs font-bold text-black mb-2">Overall average</div>
         {data.map((item, index) => (
           <div key={index} className="flex items-center justify-between gap-3">
             <span className="text-xs text-black">{item.category}</span>
@@ -98,7 +98,7 @@ export default function TrackerPage() {
     "brief-quality": "Brief quality",
     "project-performance": "Project performance",
     budget: "Budget",
-    "predictive-analytics": "Predictive Analytics & Insights",
+    "predictive-analytics": "Predictive analytics & insights",
   };
 
   // Tab colors mapping
@@ -182,7 +182,7 @@ export default function TrackerPage() {
 
   const clientSatisfactionConfig = {
     score: {
-      label: "Overall Average",
+      label: "Overall average",
       color: "#03b3e2",
     },
   };
@@ -240,11 +240,11 @@ export default function TrackerPage() {
 
   const budgetRiskConfig = {
     tokensUsed: {
-      label: "Tokens Used",
+      label: "Tokens used",
       color: "#0177c7",
     },
     tokensAllocated: {
-      label: "Tokens Allocated",
+      label: "Tokens allocated",
       color: "#03b3e2",
     },
   };
@@ -460,14 +460,14 @@ export default function TrackerPage() {
 
   // Mock data for top missing fields from briefs
   const missingFieldsData = [
-    { field: "Delivery Date", smp: 10, ecosystem: 7, promotions: 5, b2b: 1 },
-    { field: "Budget Range", smp: 7, ecosystem: 6, promotions: 4, b2b: 1 },
-    { field: "Key Message", smp: 5, ecosystem: 5, promotions: 3, b2b: 2 },
-    { field: "Target Audience", smp: 4, ecosystem: 4, promotions: 2, b2b: 2 },
-    { field: "Creative Requirements", smp: 3, ecosystem: 3, promotions: 1, b2b: 1 },
-    { field: "Brand Guidelines", smp: 3, ecosystem: 3, promotions: 1, b2b: 1 },
-    { field: "Success Metrics", smp: 2, ecosystem: 2, promotions: 2, b2b: 1 },
-    { field: "Approval Process", smp: 2, ecosystem: 3, promotions: 1, b2b: 0 },
+    { field: "Delivery date", smp: 10, ecosystem: 7, promotions: 5, b2b: 1 },
+    { field: "Budget range", smp: 7, ecosystem: 6, promotions: 4, b2b: 1 },
+    { field: "Key message", smp: 5, ecosystem: 5, promotions: 3, b2b: 2 },
+    { field: "Target audience", smp: 4, ecosystem: 4, promotions: 2, b2b: 2 },
+    { field: "Creative requirements", smp: 3, ecosystem: 3, promotions: 1, b2b: 1 },
+    { field: "Brand guidelines", smp: 3, ecosystem: 3, promotions: 1, b2b: 1 },
+    { field: "Success metrics", smp: 2, ecosystem: 2, promotions: 2, b2b: 1 },
+    { field: "Approval process", smp: 2, ecosystem: 3, promotions: 1, b2b: 0 },
   ];
 
   const missingFieldsConfig = {
@@ -792,15 +792,15 @@ export default function TrackerPage() {
 
   const spendConfig = {
     spent: {
-      label: "Tokens Spent",
+      label: "Tokens spent",
       color: "#00c3b1",
     },
     committed: {
-      label: "Tokens Committed",
+      label: "Tokens committed ",
       color: "#03b3e2",
     },
     remaining: {
-      label: "Tokens Remaining",
+      label: "Tokens remaining",
       color: "#0177c7",
     },
   };
@@ -925,7 +925,7 @@ export default function TrackerPage() {
                 value="predictive-analytics" 
                   className="flex-1 inline-flex items-center justify-center whitespace-nowrap rounded-none px-2 md:px-3 lg:px-4 py-2 md:py-3 text-xs md:text-sm lg:text-base font-medium md:font-semibold ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:bg-transparent data-[state=active]:text-[#ff4337] data-[state=active]:shadow-none border-b-[3px] border-transparent data-[state=active]:border-[#ff4337]"
               >
-                Predictive Analytics & Insights
+                Predictive analytics & insights
               </TabsTrigger>
             </TabsList>
             </Tabs>
@@ -952,7 +952,7 @@ export default function TrackerPage() {
                     Project performance
                   </SelectItem>
                   <SelectItem value="predictive-analytics" className="text-black [&>span:last-child]:text-center [&>span:last-child]:w-full">
-                    Predictive Analytics & Insights
+                    Predictive analytics & insights
                   </SelectItem>
                 </SelectContent>
               </Select>
@@ -1009,7 +1009,7 @@ export default function TrackerPage() {
                       </div>
                     </div>
                       <div className="flex items-center justify-between"><span className="text-sm leading-[18.62px] text-black">Brief quality score</span><span className="text-sm leading-[18.62px] text-black font-normal">{team.briefQualityScore}%</span></div>
-                    <div className="flex items-center justify-between"><span className="text-sm leading-[18.62px] text-black">Token Efficiency</span><span className="text-sm leading-[18.62px] text-black font-normal">{team.tokenEfficiency}%</span></div>
+                    <div className="flex items-center justify-between"><span className="text-sm leading-[18.62px] text-black">Token efficiency</span><span className="text-sm leading-[18.62px] text-black font-normal">{team.tokenEfficiency}%</span></div>
                     <div className="flex items-center justify-between"><span className="text-sm leading-[18.62px] text-black">Assets right first time</span><span className="text-sm leading-[18.62px] text-black font-normal">{team.assetsRightFirstTime}%</span></div>
                     <div className="flex items-center gap-2 pt-2">
                       <div className="w-8 h-8 rounded-full border border-[#03b3e2] overflow-hidden"><img src={boltImg} alt="Bolt" className="w-full h-full object-cover" /></div>
@@ -1022,7 +1022,7 @@ export default function TrackerPage() {
               })()}
             </div>
             {/* Mobile/Tablet: Show 3 teams with padding */}
-            <div className="px-[15%] lg:hidden space-y-5">
+            <div className="lg:hidden space-y-5">
               {(() => {
                 // Show in order: Omni & Digital | Marcomms | IMG
                 const omniDigital = teamsData.find(team => team.title === "Omni & Digital");
@@ -1061,7 +1061,7 @@ export default function TrackerPage() {
                       </div>
                     </div>
                     <div className="flex items-center justify-between"><span className="text-sm leading-[18.62px] text-black">Brief quality score</span><span className="text-sm leading-[18.62px] text-black font-normal">{team.briefQualityScore}%</span></div>
-                    <div className="flex items-center justify-between"><span className="text-sm leading-[18.62px] text-black">Token Efficiency</span><span className="text-sm leading-[18.62px] text-black font-normal">{team.tokenEfficiency}%</span></div>
+                    <div className="flex items-center justify-between"><span className="text-sm leading-[18.62px] text-black">Token efficiency</span><span className="text-sm leading-[18.62px] text-black font-normal">{team.tokenEfficiency}%</span></div>
                     <div className="flex items-center justify-between"><span className="text-sm leading-[18.62px] text-black">Assets right first time</span><span className="text-sm leading-[18.62px] text-black font-normal">{team.assetsRightFirstTime}%</span></div>
                     <div className="flex items-center gap-2 pt-2">
                       <div className="w-8 h-8 rounded-full border border-[#03b3e2] overflow-hidden"><img src={boltImg} alt="Bolt" className="w-full h-full object-cover" /></div>
@@ -1087,11 +1087,11 @@ export default function TrackerPage() {
                         <TableRow className="bg-[#f1f1f3] hover:bg-[#f1f1f3] border-b border-[#ececec]">
                           <TableHead className="h-12 px-4 text-left font-bold text-black">Rank</TableHead>
                           <TableHead className="h-12 px-4 text-left font-bold text-black">Team</TableHead>
-                          <TableHead className="h-12 px-4 text-left font-bold text-black">Number of Projects</TableHead>
-                          <TableHead className="h-12 px-4 text-left font-bold text-black">On-Time Delivery Rate</TableHead>
-                          <TableHead className="h-12 px-4 text-left font-bold text-black">Brief Quality</TableHead>
+                          <TableHead className="h-12 px-4 text-left font-bold text-black">Number of projects</TableHead>
+                          <TableHead className="h-12 px-4 text-left font-bold text-black">On-time delivery rate</TableHead>
+                          <TableHead className="h-12 px-4 text-left font-bold text-black">Brief quality</TableHead>
                           <TableHead className="h-12 px-4 text-left font-bold text-black">Assets right first time</TableHead>
-                          <TableHead className="h-12 px-4 text-left font-bold text-black">Overall Score</TableHead>
+                          <TableHead className="h-12 px-4 text-left font-bold text-black">Overall score</TableHead>
                         </TableRow>
                       </TableHeader>
                       <TableBody>
@@ -1136,7 +1136,7 @@ export default function TrackerPage() {
               </div>
             </TabsContent>
 
-            {/* Brief Quality Tab Content */}
+            {/* Brief quality Tab Content */}
             <TabsContent value="brief-quality" className="mt-6">
               {/* Desktop: Grid Layout */}
               <div className="hidden lg:block space-y-6">
@@ -1363,6 +1363,7 @@ export default function TrackerPage() {
                             dataKey="category" 
                             axisLine={false}
                             tickLine={false}
+                            interval={0}
                             tick={{ fill: "#646464", fontSize: 12 }}
                           />
                           <YAxis 
@@ -1396,6 +1397,7 @@ export default function TrackerPage() {
                             dataKey="category" 
                             axisLine={false}
                             tickLine={false}
+                            interval={0}
                             tick={{ fill: "#646464", fontSize: 12 }}
                           />
                           <YAxis 
@@ -1481,7 +1483,7 @@ export default function TrackerPage() {
                             domain={[0, 25]}
                             ticks={[0, 5, 10, 15, 20, 25]}
                             tick={{ fill: "#646464", fontSize: 12 }}
-                            label={{ value: "Number of Missing Fields", position: "insideBottom", offset: -5, style: { fill: "#646464", fontSize: 12 } }}
+                            label={{ value: "Number of missing fields", position: "insideBottom", offset: -5, style: { fill: "#646464", fontSize: 12 } }}
                           />
                           <YAxis 
                             type="category" 
@@ -1811,6 +1813,7 @@ export default function TrackerPage() {
                             dataKey="category" 
                             axisLine={false}
                             tickLine={false}
+                            interval={0}
                             tick={{ fill: "#646464", fontSize: 12 }}
                           />
                           <YAxis 
@@ -1927,7 +1930,7 @@ export default function TrackerPage() {
                             domain={[0, 25]}
                             ticks={[0, 5, 10, 15, 20, 25]}
                             tick={{ fill: "#646464", fontSize: 12 }}
-                            label={{ value: "Number of Missing Fields", position: "insideBottom", offset: -5, style: { fill: "#646464", fontSize: 12 } }}
+                            label={{ value: "Number of missing fields", position: "insideBottom", offset: -5, style: { fill: "#646464", fontSize: 12 } }}
                           />
                           <YAxis 
                             type="category" 
@@ -2032,8 +2035,8 @@ export default function TrackerPage() {
                 </div>
               </div>
 
-              {/* Tablet/Mobile: Vertical Stack */}
-              <div className="lg:hidden space-y-6">
+              {/* Tablet/Mobile: Vertical Stack (duplicate content hidden intentionally) */}
+              <div className="hidden">
                 {/* Row 1: Brief quality score - all categories | Average number of iterations */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                   {/* 1. Brief quality score - all categories */}
@@ -2259,6 +2262,7 @@ export default function TrackerPage() {
                             dataKey="category" 
                             axisLine={false}
                             tickLine={false}
+                            interval={0}
                             tick={{ fill: "#646464", fontSize: 12 }}
                           />
                           <YAxis 
@@ -2375,7 +2379,7 @@ export default function TrackerPage() {
                             domain={[0, 25]}
                             ticks={[0, 5, 10, 15, 20, 25]}
                             tick={{ fill: "#646464", fontSize: 12 }}
-                            label={{ value: "Number of Missing Fields", position: "insideBottom", offset: -5, style: { fill: "#646464", fontSize: 12 } }}
+                            label={{ value: "Number of missing fields", position: "insideBottom", offset: -5, style: { fill: "#646464", fontSize: 12 } }}
                           />
                           <YAxis 
                             type="category" 
@@ -3564,16 +3568,16 @@ export default function TrackerPage() {
                             <>
                               <div className="space-y-4">
                                 <div className="flex items-center justify-between">
-                                  <span className="text-sm text-black">Total Budget {periodLabel}</span>
+                                  <span className="text-sm text-black">Total budget {periodLabel}</span>
                                   <span className="text-lg font-bold text-black">{budgetData.totalBudget.toLocaleString()} tokens</span>
                                 </div>
                                 
                                 {/* Metrics Grid - 2x2 */}
                                 <div className="grid grid-cols-2 gap-4">
-                                  {/* Tokens Spent */}
+                                  {/* Tokens spent */}
                                   <div className="border border-[#ececec] rounded-lg p-4 bg-white">
                                     <div className="flex items-center justify-between mb-2">
-                                      <span className="text-sm text-black">Tokens Spent</span>
+                                      <span className="text-sm text-black">Tokens spent</span>
                                       <Tooltip>
                                         <TooltipTrigger asChild>
                                           <HelpCircle size={16} className="text-[#646464] cursor-help" />
@@ -3587,10 +3591,10 @@ export default function TrackerPage() {
                                     <div className="text-xs text-[#646464] mt-1">{((budgetData.tokensSpent / budgetData.totalBudget) * 100).toFixed(1)}% of budget</div>
                                   </div>
 
-                                  {/* Tokens Committed */}
+                                  {/* Tokens committed  */}
                                   <div className="border border-[#ececec] rounded-lg p-4 bg-white">
                                     <div className="flex items-center justify-between mb-2">
-                                      <span className="text-sm text-black">Tokens Committed</span>
+                                      <span className="text-sm text-black">Tokens committed </span>
                                       <Tooltip>
                                         <TooltipTrigger asChild>
                                           <HelpCircle size={16} className="text-[#646464] cursor-help" />
@@ -3604,10 +3608,10 @@ export default function TrackerPage() {
                                     <div className="text-xs text-[#646464] mt-1">{((budgetData.tokensCommitted / budgetData.totalBudget) * 100).toFixed(1)}% of budget</div>
                                   </div>
 
-                                  {/* Tokens Remaining */}
+                                  {/* Tokens remaining */}
                                   <div className="border border-[#ececec] rounded-lg p-4 bg-white">
                                     <div className="flex items-center justify-between mb-2">
-                                      <span className="text-sm text-black">Tokens Remaining</span>
+                                      <span className="text-sm text-black">Tokens remaining</span>
                                       <Tooltip>
                                         <TooltipTrigger asChild>
                                           <HelpCircle size={16} className="text-[#646464] cursor-help" />
@@ -3621,10 +3625,10 @@ export default function TrackerPage() {
                                     <div className="text-xs text-[#646464] mt-1">{((budgetData.tokensRemaining / budgetData.totalBudget) * 100).toFixed(1)}% of budget</div>
                                   </div>
 
-                                  {/* Tokens Pending */}
+                                  {/* Tokens pending */}
                                   <div className="border border-[#ececec] rounded-lg p-4 bg-white">
                                     <div className="flex items-center justify-between mb-2">
-                                      <span className="text-sm text-black">Tokens Pending</span>
+                                      <span className="text-sm text-black">Tokens pending</span>
                                       <Tooltip>
                                         <TooltipTrigger asChild>
                                           <HelpCircle size={16} className="text-[#646464] cursor-help" />
@@ -3699,12 +3703,13 @@ export default function TrackerPage() {
                     <CardContent>
                       <ChartContainer config={historicalSpendConfig} className="h-[300px] w-full">
                         <ResponsiveContainer width="100%" height="100%">
-                          <BarChart data={historicalSpendData[selectedYear as keyof typeof historicalSpendData]} margin={{ left: 10, right: 10, top: 10, bottom: 20 }}>
+                          <BarChart data={historicalSpendData[selectedYear as keyof typeof historicalSpendData]} margin={{ left: 10, right: 10, top: 10, bottom: 35 }}>
                             <CartesianGrid strokeDasharray="3 3" stroke="#e0e0e0" vertical={false} />
                             <XAxis 
                               dataKey="category" 
                               axisLine={false}
                               tickLine={false}
+                              interval={0}
                               tick={{ fill: "#646464", fontSize: 12 }}
                             />
                             <YAxis 
@@ -3730,12 +3735,13 @@ export default function TrackerPage() {
                     <CardContent>
                       <ChartContainer config={changeRequestsSpendByCategoryConfig} className="h-[300px] w-full">
                         <ResponsiveContainer width="100%" height="100%">
-                          <BarChart data={changeRequestsSpendByCategoryData} margin={{ left: 10, right: 10, top: 10, bottom: 20 }}>
+                          <BarChart data={changeRequestsSpendByCategoryData} margin={{ left: 10, right: 10, top: 10, bottom: 35 }}>
                             <CartesianGrid strokeDasharray="3 3" stroke="#e0e0e0" vertical={false} />
                             <XAxis
                               dataKey="category"
                               axisLine={false}
                               tickLine={false}
+                              interval={0}
                               tick={{ fill: "#646464", fontSize: 12 }}
                             />
                             <YAxis
@@ -3827,16 +3833,16 @@ export default function TrackerPage() {
                           <>
                             <div className="space-y-4">
                               <div className="flex items-center justify-between">
-                                <span className="text-sm text-black">Total Budget {periodLabel}</span>
+                                <span className="text-sm text-black">Total budget {periodLabel}</span>
                                 <span className="text-lg font-bold text-black">{budgetData.totalBudget.toLocaleString()} tokens</span>
                               </div>
                               
                                 {/* Metrics Grid - 2x2 */}
                                 <div className="grid grid-cols-2 gap-4">
-                                {/* Tokens Spent */}
+                                {/* Tokens spent */}
                                 <div className="border border-[#ececec] rounded-lg p-4 bg-white">
                                   <div className="flex items-center justify-between mb-2">
-                                    <span className="text-sm text-black">Tokens Spent</span>
+                                    <span className="text-sm text-black">Tokens spent</span>
                                     <Tooltip>
                                       <TooltipTrigger asChild>
                                         <HelpCircle size={16} className="text-[#646464] cursor-help" />
@@ -3850,10 +3856,10 @@ export default function TrackerPage() {
                                   <div className="text-xs text-[#646464] mt-1">{((budgetData.tokensSpent / budgetData.totalBudget) * 100).toFixed(1)}% of budget</div>
                                 </div>
 
-                                {/* Tokens Committed */}
+                                {/* Tokens committed  */}
                                 <div className="border border-[#ececec] rounded-lg p-4 bg-white">
                                   <div className="flex items-center justify-between mb-2">
-                                    <span className="text-sm text-black">Tokens Committed</span>
+                                    <span className="text-sm text-black">Tokens committed </span>
                                     <Tooltip>
                                       <TooltipTrigger asChild>
                                         <HelpCircle size={16} className="text-[#646464] cursor-help" />
@@ -3867,10 +3873,10 @@ export default function TrackerPage() {
                                   <div className="text-xs text-[#646464] mt-1">{((budgetData.tokensCommitted / budgetData.totalBudget) * 100).toFixed(1)}% of budget</div>
                                 </div>
 
-                                {/* Tokens Remaining */}
+                                {/* Tokens remaining */}
                                 <div className="border border-[#ececec] rounded-lg p-4 bg-white">
                                   <div className="flex items-center justify-between mb-2">
-                                    <span className="text-sm text-black">Tokens Remaining</span>
+                                    <span className="text-sm text-black">Tokens remaining</span>
                                     <Tooltip>
                                       <TooltipTrigger asChild>
                                         <HelpCircle size={16} className="text-[#646464] cursor-help" />
@@ -3884,10 +3890,10 @@ export default function TrackerPage() {
                                   <div className="text-xs text-[#646464] mt-1">{((budgetData.tokensRemaining / budgetData.totalBudget) * 100).toFixed(1)}% of budget</div>
                                 </div>
 
-                                {/* Tokens Pending */}
+                                {/* Tokens pending */}
                                 <div className="border border-[#ececec] rounded-lg p-4 bg-white">
                                   <div className="flex items-center justify-between mb-2">
-                                    <span className="text-sm text-black">Tokens Pending</span>
+                                    <span className="text-sm text-black">Tokens pending</span>
                                     <Tooltip>
                                       <TooltipTrigger asChild>
                                         <HelpCircle size={16} className="text-[#646464] cursor-help" />
@@ -3948,12 +3954,13 @@ export default function TrackerPage() {
                     <CardContent>
                       <ChartContainer config={changeRequestsSpendByCategoryConfig} className="h-[300px] md:h-[250px] w-full">
                         <ResponsiveContainer width="100%" height="100%">
-                          <BarChart data={changeRequestsSpendByCategoryData} margin={{ left: 10, right: 10, top: 10, bottom: 20 }}>
+                          <BarChart data={changeRequestsSpendByCategoryData} margin={{ left: 10, right: 10, top: 10, bottom: 35 }}>
                             <CartesianGrid strokeDasharray="3 3" stroke="#e0e0e0" vertical={false} />
                             <XAxis
                               dataKey="category"
                               axisLine={false}
                               tickLine={false}
+                              interval={0}
                               tick={{ fill: "#646464", fontSize: 12 }}
                             />
                             <YAxis
@@ -4025,12 +4032,13 @@ export default function TrackerPage() {
                     <CardContent>
                       <ChartContainer config={historicalSpendConfig} className="h-[300px] md:h-[250px] w-full">
                         <ResponsiveContainer width="100%" height="100%">
-                          <BarChart data={historicalSpendData[selectedYear as keyof typeof historicalSpendData]} margin={{ left: 10, right: 10, top: 10, bottom: 20 }}>
+                          <BarChart data={historicalSpendData[selectedYear as keyof typeof historicalSpendData]} margin={{ left: 10, right: 10, top: 10, bottom: 35 }}>
                             <CartesianGrid strokeDasharray="3 3" stroke="#e0e0e0" vertical={false} />
                             <XAxis 
                               dataKey="category" 
                               axisLine={false}
                               tickLine={false}
+                              interval={0}
                               tick={{ fill: "#646464", fontSize: 12 }}
                             />
                             <YAxis 
@@ -4052,13 +4060,13 @@ export default function TrackerPage() {
               </TooltipProvider>
             </TabsContent>
 
-            {/* Predictive Analytics & Insights Tab Content */}
+            {/* Predictive analytics & insights Tab Content */}
             <TabsContent value="predictive-analytics" className="mt-6">
               {/* Desktop: Side-by-side layout */}
               <div className="hidden lg:block space-y-6">
                 {/* Row 1: Ask TIKO 70% / Client satisfaction 30% */}
                 <div className="grid grid-cols-10 gap-5">
-                {/* Ask TIKO a Question */}
+                {/* Ask TIKO a question */}
                   <Card className="border border-[#ececec] bg-white rounded-xl overflow-hidden relative col-span-7">
                     <CardHeader className="pb-3">
                     <div className="flex items-start gap-3">
@@ -4066,7 +4074,7 @@ export default function TrackerPage() {
                         <Bot size={24} className="text-white" />
                       </div>
                       <div className="flex-1">
-                        <CardTitle className="text-base font-bold leading-[21.28px] text-black mb-1">Ask TIKO a Question</CardTitle>
+                        <CardTitle className="text-base font-bold leading-[21.28px] text-black mb-1">Ask TIKO a question</CardTitle>
                         <p className="text-sm text-[#646464]">Get AI-powered insights on any aspect of your project data</p>
                       </div>
                     </div>
@@ -4160,7 +4168,7 @@ export default function TrackerPage() {
                                 axisLine={false}
                               />
                               <Radar
-                                name="Overall Average"
+                                name="Overall average"
                                 dataKey="score"
                                 stroke="#03b3e2"
                                 fill="#03b3e2"
@@ -4174,7 +4182,7 @@ export default function TrackerPage() {
                     </div>
                     <div className="flex items-center justify-center gap-2">
                       <div className="w-4 h-0.5 bg-[#03b3e2]"></div>
-                      <span className="text-sm text-black">Overall Average</span>
+                      <span className="text-sm text-black">Overall average</span>
                     </div>
                   </CardContent>
                 </Card>
@@ -4252,7 +4260,7 @@ export default function TrackerPage() {
 
               {/* Tablet/Mobile: Vertical Stack */}
               <div className="lg:hidden space-y-6">
-                {/* 1. Ask TIKO a Question */}
+                {/* 1. Ask TIKO a question */}
                 <Card className="border border-[#ececec] bg-white rounded-xl overflow-hidden relative">
                   <CardHeader className="pb-3">
                     <div className="flex items-start gap-3">
@@ -4260,7 +4268,7 @@ export default function TrackerPage() {
                         <Bot size={24} className="text-white" />
                       </div>
                       <div className="flex-1">
-                        <CardTitle className="text-base font-bold leading-[21.28px] text-black mb-1">Ask TIKO a Question</CardTitle>
+                        <CardTitle className="text-base font-bold leading-[21.28px] text-black mb-1">Ask TIKO a question</CardTitle>
                         <p className="text-sm text-[#646464]">Get AI-powered insights on any aspect of your project data</p>
                       </div>
                     </div>
@@ -4404,7 +4412,7 @@ export default function TrackerPage() {
                                 axisLine={false}
                               />
                               <Radar
-                                name="Overall Average"
+                                name="Overall average"
                                 dataKey="score"
                                 stroke="#03b3e2"
                                 fill="#03b3e2"
@@ -4421,7 +4429,7 @@ export default function TrackerPage() {
                         <div className="space-y-3">
                           <div className="flex items-center gap-2 mb-4">
                             <div className="w-4 h-0.5 bg-[#03b3e2]"></div>
-                            <span className="text-sm font-bold text-black">Overall Average</span>
+                            <span className="text-sm font-bold text-black">Overall average</span>
                           </div>
                           {clientSatisfactionData.map((item, index) => (
                             <div key={index} className="flex items-center justify-between gap-3">
@@ -4436,9 +4444,7 @@ export default function TrackerPage() {
                     </div>
                   </CardContent>
                 </Card>
-              </div>
-
-                {/* Optimization Opportunities */}
+              </div>                {/* Optimization Opportunities */}
               <div className="space-y-4 pt-6">
                   <div className="flex flex-col gap-1">
                     <h3 className="text-[22px] font-bold leading-[29.26px] text-black">Optimization opportunities</h3>
@@ -4530,7 +4536,7 @@ export default function TrackerPage() {
                                   stroke="#0177c7" 
                                   strokeWidth={2} 
                                   dot={{ fill: "#0177c7", r: 4 }}
-                                  name="Tokens Used"
+                                  name="Tokens used"
                                 />
                                 <Line 
                                   type="monotone" 
@@ -4539,7 +4545,7 @@ export default function TrackerPage() {
                                   strokeWidth={2} 
                                   strokeDasharray="5 5"
                                   dot={{ fill: "#03b3e2", r: 4 }}
-                                  name="Tokens Allocated"
+                                  name="Tokens allocated"
                                 />
                               </LineChart>
                             </ResponsiveContainer>
@@ -4681,7 +4687,7 @@ export default function TrackerPage() {
                                 stroke="#0177c7" 
                                 strokeWidth={2} 
                                 dot={{ fill: "#0177c7", r: 4 }}
-                                name="Tokens Used"
+                                name="Tokens used"
                               />
                               <Line 
                                 type="monotone" 
@@ -4690,7 +4696,7 @@ export default function TrackerPage() {
                                 strokeWidth={2} 
                                 strokeDasharray="5 5"
                                 dot={{ fill: "#03b3e2", r: 4 }}
-                                name="Tokens Allocated"
+                                name="Tokens allocated"
                               />
                             </LineChart>
                           </ResponsiveContainer>
@@ -4768,20 +4774,20 @@ export default function TrackerPage() {
                         </p>
                         <div className="space-y-2">
                           <div className="flex items-center justify-between">
-                            <span className="text-sm text-black">Current Average Timeline</span>
+                            <span className="text-sm text-black">Current average timeline</span>
                             <span className="text-sm font-bold text-black">14.2 days</span>
                           </div>
                           <div className="flex items-center justify-between">
-                            <span className="text-sm text-black">Optimized Timeline</span>
+                            <span className="text-sm text-black">Optimized timeline</span>
                             <span className="text-sm font-bold text-black">9.6 days</span>
                           </div>
                           <div className="flex items-center justify-between">
-                            <span className="text-sm text-black">Time Saved</span>
+                            <span className="text-sm text-black">Time saved</span>
                             <span className="text-sm font-bold text-[#00C3B1]">4.6 days (32%)</span>
                           </div>
                         </div>
                         <div className="border border-[#00C3B1] rounded-lg bg-[#00C3B10F] p-3">
-                          <p className="text-xs font-bold text-[#00C3B1] mb-1">Action Required</p>
+                          <p className="text-xs font-bold text-[#00C3B1] mb-1">Action required</p>
                           <p className="text-xs text-black">Implement automated brief validation and parallel approval workflows. Est. ROI: 340% within 6 months.</p>
                         </div>
                       </CardContent>
@@ -4801,20 +4807,20 @@ export default function TrackerPage() {
                         </p>
                         <div className="space-y-2">
                           <div className="flex items-center justify-between">
-                            <span className="text-sm text-black">Over-allocated Divisions</span>
+                            <span className="text-sm text-black">Over-allocated divisions</span>
                             <span className="text-sm font-bold text-black">3 divisions</span>
                           </div>
                           <div className="flex items-center justify-between">
-                            <span className="text-sm text-black">Under-utilized Tokens</span>
+                            <span className="text-sm text-black">Under-utilized tokens</span>
                             <span className="text-sm font-bold text-black">2,400 tokens</span>
                           </div>
                           <div className="flex items-center justify-between">
-                            <span className="text-sm text-black">Potential Savings</span>
+                            <span className="text-sm text-black">Potential savings</span>
                             <span className="text-sm font-bold text-[#00C3B1]">£1.4M annual</span>
                           </div>
                         </div>
                         <div className="border border-[#00C3B1] rounded-lg bg-[#00C3B10F] p-3">
-                          <p className="text-xs font-bold text-[#00C3B1] mb-1">Action Required</p>
+                          <p className="text-xs font-bold text-[#00C3B1] mb-1">Action required</p>
                           <p className="text-xs text-black">Redistribute 1,200 tokens from Mobile to Wearable division. Implement quarterly budget reviews.</p>
                         </div>
                       </CardContent>
@@ -4834,20 +4840,20 @@ export default function TrackerPage() {
                         </p>
                         <div className="space-y-2">
                           <div className="flex items-center justify-between">
-                            <span className="text-sm text-black">Current Approval Rate</span>
+                            <span className="text-sm text-black">Current approval rate</span>
                             <span className="text-sm font-bold text-black">78%</span>
                           </div>
                           <div className="flex items-center justify-between">
-                            <span className="text-sm text-black">Target Approval Rate</span>
+                            <span className="text-sm text-black">Target approval rate</span>
                             <span className="text-sm font-bold text-black">94%</span>
                           </div>
                           <div className="flex items-center justify-between">
-                            <span className="text-sm text-black">Quality Improvement</span>
+                            <span className="text-sm text-black">Quality improvement</span>
                             <span className="text-sm font-bold text-[#00C3B1]">+16 points</span>
                           </div>
                         </div>
                         <div className="border border-[#00C3B1] rounded-lg bg-[#00C3B10F] p-3">
-                          <p className="text-xs font-bold text-[#00C3B1] mb-1">Action Required</p>
+                          <p className="text-xs font-bold text-[#00C3B1] mb-1">Action required</p>
                           <p className="text-xs text-black">Mandatory brief completeness checks and creative review checkpoints for all Strategic briefs.</p>
                         </div>
                       </CardContent>
@@ -4867,20 +4873,20 @@ export default function TrackerPage() {
                         </p>
                         <div className="space-y-2">
                           <div className="flex items-center justify-between">
-                            <span className="text-sm text-black">Current Capacity</span>
+                            <span className="text-sm text-black">Current capacity</span>
                             <span className="text-sm font-bold text-black">214 briefs/month</span>
                           </div>
                           <div className="flex items-center justify-between">
-                            <span className="text-sm text-black">Projected Demand</span>
+                            <span className="text-sm text-black">Projected demand</span>
                             <span className="text-sm font-bold text-black">225 briefs/month</span>
                           </div>
                           <div className="flex items-center justify-between">
-                            <span className="text-sm text-black">Capacity Gap</span>
+                            <span className="text-sm text-black">Capacity gap</span>
                             <span className="text-sm font-bold text-[#8092DC]">11 briefs (5%)</span>
                           </div>
                         </div>
                         <div className="border border-[#00C3B1] rounded-lg bg-[#00C3B10F] p-3">
-                          <p className="text-xs font-bold text-[#00C3B1] mb-1">Action Required</p>
+                          <p className="text-xs font-bold text-[#00C3B1] mb-1">Action required</p>
                           <p className="text-xs text-black">Cross-train 3 team members across product lines. Optimize scheduling for peak periods.</p>
                         </div>
                       </CardContent>
@@ -4933,3 +4939,5 @@ export default function TrackerPage() {
     </DashboardLayout>
   );
 }
+
+

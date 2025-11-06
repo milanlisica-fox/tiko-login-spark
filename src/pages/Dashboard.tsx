@@ -293,16 +293,16 @@ export default function TikoDashboard() {
                           <>
                             <div className="space-y-4">
                               <div className="flex items-center justify-between">
-                                <span className="text-sm text-black">Total Budget {periodLabel}</span>
+                                <span className="text-sm text-black">Total budget {periodLabel}</span>
                                 <span className="text-lg font-bold text-black">{budgetData.totalBudget.toLocaleString()} tokens</span>
                               </div>
                               
                               {/* Metrics Grid - 2x2 */}
                               <div className="grid grid-cols-4 gap-4">
-                                {/* Tokens Spent */}
+                                {/* Tokens spent */}
                                 <div className="border border-[#ececec] rounded-lg p-4 bg-white">
                                   <div className="flex items-center justify-between mb-2 gap-1">
-                                    <span className="text-sm text-black">Tokens Spent</span>
+                                    <span className="text-sm text-black">Tokens spent</span>
                                     <Tooltip>
                                       <TooltipTrigger asChild>
                                         <HelpCircle size={16} className="text-[#646464] cursor-help" />
@@ -316,10 +316,10 @@ export default function TikoDashboard() {
                                   <div className="text-xs text-[#646464] mt-1">{((budgetData.tokensSpent / budgetData.totalBudget) * 100).toFixed(1)}% of budget</div>
                                 </div>
 
-                                {/* Tokens Committed */}
+                                {/* Tokens committed */}
                                 <div className="border border-[#ececec] rounded-lg p-4 bg-white">
                                   <div className="flex items-center justify-between mb-2 gap-1">
-                                    <span className="text-sm text-black">Tokens Committed</span>
+                                    <span className="text-sm text-black">Tokens committed</span>
                                     <Tooltip>
                                       <TooltipTrigger asChild>
                                         <HelpCircle size={16} className="text-[#646464] cursor-help" />
@@ -333,10 +333,10 @@ export default function TikoDashboard() {
                                   <div className="text-xs text-[#646464] mt-1">{((budgetData.tokensCommitted / budgetData.totalBudget) * 100).toFixed(1)}% of budget</div>
                                 </div>
 
-                                {/* Tokens Remaining */}
+                                {/* Tokens remaining */}
                                 <div className="border border-[#ececec] rounded-lg p-4 bg-white">
                                   <div className="flex items-center justify-between mb-2 gap-1">
-                                    <span className="text-sm text-black">Tokens Remaining</span>
+                                    <span className="text-sm text-black">Tokens remaining</span>
                                     <Tooltip>
                                       <TooltipTrigger asChild>
                                         <HelpCircle size={16} className="text-[#646464] cursor-help" />
@@ -350,10 +350,10 @@ export default function TikoDashboard() {
                                   <div className="text-xs text-[#646464] mt-1">{((budgetData.tokensRemaining / budgetData.totalBudget) * 100).toFixed(1)}% of budget</div>
                                 </div>
 
-                                {/* Tokens Pending */}
+                                {/* Tokens pending */}
                                 <div className="border border-[#ececec] rounded-lg p-4 bg-white">
                                   <div className="flex items-center justify-between mb-2 gap-1">
-                                    <span className="text-sm text-black">Tokens Pending</span>
+                                    <span className="text-sm text-black">Tokens pending</span>
                                     <Tooltip>
                                       <TooltipTrigger asChild>
                                         <HelpCircle size={16} className="text-[#646464] cursor-help" />
