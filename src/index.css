@@ -423,17 +423,23 @@ h1.h1-heading, .leading-tight {
 }
 
 .login-arrow {
-  position: absolute;
+  position: fixed;
   height: 100vh;
   left: 0;
   top: 0;
-  transform: translateX(-100%);
-  transition: 2.5s ease;
+  transform: translateX(-110%);
+  transition: transform 0.8s ease-in-out;
   z-index: 999;
   fill: #ffb546;
+  pointer-events: none;
+  will-change: transform;
 }
 
-.arrow-slide {
+.login-arrow.middle {
+  transform: translateX(-10%);
+}
+
+.login-arrow.after {
   transform: translateX(100%);
 }
 

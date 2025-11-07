@@ -47,7 +47,7 @@ const Signup = () => {
   };
 
   return (
-    <AuthLayout showArrow={false} svgAnimationClass="animate-scale">
+    <AuthLayout svgAnimationClass="animate-scale">
       {/* Frame 596 - Header Section */}
       <div className="flex flex-col items-center mb-8">
         <h1 className="h1-heading text-[38px] font-bold leading-[46px] text-card-foreground mb-1 text-left w-full">

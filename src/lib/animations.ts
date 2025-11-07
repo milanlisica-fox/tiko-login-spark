@@ -1,10 +1,56 @@
 import confetti from "canvas-confetti";
 
-export function triggerArrow(): void {
-  const arrow = document.querySelector('.login-arrow');
-  if (arrow) {
-    arrow.classList.add('arrow-slide');
+export function triggerArrow(): Promise<void> {
+  const arrow = document.querySelector<SVGElement>(".login-arrow");
+  if (!arrow) {
+    return Promise.resolve();
   }
+
+  const previousTransition = arrow.style.transition;
+  arrow.style.transition = "none";
+  arrow.classList.remove("middle", "after");
+  void arrow.getBoundingClientRect();
+  arrow.style.transition = previousTransition;
+
+  return new Promise((resolve) => {
+    const handleTransitionEnd = (event: TransitionEvent) => {
+      if (event.propertyName !== "transform") {
+        return;
+      }
+      arrow.removeEventListener("transitionend", handleTransitionEnd);
+      resolve();
+    };
+
+    arrow.addEventListener("transitionend", handleTransitionEnd);
+    requestAnimationFrame(() => {
+      arrow.classList.add("middle");
+    });
+  });
+}
+
+export function finishArrow(): Promise<void> {
+  const arrow = document.querySelector<SVGElement>(".login-arrow");
+  if (!arrow) {
+    return Promise.resolve();
+  }
+
+  arrow.classList.remove("after");
+
+  return new Promise((resolve) => {
+    const handleTransitionEnd = (event: TransitionEvent) => {
+      if (event.propertyName !== "transform") {
+        return;
+      }
+      arrow.removeEventListener("transitionend", handleTransitionEnd);
+      arrow.classList.remove("middle");
+      resolve();
+    };
+
+    arrow.addEventListener("transitionend", handleTransitionEnd);
+    requestAnimationFrame(() => {
+      arrow.classList.add("after");
+    });
+  });
 }
 
 export function triggerConfetti(): void {

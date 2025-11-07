@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Eye, EyeOff, ArrowRight } from "lucide-react";
+import { Eye, EyeOff } from "lucide-react";
 import { toast } from "sonner";
-import { triggerArrow } from "@/lib/animations";
+import { triggerArrow, finishArrow } from "@/lib/animations";
 import { isValidEmail } from "@/lib/validation";
 import AuthLayout from "@/components/layout/AuthLayout";
 import { StyledInput } from "@/components/common/StyledInput";
@@ -37,17 +37,19 @@ const Login = () => {
     }
 
     setIsLoading(true);
-    // Simulate login
-    triggerArrow();
-    setTimeout(() => {
+
+    try {
+      await triggerArrow();
       toast.success("Welcome back!");
       navigate("/dashboard");
+      await finishArrow();
+    } finally {
       setIsLoading(false);
-    }, 1200);
+    }
   };
 
   return (
-    <AuthLayout showArrow={true} svgAnimationClass="animate-scale2">
+    <AuthLayout svgAnimationClass="animate-scale2">
       <h1 className="h1-heading text-5xl font-bold text-card-foreground mb-8">
         Welcome back!
       </h1>
