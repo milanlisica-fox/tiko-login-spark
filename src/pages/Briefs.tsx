@@ -50,7 +50,6 @@ const tokenIcon = BRIEFS_ASSETS.tokenIcon;
 const createBriefArrowIcon = BRIEFS_ASSETS.createBriefArrowIcon;
 
 // Deliverables screen images from Figma
-const imgFrame14 = BRIEFS_ASSETS.imgFrame14;
 const imgFrame15 = BRIEFS_ASSETS.imgFrame15;
 const imgLine10 = BRIEFS_ASSETS.imgLine10;
 const imgLineStroke = BRIEFS_ASSETS.imgLineStroke;
@@ -62,6 +61,20 @@ const imgFrame14_v2 = BRIEFS_ASSETS.imgFrame14_v2;
 const imgFrame15_v2 = BRIEFS_ASSETS.imgFrame15_v2;
 // Upload icon (match profile picture dialog)
 const uploadIcon = BRIEFS_ASSETS.uploadIcon;
+
+const paperclipIcon = (
+  <svg xmlns="http://www.w3.org/2000/svg" width="14" height="16" viewBox="0 0 14 16" fill="none">
+    <path d="M12.9338 6.75454L6.54463 13.1437C5.3168 14.3715 3.32782 14.3715 2.09999 13.1437C0.872163 11.9159 0.872163 9.9269 2.09999 8.69907L9.04474 1.75433C9.41311 1.38595 9.91273 1.179 10.4337 1.179C10.9546 1.179 11.4543 1.38595 11.8226 1.75433C12.191 2.1227 12.398 2.62232 12.398 3.14327C12.398 3.66423 12.191 4.16385 11.8226 4.53222L5.98905 10.3658C5.68348 10.6714 5.18346 10.6714 4.87789 10.3658C4.57232 10.0602 4.57232 9.56022 4.87789 9.25465L10.1559 3.97664L9.32253 3.14327L4.04452 8.42128C3.67615 8.78965 3.4692 9.28927 3.4692 9.81023C3.4692 10.3312 3.67615 10.8308 4.04452 11.1992C4.41289 11.5675 4.91251 11.7745 5.43347 11.7745C5.95443 11.7745 6.45405 11.5675 6.82242 11.1992L12.656 5.36559C13.8838 4.13776 13.8838 2.14879 12.656 0.920957C11.4282 -0.306874 9.4392 -0.306874 8.21137 0.920957L1.26662 7.8657C-0.422337 9.55466 -0.422337 12.2881 1.26662 13.9771C2.95559 15.666 5.68904 15.666 7.378 13.9771L13.7672 7.58791L12.9338 6.75454Z" fill="#1F1F22"/>
+  </svg>
+);
+
+const sendArrowIcon = (
+  <div className="w-10 h-10 rounded-full bg-[#ffb546] flex items-center justify-center">
+    <svg xmlns="http://www.w3.org/2000/svg" width="15" height="13" viewBox="0 0 15 13" fill="none">
+      <path d="M4.55075 0.753984C4.5167 0.883758 4.50851 1.01933 4.52664 1.15293C4.54478 1.28653 4.58889 1.41553 4.65644 1.53253C4.72399 1.64953 4.81365 1.75223 4.92028 1.83473C5.02692 1.91724 5.14842 1.97794 5.27783 2.01334L11.2417 3.6559L0.502435 9.85624C0.269925 9.99048 0.101013 10.2129 0.0328563 10.4745C-0.0353009 10.7361 0.00287702 11.0156 0.138997 11.2513C0.275116 11.4871 0.498027 11.6599 0.758686 11.7317C1.01935 11.8035 1.2964 11.7684 1.52891 11.6341L12.2682 5.43381L10.7096 11.4215C10.6413 11.6835 10.6796 11.9635 10.8159 12.1996C10.9523 12.4358 11.1756 12.6089 11.4367 12.6808C11.6978 12.7527 11.9754 12.7176 12.2083 12.5831C12.4412 12.4486 12.6104 12.2259 12.6787 11.9638L14.8593 3.59313C14.8933 3.46336 14.9015 3.32778 14.8834 3.19418C14.8653 3.06058 14.8212 2.93158 14.7536 2.81458C14.6861 2.69758 14.5964 2.59488 14.4898 2.51238C14.3831 2.42987 14.2616 2.36917 14.1322 2.33377L5.79271 0.0369374C5.66341 0.00108577 5.52867 -0.0087951 5.3962 0.00786099C5.26374 0.0245171 5.13615 0.0673812 5.02077 0.133998C4.90539 0.200614 4.80447 0.289672 4.72382 0.396063C4.64316 0.502454 4.58434 0.624086 4.55075 0.753984Z" fill="white" />
+    </svg>
+  </div>
+);
 
 type BriefStatus = "Draft" | "In review" | "SOW Ready to sign";
 type BriefBadge = "Creation" | "Adaptation" | "Resize" | "default";
@@ -1192,8 +1205,8 @@ function DeliverablesSelectionScreen({ onCancel, onBack, onNavigateToAiResponse 
               value={chatInput}
               onChange={setChatInput}
               onSubmit={(v) => { if (v.trim()) { onNavigateToAiResponse(v.trim()); } }}
-              leftIconSrc={imgFrame14}
-              rightIconSrc={imgFrame15}
+              leftIcon={paperclipIcon}
+              rightIcon={sendArrowIcon}
               helpText="Need a hand? Talk to your Iris account manager"
             />
           </div>
@@ -1345,8 +1358,8 @@ function DeliverablesSelectionScreen({ onCancel, onBack, onNavigateToAiResponse 
               value={chatInput}
               onChange={setChatInput}
               onSubmit={(v) => { if (v.trim()) { onNavigateToAiResponse(v.trim()); } }}
-              leftIconSrc={imgFrame14}
-              rightIconSrc={imgFrame15}
+              leftIcon={paperclipIcon}
+              rightIcon={sendArrowIcon}
               helpText="Need a hand? Talk to your Iris account manager"
               className="w-full md:w-[516px]"
               containerClassName="w-full"
@@ -1513,8 +1526,8 @@ function AIResponseScreen({ userInput, onBack, onCancel }: { userInput: string; 
           {/* AI Chat Input at Bottom */}
           <div className="shrink-0">
             <ChatInput
-              leftIconSrc={imgFrame14_v2}
-              rightIconSrc={imgFrame15_v2}
+              leftIcon={paperclipIcon}
+              rightIcon={sendArrowIcon}
               helpText="Need a hand? Talk to your Iris account manager"
             />
             </div>
@@ -1662,8 +1675,8 @@ function AIResponseScreen({ userInput, onBack, onCancel }: { userInput: string; 
           {/* AI Chat Input below white document on mobile */}
           <div className="flex lg:hidden shrink-0 pb-2 pt-2 w-full">
             <ChatInput
-              leftIconSrc={imgFrame14_v2}
-              rightIconSrc={imgFrame15_v2}
+              leftIcon={paperclipIcon}
+              rightIcon={sendArrowIcon}
               helpText="Need a hand? Talk to your Iris account manager"
               className="w-full md:w-[516px]"
               containerClassName="w-full"
