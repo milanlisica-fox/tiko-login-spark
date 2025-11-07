@@ -462,14 +462,14 @@ function TemplateSelectionScreen({ onCancel, onCreateBrief }: { onCancel: () => 
 
         {/* Upload existing brief - centered below buttons */}
         <div className="flex flex-col items-center mt-2 w-full">
-          <div className="flex items-center gap-2 justify-center">
-            <p className="text-sm leading-[18.62px] text-black text-center">
+          <div className="flex flex-col sm:flex-row items-center gap-2 justify-center text-center">
+            <p className="text-sm leading-[18.62px] text-black">
               Already have a brief file, please upload it.
             </p>
             <input ref={uploadInputRef} type="file" className="hidden" />
             <button
               type="button"
-              className="flex gap-[4px] items-start hover:opacity-80 transition cursor-pointer"
+              className="flex gap-[4px] items-center justify-center sm:justify-start hover:opacity-80 transition cursor-pointer w-full sm:w-auto"
               onClick={() => uploadInputRef.current?.click()}
             >
               <div className="overflow-clip relative shrink-0 size-[20px]">

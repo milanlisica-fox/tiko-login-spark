@@ -2,6 +2,7 @@ import React from "react";
 import Logo from "./Logo";
 import { LogOut, LucideIcon } from "lucide-react";
 import { useLogout } from "@/hooks/useAuth";
+import { Icons } from "@/constants/icons";
 
 type NavItem = { name: string; icon: LucideIcon; path: string };
 
@@ -12,6 +13,8 @@ interface MobileSidebarProps {
   onLogout?: () => void;
   logoSrc: string;
   logoDotSrc?: string;
+  onOpenHelp: () => void;
+  onCloseSidebar: () => void;
 }
 
 export default function MobileSidebar({
@@ -21,6 +24,8 @@ export default function MobileSidebar({
   onLogout,
   logoSrc,
   logoDotSrc,
+  onOpenHelp,
+  onCloseSidebar,
 }: MobileSidebarProps) {
   const defaultLogout = useLogout();
   const logout = onLogout ?? defaultLogout;
@@ -52,7 +57,17 @@ export default function MobileSidebar({
           })}
         </nav>
       </div>
-      <div className="px-4 pb-8 border-t border-[#d9d9d9] pt-4">
+      <div className="px-4 pb-8 border-t border-[#d9d9d9] pt-4 flex flex-col gap-3">
+        <button
+          onClick={() => {
+            onCloseSidebar();
+            onOpenHelp();
+          }}
+          className="w-full flex items-center gap-3 px-4 py-4 rounded-lg transition hover:bg-white/50"
+        >
+          <Icons.help size={20} className="text-black" />
+          <span className="text-base font-normal text-black">Help</span>
+        </button>
         <button
           onClick={logout}
           className="w-full flex items-center gap-3 px-4 py-4 rounded-lg transition hover:bg-white/50"
