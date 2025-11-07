@@ -707,6 +707,14 @@ function NewBriefForm({
     setShowConfirmation(true);
   };
 
+  const handleReviewBrief = () => {
+    if (!isFormComplete) {
+      return;
+    }
+
+    navigate("/dashboard/briefs/review");
+  };
+
   const handleChange = (field: string, value: string | Date | undefined) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
   };
@@ -866,16 +874,15 @@ function NewBriefForm({
               <div className="flex gap-1 items-center w-[60%] min-w-0">
                 <button 
                   onClick={handleSaveDraft}
-                  className="btn flex-1 min-w-0 h-8 px-2 md:px-4 bg-[#ffb546] hover:opacity-90 rounded-[28px] flex items-center justify-center gap-1 md:gap-[10px] transition"
+                  className="btn flex-1 min-w-0 h-8 px-2 md:px-4 bg-[#ffb546] hover:opacity-90 rounded-[28px] flex items-center justify-center transition"
                 >
                   <span className="text-[13px] font-semibold leading-[18.62px] text-black whitespace-nowrap truncate">Save draft</span>
-                  <svg className="h-[14px] w-[15.567px]" width="45" height="40" viewBox="0 0 45 40" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M23.8229 40H5.80935C2.59694 40 0 37.4332 0 34.2582V31.8843C0 30.5935 0.795591 29.4362 2.0115 28.9614L14.9212 22.908C17.5932 21.8546 17.5932 18.1306 14.9362 17.0623L1.99648 10.8902C0.795576 10.4154 0 9.25816 0 7.96736V5.74184C0 2.56677 2.59694 0 5.80935 0H23.8229C25.0838 0 26.3147 0.400603 27.3205 1.15728L42.692 15.4154C45.7693 17.7151 45.7693 22.27 42.692 24.5697L27.3205 38.8279C26.3147 39.5846 25.0838 39.9852 23.8229 39.9852V40Z" fill="#000"></path></svg>
                 </button>
                 <button
                   type="button"
-                  onClick={handleSubmit}
+                  onClick={handleReviewBrief}
                   disabled={!isFormComplete}
-                  className={`btn flex-1 min-w-0 h-8 px-2 md:px-4 rounded-[28px] flex items-center justify-center gap-1 md:gap-[10px] transition ${
+                  className={`btn flex-1 min-w-0 h-8 px-2 md:px-4 rounded-[28px] flex items-center justify-center transition ${
                     isFormComplete ? "bg-[#ffb546] hover:opacity-90" : "bg-[#f9f9f9] cursor-not-allowed opacity-50"
                   }`}
                 >
@@ -884,18 +891,8 @@ function NewBriefForm({
                       isFormComplete ? "text-black" : "text-[#848487]"
                     }`}
                   >
-                    Submit brief
+                    Review brief
                   </span>
-                  <svg
-                    className={`h-[14px] w-[15.567px] ${isFormComplete ? "" : "opacity-50"}`}
-                    width="45"
-                    height="40"
-                    viewBox="0 0 45 40"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path d="M23.8229 40H5.80935C2.59694 40 0 37.4332 0 34.2582V31.8843C0 30.5935 0.795591 29.4362 2.0115 28.9614L14.9212 22.908C17.5932 21.8546 17.5932 18.1306 14.9362 17.0623L1.99648 10.8902C0.795576 10.4154 0 9.25816 0 7.96736V5.74184C0 2.56677 2.59694 0 5.80935 0H23.8229C25.0838 0 26.3147 0.400603 27.3205 1.15728L42.692 15.4154C45.7693 17.7151 45.7693 22.27 42.692 24.5697L27.3205 38.8279C26.3147 39.5846 25.0838 39.9852 23.8229 39.9852V40Z" fill="#000"></path>
-                  </svg>
                 </button>
               </div>
             </div>
@@ -1028,31 +1025,17 @@ function NewBriefForm({
             </button>
             <button 
               onClick={handleSaveDraft}
-              className="w-full md:flex-1 md:min-w-0 h-8 px-2 md:px-4 bg-[#ffb546] hover:opacity-90 rounded-[28px] flex items-center justify-center gap-1 md:gap-[10px] transition"
+              className="w-full md:flex-1 md:min-w-0 h-8 px-2 md:px-4 bg-[#ffb546] hover:opacity-90 rounded-[28px] flex items-center justify-center transition"
             >
               <span className="text-[13px] font-semibold leading-[18.62px] text-black whitespace-nowrap">Save draft</span>
-              <img src={createBriefArrowIcon} alt="" className="h-[14px] w-[15.567px] shrink-0" />
             </button>
             <button
               type="button"
-              onClick={handleSubmit}
+              onClick={handleReviewBrief}
               disabled={!isFormComplete}
-              className={`w-full md:flex-1 md:min-w-0 h-8 px-2 md:px-4 rounded-[28px] flex items-center justify-center gap-1 md:gap-[10px] transition ${
-                isFormComplete ? "bg-[#ffb546] hover:opacity-90" : "bg-[#f9f9f9] cursor-not-allowed opacity-50"
-              }`}
+              className="w-full md:flex-1 md:min-w-0 h-8 px-2 md:px-4 rounded-[28px] flex items-center justify-center bg-[#ffb546] hover:opacity-90 transition"
             >
-              <span
-                className={`text-[13px] font-semibold leading-[18.62px] whitespace-nowrap ${
-                  isFormComplete ? "text-black" : "text-[#848487]"
-                }`}
-              >
-                Submit brief
-              </span>
-              <img
-                src={createBriefArrowIcon}
-                alt=""
-                className={`h-[14px] w-[15.567px] shrink-0 ${isFormComplete ? "" : "opacity-50"}`}
-              />
+              <span className="text-[13px] font-semibold leading-[18.62px] text-black whitespace-nowrap">Review brief</span>
             </button>
           </div>
         </div>
@@ -1063,7 +1046,6 @@ function NewBriefForm({
         open={showConfirmation}
         onOpenChange={setShowConfirmation}
         onConfirm={handleViewAllBriefs}
-        title="Brief submitted!"
       />
 
       {/* Save Draft Confirmation Dialog */}
@@ -1246,17 +1228,15 @@ function DeliverablesSelectionScreen({ onCancel, onBack, onNavigateToAiResponse 
               <div className="flex gap-1 items-center flex-1 min-w-0">
                 <button 
                   onClick={handleSaveDraft}
-                  className="btn flex-1 min-w-0 h-8 px-2 md:px-4 bg-[#ffb546] hover:opacity-90 rounded-[28px] flex items-center justify-center gap-1 md:gap-[10px] transition"
+                  className="btn flex-1 min-w-0 h-8 px-2 md:px-4 bg-[#ffb546] hover:opacity-90 rounded-[28px] flex items-center justify-center transition"
                 >
                   <span className="text-[13px] font-semibold leading-[18.62px] text-black whitespace-nowrap">Save draft</span>
-                  <img src={createBriefArrowIcon} alt="" className="h-[14px] w-[15.567px] shrink-0" />
                 </button>
                 <button
                   onClick={() => navigate("/dashboard/briefs/review")}
-                  className="btn flex-1 min-w-0 h-8 px-2 md:px-4 bg-[#ffb546] hover:opacity-90 rounded-[28px] flex items-center justify-center gap-1 md:gap-[10px] transition"
+                  className="w-full md:flex-1 md:min-w-0 h-8 px-2 md:px-4 rounded-[28px] flex items-center justify-center bg-[#ffb546] hover:opacity-90 transition"
                 >
                   <span className="text-[13px] font-semibold leading-[18.62px] text-black whitespace-nowrap">Review brief</span>
-                  <img src={createBriefArrowIcon} alt="" className="h-[14px] w-[15.567px] shrink-0" />
                 </button>
               </div>
             </div>
@@ -1381,18 +1361,16 @@ function DeliverablesSelectionScreen({ onCancel, onBack, onNavigateToAiResponse 
             </button>
             <button 
               onClick={handleSaveDraft}
-              className="w-full md:flex-1 md:min-w-0 h-8 px-2 md:px-4 bg-[#ffb546] hover:opacity-90 rounded-[28px] flex items-center justify-center gap-1 md:gap-[10px] transition"
+              className="w-full md:flex-1 md:min-w-0 h-8 px-2 md:px-4 bg-[#ffb546] hover:opacity-90 rounded-[28px] flex items-center justify-center transition"
             >
               <span className="text-[13px] font-semibold leading-[18.62px] text-black whitespace-nowrap">Save draft</span>
-              <img src={createBriefArrowIcon} alt="" className="h-[14px] w-[15.567px] shrink-0" />
             </button>
             <button
               type="button"
               onClick={() => navigate("/dashboard/briefs/review")}
-              className="w-full md:flex-1 md:min-w-0 h-8 px-2 md:px-4 bg-[#ffb546] hover:opacity-90 rounded-[28px] flex items-center justify-center gap-1 md:gap-[10px] transition"
+              className="w-full md:flex-1 md:min-w-0 h-8 px-2 md:px-4 rounded-[28px] flex items-center justify-center bg-[#ffb546] hover:opacity-90 transition"
             >
               <span className="text-[13px] font-semibold leading-[18.62px] text-black whitespace-nowrap">Review brief</span>
-              <img src={createBriefArrowIcon} alt="" className="h-[14px] w-[15.567px] shrink-0" />
             </button>
           </div>
         </div>
@@ -1567,17 +1545,15 @@ function AIResponseScreen({ userInput, onBack, onCancel }: { userInput: string; 
               <div className="flex gap-1 items-center flex-1 min-w-0">
                 <button 
                   onClick={handleSaveDraft}
-                  className="btn flex-1 min-w-0 h-8 px-2 md:px-4 bg-[#ffb546] hover:opacity-90 rounded-[28px] flex items-center justify-center gap-1 md:gap-[10px] transition"
+                  className="btn flex-1 min-w-0 h-8 px-2 md:px-4 bg-[#ffb546] hover:opacity-90 rounded-[28px] flex items-center justify-center transition"
                 >
                   <span className="text-[13px] font-semibold leading-[18.62px] text-black whitespace-nowrap">Save draft</span>
-                  <img src={createBriefArrowIcon} alt="" className="h-[14px] w-[15.567px] shrink-0" />
                 </button>
                 <button
                   onClick={() => navigate("/dashboard/briefs/review")}
-                  className="btn flex-1 min-w-0 h-8 px-2 md:px-4 bg-[#ffb546] hover:opacity-90 rounded-[28px] flex items-center justify-center gap-1 md:gap-[10px] transition"
+                  className="w-full md:flex-1 md:min-w-0 h-8 px-2 md:px-4 rounded-[28px] flex items-center justify-center bg-[#ffb546] hover:opacity-90 transition"
                 >
                   <span className="text-[13px] font-semibold leading-[18.62px] text-black whitespace-nowrap">Review brief</span>
-                  <img src={createBriefArrowIcon} alt="" className="h-[14px] w-[15.567px] shrink-0" />
                 </button>
               </div>
             </div>
@@ -1693,26 +1669,25 @@ function AIResponseScreen({ userInput, onBack, onCancel }: { userInput: string; 
           </div>
 
           {/* Action Buttons - Order: Discard, Save draft, Review brief - Stacked on mobile, row on tablet */}
-          <div className="flex flex-col md:flex-row items-center gap-2.5 w-full">
+          <div className="flex flex-col md:flex-row items-center gap-2.5 w-full min-w-0">
             <button
               onClick={onCancel}
-              className="w-full md:flex-1 h-8 px-4 bg-[#03b3e2] text-black hover:opacity-80 rounded-[28px] transition flex items-center justify-center"
+              className="w-full md:flex-1 md:min-w-0 h-8 px-2 md:px-4 bg-[#03b3e2] text-black hover:opacity-80 rounded-[28px] transition flex items-center justify-center"
             >
-              <span className="text-[13px] font-semibold leading-[18.62px]">Discard</span>
+              <span className="text-[13px] font-semibold leading-[18.62px] whitespace-nowrap">Discard</span>
             </button>
             <button 
               onClick={handleSaveDraft}
-              className="w-full md:flex-1 h-8 px-4 bg-[#ffb546] hover:opacity-90 rounded-[28px] flex items-center justify-center gap-[10px] transition"
+              className="w-full md:flex-1 md:min-w-0 h-8 px-2 md:px-4 bg-[#ffb546] hover:opacity-90 rounded-[28px] flex items-center justify-center transition"
             >
-              <span className="text-[13px] font-semibold leading-[18.62px] text-black">Save draft</span>
-              <img src={createBriefArrowIcon} alt="" className="h-[14px] w-[15.567px]" />
+              <span className="text-[13px] font-semibold leading-[18.62px] text-black whitespace-nowrap">Save draft</span>
             </button>
             <button
+              type="button"
               onClick={() => navigate("/dashboard/briefs/review")}
-              className="w-full md:flex-1 h-8 px-4 bg-[#ffb546] hover:opacity-90 rounded-[28px] flex items-center justify-center gap-[10px] transition"
+              className="w-full md:flex-1 md:min-w-0 h-8 px-2 md:px-4 rounded-[28px] flex items-center justify-center bg-[#ffb546] hover:opacity-90 transition"
             >
-              <span className="text-[13px] font-semibold leading-[18.62px] text-black">Review brief</span>
-              <img src={createBriefArrowIcon} alt="" className="h-[14px] w-[15.567px]" />
+              <span className="text-[13px] font-semibold leading-[18.62px] text-black whitespace-nowrap">Review brief</span>
             </button>
           </div>
         </div>
