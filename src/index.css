@@ -571,11 +571,11 @@ h1.h1-heading, .leading-tight {
 }
 
 .board-o path {
-   fill: #fa9f41;
+   fill: #ffb546;
 }
 
 .board-b path {
-   fill: #36bbfb;
+   fill: #03b3e2;
 }
 
 .board-c path {
@@ -583,11 +583,11 @@ h1.h1-heading, .leading-tight {
 }
 
 .board-o::after {
-  background-color: #fa9f41;
+  background-color: #ffb546;
 }
 
 .board-b::after {
-  background-color: #36bbfb;
+  background-color: #03b3e2;
 }
 
 .board-c::after {
