@@ -76,6 +76,16 @@ const sendArrowIcon = (
   </div>
 );
 
+const BriefLoadingGraphic = () => (
+  <svg className="h-[36.966px] w-[77.813px]" xmlns="http://www.w3.org/2000/svg" width="42" height="37" viewBox="0 0 42 37" fill="none">
+    <path
+      d="M21.7174 36.8857H5.29228C2.36582 36.8857 0 34.5137 0 31.5934V29.4062C0 28.2172 0.727013 27.1452 1.82982 26.7077L13.5972 21.1197C16.0308 20.1525 16.037 16.7147 13.6157 15.7289L1.81749 10.03C0.72084 9.58643 0.00616698 8.52059 0.00616698 7.33769V5.29224C0.00616698 2.36579 2.37815 0 5.29845 0H21.7235C22.8756 0 23.9969 0.375812 24.9149 1.072L38.925 14.2256C41.7282 16.345 41.7282 20.5529 38.925 22.6723L24.9149 35.826C23.9969 36.5221 22.8756 36.898 21.7235 36.898L21.7174 36.8857Z"
+      fill="#E0E0E1"
+      fillOpacity="0.5"
+    />
+  </svg>
+);
+
 type BriefStatus = "Draft" | "In review" | "SOW Ready to sign";
 type BriefBadge = "Creation" | "Adaptation" | "Resize" | "default";
 
@@ -835,9 +845,7 @@ function NewBriefForm({
         {/* Loading State */}
           <div className="bg-white flex flex-col gap-8 items-center justify-center p-6 rounded-xl overflow-hidden h-[89%]">
           <div className="flex flex-col gap-2 items-center">
-            <svg className="h-[36.966px] w-[77.813px]" xmlns="http://www.w3.org/2000/svg" width="42" height="37" viewBox="0 0 42 37" fill="none">
-  <path d="M21.7174 36.8857H5.29228C2.36582 36.8857 0 34.5137 0 31.5934V29.4062C0 28.2172 0.727013 27.1452 1.82982 26.7077L13.5972 21.1197C16.0308 20.1525 16.037 16.7147 13.6157 15.7289L1.81749 10.03C0.72084 9.58643 0.00616698 8.52059 0.00616698 7.33769V5.29224C0.00616698 2.36579 2.37815 0 5.29845 0H21.7235C22.8756 0 23.9969 0.375812 24.9149 1.072L38.925 14.2256C41.7282 16.345 41.7282 20.5529 38.925 22.6723L24.9149 35.826C23.9969 36.5221 22.8756 36.898 21.7235 36.898L21.7174 36.8857Z" fill="#E0E0E1" fill-opacity="0.5"/>
-</svg>
+            <BriefLoadingGraphic />
             <p className="text-sm font-bold leading-[18.62px] opacity-50 text-[#c1c1c3]">
               Brief loading...
             </p>
@@ -852,17 +860,9 @@ function NewBriefForm({
         {/* Footer */}
           <div className="flex flex-col gap-1 items-end shrink-0 w-full">
           {/* Token Estimate */}
-            <div className="flex gap-2 items-center pb-2 w-full">
-            <svg className="h-5 w-5" xmlns="http://www.w3.org/2000/svg" width="13" height="14" viewBox="0 0 13 14" fill="none">
-  <path d="M6.12901 13.3333C9.51397 13.3333 12.258 12.2624 12.258 10.9414C12.258 9.62042 9.51397 8.54951 6.12901 8.54951C2.74406 8.54951 0 9.62042 0 10.9414C0 12.2624 2.74406 13.3333 6.12901 13.3333Z" fill="#848487"/>
-  <path d="M6.12901 4.27679C9.51448 4.27679 12.258 5.34805 12.258 6.66871C12.258 7.98937 9.51448 9.06061 6.12901 9.06061C2.74355 9.06061 0 7.98937 0 6.66871C0 5.34805 2.74355 4.27679 6.12901 4.27679Z" fill="#848487"/>
-  <path d="M6.12922 4.78382C9.51417 4.78382 12.2582 3.71291 12.2582 2.3919C12.2582 1.07088 9.51417 0 6.12922 0C2.74426 0 0.000202269 1.07088 0.000202269 2.3919C0.000202269 3.71291 2.74426 4.78382 6.12922 4.78382Z" fill="#848487"/>
-</svg>
-            <span className="text-[13px] leading-[18.62px] text-[#848487]">0</span>
-            <span className="text-[13px] leading-[18.62px] text-[#848487]">Tokens estimate</span>
-          </div>
+            <TokenEstimate value={0} />
 
-          {/* Action Buttons */}
+            {/* Action Buttons */}
             <div className="flex items-center w-full min-w-0">
               <button
                 onClick={onCancel}
@@ -879,15 +879,14 @@ function NewBriefForm({
                   <span className="text-[13px] font-semibold leading-[18.62px] text-black whitespace-nowrap truncate">Save draft</span>
                 </button>
                 <button
-                  type="button"
                   onClick={handleReviewBrief}
                   disabled={!isFormComplete}
-                  className={`btn flex-1 min-w-0 h-8 px-2 md:px-4 rounded-[28px] flex items-center justify-center transition ${
+                  className={`w-full md:flex-1 md:min-w-0 h-8 px-2 md:px-4 rounded-[28px] flex items-center justify-center transition ${
                     isFormComplete ? "bg-[#ffb546] hover:opacity-90" : "bg-[#f9f9f9] cursor-not-allowed opacity-50"
                   }`}
                 >
                   <span
-                    className={`text-[13px] font-semibold leading-[18.62px] whitespace-nowrap truncate ${
+                    className={`text-[13px] font-semibold leading-[18.62px] whitespace-nowrap ${
                       isFormComplete ? "text-black" : "text-[#848487]"
                     }`}
                   >
@@ -980,7 +979,7 @@ function NewBriefForm({
           {/* Loading State - Double height */}
           <div className="bg-white flex flex-col gap-8 items-center justify-center rounded-xl min-h-[600px]">
             <div className="flex flex-col gap-2 items-center">
-              <img src={briefLoadingIcon} alt="" className="h-[36.966px] w-[77.813px]" />
+              <BriefLoadingGraphic />
               <p className="text-sm font-bold leading-[18.62px] opacity-50 text-[#c1c1c3]">
                 Brief loading...
               </p>
@@ -996,10 +995,8 @@ function NewBriefForm({
         {/* Buttons section for mobile and tablet/iPad */}
         <div className="flex lg:hidden flex-col gap-2.5 w-full max-w-4xl pb-5">
           {/* Token Estimate */}
-          <div className="flex gap-2 items-center pb-2 w-full justify-end">
-            <img src={tokenIcon} alt="" className="h-5 w-5" />
-            <span className="text-[13px] leading-[18.62px] text-[#848487]">0</span>
-            <span className="text-[13px] leading-[18.62px] text-[#848487]">Tokens estimate</span>
+          <div className="flex w-full justify-end">
+            <TokenEstimate value={0} />
           </div>
 
           {/* Action Buttons - Order: Next, Discard, Save draft, Review brief - Stacked on mobile, row on tablet */}
@@ -1030,12 +1027,15 @@ function NewBriefForm({
               <span className="text-[13px] font-semibold leading-[18.62px] text-black whitespace-nowrap">Save draft</span>
             </button>
             <button
-              type="button"
               onClick={handleReviewBrief}
               disabled={!isFormComplete}
-              className="w-full md:flex-1 md:min-w-0 h-8 px-2 md:px-4 rounded-[28px] flex items-center justify-center bg-[#ffb546] hover:opacity-90 transition"
+              className={`w-full md:flex-1 md:min-w-0 h-8 px-2 md:px-4 rounded-[28px] flex items-center justify-center transition ${
+                isFormComplete ? "bg-[#ffb546] hover:opacity-90" : "bg-[#f9f9f9] cursor-not-allowed opacity-50"
+              }`}
             >
-              <span className="text-[13px] font-semibold leading-[18.62px] text-black whitespace-nowrap">Review brief</span>
+              <span className={`text-[13px] font-semibold leading-[18.62px] whitespace-nowrap ${
+                isFormComplete ? "text-black" : "text-[#848487]"
+              }`}>Review brief</span>
             </button>
           </div>
         </div>
@@ -1366,7 +1366,6 @@ function DeliverablesSelectionScreen({ onCancel, onBack, onNavigateToAiResponse 
               <span className="text-[13px] font-semibold leading-[18.62px] text-black whitespace-nowrap">Save draft</span>
             </button>
             <button
-              type="button"
               onClick={() => navigate("/dashboard/briefs/review")}
               className="w-full md:flex-1 md:min-w-0 h-8 px-2 md:px-4 rounded-[28px] flex items-center justify-center bg-[#ffb546] hover:opacity-90 transition"
             >
@@ -1683,7 +1682,6 @@ function AIResponseScreen({ userInput, onBack, onCancel }: { userInput: string; 
               <span className="text-[13px] font-semibold leading-[18.62px] text-black whitespace-nowrap">Save draft</span>
             </button>
             <button
-              type="button"
               onClick={() => navigate("/dashboard/briefs/review")}
               className="w-full md:flex-1 md:min-w-0 h-8 px-2 md:px-4 rounded-[28px] flex items-center justify-center bg-[#ffb546] hover:opacity-90 transition"
             >
