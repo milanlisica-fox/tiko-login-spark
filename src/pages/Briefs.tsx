@@ -872,34 +872,14 @@ function NewBriefForm({
     ? PROJECT_LEADS.find((lead) => lead.value === formData.projectLead)?.label ?? formData.projectLead
     : "";
 
-  const briefPreviewCard = (
-    <div className="w-full rounded-2xl bg-white shadow-sm p-6 space-y-4">
-      <div>
-        <h2 className="text-xl font-semibold leading-[26px] text-black text-center">
-          {formData.projectTitle || "Untitled brief"}
-        </h2>
-      </div>
-      <div className="space-y-2 text-sm leading-[18.62px] text-[#424242]">
-        {formattedDueDate ? (
-          <p>
-            <span className="font-semibold text-black">Launch date:</span>{" "}
-            {formattedDueDate}
-          </p>
-        ) : null}
-        {projectLeadLabel ? (
-          <p>
-            <span className="font-semibold text-black">Project lead:</span>{" "}
-            {projectLeadLabel}
-          </p>
-        ) : null}
-      </div>
-      {formData.objective.trim() ? (
-        <p className="text-sm leading-[20px] text-[#424242]">
-          <span className="font-semibold text-black">Objective:</span>{" "}
-          {formData.objective.trim()}
-        </p>
-      ) : null}
-    </div>
+  // Shared preview card
+  const renderPreviewPanel = () => (
+    <BriefPreviewPanel
+      projectTitle={formData.projectTitle}
+      launchDate={formattedDueDate}
+      projectLead={projectLeadLabel}
+      objective={formData.objective.trim()}
+    />
   );
 
   return (
@@ -976,19 +956,22 @@ function NewBriefForm({
             <p className="text-sm leading-[normal] opacity-[0.826] text-[#434343]">
               *You can assign multiple leads
             </p>
-            <button
-          onClick={handleNext}
-              disabled={!isFormComplete}
-              className={`w-full h-10 px-5 rounded-[28px] flex items-center justify-center transition ${
-                isFormComplete
-                  ? "bg-[#ffb546] hover:opacity-90 cursor-pointer"
-                  : "bg-[#f9f9f9] cursor-not-allowed opacity-50"
-              }`}
-            >
-              <span className={`text-sm font-semibold leading-[18.62px] ${
-                isFormComplete ? "text-black" : "text-[#848487]"
-              }`}>Next</span>
-            </button>
+          {/* Next */}
+            <div className="flex flex-col md:flex-row md:items-center md:gap-2.5">
+              <button
+                onClick={handleNext}
+                disabled={!isFormComplete}
+                className={`w-full md:flex-1 md:min-w-0 h-10 md:h-8 px-5 md:px-4 rounded-[28px] flex items-center justify-center transition ${
+                   isFormComplete
+                     ? "bg-[#ffb546] hover:opacity-90 cursor-pointer"
+                     : "bg-[#f9f9f9] cursor-not-allowed opacity-50"
+                 }`}
+              >
+                <span className={`text-sm font-semibold leading-[18.62px] ${
+                  isFormComplete ? "text-black" : "text-[#848487]"
+                }`}>Next</span>
+              </button>
+            </div>
           </div>
       </div>
 
@@ -1002,12 +985,7 @@ function NewBriefForm({
           >
           {hasFormProgress ? (
             <div className="w-full h-full overflow-y-auto">
-              <BriefPreviewPanel
-                projectTitle={formData.projectTitle}
-                launchDate={formattedDueDate}
-                projectLead={projectLeadLabel}
-                objective={formData.objective.trim()}
-              />
+              {renderPreviewPanel()}
             </div>
           ) : (
             <div className="flex flex-col gap-2 items-center">
@@ -1139,47 +1117,55 @@ function NewBriefForm({
               *You can assign multiple leads
             </p>
           </div>
+
         </div>
 
         {/* White Document - Shown on mobile and tablet/iPad */}
         <div className="flex lg:hidden flex-col gap-2.5 pb-5 w-full max-w-4xl mt-5">
-          {/* Loading State - Double height */}
-          <div className="bg-white flex flex-col gap-8 items-center justify-center rounded-xl min-h-[600px]">
-            <div className="flex flex-col gap-2 items-center">
-              <BriefLoadingGraphic />
-              <p className="text-sm font-bold leading-[18.62px] opacity-50 text-[#c1c1c3]">
-                Brief loading...
-              </p>
-            </div>
+          <div
+            className={`bg-white rounded-xl min-h-[600px] w-full ${
+              hasFormProgress
+                ? "p-6 flex items-start justify-start"
+                : "p-6 flex flex-col gap-8 items-center justify-center"
+            }`}
+          >
+            {hasFormProgress ? (
+              <div className="w-full">
+                {renderPreviewPanel()}
+              </div>
+            ) : (
+              <div className="flex flex-col gap-2 items-center">
+                <BriefLoadingGraphic />
+                <p className="text-sm font-bold leading-[18.62px] opacity-50 text-[#c1c1c3]">
+                  Brief loading...
+                </p>
+              </div>
+            )}
           </div>
 
           {/* Separator */}
           <div className="h-[9px] relative w-full shrink-0">
             <div className="absolute h-px left-0 top-[4px] w-full bg-[#e0e0e0]" />
           </div>
-        </div>
 
-        {/* Buttons section for mobile and tablet/iPad */}
-        <div className="flex lg:hidden flex-col gap-2.5 w-full max-w-4xl pb-5">
-          {/* Token Estimate */}
-          <div className="flex w-full justify-end">
-            <TokenEstimate value={0} />
-          </div>
-
-          {/* Action Buttons - Order: Next, Discard, Save draft, Review brief - Stacked on mobile, row on tablet */}
+          {/* Action Buttons - Discard, Save draft, Review brief */}
           <div className="flex flex-col md:flex-row items-center gap-2.5 w-full min-w-0">
             <button
               onClick={handleNext}
               disabled={!isFormComplete}
-              className={`w-full md:flex-1 md:min-w-0 h-8 px-2 md:px-4 rounded-[28px] flex items-center justify-center transition ${
+              className={`w-full md:flex-1 md:min-w-0 h-8 md:h-10 px-2 md:px-4 rounded-[28px] flex items-center justify-center transition ${
                 isFormComplete
                   ? "bg-[#ffb546] hover:opacity-90 cursor-pointer"
                   : "bg-[#f9f9f9] cursor-not-allowed opacity-50"
               }`}
             >
-              <span className={`text-[13px] font-semibold leading-[18.62px] whitespace-nowrap ${
-                isFormComplete ? "text-black" : "text-[#848487]"
-              }`}>Next</span>
+              <span
+                className={`text-[13px] md:text-sm font-semibold leading-[18.62px] ${
+                  isFormComplete ? "text-black" : "text-[#848487]"
+                }`}
+              >
+                Next
+              </span>
             </button>
             <button
               onClick={onCancel}
@@ -1187,22 +1173,29 @@ function NewBriefForm({
             >
               <span className="text-[13px] font-semibold leading-[18.62px] whitespace-nowrap">Discard</span>
             </button>
-            <button 
+            <button
               onClick={handleSaveDraft}
               className="w-full md:flex-1 md:min-w-0 h-8 px-2 md:px-4 bg-[#ffb546] hover:opacity-90 rounded-[28px] flex items-center justify-center transition"
             >
               <span className="text-[13px] font-semibold leading-[18.62px] text-black whitespace-nowrap">Save draft</span>
             </button>
             <button
-              onClick={() => navigate("/dashboard/briefs/review", { state: { brief: formData } })}
+              onClick={() => {
+                if (!isFormComplete) return;
+                navigate("/dashboard/briefs/review", { state: { brief: formData } });
+              }}
               disabled={!isFormComplete}
               className={`w-full md:flex-1 md:min-w-0 h-8 px-2 md:px-4 rounded-[28px] flex items-center justify-center transition ${
                 isFormComplete ? "bg-[#ffb546] hover:opacity-90" : "bg-[#f9f9f9] cursor-not-allowed opacity-50"
               }`}
             >
-              <span className={`text-[13px] font-semibold leading-[18.62px] whitespace-nowrap ${
-                isFormComplete ? "text-black" : "text-[#848487]"
-              }`}>Review brief</span>
+              <span
+                className={`text-[13px] font-semibold leading-[18.62px] whitespace-nowrap ${
+                  isFormComplete ? "text-black" : "text-[#848487]"
+                }`}
+              >
+                Review brief
+              </span>
             </button>
           </div>
         </div>
@@ -1249,6 +1242,21 @@ function DeliverablesSelectionScreen({
   const projectLeadLabel = briefData.projectLead
     ? PROJECT_LEADS.find((lead) => lead.value === briefData.projectLead)?.label ?? briefData.projectLead
     : "";
+
+  const hasBriefPreview =
+    briefData.projectTitle.trim() !== "" ||
+    Boolean(briefData.dueDate) ||
+    briefData.projectLead !== "" ||
+    briefData.objective.trim() !== "";
+
+  const renderBriefPreview = () => (
+    <BriefPreviewPanel
+      projectTitle={briefData.projectTitle}
+      launchDate={formattedLaunchDate}
+      projectLead={projectLeadLabel}
+      objective={briefData.objective.trim()}
+    />
+  );
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -1386,12 +1394,14 @@ function DeliverablesSelectionScreen({
           <div className="flex flex-col gap-2.5 pb-5 pl-2.5 pt-2.5 flex-[1_1_0%] min-w-0 h-full overflow-hidden">
           {/* Brief Preview - made smaller to prevent scroll */}
           <div className="h-[89%] overflow-hidden">
-          <BriefPreviewPanel
-            projectTitle={briefData.projectTitle}
-            launchDate={formattedLaunchDate}
-            projectLead={projectLeadLabel}
-            objective={briefData.objective}
-          />
+          {hasBriefPreview ? renderBriefPreview() : (
+            <div className="flex flex-col gap-2 items-center justify-center h-full">
+              <BriefLoadingGraphic />
+              <p className="text-sm font-bold leading-[18.62px] opacity-50 text-[#c1c1c3]">
+                Brief loading...
+              </p>
+            </div>
+          )}
           </div>
 
           {/* Separator - matching left side line width and position */}
@@ -1501,44 +1511,40 @@ function DeliverablesSelectionScreen({
         </div>
 
         {/* White Document - Shown on mobile and tablet/iPad */}
-        <div className="flex lg:hidden flex-col gap-2.5 pb-5 w-full max-w-4xl mt-5">
-          {/* Brief Preview - Double height */}
-          <div className="bg-white flex flex-col p-6 rounded-xl min-h-[600px] overflow-y-auto">
-            <BriefPreviewPanel
-              projectTitle={briefData.projectTitle}
-              launchDate={formattedLaunchDate}
-              projectLead={projectLeadLabel}
-              objective={briefData.objective}
-            />
-          </div>
+        <div
+          className={`bg-white rounded-xl min-h-[600px] w-full ${
+            hasBriefPreview
+              ? "p-6 flex items-start justify-start"
+              : "p-6 flex flex-col gap-8 items-center justify-center"
+          }`}
+        >
+          {hasBriefPreview ? (
+            <div className="w-full">
+              {renderBriefPreview()}
+            </div>
+          ) : (
+            <div className="flex flex-col gap-2 items-center">
+              <BriefLoadingGraphic />
+              <p className="text-sm font-bold leading-[18.62px] opacity-50 text-[#c1c1c3]">
+                Brief loading...
+              </p>
+            </div>
+          )}
+        </div>
 
-          {/* Separator */}
-          <div className="h-[9px] relative w-full shrink-0">
-            <div className="absolute h-px left-0 top-[4px] w-full bg-[#e0e0e0]" />
-          </div>
+        {/* Separator */}
+        <div className="h-[9px] relative w-full shrink-0">
+          <div className="absolute h-px left-0 top-[4px] w-full bg-[#e0e0e0]" />
         </div>
 
         {/* Buttons section for mobile and tablet/iPad */}
         <div className="flex lg:hidden flex-col gap-2.5 w-full max-w-4xl pb-5">
-          {/* AI Chat Input above buttons */}
-          <div className="shrink-0 pb-2 w-full">
-            <ChatInput
-              value={chatInput}
-              onChange={setChatInput}
-              onSubmit={(v) => { if (v.trim()) { onNavigateToAiResponse(v.trim()); } }}
-              leftIcon={paperclipIcon}
-              rightIcon={sendArrowIcon}
-              helpText="Need a hand? Talk to your Iris account manager"
-              className="w-full md:w-[516px]"
-              containerClassName="w-full"
-            />
-          </div>
           {/* Token Estimate */}
-          <div className="flex gap-2 items-center pb-2 w-full justify-end">
-            <TokenEstimate value={tokenEstimate} />
+          <div className="flex w-full justify-end">
+            <TokenEstimate value={0} />
           </div>
 
-          {/* Action Buttons - Order: Discard, Save draft, Review brief - Stacked on mobile, row on tablet */}
+          {/* Action Buttons - Discard, Save draft, Review brief */}
           <div className="flex flex-col md:flex-row items-center gap-2.5 w-full min-w-0">
             <button
               onClick={onCancel}
@@ -1638,6 +1644,25 @@ function AIResponseScreen({
   // Mock deliverables list from Figma
   const deliverablesList = DELIVERABLES_LIST;
 
+  const hasBriefPreview =
+    briefData.projectTitle.trim() !== "" ||
+    Boolean(briefData.dueDate) ||
+    briefData.projectLead !== "" ||
+    briefData.objective.trim() !== "";
+
+  const handleSubmit = () => {
+    setShowConfirmation(true);
+  };
+
+  const renderBriefPreview = () => (
+    <BriefPreviewPanel
+      projectTitle={briefData.projectTitle}
+      launchDate={formattedLaunchDate}
+      projectLead={projectLeadLabel}
+      objective={briefData.objective.trim()}
+    />
+  );
+
   return (
     <>
       {/* Desktop Layout - Side by side */}
@@ -1724,12 +1749,14 @@ function AIResponseScreen({
           <div className="flex flex-col gap-2.5 pb-5 pl-2.5 pt-2.5 flex-[1_1_0%] min-w-0 h-full overflow-hidden">
           {/* Brief Preview - made smaller to prevent scroll */}
           <div className="h-[89%] overflow-hidden">
-          <BriefPreviewPanel
-            projectTitle={briefData.projectTitle}
-            launchDate={formattedLaunchDate}
-            projectLead={projectLeadLabel}
-            objective={briefData.objective}
-          />
+          {hasBriefPreview ? renderBriefPreview() : (
+            <div className="flex flex-col gap-2 items-center justify-center h-full">
+              <BriefLoadingGraphic />
+              <p className="text-sm font-bold leading-[18.62px] opacity-50 text-[#c1c1c3]">
+                Brief loading...
+              </p>
+            </div>
+          )}
           </div>
 
           {/* Separator - matching left side line width and position */}
@@ -1743,17 +1770,17 @@ function AIResponseScreen({
             <TokenEstimate value={10} />
 
             {/* Action Buttons */}
-            <div className="flex items-center w-full gap-2 min-w-0">
+            <div className="flex flex-row items-center gap-2.5 w-full min-w-0">
               <button
                 onClick={handleSaveDraft}
-                className="flex-shrink-0 h-8 px-3 md:px-4 bg-[#03b3e2] text-black hover:opacity-80 rounded-[28px] transition flex items-center justify-center"
+                className="flex-1 min-w-0 h-8 px-2 md:px-4 bg-[#03b3e2] text-black hover:opacity-80 rounded-[28px] transition flex items-center justify-center"
               >
-                <span className="text-[13px] font-semibold leading-[18.62px] whitespace-nowrap">Save draft</span>
+                <span className="text-[13px] font-semibold leading-[18.62px] text-black whitespace-nowrap">Save draft</span>
               </button>
               <div className="w-[15%] shrink-0" />
               <button
-                onClick={() => navigate("/dashboard/briefs/review", { state: { brief: briefData } })}
-                className="btn w-[60%] min-w-0 h-8 px-2 md:px-4 bg-[#ffb546] hover:opacity-90 rounded-[28px] flex items-center justify-center gap-1 md:gap-[10px] transition"
+                onClick={handleSubmit}
+                className="btn flex-1 min-w-0 h-8 px-2 md:px-4 bg-[#ffb546] hover:opacity-90 rounded-[28px] flex items-center justify-center gap-1 md:gap-[10px] transition"
               >
                 <span className="text-[13px] font-semibold leading-[18.62px] text-black whitespace-nowrap">Submit brief</span>
                 <img src={createBriefArrowIcon} alt="" className="h-[14px] w-[15.567px] shrink-0" />
@@ -1835,24 +1862,24 @@ function AIResponseScreen({
         </div>
 
         {/* White Document - Shown on mobile and tablet/iPad */}
-        <div className="flex lg:hidden flex-col gap-2.5 pb-5 w-full max-w-4xl mt-5">
-          {/* Brief Preview - Double height */}
-          <div className="bg-white flex flex-col p-6 rounded-xl min-h-[600px] overflow-y-auto">
-            <BriefPreviewPanel
-              projectTitle={briefData.projectTitle}
-              launchDate={formattedLaunchDate}
-              projectLead={projectLeadLabel}
-              objective={briefData.objective}
-            />
-          </div>
+        <div className="bg-white flex flex-col p-6 rounded-xl min-h-[600px] overflow-y-auto">
+          <BriefPreviewPanel
+            projectTitle={briefData.projectTitle}
+            launchDate={formattedLaunchDate}
+            projectLead={projectLeadLabel}
+            objective={briefData.objective}
+          />
+        </div>
 
-          {/* Separator */}
-          <div className="h-[9px] relative w-full shrink-0">
-            <div className="absolute h-px left-0 top-[4px] w-full bg-[#e0e0e0]" />
-          </div>
+        {/* Separator */}
+        <div className="h-[9px] relative w-full shrink-0">
+          <div className="absolute h-px left-0 top-[4px] w-full bg-[#e0e0e0]" />
+        </div>
 
-          {/* AI Chat Input below white document on mobile */}
-          <div className="flex lg:hidden shrink-0 pb-2 pt-2 w-full">
+        {/* Buttons section for mobile and tablet/iPad */}
+        <div className="flex lg:hidden flex-col gap-2.5 w-full max-w-4xl pb-5">
+          {/* AI Chat Input above buttons */}
+          <div className="shrink-0 pb-2 w-full">
             <ChatInput
               leftIcon={paperclipIcon}
               rightIcon={sendArrowIcon}
@@ -1861,16 +1888,12 @@ function AIResponseScreen({
               containerClassName="w-full"
             />
           </div>
-        </div>
-
-        {/* Buttons section for mobile and tablet/iPad */}
-        <div className="flex lg:hidden flex-col gap-2.5 w-full max-w-4xl pb-5">
           {/* Token Estimate */}
-          <div className="flex gap-2 items-center pb-2 w-full justify-end">
-            <TokenEstimate value={10} />
+          <div className="flex w-full justify-end">
+            <TokenEstimate value={0} />
           </div>
 
-          {/* Action Buttons - Order: Discard, Save draft, Review brief - Stacked on mobile, row on tablet */}
+          {/* Action Buttons - Discard, Save draft, Review brief */}
           <div className="flex flex-col md:flex-row items-center gap-2.5 w-full min-w-0">
             <button
               onClick={onCancel}
@@ -1878,18 +1901,20 @@ function AIResponseScreen({
             >
               <span className="text-[13px] font-semibold leading-[18.62px] whitespace-nowrap">Discard</span>
             </button>
-            <button 
-              onClick={handleSaveDraft}
-              className="w-full md:flex-1 md:min-w-0 h-8 px-2 md:px-4 bg-[#ffb546] hover:opacity-90 rounded-[28px] flex items-center justify-center transition"
-            >
-              <span className="text-[13px] font-semibold leading-[18.62px] text-black whitespace-nowrap">Save draft</span>
-            </button>
-            <button
-              onClick={() => navigate("/dashboard/briefs/review", { state: { brief: briefData } })}
-              className="w-full md:flex-1 md:min-w-0 h-8 px-2 md:px-4 rounded-[28px] flex items-center justify-center bg-[#ffb546] hover:opacity-90 transition"
-            >
-              <span className="text-[13px] font-semibold leading-[18.62px] text-black whitespace-nowrap">Review brief</span>
-            </button>
+            <div className="w-full md:w-auto flex flex-col md:flex-row items-center gap-2.5 md:gap-1 md:flex-1 min-w-0">
+              <button 
+                onClick={handleSaveDraft}
+                className="w-full md:flex-1 md:min-w-0 h-8 px-2 md:px-4 bg-[#ffb546] hover:opacity-90 rounded-[28px] flex items-center justify-center transition"
+              >
+                <span className="text-[13px] font-semibold leading-[18.62px] text-black whitespace-nowrap">Save draft</span>
+              </button>
+              <button
+                onClick={() => navigate("/dashboard/briefs/review", { state: { brief: briefData } })}
+                className="w-full md:flex-1 md:min-w-0 h-8 px-2 md:px-4 rounded-[28px] flex items-center justify-center bg-[#ffb546] hover:opacity-90 transition"
+              >
+                <span className="text-[13px] font-semibold leading-[18.62px] text-black whitespace-nowrap">Review brief</span>
+              </button>
+            </div>
           </div>
         </div>
       </div>
