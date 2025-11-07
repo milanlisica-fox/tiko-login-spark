@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Home, FileText, Folder, BarChart2, Bell, ChevronDown, ArrowRight, Calculator, Coins, Wallet, HelpCircle } from "lucide-react";
+import { Home, FileText, Folder, BarChart2, Bell, ChevronDown, ArrowRight, Calculator, Coins, Wallet, HelpCircle, Plus } from "lucide-react";
 import { toast } from "sonner";
 import { Popover, PopoverTrigger, PopoverContent } from "@/components/ui/popover";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -28,7 +28,7 @@ const createBriefArrowIcon = DASHBOARD_ASSETS.createBriefArrowIcon;
 export default function TikoDashboard() {
   const navigate = useNavigate();
   const [budgetView, setBudgetView] = useState<"quarter" | "annual">("quarter");
-
+const [open, setOpen] = useState(false);
   // nav items centralized via DashboardLayout
   const { activeName: active } = useActiveNav();
 
@@ -147,51 +147,126 @@ export default function TikoDashboard() {
                   </div>
 
                   {/* Buttons Section - 25% on desktop */}
-                  <div className="cs-item flex flex-col sm:flex-row lg:flex-col gap-2.5 lg:w-[25%]">
-                    <button 
-                      onClick={() => navigate("/dashboard/briefs", { state: { createBrief: true } })}
-                      className="btn w-full sm:flex-1 lg:flex-none h-[48px] bg-[#ffb546] backdrop-blur-sm rounded-[28px] flex items-center justify-center gap-[10px] px-[24px] py-[18px] hover:opacity-90 transition"
-                    >
-                      <span className="text-base font-semibold leading-[23.94px] text-black whitespace-nowrap">
-                        Create brief
-                      </span>
-                    <svg className="h-[14px] w-[15.567px]" width="45" height="40" viewBox="0 0 45 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <path d="M23.8229 40H5.80935C2.59694 40 0 37.4332 0 34.2582V31.8843C0 30.5935 0.795591 29.4362 2.0115 28.9614L14.9212 22.908C17.5932 21.8546 17.5932 18.1306 14.9362 17.0623L1.99648 10.8902C0.795576 10.4154 0 9.25816 0 7.96736V5.74184C0 2.56677 2.59694 0 5.80935 0H23.8229C25.0838 0 26.3147 0.400603 27.3205 1.15728L42.692 15.4154C45.7693 17.7151 45.7693 22.27 42.692 24.5697L27.3205 38.8279C26.3147 39.5846 25.0838 39.9852 23.8229 39.9852V40Z" fill="#000"></path>
-                      </svg>
-                    </button>
-                    <button
-                      onClick={async (e) => {
-                        const button = e.currentTarget;
+                {/* Desktop version (visible on sm and above) */}
+      <div className="cs-item hidden sm:flex flex-col sm:flex-row lg:flex-col gap-2.5 lg:w-[25%]">
+        {/* Create brief */}
+        <button
+          onClick={() =>
+            navigate("/dashboard/briefs", { state: { createBrief: true } })
+          }
+          className="btn w-full sm:flex-1 lg:flex-none h-[48px] bg-[#ffb546] backdrop-blur-sm rounded-[28px] flex items-center justify-center gap-[10px] px-[24px] py-[18px] hover:opacity-90 transition"
+        >
+          <span className="text-base font-semibold leading-[23.94px] text-black whitespace-nowrap">
+            Create brief
+          </span>
+          <svg
+            className="h-[14px] w-[15.567px]"
+            width="45"
+            height="40"
+            viewBox="0 0 45 40"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M23.8229 40H5.80935C2.59694 40 0 37.4332 0 34.2582V31.8843C0 30.5935 0.795591 29.4362 2.0115 28.9614L14.9212 22.908C17.5932 21.8546 17.5932 18.1306 14.9362 17.0623L1.99648 10.8902C0.795576 10.4154 0 9.25816 0 7.96736V5.74184C0 2.56677 2.59694 0 5.80935 0H23.8229C25.0838 0 26.3147 0.400603 27.3205 1.15728L42.692 15.4154C45.7693 17.7151 45.7693 22.27 42.692 24.5697L27.3205 38.8279C26.3147 39.5846 25.0838 39.9852 23.8229 39.9852V40Z"
+              fill="#000"
+            ></path>
+          </svg>
+        </button>
 
-                        // Add bounce animation with brand color
-                        button.classList.add("animate-bounce-once", "bg-[#03b3e2]");
+        {/* Quick calculator */}
+        <button
+          onClick={async (e) => {
+            const button = e.currentTarget;
+            button.classList.add("animate-bounce-once", "bg-[#03b3e2]");
+            await new Promise((resolve) => setTimeout(resolve, 600));
+            button.classList.remove("animate-bounce-once", "bg-[#03b3e2]");
+            navigate("/dashboard/calculator");
+          }}
+          className="btn w-full sm:flex-1 lg:flex-none h-[48px] bg-[#03b3e2] backdrop-blur-sm rounded-[28px] flex items-center justify-center gap-[10px] px-[24px] py-[18px] hover:opacity-90 transition"
+        >
+          <Calculator size={16} className="text-black" />
+          <span className="text-base font-semibold leading-[23.94px] text-black whitespace-nowrap">
+            Quick calculator
+          </span>
+        </button>
 
-                        // Wait for animation to complete (~600ms)
-                        await new Promise((resolve) => setTimeout(resolve, 600));
+        {/* View all */}
+        <button
+          onClick={() => navigate("/dashboard/briefs")}
+          className="btn btn-transp w-full sm:flex-1 lg:flex-none h-[48px] bg-[#ffb546] backdrop-blur-sm rounded-[28px] flex items-center justify-center gap-[10px] px-[24px] py-[18px] hover:opacity-90 transition"
+        >
+          <span className="text-base font-semibold leading-[23.94px] text-black whitespace-nowrap">
+            View all
+          </span>
+          <ArrowRight size={16} className="text-black" />
+        </button>
+      </div>
 
-                        // Remove the animation so it resets next time
-                        button.classList.remove("animate-bounce-once", "bg-[#03b3e2]");
+      {/* Mobile floating button (only visible below sm) */}
+      <div className="sm:hidden relative bottom-0 right-0 flex flex-col items-end z-50">
+        {open && (
+          <div className="flex flex-col gap-2.5 mb-3 bg-white/70 backdrop-blur-md rounded-[20px] p-3 shadow-lg absolute bottom-[45px] right-0">
+            {/* Same buttons from above */}
+            <button
+              onClick={() =>
+                navigate("/dashboard/briefs", { state: { createBrief: true } })
+              }
+              className="btn w-full h-[48px] bg-[#ffb546] rounded-[28px] flex items-center justify-center gap-[10px] px-[24px] py-[18px] hover:opacity-90 transition"
+            >
+              <span className="text-base font-semibold text-black whitespace-nowrap">
+                Create brief
+              </span>
+              <svg
+                className="h-[14px] w-[15.567px]"
+                width="45"
+                height="40"
+                viewBox="0 0 45 40"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M23.8229 40H5.80935C2.59694 40 0 37.4332 0 34.2582V31.8843C0 30.5935 0.795591 29.4362 2.0115 28.9614L14.9212 22.908C17.5932 21.8546 17.5932 18.1306 14.9362 17.0623L1.99648 10.8902C0.795576 10.4154 0 9.25816 0 7.96736V5.74184C0 2.56677 2.59694 0 5.80935 0H23.8229C25.0838 0 26.3147 0.400603 27.3205 1.15728L42.692 15.4154C45.7693 17.7151 45.7693 22.27 42.692 24.5697L27.3205 38.8279C26.3147 39.5846 25.0838 39.9852 23.8229 39.9852V40Z"
+                  fill="#000"
+                ></path>
+              </svg>
+            </button>
 
-                        // Navigate after animation
-                        navigate("/dashboard/calculator");
-                      }}
-                      className="btn w-full sm:flex-1 lg:flex-none h-[48px] bg-[#03b3e2] backdrop-blur-sm rounded-[28px] flex items-center justify-center gap-[10px] px-[24px] py-[18px] hover:opacity-90 transition"
-                    >
-                      <Calculator size={16} className="text-black" />
-                      <span className="text-base font-semibold leading-[23.94px] text-black whitespace-nowrap">
-                        Quick calculator
-                      </span>
-                    </button>
-                    <button 
-                      onClick={() => navigate("/dashboard/briefs")}
-                      className="btn btn-transp w-full sm:flex-1 lg:flex-none h-[48px] bg-[#ffb546] backdrop-blur-sm rounded-[28px] flex items-center justify-center gap-[10px] px-[24px] py-[18px] hover:opacity-90 transition"
-                    >
-                      <span className="text-base font-semibold leading-[23.94px] text-black whitespace-nowrap">
-                        View all
-                      </span>
-                      <ArrowRight size={16} className="text-black" />
-                    </button>
-                  </div>
+            <button
+              onClick={() => navigate("/dashboard/calculator")}
+              className="btn w-full h-[48px] bg-[#03b3e2] rounded-[28px] flex items-center justify-center gap-[10px] px-[24px] py-[18px] hover:opacity-90 transition"
+            >
+              <Calculator size={16} className="text-black" />
+              <span className="text-base font-semibold text-black whitespace-nowrap">
+                Quick calculator
+              </span>
+            </button>
+
+            <button
+              onClick={() => navigate("/dashboard/briefs")}
+              className="btn w-full h-[48px] bg-[#ffb546] rounded-[28px] flex items-center justify-center gap-[10px] px-[24px] py-[18px] hover:opacity-90 transition"
+            >
+              <span className="text-base font-semibold text-black whitespace-nowrap">
+                View all
+              </span>
+              <ArrowRight size={16} className="text-black" />
+            </button>
+          </div>
+        )}
+
+        {/* Floating + button */}
+        <button
+          onClick={() => setOpen(!open)}
+          className="bg-[#fa9f41] text-white w-12 h-12 rounded-full flex items-center justify-center shadow-lg hover:bg-[#fa9f41] transition"
+        >
+          <Plus
+            size={24}
+            className={`transform transition-transform duration-300 ${
+              open ? "rotate-45" : "rotate-0"
+            }`}
+          />
+        </button>
+      </div>
                 </div>
               </div>
 
