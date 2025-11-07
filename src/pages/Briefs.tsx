@@ -246,7 +246,6 @@ export default function BriefsPage() {
                         className="card-brief cb2 relative overflow-hidden hover:opacity-90 transition cursor-pointer w-full text-left"
                       >
                         <StatCard title={card.title} value={card.value} className="rounded-xl p-6" titleBold={card.titleBold} />
-                        {card.icon}
                       </button>
                     );
                   }
