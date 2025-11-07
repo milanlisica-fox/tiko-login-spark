@@ -212,7 +212,7 @@ export default function SOWPage() {
 
       {/* SOW Document Modal */}
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-        <DialogContent className="max-w-5xl max-h-[95vh] p-0 bg-white flex flex-col">
+        <DialogContent hideClose className="max-w-5xl max-h-[95vh] p-0 bg-white flex flex-col">
           <div className="p-6 pb-4 shrink-0 relative">
             <DialogHeader>
               <DialogTitle className="text-xl font-bold text-black pr-10">{selectedSOW?.title}</DialogTitle>

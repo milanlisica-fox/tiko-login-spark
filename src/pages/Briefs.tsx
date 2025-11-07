@@ -1,14 +1,9 @@
-import { useMemo, useState, useEffect, useRef } from "react";
+import { useMemo, useState, useEffect, useRef, useCallback, ReactNode } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Home, FileText, Folder, BarChart2, LogOut, Bell, ChevronDown, ArrowRight, Calculator, Coins, X, Calendar as CalendarIcon, ArrowLeft, Plus, ChevronDown as ChevronDownIcon } from "lucide-react";
 import { toast } from "sonner";
-import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Calendar } from "@/components/ui/calendar";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { format } from "date-fns";
 import { triggerSuccessConfetti } from "@/lib/animations";
@@ -22,9 +17,7 @@ import BriefCard from "@/components/common/BriefCard";
 import { Field } from "@/components/common/Field";
 import DateField from "@/components/common/DateField";
 import ChatInput from "@/components/common/ChatInput";
-import FormFooter from "@/components/common/FormFooter";
 import TokenEstimate from "@/components/common/TokenEstimate";
-import { getBadgeStyle } from "@/lib/utils";
 import { ALL_TEMPLATES } from "@/constants/templates";
 import { RECOMMENDED_DELIVERABLES, DELIVERABLES_LIST } from "@/constants/deliverables";
 import { Icons } from "@/constants/icons";
@@ -57,7 +50,6 @@ const tokenIcon = BRIEFS_ASSETS.tokenIcon;
 const createBriefArrowIcon = BRIEFS_ASSETS.createBriefArrowIcon;
 
 // Deliverables screen images from Figma
-const imgFrame14 = BRIEFS_ASSETS.imgFrame14;
 const imgFrame15 = BRIEFS_ASSETS.imgFrame15;
 const imgLine10 = BRIEFS_ASSETS.imgLine10;
 const imgLineStroke = BRIEFS_ASSETS.imgLineStroke;
@@ -70,12 +62,163 @@ const imgFrame15_v2 = BRIEFS_ASSETS.imgFrame15_v2;
 // Upload icon (match profile picture dialog)
 const uploadIcon = BRIEFS_ASSETS.uploadIcon;
 
+const paperclipIcon = (
+  <svg xmlns="http://www.w3.org/2000/svg" width="14" height="16" viewBox="0 0 14 16" fill="none">
+    <path d="M12.9338 6.75454L6.54463 13.1437C5.3168 14.3715 3.32782 14.3715 2.09999 13.1437C0.872163 11.9159 0.872163 9.9269 2.09999 8.69907L9.04474 1.75433C9.41311 1.38595 9.91273 1.179 10.4337 1.179C10.9546 1.179 11.4543 1.38595 11.8226 1.75433C12.191 2.1227 12.398 2.62232 12.398 3.14327C12.398 3.66423 12.191 4.16385 11.8226 4.53222L5.98905 10.3658C5.68348 10.6714 5.18346 10.6714 4.87789 10.3658C4.57232 10.0602 4.57232 9.56022 4.87789 9.25465L10.1559 3.97664L9.32253 3.14327L4.04452 8.42128C3.67615 8.78965 3.4692 9.28927 3.4692 9.81023C3.4692 10.3312 3.67615 10.8308 4.04452 11.1992C4.41289 11.5675 4.91251 11.7745 5.43347 11.7745C5.95443 11.7745 6.45405 11.5675 6.82242 11.1992L12.656 5.36559C13.8838 4.13776 13.8838 2.14879 12.656 0.920957C11.4282 -0.306874 9.4392 -0.306874 8.21137 0.920957L1.26662 7.8657C-0.422337 9.55466 -0.422337 12.2881 1.26662 13.9771C2.95559 15.666 5.68904 15.666 7.378 13.9771L13.7672 7.58791L12.9338 6.75454Z" fill="#1F1F22"/>
+  </svg>
+);
+
+const sendArrowIcon = (
+  <div className="w-10 h-10 rounded-full bg-[#ffb546] flex items-center justify-center">
+    <svg xmlns="http://www.w3.org/2000/svg" width="15" height="13" viewBox="0 0 15 13" fill="none">
+      <path d="M4.55075 0.753984C4.5167 0.883758 4.50851 1.01933 4.52664 1.15293C4.54478 1.28653 4.58889 1.41553 4.65644 1.53253C4.72399 1.64953 4.81365 1.75223 4.92028 1.83473C5.02692 1.91724 5.14842 1.97794 5.27783 2.01334L11.2417 3.6559L0.502435 9.85624C0.269925 9.99048 0.101013 10.2129 0.0328563 10.4745C-0.0353009 10.7361 0.00287702 11.0156 0.138997 11.2513C0.275116 11.4871 0.498027 11.6599 0.758686 11.7317C1.01935 11.8035 1.2964 11.7684 1.52891 11.6341L12.2682 5.43381L10.7096 11.4215C10.6413 11.6835 10.6796 11.9635 10.8159 12.1996C10.9523 12.4358 11.1756 12.6089 11.4367 12.6808C11.6978 12.7527 11.9754 12.7176 12.2083 12.5831C12.4412 12.4486 12.6104 12.2259 12.6787 11.9638L14.8593 3.59313C14.8933 3.46336 14.9015 3.32778 14.8834 3.19418C14.8653 3.06058 14.8212 2.93158 14.7536 2.81458C14.6861 2.69758 14.5964 2.59488 14.4898 2.51238C14.3831 2.42987 14.2616 2.36917 14.1322 2.33377L5.79271 0.0369374C5.66341 0.00108577 5.52867 -0.0087951 5.3962 0.00786099C5.26374 0.0245171 5.13615 0.0673812 5.02077 0.133998C4.90539 0.200614 4.80447 0.289672 4.72382 0.396063C4.64316 0.502454 4.58434 0.624086 4.55075 0.753984Z" fill="white" />
+    </svg>
+  </div>
+);
+
+type BriefStatus = "Draft" | "In review" | "SOW Ready to sign";
+type BriefBadge = "Creation" | "Adaptation" | "Resize" | "default";
+
+interface BriefSummary {
+  id: string;
+  title: string;
+  description: string;
+  badge: BriefBadge;
+  date: string;
+  comments: number;
+  avatars: number;
+  status: BriefStatus;
+  icon?: ReactNode;
+  projectLead?: string;
+}
+
+interface NewBriefFormValues {
+  projectTitle: string;
+  dueDate?: Date;
+  projectLead: string;
+  objective: string;
+}
+
+const PROJECT_LEADS = [
+  { value: "henry-bray", label: "Henry Bray" },
+  { value: "john-doe", label: "John Doe" },
+  { value: "jane-smith", label: "Jane Smith" },
+];
+
+const createBriefFormDefaults = (): NewBriefFormValues => ({
+  projectTitle: "",
+  dueDate: undefined,
+  projectLead: "",
+  objective: "",
+});
+
+const initialBriefs: BriefSummary[] = [
+  {
+    id: "brief-1",
+    title: "W Summer Festival 2025",
+    description:
+      "Develop visual guide for  the Summer Campaign Festival 2025. Create full set of campaign visuals, formats, and variations, for digital, print media.",
+    badge: "Creation",
+    date: "27 AUG",
+    comments: 23,
+    avatars: 2,
+    status: "Draft",
+    icon: (
+      <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M3.58249 0H7.87085C9.84785 0 11.4533 1.60548 11.4533 3.58249V8.41751C11.4533 10.3945 9.84785 12 7.87085 12H3.58249C1.60549 12 0 10.3945 0 8.41751V3.58249C0 1.60548 1.60549 0 3.58249 0Z" fill="#FFB546" />
+      </svg>
+    ),
+  },
+  {
+    id: "brief-2",
+    title: "Watch Radio Campaign Q4 2025",
+    description:
+      "Develop visual guide for  the Summer Campaign Festival 2025. Create full set of campaign visuals, formats, and variations, for digital, print media.",
+    badge: "Adaptation",
+    date: "3 SEP",
+    comments: 4,
+    avatars: 3,
+    status: "Draft",
+    icon: (
+      <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M3.58249 0H7.87085C9.84785 0 11.4533 1.60548 11.4533 3.58249V8.41751C11.4533 10.3945 9.84785 12 7.87085 12H3.58249C1.60549 12 0 10.3945 0 8.41751V3.58249C0 1.60548 1.60549 0 3.58249 0Z" fill="#FFB546" />
+      </svg>
+    ),
+  },
+  {
+    id: "brief-3",
+    title: "W Summer Festival 2025",
+    description:
+      "Develop visual guide for  the Summer Campaign Festival 2025. Create full set of campaign visuals, formats, and variations, for digital, print media.",
+    badge: "Creation",
+    date: "28 AUG",
+    comments: 4,
+    avatars: 3,
+    status: "In review",
+    icon: (
+      <svg width="16" height="10" viewBox="0 0 16 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M7.80101 10C10.9954 10 13.7962 8.32168 15.373 5.7988C15.6784 5.31037 15.6784 4.69046 15.373 4.2012C13.7962 1.67832 10.9954 0 7.80101 0C4.60663 0 1.80583 1.67832 0.229031 4.2012C-0.0763438 4.68963 -0.0763438 5.30954 0.229031 5.7988C1.80583 8.32168 4.60663 10 7.80101 10Z" fill="#E5E5E5" />
+      </svg>
+    ),
+  },
+  {
+    id: "brief-4",
+    title: "Fold Toolkit Q3 2025",
+    description:
+      "Develop visual guide for  the Summer Campaign Festival 2025. Create full set of campaign visuals, formats, and variations, for digital, print media.",
+    badge: "Resize",
+    date: "30 AUG",
+    comments: 2,
+    avatars: 4,
+    status: "SOW Ready to sign",
+    icon: (
+      <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M3.58249 0H7.87085C9.84785 0 11.4533 1.60548 11.4533 3.58249V8.41751C11.4533 10.3945 9.84785 12 7.87085 12H3.58249C1.60549 12 0 10.3945 0 8.41751V3.58249C0 1.60548 1.60549 0 3.58249 0Z" fill="#FFB546" />
+      </svg>
+    ),
+  },
+];
+
 export default function BriefsPage() {
   const navigate = useNavigate();
   const location = useLocation();
+  const [briefs, setBriefs] = useState<BriefSummary[]>(initialBriefs);
   const [isCreatingBrief, setIsCreatingBrief] = useState(false);
   const [briefView, setBriefView] = useState<"templates" | "form" | "deliverables" | "ai-response">("templates");
   const [aiInputText, setAiInputText] = useState("");
+
+  const draftBriefCount = useMemo(() => briefs.filter((brief) => brief.status === "Draft").length, [briefs]);
+  const inReviewBriefCount = useMemo(() => briefs.filter((brief) => brief.status === "In review").length, [briefs]);
+  const sowReadyBriefCount = useMemo(
+    () => briefs.filter((brief) => brief.status === "SOW Ready to sign").length,
+    [briefs]
+  );
+
+  const handleBriefSubmit = useCallback(
+    (data: NewBriefFormValues) => {
+      const projectLeadLabel = PROJECT_LEADS.find((lead) => lead.value === data.projectLead)?.label;
+      const dueDateLabel = data.dueDate
+        ? format(data.dueDate, "d MMM").toUpperCase()
+        : format(new Date(), "d MMM").toUpperCase();
+
+      const newBrief: BriefSummary = {
+        id: `brief-${Date.now()}`,
+        title: data.projectTitle.trim(),
+        description: data.objective.trim() || "No objective provided.",
+        badge: "Creation",
+        date: dueDateLabel,
+        comments: 0,
+        avatars: 1,
+        status: "Draft",
+        icon: <Icons.briefs size={16} className="text-[#FFB546]" />,
+        projectLead: projectLeadLabel,
+      };
+
+      setBriefs((prev) => [newBrief, ...prev]);
+      toast.success("Brief submitted successfully");
+    },
+    []
+  );
 
   // Check if we should show the form directly from navigation state or reset to overview
   useEffect(() => {
@@ -153,6 +296,7 @@ export default function BriefsPage() {
               <NewBriefForm 
                 onCancel={() => setBriefView("templates")} 
                 onNext={() => setBriefView("deliverables")}
+                onSubmit={handleBriefSubmit}
               />
             ) : briefView === "deliverables" ? (
               <DeliverablesSelectionScreen 
@@ -208,7 +352,7 @@ export default function BriefsPage() {
                   { 
                     title: "Draft briefs",
                     titleBold: true,
-                    value: 5,
+                    value: draftBriefCount,
                     icon: (
                       <svg width="40" height="44" viewBox="0 0 40 44" fill="none" xmlns="http://www.w3.org/2000/svg" className="absolute right-5 top-5">
                         <path d="M33.3775 0H6.62252C2.96358 0 0 2.96358 0 6.62252V36.7881C0 40.447 2.96358 43.4106 6.62252 43.4106H33.3775C37.0364 43.4106 40 40.447 40 36.7881V6.62252C40 2.96358 37.0364 0 33.3775 0ZM29.8758 34.3295H10.1159C8.75829 34.3295 7.66556 33.2285 7.66556 31.8791C7.66556 30.5215 8.76656 29.4288 10.1159 29.4288H29.8758C31.2334 29.4288 32.3262 30.5298 32.3262 31.8791C32.3262 33.2368 31.2252 34.3295 29.8758 34.3295ZM29.8758 24.1557H10.1159C8.75829 24.1557 7.66556 23.0547 7.66556 21.7053C7.66556 20.3477 8.76656 19.255 10.1159 19.255H29.8758C31.2334 19.255 32.3262 20.356 32.3262 21.7053C32.3262 23.0629 31.2252 24.1557 29.8758 24.1557ZM29.8758 13.9818H10.1159C8.75829 13.9818 7.66556 12.8808 7.66556 11.5315C7.66556 10.1739 8.76656 9.08115 10.1159 9.08115H29.8758C31.2334 9.08115 32.3262 10.1822 32.3262 11.5315C32.3262 12.8891 31.2252 13.9818 29.8758 13.9818Z" fill="#FFB546"/>
@@ -218,7 +362,7 @@ export default function BriefsPage() {
                   { 
                     title: "In review",
                     titleBold: true,
-                    value: 4,
+                    value: inReviewBriefCount,
                     icon: (
                       <svg width="50" height="32" viewBox="0 0 50 32" fill="none" xmlns="http://www.w3.org/2000/svg" className="absolute right-5 top-5">
                         <path d="M24.9632 32C35.1852 32 44.1478 26.6294 49.1935 18.5562C50.1707 16.9932 50.1707 15.0095 49.1935 13.4438C44.1478 5.37061 35.1852 0 24.9632 0C14.7412 0 5.77867 5.37061 0.732901 13.4438C-0.2443 15.0068 -0.2443 16.9905 0.732901 18.5562C5.77867 26.6294 14.7412 32 24.9632 32Z" fill="#E5E5E5"/>
@@ -228,7 +372,7 @@ export default function BriefsPage() {
                   { 
                     title: "SOW Ready to sign",
                     titleBold: true,
-                    value: 3,
+                    value: sowReadyBriefCount,
                     icon: (
                       <svg width="45" height="40" viewBox="0 0 45 40" fill="none" xmlns="http://www.w3.org/2000/svg" className="absolute right-5 top-5">
                         <path d="M23.8229 40H5.80935C2.59694 40 0 37.4332 0 34.2582V31.8843C0 30.5935 0.795591 29.4362 2.0115 28.9614L14.9212 22.908C17.5932 21.8546 17.5932 18.1306 14.9362 17.0623L1.99648 10.8902C0.795576 10.4154 0 9.25816 0 7.96736V5.74184C0 2.56677 2.59694 0 5.80935 0H23.8229C25.0838 0 26.3147 0.400603 27.3205 1.15728L42.692 15.4154C45.7693 17.7151 45.7693 22.27 42.692 24.5697L27.3205 38.8279C26.3147 39.5846 25.0838 39.9852 23.8229 39.9852V40Z" fill="#03B3E2"/>
@@ -396,7 +540,7 @@ export default function BriefsPage() {
               </div>
 
               {/* All briefs */}
-              <AllBriefsSection />
+              <AllBriefsSection briefs={briefs} />
             </div>
           )}
       </div>
@@ -462,14 +606,14 @@ function TemplateSelectionScreen({ onCancel, onCreateBrief }: { onCancel: () => 
 
         {/* Upload existing brief - centered below buttons */}
         <div className="flex flex-col items-center mt-2 w-full">
-          <div className="flex items-center gap-2 justify-center">
-            <p className="text-sm leading-[18.62px] text-black text-center">
+          <div className="flex flex-col sm:flex-row items-center gap-2 justify-center text-center">
+            <p className="text-sm leading-[18.62px] text-black">
               Already have a brief file, please upload it.
             </p>
             <input ref={uploadInputRef} type="file" className="hidden" />
             <button
               type="button"
-              className="flex gap-[4px] items-start hover:opacity-80 transition cursor-pointer"
+              className="flex gap-[4px] items-center justify-center sm:justify-start hover:opacity-80 transition cursor-pointer w-full sm:w-auto"
               onClick={() => uploadInputRef.current?.click()}
             >
               <div className="overflow-clip relative shrink-0 size-[20px]">
@@ -527,14 +671,17 @@ function TemplateSelectionScreen({ onCancel, onCreateBrief }: { onCancel: () => 
   );
 }
 
-function NewBriefForm({ onCancel, onNext }: { onCancel: () => void; onNext: () => void }) {
+function NewBriefForm({
+  onCancel,
+  onNext,
+  onSubmit,
+}: {
+  onCancel: () => void;
+  onNext: () => void;
+  onSubmit: (data: NewBriefFormValues) => void;
+}) {
   const navigate = useNavigate();
-  const [formData, setFormData] = useState({
-    projectTitle: "",
-    dueDate: undefined as Date | undefined,
-    projectLead: "",
-    objective: "",
-  });
+  const [formData, setFormData] = useState<NewBriefFormValues>(createBriefFormDefaults());
   const [showConfirmation, setShowConfirmation] = useState(false);
   const [showSaveDraftConfirmation, setShowSaveDraftConfirmation] = useState(false);
 
@@ -548,6 +695,16 @@ function NewBriefForm({ onCancel, onNext }: { onCancel: () => void; onNext: () =
     if (isFormComplete) {
     onNext();
     }
+  };
+
+  const handleSubmit = () => {
+    if (!isFormComplete) {
+      return;
+    }
+
+    onSubmit(formData);
+    setFormData(createBriefFormDefaults());
+    setShowConfirmation(true);
   };
 
   const handleChange = (field: string, value: string | Date | undefined) => {
@@ -617,9 +774,11 @@ function NewBriefForm({ onCancel, onNext }: { onCancel: () => void; onNext: () =
                   <SelectValue placeholder="Choose a lead" />
                 </SelectTrigger>
                 <SelectContent className="bg-[#f9f9f9]">
-                  <SelectItem value="henry-bray" className="text-black">Henry Bray</SelectItem>
-                  <SelectItem value="john-doe" className="text-black">John Doe</SelectItem>
-                  <SelectItem value="jane-smith" className="text-black">Jane Smith</SelectItem>
+                  {PROJECT_LEADS.map((lead) => (
+                    <SelectItem key={lead.value} value={lead.value} className="text-black">
+                      {lead.label}
+                    </SelectItem>
+                  ))}
                 </SelectContent>
               </Select>
             </Field>
@@ -713,12 +872,30 @@ function NewBriefForm({ onCancel, onNext }: { onCancel: () => void; onNext: () =
                   <svg className="h-[14px] w-[15.567px]" width="45" height="40" viewBox="0 0 45 40" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M23.8229 40H5.80935C2.59694 40 0 37.4332 0 34.2582V31.8843C0 30.5935 0.795591 29.4362 2.0115 28.9614L14.9212 22.908C17.5932 21.8546 17.5932 18.1306 14.9362 17.0623L1.99648 10.8902C0.795576 10.4154 0 9.25816 0 7.96736V5.74184C0 2.56677 2.59694 0 5.80935 0H23.8229C25.0838 0 26.3147 0.400603 27.3205 1.15728L42.692 15.4154C45.7693 17.7151 45.7693 22.27 42.692 24.5697L27.3205 38.8279C26.3147 39.5846 25.0838 39.9852 23.8229 39.9852V40Z" fill="#000"></path></svg>
                 </button>
                 <button
-                type="button"
-                onClick={() => navigate("/dashboard/briefs/review")}
-                  className="btn flex-1 min-w-0 h-8 px-2 md:px-4 bg-[#ffb546] hover:opacity-90 rounded-[28px] flex items-center justify-center gap-1 md:gap-[10px] transition"
-              >
-                <span className="text-[13px] font-semibold leading-[18.62px] text-black whitespace-nowrap truncate">Review brief</span>
-                <svg className="h-[14px] w-[15.567px]" width="45" height="40" viewBox="0 0 45 40" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M23.8229 40H5.80935C2.59694 40 0 37.4332 0 34.2582V31.8843C0 30.5935 0.795591 29.4362 2.0115 28.9614L14.9212 22.908C17.5932 21.8546 17.5932 18.1306 14.9362 17.0623L1.99648 10.8902C0.795576 10.4154 0 9.25816 0 7.96736V5.74184C0 2.56677 2.59694 0 5.80935 0H23.8229C25.0838 0 26.3147 0.400603 27.3205 1.15728L42.692 15.4154C45.7693 17.7151 45.7693 22.27 42.692 24.5697L27.3205 38.8279C26.3147 39.5846 25.0838 39.9852 23.8229 39.9852V40Z" fill="#000"></path></svg>
+                  type="button"
+                  onClick={handleSubmit}
+                  disabled={!isFormComplete}
+                  className={`btn flex-1 min-w-0 h-8 px-2 md:px-4 rounded-[28px] flex items-center justify-center gap-1 md:gap-[10px] transition ${
+                    isFormComplete ? "bg-[#ffb546] hover:opacity-90" : "bg-[#f9f9f9] cursor-not-allowed opacity-50"
+                  }`}
+                >
+                  <span
+                    className={`text-[13px] font-semibold leading-[18.62px] whitespace-nowrap truncate ${
+                      isFormComplete ? "text-black" : "text-[#848487]"
+                    }`}
+                  >
+                    Submit brief
+                  </span>
+                  <svg
+                    className={`h-[14px] w-[15.567px] ${isFormComplete ? "" : "opacity-50"}`}
+                    width="45"
+                    height="40"
+                    viewBox="0 0 45 40"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path d="M23.8229 40H5.80935C2.59694 40 0 37.4332 0 34.2582V31.8843C0 30.5935 0.795591 29.4362 2.0115 28.9614L14.9212 22.908C17.5932 21.8546 17.5932 18.1306 14.9362 17.0623L1.99648 10.8902C0.795576 10.4154 0 9.25816 0 7.96736V5.74184C0 2.56677 2.59694 0 5.80935 0H23.8229C25.0838 0 26.3147 0.400603 27.3205 1.15728L42.692 15.4154C45.7693 17.7151 45.7693 22.27 42.692 24.5697L27.3205 38.8279C26.3147 39.5846 25.0838 39.9852 23.8229 39.9852V40Z" fill="#000"></path>
+                  </svg>
                 </button>
               </div>
             </div>
@@ -766,9 +943,11 @@ function NewBriefForm({ onCancel, onNext }: { onCancel: () => void; onNext: () =
                     <SelectValue placeholder="Choose a lead" />
                   </SelectTrigger>
                   <SelectContent className="bg-[#f9f9f9]">
-                    <SelectItem value="henry-bray" className="text-black">Henry Bray</SelectItem>
-                    <SelectItem value="john-doe" className="text-black">John Doe</SelectItem>
-                    <SelectItem value="jane-smith" className="text-black">Jane Smith</SelectItem>
+                    {PROJECT_LEADS.map((lead) => (
+                      <SelectItem key={lead.value} value={lead.value} className="text-black">
+                        {lead.label}
+                      </SelectItem>
+                    ))}
                   </SelectContent>
                 </Select>
               </Field>
@@ -856,11 +1035,24 @@ function NewBriefForm({ onCancel, onNext }: { onCancel: () => void; onNext: () =
             </button>
             <button
               type="button"
-              onClick={() => navigate("/dashboard/briefs/review")}
-              className="w-full md:flex-1 md:min-w-0 h-8 px-2 md:px-4 bg-[#ffb546] hover:opacity-90 rounded-[28px] flex items-center justify-center gap-1 md:gap-[10px] transition"
+              onClick={handleSubmit}
+              disabled={!isFormComplete}
+              className={`w-full md:flex-1 md:min-w-0 h-8 px-2 md:px-4 rounded-[28px] flex items-center justify-center gap-1 md:gap-[10px] transition ${
+                isFormComplete ? "bg-[#ffb546] hover:opacity-90" : "bg-[#f9f9f9] cursor-not-allowed opacity-50"
+              }`}
             >
-              <span className="text-[13px] font-semibold leading-[18.62px] text-black whitespace-nowrap">Review brief</span>
-              <img src={createBriefArrowIcon} alt="" className="h-[14px] w-[15.567px] shrink-0" />
+              <span
+                className={`text-[13px] font-semibold leading-[18.62px] whitespace-nowrap ${
+                  isFormComplete ? "text-black" : "text-[#848487]"
+                }`}
+              >
+                Submit brief
+              </span>
+              <img
+                src={createBriefArrowIcon}
+                alt=""
+                className={`h-[14px] w-[15.567px] shrink-0 ${isFormComplete ? "" : "opacity-50"}`}
+              />
             </button>
           </div>
         </div>
@@ -871,6 +1063,7 @@ function NewBriefForm({ onCancel, onNext }: { onCancel: () => void; onNext: () =
         open={showConfirmation}
         onOpenChange={setShowConfirmation}
         onConfirm={handleViewAllBriefs}
+        title="Brief submitted!"
       />
 
       {/* Save Draft Confirmation Dialog */}
@@ -1013,8 +1206,8 @@ function DeliverablesSelectionScreen({ onCancel, onBack, onNavigateToAiResponse 
               value={chatInput}
               onChange={setChatInput}
               onSubmit={(v) => { if (v.trim()) { onNavigateToAiResponse(v.trim()); } }}
-              leftIconSrc={imgFrame14}
-              rightIconSrc={imgFrame15}
+              leftIcon={paperclipIcon}
+              rightIcon={sendArrowIcon}
               helpText="Need a hand? Talk to your Iris account manager"
             />
           </div>
@@ -1166,8 +1359,8 @@ function DeliverablesSelectionScreen({ onCancel, onBack, onNavigateToAiResponse 
               value={chatInput}
               onChange={setChatInput}
               onSubmit={(v) => { if (v.trim()) { onNavigateToAiResponse(v.trim()); } }}
-              leftIconSrc={imgFrame14}
-              rightIconSrc={imgFrame15}
+              leftIcon={paperclipIcon}
+              rightIcon={sendArrowIcon}
               helpText="Need a hand? Talk to your Iris account manager"
               className="w-full md:w-[516px]"
               containerClassName="w-full"
@@ -1334,8 +1527,8 @@ function AIResponseScreen({ userInput, onBack, onCancel }: { userInput: string; 
           {/* AI Chat Input at Bottom */}
           <div className="shrink-0">
             <ChatInput
-              leftIconSrc={imgFrame14_v2}
-              rightIconSrc={imgFrame15_v2}
+              leftIcon={paperclipIcon}
+              rightIcon={sendArrowIcon}
               helpText="Need a hand? Talk to your Iris account manager"
             />
             </div>
@@ -1483,8 +1676,8 @@ function AIResponseScreen({ userInput, onBack, onCancel }: { userInput: string; 
           {/* AI Chat Input below white document on mobile */}
           <div className="flex lg:hidden shrink-0 pb-2 pt-2 w-full">
             <ChatInput
-              leftIconSrc={imgFrame14_v2}
-              rightIconSrc={imgFrame15_v2}
+              leftIcon={paperclipIcon}
+              rightIcon={sendArrowIcon}
               helpText="Need a hand? Talk to your Iris account manager"
               className="w-full md:w-[516px]"
               containerClassName="w-full"
@@ -1543,73 +1736,10 @@ function AIResponseScreen({ userInput, onBack, onCancel }: { userInput: string; 
   );
 }
 
-function AllBriefsSection() {
+function AllBriefsSection({ briefs: allBriefs }: { briefs: BriefSummary[] }) {
   const [activeTab, setActiveTab] = useState<"All" | "Drafts" | "In review">("All");
 
-  const briefs = [
-    {
-      id: 1,
-      title: "W Summer Festival 2025",
-      desc: "Develop visual guide for  the Summer Campaign Festival 2025. Create full set of campaign visuals, formats, and variations, for digital, print media.",
-      badge: "Creation",
-      date: "27 AUG",
-      comments: 23,
-      avatars: 2,
-      status: "Draft",
-      icon: (
-        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M3.58249 0H7.87085C9.84785 0 11.4533 1.60548 11.4533 3.58249V8.41751C11.4533 10.3945 9.84785 12 7.87085 12H3.58249C1.60549 12 0 10.3945 0 8.41751V3.58249C0 1.60548 1.60549 0 3.58249 0Z" fill="#FFB546"/>
-        </svg>
-      ),
-    },
-    {
-      id: 2,
-      title: "Watch Radio Campaign Q4 2025",
-      desc: "Develop visual guide for  the Summer Campaign Festival 2025. Create full set of campaign visuals, formats, and variations, for digital, print media.",
-      badge: "Adaptation",
-      date: "3 Sept",
-      comments: 4,
-      avatars: 3,
-      status: "Draft",
-      icon: (
-        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M3.58249 0H7.87085C9.84785 0 11.4533 1.60548 11.4533 3.58249V8.41751C11.4533 10.3945 9.84785 12 7.87085 12H3.58249C1.60549 12 0 10.3945 0 8.41751V3.58249C0 1.60548 1.60549 0 3.58249 0Z" fill="#FFB546"/>
-        </svg>
-      ),
-    },
-    {
-      id: 3,
-      title: "W Summer Festival 2025",
-      desc: "Develop visual guide for  the Summer Campaign Festival 2025. Create full set of campaign visuals, formats, and variations, for digital, print media.",
-      badge: "Creation",
-      date: "28 Aug",
-      comments: 4,
-      avatars: 3,
-      status: "In review",
-      icon: (
-        <svg width="16" height="10" viewBox="0 0 16 10" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M7.80101 10C10.9954 10 13.7962 8.32168 15.373 5.7988C15.6784 5.31037 15.6784 4.69046 15.373 4.2012C13.7962 1.67832 10.9954 0 7.80101 0C4.60663 0 1.80583 1.67832 0.229031 4.2012C-0.0763438 4.68963 -0.0763438 5.30954 0.229031 5.7988C1.80583 8.32168 4.60663 10 7.80101 10Z" fill="#E5E5E5"/>
-        </svg>
-      ),
-    },
-    {
-      id: 4,
-      title: "Fold Toolkit Q3 2025",
-      desc: "Develop visual guide for  the Summer Campaign Festival 2025. Create full set of campaign visuals, formats, and variations, for digital, print media.",
-      badge: "Resize",
-      date: "30 Aug",
-      comments: 2,
-      avatars: 4,
-      status: "Draft",
-      icon: (
-        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M3.58249 0H7.87085C9.84785 0 11.4533 1.60548 11.4533 3.58249V8.41751C11.4533 10.3945 9.84785 12 7.87085 12H3.58249C1.60549 12 0 10.3945 0 8.41751V3.58249C0 1.60548 1.60549 0 3.58249 0Z" fill="#FFB546"/>
-        </svg>
-      ),
-    },
-  ];
-
-  const filtered = briefs.filter((b) =>
+  const filtered = allBriefs.filter((b) =>
     activeTab === "All" ? true : activeTab === "Drafts" ? b.status === "Draft" : b.status === "In review"
   );
 
@@ -1624,14 +1754,11 @@ function AllBriefsSection() {
       />
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {filtered.map((b) => {
-          // Badge styling based on type
-          const badgeStyle = getBadgeStyle(b.badge);
-
           return (
             <BriefCard
               key={b.id}
               title={b.title}
-              description={b.desc}
+              description={b.description}
               right={b.icon}
               meta={
                 <div className="flex items-center justify-between">
@@ -1645,6 +1772,12 @@ function AllBriefsSection() {
               }
             >
               <div className="h-px bg-[#ececec]" />
+              {b.projectLead && (
+                <div className="flex items-center justify-between py-2 text-xs text-[#848487]">
+                  <span>Lead</span>
+                  <span>{b.projectLead}</span>
+                </div>
+              )}
               <div className="flex items-center justify-between text-xs text-[#848487]">
                 <div className="flex items-center gap-1">
                   <span>💬</span>

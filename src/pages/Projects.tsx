@@ -252,8 +252,11 @@ export default function ProjectsPage() {
                         <span className="text-xs font-normal" style={{ color: getPriorityColor(project.priority) }}>{project.priority}</span>
                       </div>
                       <div className="flex items-center gap-2">
-                        <div className="relative h-2 flex-1 bg-[#f1f1f3] rounded-full overflow-hidden">
-                          <div className="h-full rounded-full transition-all" style={{ width: `${project.progress}%`, backgroundColor: getProgressBarColor(project.progress) }} />
+                        <div className="flex flex-col w-full items-center">
+                          <span className="text-xs font-medium text-black mb-1">{project.progress}% Done</span>
+                          <div className="relative h-2 w-full bg-[#f1f1f3] rounded-full overflow-hidden">
+                            <div className="h-full rounded-full transition-all" style={{ width: `${project.progress}%`, backgroundColor: getProgressBarColor(project.progress) }} />
+                          </div>
                         </div>
                       </div>
                       <div className="text-xs text-black font-medium text-center">

@@ -9,6 +9,7 @@ interface DashboardTopbarRightProps {
   userName?: string;
   userDept?: string;
   avatarSrc?: string;
+  onOpenHelp?: () => void;
 }
 
 export default function DashboardTopbarRight({
@@ -16,11 +17,19 @@ export default function DashboardTopbarRight({
   userName = "Henry Bray",
   userDept = "Marcomms",
   avatarSrc,
+  onOpenHelp,
 }: DashboardTopbarRightProps) {
   const navigate = useNavigate();
 
   return (
     <>
+      <button
+        onClick={() => onOpenHelp?.()}
+        className="hidden lg:flex items-center gap-2 px-4 py-2 rounded-[28px] border border-[#d0d0d0] text-[#646464] hover:bg-[#f1f1f3] transition"
+      >
+        <Icons.help size={16} />
+        <span className="text-sm font-semibold leading-[23.94px] whitespace-nowrap">Help</span>
+      </button>
       <NotificationsPopover />
       <button
         onClick={() => navigate("/dashboard/tracker?tab=budget")}

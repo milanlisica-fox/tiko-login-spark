@@ -11,6 +11,7 @@ import {
   ArrowRight,
   Plus,
   X,
+  HelpCircle,
 } from "lucide-react";
 
 export const Icons = {
@@ -26,6 +27,7 @@ export const Icons = {
   arrowRight: ArrowRight,
   plus: Plus,
   close: X,
+  help: HelpCircle,
 } as const;
 
 export type IconKey = keyof typeof Icons;
