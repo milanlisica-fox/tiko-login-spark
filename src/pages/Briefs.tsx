@@ -28,6 +28,7 @@ import SuccessDialog from "@/components/common/SuccessDialog";
 import BriefPreviewPanel from "@/components/briefs/BriefPreviewPanel";
 import { StyledInput } from "@/components/common/StyledInput";
 import TabFilter from "@/components/common/TabFilter";
+import { READY_TO_SIGN_SOWS } from "./SOW";
 
 // Reuse images from Dashboard for consistent visuals
 const logoImage = BRAND.logo;
@@ -89,7 +90,14 @@ const BriefLoadingGraphic = () => (
 type BriefStatus = "Draft" | "In review" | "SOW Ready to sign";
 type BriefBadge = "Creation" | "Adaptation" | "Resize" | "default";
 
-interface BriefSummary {
+export type SubmittedBriefPayload = {
+  title: string;
+  objective: string;
+  status: "draft" | "in-review";
+  dueDate?: string;
+};
+
+export interface BriefSummary {
   id: string;
   title: string;
   description: string;
@@ -109,7 +117,7 @@ interface NewBriefFormValues {
   objective: string;
 }
 
-const PROJECT_LEADS = [
+export const PROJECT_LEADS = [
   { value: "henry-bray", label: "Henry Bray" },
   { value: "john-doe", label: "John Doe" },
   { value: "jane-smith", label: "Jane Smith" },
@@ -176,11 +184,11 @@ const initialBriefs: BriefSummary[] = [
     title: "Fold Toolkit Q3 2025",
     description:
       "Develop visual guide for  the Summer Campaign Festival 2025. Create full set of campaign visuals, formats, and variations, for digital, print media.",
-    badge: "Resize",
-    date: "30 AUG",
-    comments: 2,
-    avatars: 4,
-    status: "SOW Ready to sign",
+    badge: "Creation",
+    date: format(new Date(), "d MMM").toUpperCase(),
+    comments: 0,
+    avatars: 3,
+    status: "Draft",
     icon: (
       <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
         <path d="M3.58249 0H7.87085C9.84785 0 11.4533 1.60548 11.4533 3.58249V8.41751C11.4533 10.3945 9.84785 12 7.87085 12H3.58249C1.60549 12 0 10.3945 0 8.41751V3.58249C0 1.60548 1.60549 0 3.58249 0Z" fill="#FFB546" />
@@ -196,13 +204,11 @@ export default function BriefsPage() {
   const [isCreatingBrief, setIsCreatingBrief] = useState(false);
   const [briefView, setBriefView] = useState<"templates" | "form" | "deliverables" | "ai-response">("templates");
   const [aiInputText, setAiInputText] = useState("");
+  const [newBriefDraft, setNewBriefDraft] = useState<NewBriefFormValues>(createBriefFormDefaults());
 
   const draftBriefCount = useMemo(() => briefs.filter((brief) => brief.status === "Draft").length, [briefs]);
   const inReviewBriefCount = useMemo(() => briefs.filter((brief) => brief.status === "In review").length, [briefs]);
-  const sowReadyBriefCount = useMemo(
-    () => briefs.filter((brief) => brief.status === "SOW Ready to sign").length,
-    [briefs]
-  );
+  const sowReadyBriefCount = READY_TO_SIGN_SOWS.length;
 
   const handleBriefSubmit = useCallback(
     (data: NewBriefFormValues) => {
@@ -232,22 +238,86 @@ export default function BriefsPage() {
 
   // Check if we should show the form directly from navigation state or reset to overview
   useEffect(() => {
-    const state = location.state as { createBrief?: boolean; showForm?: boolean; resetToOverview?: boolean } | null;
-    if (state?.resetToOverview) {
-      setIsCreatingBrief(false);
-      setBriefView("templates");
-      // Clear the state so subsequent renders don't re-trigger
-      navigate("/dashboard/briefs", { replace: true });
+    const state = location.state as {
+      createBrief?: boolean;
+      showForm?: boolean;
+      resetToOverview?: boolean;
+      brief?: NewBriefFormValues;
+      submittedBrief?: SubmittedBriefPayload;
+    } | null;
+
+    if (!state) {
       return;
     }
-    if (state?.createBrief && state?.showForm) {
-      setIsCreatingBrief(true);
-      setBriefView("form");
-    } else if (state?.createBrief) {
-      setIsCreatingBrief(true);
+
+    let shouldReplace = false;
+
+    if (state.resetToOverview) {
+      setIsCreatingBrief(false);
       setBriefView("templates");
+      shouldReplace = true;
     }
-  }, [location.state, navigate]);
+
+    if (state.brief) {
+      const normalizedDraft: NewBriefFormValues = {
+        ...state.brief,
+        dueDate: state.brief.dueDate ? new Date(state.brief.dueDate) : undefined,
+      };
+      setNewBriefDraft(normalizedDraft);
+      shouldReplace = true;
+    }
+
+    if (state.createBrief) {
+      setIsCreatingBrief(true);
+      setBriefView(state.showForm ? "form" : "templates");
+      shouldReplace = true;
+    }
+
+    if (state.submittedBrief) {
+      const { title, objective, status, dueDate } = state.submittedBrief;
+      const formattedDate = format(new Date(), "d MMM").toUpperCase();
+      const briefStatus: BriefStatus = status === "in-review" ? "In review" : "Draft";
+
+      const icon = status === "in-review"
+        ? (
+            <svg width="16" height="10" viewBox="0 0 16 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path
+                d="M7.80101 10C10.9954 10 13.7962 8.32168 15.373 5.7988C15.6784 5.31037 15.6784 4.69046 15.373 4.2012C13.7962 1.67832 10.9954 0 7.80101 0C4.60663 0 1.80583 1.67832 0.229031 4.2012C-0.0763438 4.68963 -0.0763438 5.30954 0.229031 5.7988C1.80583 8.32168 4.60663 10 7.80101 10Z"
+                fill="#E5E5E5"
+              />
+            </svg>
+          )
+        : (
+            <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path
+                d="M3.58249 0H7.87085C9.84785 0 11.4533 1.60548 11.4533 3.58249V8.41751C11.4533 10.3945 9.84785 12 7.87085 12H3.58249C1.60549 12 0 10.3945 0 8.41751V3.58249C0 1.60548 1.60549 0 3.58249 0Z"
+                fill="#FFB546"
+              />
+            </svg>
+          );
+
+      const newBrief: BriefSummary = {
+        id: `brief-${Date.now()}`,
+        title: title.trim() || "Untitled brief",
+        description: objective.trim() || "No objective provided.",
+        badge: "Creation",
+        date: formattedDate,
+        comments: 0,
+        avatars: 3,
+        status: briefStatus,
+        icon,
+      };
+
+      setBriefs((prev) => [newBrief, ...prev]);
+      setIsCreatingBrief(false);
+      setBriefView("templates");
+      shouldReplace = true;
+    }
+
+    if (shouldReplace) {
+      navigate(location.pathname, { replace: true });
+    }
+  }, [location, navigate]);
 
   // nav items centralized via DashboardLayout
   const { activeName } = useActiveNav();
@@ -300,13 +370,21 @@ export default function BriefsPage() {
             briefView === "templates" ? (
               <TemplateSelectionScreen 
                 onCancel={() => setIsCreatingBrief(false)} 
-                onCreateBrief={() => setBriefView("form")}
+                onCreateBrief={() => {
+                  setNewBriefDraft(createBriefFormDefaults());
+                  setBriefView("form");
+                }}
               />
             ) : briefView === "form" ? (
               <NewBriefForm 
-                onCancel={() => setBriefView("templates")} 
+                onCancel={() => {
+                  setBriefView("templates");
+                  setNewBriefDraft(createBriefFormDefaults());
+                }} 
                 onNext={() => setBriefView("deliverables")}
                 onSubmit={handleBriefSubmit}
+                initialValues={newBriefDraft}
+                onFormDataChange={(data) => setNewBriefDraft({ ...data })}
               />
             ) : briefView === "deliverables" ? (
               <DeliverablesSelectionScreen 
@@ -316,12 +394,15 @@ export default function BriefsPage() {
                   setAiInputText(inputText);
                   setBriefView("ai-response");
                 }}
+                briefData={newBriefDraft}
               />
             ) : (
               <AIResponseScreen 
                 userInput={aiInputText}
                 onBack={() => setBriefView("deliverables")}
                 onCancel={() => setBriefView("form")}
+                briefData={newBriefDraft}
+                onGoToReview={() => navigate("/dashboard/briefs/review", { state: { brief: newBriefDraft } })}
               />
             )
           ) : (
@@ -343,7 +424,11 @@ export default function BriefsPage() {
                     </span>
                   </button>
                   <button 
-                    onClick={() => setIsCreatingBrief(true)}
+                    onClick={() => {
+                      setNewBriefDraft(createBriefFormDefaults());
+                      setIsCreatingBrief(true);
+                      setBriefView("templates");
+                    }}
                     className="btn w-full sm:w-[216px] h-[48px] backdrop-blur-[6px] backdrop-filter bg-[#ffb546] px-[24px] py-[18px] rounded-[28px] flex items-center justify-center gap-[10px] hover:opacity-90 transition"
                   >
                     <span className="text-[16px] font-semibold leading-[23.94px] text-black whitespace-nowrap">
@@ -685,15 +770,20 @@ function NewBriefForm({
   onCancel,
   onNext,
   onSubmit,
+  initialValues,
+  onFormDataChange,
 }: {
   onCancel: () => void;
   onNext: () => void;
   onSubmit: (data: NewBriefFormValues) => void;
+  initialValues: NewBriefFormValues;
+  onFormDataChange: (data: NewBriefFormValues) => void;
 }) {
   const navigate = useNavigate();
-  const [formData, setFormData] = useState<NewBriefFormValues>(createBriefFormDefaults());
+  const [formData, setFormData] = useState<NewBriefFormValues>(initialValues);
   const [showConfirmation, setShowConfirmation] = useState(false);
   const [showSaveDraftConfirmation, setShowSaveDraftConfirmation] = useState(false);
+  const [pendingDraftPayload, setPendingDraftPayload] = useState<SubmittedBriefPayload | null>(null);
 
   // Check if form is complete
   const isFormComplete = formData.projectTitle.trim() !== "" && 
@@ -713,7 +803,9 @@ function NewBriefForm({
     }
 
     onSubmit(formData);
-    setFormData(createBriefFormDefaults());
+    const reset = createBriefFormDefaults();
+    setFormData(reset);
+    onFormDataChange(reset);
     setShowConfirmation(true);
   };
 
@@ -722,13 +814,20 @@ function NewBriefForm({
       return;
     }
 
-    navigate("/dashboard/briefs/review");
+    navigate("/dashboard/briefs/review", { state: { brief: formData } });
   };
 
   const handleChange = (field: string, value: string | Date | undefined) => {
-    setFormData((prev) => ({ ...prev, [field]: value }));
+    setFormData((prev) => {
+      const next = { ...prev, [field]: value } as NewBriefFormValues;
+      onFormDataChange(next);
+      return next;
+    });
   };
 
+  useEffect(() => {
+    setFormData(initialValues);
+  }, [initialValues]);
 
   const handleViewAllBriefs = () => {
     setShowConfirmation(false);
@@ -737,10 +836,22 @@ function NewBriefForm({
 
   const handleViewAllBriefsFromSave = () => {
     setShowSaveDraftConfirmation(false);
-    navigate("/dashboard/briefs", { state: { resetToOverview: true } });
+    if (pendingDraftPayload) {
+      navigate("/dashboard/briefs", { state: { submittedBrief: pendingDraftPayload } });
+      setPendingDraftPayload(null);
+    } else {
+      navigate("/dashboard/briefs", { state: { resetToOverview: true } });
+    }
   };
 
   const handleSaveDraft = () => {
+    const payload: SubmittedBriefPayload = {
+      title: formData.projectTitle || "Untitled brief",
+      objective: formData.objective,
+      status: "draft",
+      dueDate: formData.dueDate ? formData.dueDate.toISOString() : undefined,
+    };
+    setPendingDraftPayload(payload);
     setShowSaveDraftConfirmation(true);
   };
 
@@ -749,6 +860,47 @@ function NewBriefForm({
       triggerSuccessConfetti();
     }
   }, [showConfirmation]);
+
+  const hasFormProgress =
+    formData.projectTitle.trim() !== "" ||
+    Boolean(formData.dueDate) ||
+    formData.projectLead !== "" ||
+    formData.objective.trim() !== "";
+
+  const formattedDueDate = formData.dueDate ? format(formData.dueDate, "MMMM d, yyyy") : "";
+  const projectLeadLabel = formData.projectLead
+    ? PROJECT_LEADS.find((lead) => lead.value === formData.projectLead)?.label ?? formData.projectLead
+    : "";
+
+  const briefPreviewCard = (
+    <div className="w-full rounded-2xl bg-white shadow-sm p-6 space-y-4">
+      <div>
+        <h2 className="text-xl font-semibold leading-[26px] text-black text-center">
+          {formData.projectTitle || "Untitled brief"}
+        </h2>
+      </div>
+      <div className="space-y-2 text-sm leading-[18.62px] text-[#424242]">
+        {formattedDueDate ? (
+          <p>
+            <span className="font-semibold text-black">Launch date:</span>{" "}
+            {formattedDueDate}
+          </p>
+        ) : null}
+        {projectLeadLabel ? (
+          <p>
+            <span className="font-semibold text-black">Project lead:</span>{" "}
+            {projectLeadLabel}
+          </p>
+        ) : null}
+      </div>
+      {formData.objective.trim() ? (
+        <p className="text-sm leading-[20px] text-[#424242]">
+          <span className="font-semibold text-black">Objective:</span>{" "}
+          {formData.objective.trim()}
+        </p>
+      ) : null}
+    </div>
+  );
 
   return (
     <>
@@ -842,14 +994,29 @@ function NewBriefForm({
 
         {/* Right Panel - Desktop only */}
         <div className="flex flex-col gap-2.5 pb-5 pl-2.5 pt-2.5 flex-[1_1_0%] min-w-0 h-full overflow-hidden">
-        {/* Loading State */}
-          <div className="bg-white flex flex-col gap-8 items-center justify-center p-6 rounded-xl overflow-hidden h-[89%]">
-          <div className="flex flex-col gap-2 items-center">
-            <BriefLoadingGraphic />
-            <p className="text-sm font-bold leading-[18.62px] opacity-50 text-[#c1c1c3]">
-              Brief loading...
-            </p>
-          </div>
+        {/* Preview / Loading State */}
+          <div
+            className={`bg-white rounded-xl overflow-hidden h-[89%] w-full ${
+              hasFormProgress ? "p-6 flex items-start justify-start" : "p-6 flex flex-col gap-8 items-center justify-center"
+            }`}
+          >
+          {hasFormProgress ? (
+            <div className="w-full h-full overflow-y-auto">
+              <BriefPreviewPanel
+                projectTitle={formData.projectTitle}
+                launchDate={formattedDueDate}
+                projectLead={projectLeadLabel}
+                objective={formData.objective.trim()}
+              />
+            </div>
+          ) : (
+            <div className="flex flex-col gap-2 items-center">
+              <BriefLoadingGraphic />
+              <p className="text-sm font-bold leading-[18.62px] opacity-50 text-[#c1c1c3]">
+                Brief loading...
+              </p>
+            </div>
+          )}
         </div>
 
         {/* Separator */}
@@ -879,7 +1046,7 @@ function NewBriefForm({
                   <span className="text-[13px] font-semibold leading-[18.62px] text-black whitespace-nowrap truncate">Save draft</span>
                 </button>
                 <button
-                  onClick={handleReviewBrief}
+                  onClick={() => navigate("/dashboard/briefs/review", { state: { brief: formData } })}
                   disabled={!isFormComplete}
                   className={`w-full md:flex-1 md:min-w-0 h-8 px-2 md:px-4 rounded-[28px] flex items-center justify-center transition ${
                     isFormComplete ? "bg-[#ffb546] hover:opacity-90" : "bg-[#f9f9f9] cursor-not-allowed opacity-50"
@@ -1027,7 +1194,7 @@ function NewBriefForm({
               <span className="text-[13px] font-semibold leading-[18.62px] text-black whitespace-nowrap">Save draft</span>
             </button>
             <button
-              onClick={handleReviewBrief}
+              onClick={() => navigate("/dashboard/briefs/review", { state: { brief: formData } })}
               disabled={!isFormComplete}
               className={`w-full md:flex-1 md:min-w-0 h-8 px-2 md:px-4 rounded-[28px] flex items-center justify-center transition ${
                 isFormComplete ? "bg-[#ffb546] hover:opacity-90" : "bg-[#f9f9f9] cursor-not-allowed opacity-50"
@@ -1059,27 +1226,35 @@ function NewBriefForm({
   );
 }
 
-function DeliverablesSelectionScreen({ onCancel, onBack, onNavigateToAiResponse }: { onCancel: () => void; onBack: () => void; onNavigateToAiResponse: (inputText: string) => void }) {
+function DeliverablesSelectionScreen({
+  onCancel,
+  onBack,
+  onNavigateToAiResponse,
+  briefData,
+}: {
+  onCancel: () => void;
+  onBack: () => void;
+  onNavigateToAiResponse: (inputText: string) => void;
+  briefData: NewBriefFormValues;
+}) {
   const navigate = useNavigate();
   const [selectedDeliverables, setSelectedDeliverables] = useState<string[]>([]);
   const [tokenEstimate, setTokenEstimate] = useState(0);
   const [chatInput, setChatInput] = useState("");
   const [showConfirmation, setShowConfirmation] = useState(false);
   const [showSaveDraftConfirmation, setShowSaveDraftConfirmation] = useState(false);
+  const [pendingDraftPayload, setPendingDraftPayload] = useState<SubmittedBriefPayload | null>(null);
+
+  const formattedLaunchDate = briefData.dueDate ? format(briefData.dueDate, "MMMM d, yyyy") : "";
+  const projectLeadLabel = briefData.projectLead
+    ? PROJECT_LEADS.find((lead) => lead.value === briefData.projectLead)?.label ?? briefData.projectLead
+    : "";
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (chatInput.trim()) {
       onNavigateToAiResponse(chatInput.trim());
     }
-  };
-
-  // Mock data from Figma
-  const mockBriefData = {
-    projectTitle: "Q7B7 Toolkit",
-    launchDate: "July 23, 2025",
-    projectLead: "Henry Bray",
-    objective: "To create a product toolkit that provides clear guidance to help partners effectively amplify the campaign message. The toolkit should enable consistent execution, align with campaign objectives, and make it easy for users to activate the campaign across channels.",
   };
 
   const handleAddDeliverable = (deliverableId: string, tokens: number) => {
@@ -1099,10 +1274,22 @@ function DeliverablesSelectionScreen({ onCancel, onBack, onNavigateToAiResponse 
 
   const handleViewAllBriefsFromSave = () => {
     setShowSaveDraftConfirmation(false);
-    navigate("/dashboard/briefs", { state: { resetToOverview: true } });
+    if (pendingDraftPayload) {
+      navigate("/dashboard/briefs", { state: { submittedBrief: pendingDraftPayload } });
+      setPendingDraftPayload(null);
+    } else {
+      navigate("/dashboard/briefs", { state: { resetToOverview: true } });
+    }
   };
 
   const handleSaveDraft = () => {
+    const payload: SubmittedBriefPayload = {
+      title: briefData.projectTitle || "Untitled brief",
+      objective: briefData.objective,
+      status: "draft",
+      dueDate: briefData.dueDate ? briefData.dueDate.toISOString() : undefined,
+    };
+    setPendingDraftPayload(payload);
     setShowSaveDraftConfirmation(true);
   };
 
@@ -1200,10 +1387,10 @@ function DeliverablesSelectionScreen({ onCancel, onBack, onNavigateToAiResponse 
           {/* Brief Preview - made smaller to prevent scroll */}
           <div className="h-[89%] overflow-hidden">
           <BriefPreviewPanel
-            projectTitle={mockBriefData.projectTitle}
-            launchDate={mockBriefData.launchDate}
-            projectLead={mockBriefData.projectLead}
-            objective={mockBriefData.objective}
+            projectTitle={briefData.projectTitle}
+            launchDate={formattedLaunchDate}
+            projectLead={projectLeadLabel}
+            objective={briefData.objective}
           />
           </div>
 
@@ -1233,7 +1420,7 @@ function DeliverablesSelectionScreen({ onCancel, onBack, onNavigateToAiResponse 
                   <span className="text-[13px] font-semibold leading-[18.62px] text-black whitespace-nowrap">Save draft</span>
                 </button>
                 <button
-                  onClick={() => navigate("/dashboard/briefs/review")}
+                  onClick={() => navigate("/dashboard/briefs/review", { state: { brief: briefData } })}
                   className="w-full md:flex-1 md:min-w-0 h-8 px-2 md:px-4 rounded-[28px] flex items-center justify-center bg-[#ffb546] hover:opacity-90 transition"
                 >
                   <span className="text-[13px] font-semibold leading-[18.62px] text-black whitespace-nowrap">Review brief</span>
@@ -1318,10 +1505,10 @@ function DeliverablesSelectionScreen({ onCancel, onBack, onNavigateToAiResponse 
           {/* Brief Preview - Double height */}
           <div className="bg-white flex flex-col p-6 rounded-xl min-h-[600px] overflow-y-auto">
             <BriefPreviewPanel
-              projectTitle={mockBriefData.projectTitle}
-              launchDate={mockBriefData.launchDate}
-              projectLead={mockBriefData.projectLead}
-              objective={mockBriefData.objective}
+              projectTitle={briefData.projectTitle}
+              launchDate={formattedLaunchDate}
+              projectLead={projectLeadLabel}
+              objective={briefData.objective}
             />
           </div>
 
@@ -1366,7 +1553,7 @@ function DeliverablesSelectionScreen({ onCancel, onBack, onNavigateToAiResponse 
               <span className="text-[13px] font-semibold leading-[18.62px] text-black whitespace-nowrap">Save draft</span>
             </button>
             <button
-              onClick={() => navigate("/dashboard/briefs/review")}
+              onClick={() => navigate("/dashboard/briefs/review", { state: { brief: briefData } })}
               className="w-full md:flex-1 md:min-w-0 h-8 px-2 md:px-4 rounded-[28px] flex items-center justify-center bg-[#ffb546] hover:opacity-90 transition"
             >
               <span className="text-[13px] font-semibold leading-[18.62px] text-black whitespace-nowrap">Review brief</span>
@@ -1393,10 +1580,23 @@ function DeliverablesSelectionScreen({ onCancel, onBack, onNavigateToAiResponse 
   );
 }
 
-function AIResponseScreen({ userInput, onBack, onCancel }: { userInput: string; onBack: () => void; onCancel: () => void }) {
+function AIResponseScreen({
+  userInput,
+  onBack,
+  onCancel,
+  briefData,
+  onGoToReview,
+}: {
+  userInput: string;
+  onBack: () => void;
+  onCancel: () => void;
+  briefData: NewBriefFormValues;
+  onGoToReview: () => void;
+}) {
   const navigate = useNavigate();
   const [showConfirmation, setShowConfirmation] = useState(false);
   const [showSaveDraftConfirmation, setShowSaveDraftConfirmation] = useState(false);
+  const [pendingDraftPayload, setPendingDraftPayload] = useState<SubmittedBriefPayload | null>(null);
   
   const handleViewAllBriefs = () => {
     setShowConfirmation(false);
@@ -1405,10 +1605,22 @@ function AIResponseScreen({ userInput, onBack, onCancel }: { userInput: string; 
 
   const handleViewAllBriefsFromSave = () => {
     setShowSaveDraftConfirmation(false);
-    navigate("/dashboard/briefs", { state: { resetToOverview: true } });
+    if (pendingDraftPayload) {
+      navigate("/dashboard/briefs", { state: { submittedBrief: pendingDraftPayload } });
+      setPendingDraftPayload(null);
+    } else {
+      navigate("/dashboard/briefs", { state: { resetToOverview: true } });
+    }
   };
 
   const handleSaveDraft = () => {
+    const payload: SubmittedBriefPayload = {
+      title: briefData.projectTitle || "Untitled brief",
+      objective: briefData.objective,
+      status: "draft",
+      dueDate: briefData.dueDate ? briefData.dueDate.toISOString() : undefined,
+    };
+    setPendingDraftPayload(payload);
     setShowSaveDraftConfirmation(true);
   };
 
@@ -1418,13 +1630,10 @@ function AIResponseScreen({ userInput, onBack, onCancel }: { userInput: string; 
     }
   }, [showConfirmation]);
 
-  // Mock data from Figma - same brief data
-  const mockBriefData = {
-    projectTitle: "Q7B7 Toolkit",
-    launchDate: "July 23, 2025",
-    projectLead: "Henry Bray",
-    objective: "To create a product toolkit that provides clear guidance to help partners effectively amplify the campaign message. The toolkit should enable consistent execution, align with campaign objectives, and make it easy for users to activate the campaign across channels.",
-  };
+  const formattedLaunchDate = briefData.dueDate ? format(briefData.dueDate, "MMMM d, yyyy") : "";
+  const projectLeadLabel = briefData.projectLead
+    ? PROJECT_LEADS.find((lead) => lead.value === briefData.projectLead)?.label ?? briefData.projectLead
+    : "";
 
   // Mock deliverables list from Figma
   const deliverablesList = DELIVERABLES_LIST;
@@ -1516,10 +1725,10 @@ function AIResponseScreen({ userInput, onBack, onCancel }: { userInput: string; 
           {/* Brief Preview - made smaller to prevent scroll */}
           <div className="h-[89%] overflow-hidden">
           <BriefPreviewPanel
-            projectTitle={mockBriefData.projectTitle}
-            launchDate={mockBriefData.launchDate}
-            projectLead={mockBriefData.projectLead}
-            objective={mockBriefData.objective}
+            projectTitle={briefData.projectTitle}
+            launchDate={formattedLaunchDate}
+            projectLead={projectLeadLabel}
+            objective={briefData.objective}
           />
           </div>
 
@@ -1536,25 +1745,19 @@ function AIResponseScreen({ userInput, onBack, onCancel }: { userInput: string; 
             {/* Action Buttons */}
             <div className="flex items-center w-full gap-2 min-w-0">
               <button
-                onClick={onCancel}
+                onClick={handleSaveDraft}
                 className="flex-shrink-0 h-8 px-3 md:px-4 bg-[#03b3e2] text-black hover:opacity-80 rounded-[28px] transition flex items-center justify-center"
               >
-                <span className="text-[13px] font-semibold leading-[18.62px] whitespace-nowrap">Discard</span>
+                <span className="text-[13px] font-semibold leading-[18.62px] whitespace-nowrap">Save draft</span>
               </button>
-              <div className="flex gap-1 items-center flex-1 min-w-0">
-                <button 
-                  onClick={handleSaveDraft}
-                  className="btn flex-1 min-w-0 h-8 px-2 md:px-4 bg-[#ffb546] hover:opacity-90 rounded-[28px] flex items-center justify-center transition"
-                >
-                  <span className="text-[13px] font-semibold leading-[18.62px] text-black whitespace-nowrap">Save draft</span>
-                </button>
-                <button
-                  onClick={() => navigate("/dashboard/briefs/review")}
-                  className="w-full md:flex-1 md:min-w-0 h-8 px-2 md:px-4 rounded-[28px] flex items-center justify-center bg-[#ffb546] hover:opacity-90 transition"
-                >
-                  <span className="text-[13px] font-semibold leading-[18.62px] text-black whitespace-nowrap">Review brief</span>
-                </button>
-              </div>
+              <div className="w-[15%] shrink-0" />
+              <button
+                onClick={() => navigate("/dashboard/briefs/review", { state: { brief: briefData } })}
+                className="btn w-[60%] min-w-0 h-8 px-2 md:px-4 bg-[#ffb546] hover:opacity-90 rounded-[28px] flex items-center justify-center gap-1 md:gap-[10px] transition"
+              >
+                <span className="text-[13px] font-semibold leading-[18.62px] text-black whitespace-nowrap">Submit brief</span>
+                <img src={createBriefArrowIcon} alt="" className="h-[14px] w-[15.567px] shrink-0" />
+              </button>
             </div>
           </div>
           </div>
@@ -1636,10 +1839,10 @@ function AIResponseScreen({ userInput, onBack, onCancel }: { userInput: string; 
           {/* Brief Preview - Double height */}
           <div className="bg-white flex flex-col p-6 rounded-xl min-h-[600px] overflow-y-auto">
             <BriefPreviewPanel
-              projectTitle={mockBriefData.projectTitle}
-              launchDate={mockBriefData.launchDate}
-              projectLead={mockBriefData.projectLead}
-              objective={mockBriefData.objective}
+              projectTitle={briefData.projectTitle}
+              launchDate={formattedLaunchDate}
+              projectLead={projectLeadLabel}
+              objective={briefData.objective}
             />
           </div>
 
@@ -1682,7 +1885,7 @@ function AIResponseScreen({ userInput, onBack, onCancel }: { userInput: string; 
               <span className="text-[13px] font-semibold leading-[18.62px] text-black whitespace-nowrap">Save draft</span>
             </button>
             <button
-              onClick={() => navigate("/dashboard/briefs/review")}
+              onClick={() => navigate("/dashboard/briefs/review", { state: { brief: briefData } })}
               className="w-full md:flex-1 md:min-w-0 h-8 px-2 md:px-4 rounded-[28px] flex items-center justify-center bg-[#ffb546] hover:opacity-90 transition"
             >
               <span className="text-[13px] font-semibold leading-[18.62px] text-black whitespace-nowrap">Review brief</span>
@@ -1768,3 +1971,4 @@ function AllBriefsSection({ briefs: allBriefs }: { briefs: BriefSummary[] }) {
     </div>
   );
 }
+

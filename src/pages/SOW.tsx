@@ -17,7 +17,7 @@ const logoDot = BRAND.logoDot;
 // SOW document image - Update src/constants/sow-assets.ts with your actual image
 const sowDocumentImage = SOW_ASSETS.sowDocument;
 
-interface SOW {
+export interface SOW {
   id: string;
   title: string;
   projectLead: string;
@@ -25,6 +25,72 @@ interface SOW {
   status: "ready_to_sign" | "signed";
   icon?: React.ReactNode;
 }
+
+export const READY_TO_SIGN_SOWS: SOW[] = [
+  {
+    id: "1",
+    title: "Q7B7 Toolkit",
+    projectLead: "John Smith",
+    date: "01/05/25",
+    status: "ready_to_sign",
+    icon: (
+      <svg width="45" height="40" viewBox="0 0 45 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M23.8229 40H5.80935C2.59694 40 0 37.4332 0 34.2582V31.8843C0 30.5935 0.795591 29.4362 2.0115 28.9614L14.9212 22.908C17.5932 21.8546 17.5932 18.1306 14.9362 17.0623L1.99648 10.8902C0.795576 10.4154 0 9.25816 0 7.96736V5.74184C0 2.56677 2.59694 0 5.80935 0H23.8229C25.0838 0 26.3147 0.400603 27.3205 1.15728L42.692 15.4154C45.7693 17.7151 45.7693 22.27 42.692 24.5697L27.3205 38.8279C26.3147 39.5846 25.0838 39.9852 23.8229 39.9852V40Z" fill="#03B3E2" />
+      </svg>
+    ),
+  },
+  {
+    id: "2",
+    title: "Fold Toolkit Q3 2025",
+    projectLead: "Henry Bray",
+    date: "15/05/25",
+    status: "ready_to_sign",
+    icon: (
+      <svg width="45" height="40" viewBox="0 0 45 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M23.8229 40H5.80935C2.59694 40 0 37.4332 0 34.2582V31.8843C0 30.5935 0.795591 29.4362 2.0115 28.9614L14.9212 22.908C17.5932 21.8546 17.5932 18.1306 14.9362 17.0623L1.99648 10.8902C0.795576 10.4154 0 9.25816 0 7.96736V5.74184C0 2.56677 2.59694 0 5.80935 0H23.8229C25.0838 0 26.3147 0.400603 27.3205 1.15728L42.692 15.4154C45.7693 17.7151 45.7693 22.27 42.692 24.5697L27.3205 38.8279C26.3147 39.5846 25.0838 39.9852 23.8229 39.9852V40Z" fill="#03B3E2" />
+      </svg>
+    ),
+  },
+  {
+    id: "3",
+    title: "Buds3 Campaign Toolkit",
+    projectLead: "Jane Smith",
+    date: "20/05/25",
+    status: "ready_to_sign",
+    icon: (
+      <svg width="45" height="40" viewBox="0 0 45 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M23.8229 40H5.80935C2.59694 40 0 37.4332 0 34.2582V31.8843C0 30.5935 0.795591 29.4362 2.0115 28.9614L14.9212 22.908C17.5932 21.8546 17.5932 18.1306 14.9362 17.0623L1.99648 10.8902C0.795576 10.4154 0 9.25816 0 7.96736V5.74184C0 2.56677 2.59694 0 5.80935 0H23.8229C25.0838 0 26.3147 0.400603 27.3205 1.15728L42.692 15.4154C45.7693 17.7151 45.7693 22.27 42.692 24.5697L27.3205 38.8279C26.3147 39.5846 25.0838 39.9852 23.8229 39.9852V40Z" fill="#03B3E2" />
+      </svg>
+    ),
+  },
+];
+
+export const SIGNED_SOWS: SOW[] = [
+  {
+    id: "4",
+    title: "W Summer Festival 2025",
+    projectLead: "Henry Bray",
+    date: "27/08/24",
+    status: "signed",
+    icon: (
+      <svg width="45" height="40" viewBox="0 0 45 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M23.8229 40H5.80935C2.59694 40 0 37.4332 0 34.2582V31.8843C0 30.5935 0.795591 29.4362 2.0115 28.9614L14.9212 22.908C17.5932 21.8546 17.5932 18.1306 14.9362 17.0623L1.99648 10.8902C0.795576 10.4154 0 9.25816 0 7.96736V5.74184C0 2.56677 2.59694 0 5.80935 0H23.8229C25.0838 0 26.3147 0.400603 27.3205 1.15728L42.692 15.4154C45.7693 17.7151 45.7693 22.27 42.692 24.5697L27.3205 38.8279C26.3147 39.5846 25.0838 39.9852 23.8229 39.9852V40Z" fill="#03B3E2" />
+      </svg>
+    ),
+  },
+  {
+    id: "5",
+    title: "Adapt AI Toolkit Q3 2025",
+    projectLead: "John Doe",
+    date: "15/09/24",
+    status: "signed",
+    icon: (
+      <svg width="45" height="40" viewBox="0 0 45 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M23.8229 40H5.80935C2.59694 40 0 37.4332 0 34.2582V31.8843C0 30.5935 0.795591 29.4362 2.0115 28.9614L14.9212 22.908C17.5932 21.8546 17.5932 18.1306 14.9362 17.0623L1.99648 10.8902C0.795576 10.4154 0 9.25816 0 7.96736V5.74184C0 2.56677 2.59694 0 5.80935 0H23.8229C25.0838 0 26.3147 0.400603 27.3205 1.15728L42.692 15.4154C45.7693 17.7151 45.7693 22.27 42.692 24.5697L27.3205 38.8279C26.3147 39.5846 25.0838 39.9852 23.8229 39.9852V40Z" fill="#03B3E2" />
+      </svg>
+    ),
+  },
+];
 
 export default function SOWPage() {
   const navigate = useNavigate();
@@ -42,73 +108,6 @@ export default function SOWPage() {
       <span className="text-sm leading-[19.6px] text-black">SOW Ready to sign</span>
     </div>
   );
-
-  // Mock SOW data
-  const readyToSignSOWs: SOW[] = [
-    {
-      id: "1",
-      title: "Q7B7 Toolkit",
-      projectLead: "John Smith",
-      date: "01/05/25",
-      status: "ready_to_sign",
-      icon: (
-        <svg width="45" height="40" viewBox="0 0 45 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M23.8229 40H5.80935C2.59694 40 0 37.4332 0 34.2582V31.8843C0 30.5935 0.795591 29.4362 2.0115 28.9614L14.9212 22.908C17.5932 21.8546 17.5932 18.1306 14.9362 17.0623L1.99648 10.8902C0.795576 10.4154 0 9.25816 0 7.96736V5.74184C0 2.56677 2.59694 0 5.80935 0H23.8229C25.0838 0 26.3147 0.400603 27.3205 1.15728L42.692 15.4154C45.7693 17.7151 45.7693 22.27 42.692 24.5697L27.3205 38.8279C26.3147 39.5846 25.0838 39.9852 23.8229 39.9852V40Z" fill="#03B3E2"/>
-        </svg>
-      ),
-    },
-    {
-      id: "2",
-      title: "Fold Toolkit Q3 2025",
-      projectLead: "Henry Bray",
-      date: "15/05/25",
-      status: "ready_to_sign",
-      icon: (
-        <svg width="45" height="40" viewBox="0 0 45 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M23.8229 40H5.80935C2.59694 40 0 37.4332 0 34.2582V31.8843C0 30.5935 0.795591 29.4362 2.0115 28.9614L14.9212 22.908C17.5932 21.8546 17.5932 18.1306 14.9362 17.0623L1.99648 10.8902C0.795576 10.4154 0 9.25816 0 7.96736V5.74184C0 2.56677 2.59694 0 5.80935 0H23.8229C25.0838 0 26.3147 0.400603 27.3205 1.15728L42.692 15.4154C45.7693 17.7151 45.7693 22.27 42.692 24.5697L27.3205 38.8279C26.3147 39.5846 25.0838 39.9852 23.8229 39.9852V40Z" fill="#03B3E2"/>
-        </svg>
-      ),
-    },
-    {
-      id: "3",
-      title: "Buds3 Campaign Toolkit",
-      projectLead: "Jane Smith",
-      date: "20/05/25",
-      status: "ready_to_sign",
-      icon: (
-        <svg width="45" height="40" viewBox="0 0 45 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M23.8229 40H5.80935C2.59694 40 0 37.4332 0 34.2582V31.8843C0 30.5935 0.795591 29.4362 2.0115 28.9614L14.9212 22.908C17.5932 21.8546 17.5932 18.1306 14.9362 17.0623L1.99648 10.8902C0.795576 10.4154 0 9.25816 0 7.96736V5.74184C0 2.56677 2.59694 0 5.80935 0H23.8229C25.0838 0 26.3147 0.400603 27.3205 1.15728L42.692 15.4154C45.7693 17.7151 45.7693 22.27 42.692 24.5697L27.3205 38.8279C26.3147 39.5846 25.0838 39.9852 23.8229 39.9852V40Z" fill="#03B3E2"/>
-        </svg>
-      ),
-    },
-  ];
-
-  const signedSOWs: SOW[] = [
-    {
-      id: "4",
-      title: "W Summer Festival 2025",
-      projectLead: "Henry Bray",
-      date: "27/08/24",
-      status: "signed",
-      icon: (
-        <svg width="45" height="40" viewBox="0 0 45 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M23.8229 40H5.80935C2.59694 40 0 37.4332 0 34.2582V31.8843C0 30.5935 0.795591 29.4362 2.0115 28.9614L14.9212 22.908C17.5932 21.8546 17.5932 18.1306 14.9362 17.0623L1.99648 10.8902C0.795576 10.4154 0 9.25816 0 7.96736V5.74184C0 2.56677 2.59694 0 5.80935 0H23.8229C25.0838 0 26.3147 0.400603 27.3205 1.15728L42.692 15.4154C45.7693 17.7151 45.7693 22.27 42.692 24.5697L27.3205 38.8279C26.3147 39.5846 25.0838 39.9852 23.8229 39.9852V40Z" fill="#03B3E2"/>
-        </svg>
-      ),
-    },
-    {
-      id: "5",
-      title: "Adapt AI Toolkit Q3 2025",
-      projectLead: "John Doe",
-      date: "15/09/24",
-      status: "signed",
-      icon: (
-        <svg width="45" height="40" viewBox="0 0 45 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M23.8229 40H5.80935C2.59694 40 0 37.4332 0 34.2582V31.8843C0 30.5935 0.795591 29.4362 2.0115 28.9614L14.9212 22.908C17.5932 21.8546 17.5932 18.1306 14.9362 17.0623L1.99648 10.8902C0.795576 10.4154 0 9.25816 0 7.96736V5.74184C0 2.56677 2.59694 0 5.80935 0H23.8229C25.0838 0 26.3147 0.400603 27.3205 1.15728L42.692 15.4154C45.7693 17.7151 45.7693 22.27 42.692 24.5697L27.3205 38.8279C26.3147 39.5846 25.0838 39.9852 23.8229 39.9852V40Z" fill="#03B3E2"/>
-        </svg>
-      ),
-    },
-  ];
 
   const handleSOWClick = (sow: SOW) => {
     setSelectedSOW(sow);
@@ -146,7 +145,7 @@ export default function SOWPage() {
           <div className="space-y-4">
             <h2 className="text-base font-semibold leading-[21.28px] text-black">SOW ready to sign</h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-              {readyToSignSOWs.map((sow) => (
+              {READY_TO_SIGN_SOWS.map((sow) => (
                 <button
                   key={sow.id}
                   onClick={() => handleSOWClick(sow)}
@@ -179,7 +178,7 @@ export default function SOWPage() {
           <div className="space-y-4">
             <h2 className="text-base font-semibold leading-[21.28px] text-black">SOW signed</h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-              {signedSOWs.map((sow) => (
+              {SIGNED_SOWS.map((sow) => (
                 <button
                   key={sow.id}
                   onClick={() => handleSOWClick(sow)}
@@ -212,7 +211,7 @@ export default function SOWPage() {
 
       {/* SOW Document Modal */}
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-        <DialogContent hideClose className="max-w-5xl max-h-[95vh] p-0 bg-white flex flex-col">
+        <DialogContent className="max-w-5xl max-h-[95vh] p-0 bg-white flex flex-col">
           <div className="p-6 pb-4 shrink-0 relative">
             <DialogHeader>
               <DialogTitle className="text-xl font-bold text-black pr-10">{selectedSOW?.title}</DialogTitle>

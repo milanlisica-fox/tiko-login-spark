@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useEffect, useMemo, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import { Label } from "@/components/ui/label";
 import { triggerSuccessConfetti } from "@/lib/animations";
 import SuccessDialog from "@/components/common/SuccessDialog";
@@ -8,6 +8,9 @@ import DashboardTopbarRight from "@/components/layout/DashboardTopbarRight";
 import { ArrowLeft } from "lucide-react";
 import { BRAND } from "@/constants/branding";
 import { BRIEFS_ASSETS } from "@/constants/briefs-assets";
+import BriefPreviewPanel from "@/components/briefs/BriefPreviewPanel";
+import { format } from "date-fns";
+import { PROJECT_LEADS, SubmittedBriefPayload } from "./Briefs";
 
 const logoImage = BRAND.logo;
 const logoDot = BRAND.logoDot;
@@ -15,41 +18,75 @@ const createBriefArrowIcon = BRIEFS_ASSETS.createBriefArrowIcon;
 
 export default function BriefReview() {
   const navigate = useNavigate();
+  const location = useLocation();
   const [showConfirmation, setShowConfirmation] = useState(false);
+  const [showSaveDraftConfirmation, setShowSaveDraftConfirmation] = useState(false);
+  const [pendingBriefPayload, setPendingBriefPayload] = useState<SubmittedBriefPayload | null>(null);
+
+  const briefState = (location.state as { brief?: { projectTitle: string; dueDate?: Date; projectLead: string; objective: string } } | undefined)?.brief;
+
+  useEffect(() => {
+    if (!briefState) {
+      navigate("/dashboard/briefs", { replace: true });
+    }
+  }, [briefState, navigate]);
+
+  const formattedDueDate = useMemo(() => {
+    if (!briefState?.dueDate) {
+      return "";
+    }
+    try {
+      return format(new Date(briefState.dueDate), "MMMM d, yyyy");
+    } catch (error) {
+      return "";
+    }
+  }, [briefState?.dueDate]);
+
+  const projectLeadLabel = useMemo(() => {
+    if (!briefState?.projectLead) {
+      return "";
+    }
+    return PROJECT_LEADS.find((lead) => lead.value === briefState.projectLead)?.label ?? briefState.projectLead;
+  }, [briefState?.projectLead]);
 
   // Mock of captured brief data (can be replaced by routed state/global store later)
-  const mockBriefData = {
-    projectTitle: "Q7B7 Toolkit",
-    dueDate: "Pick a date",
-    projectLead: "Henry Bray",
-    objective:
-      "To create a product toolkit that provides clear guidance to help partners effectively amplify the campaign message. The toolkit should enable consistent execution, align with campaign objectives, and make it easy for users to activate the campaign across channels.",
+  const briefData = {
+    projectTitle: briefState?.projectTitle ?? "",
+    dueDate: formattedDueDate,
+    projectLead: projectLeadLabel,
+    objective: briefState?.objective ?? "",
   };
 
-  const deliverablesList = [
-    {
-      kvType: "Q7 KV",
-      variants: [
-        { variant: "Clean", size: "1:1, 16:9, 9:16, PT, LS, Ex Pt, Ex LS" },
-        { variant: "80/20", size: "PDF, PT EXT, LS EXT" },
-        { variant: "70/30", size: "1:1, 16:9, 9:16, PT, LS, Ex Pt, Ex LS" },
-      ],
-    },
-    {
-      kvType: "B7 KV",
-      variants: [
-        { variant: "Clean", size: "1:1, 16:9, 9:16, PT, LS, Ex Pt, Ex LS" },
-        { variant: "80/20", size: "PDF, PT EXT, LS EXT" },
-      ],
-    },
-  ];
+  const buildPayload = (status: "draft" | "in-review"): SubmittedBriefPayload => ({
+    title: briefData.projectTitle || "Untitled brief",
+    objective: briefData.objective,
+    status,
+    dueDate: briefState?.dueDate ? new Date(briefState.dueDate).toISOString() : undefined,
+  });
 
-  const handleSubmit = () => setShowConfirmation(true);
-  const handleEdit = () => navigate("/dashboard/briefs", { state: { createBrief: true, showForm: true } });
+  const handleSubmit = () => {
+    setPendingBriefPayload(buildPayload("in-review"));
+    setShowConfirmation(true);
+  };
+
+  const handleEdit = () => {
+    navigate("/dashboard/briefs", {
+      state: {
+        createBrief: true,
+        showForm: true,
+        brief: briefState,
+      },
+    });
+  };
 
   const handleViewAllBriefs = () => {
     setShowConfirmation(false);
-    navigate("/dashboard/briefs", { state: { resetToOverview: true } });
+    if (pendingBriefPayload) {
+      navigate("/dashboard/briefs", { state: { submittedBrief: pendingBriefPayload } });
+      setPendingBriefPayload(null);
+    } else {
+      navigate("/dashboard/briefs", { state: { resetToOverview: true } });
+    }
   };
 
   useEffect(() => {
@@ -57,6 +94,27 @@ export default function BriefReview() {
       triggerSuccessConfetti();
     }
   }, [showConfirmation]);
+
+  useEffect(() => {
+    if (showSaveDraftConfirmation) {
+      triggerSuccessConfetti();
+    }
+  }, [showSaveDraftConfirmation]);
+
+  const handleSaveDraft = () => {
+    setPendingBriefPayload(buildPayload("draft"));
+    setShowSaveDraftConfirmation(true);
+  };
+
+  const handleViewAllBriefsFromSave = () => {
+    setShowSaveDraftConfirmation(false);
+    if (pendingBriefPayload) {
+      navigate("/dashboard/briefs", { state: { submittedBrief: pendingBriefPayload } });
+      setPendingBriefPayload(null);
+    } else {
+      navigate("/dashboard/briefs", { state: { resetToOverview: true } });
+    }
+  };
 
   const topbarRight = <DashboardTopbarRight />;
 
@@ -93,7 +151,7 @@ export default function BriefReview() {
                     <Label className="text-sm font-bold leading-[18.62px] text-[#09090a]">Project title</Label>
                   </div>
                   <div className="border border-[#e0e0e0] rounded-[85px] px-5 py-2.5 bg-[#f9f9f9] text-sm text-[#09090a]">
-                    {mockBriefData.projectTitle || "-"}
+                    {briefData.projectTitle || "-"}
                   </div>
                 </div>
 
@@ -103,7 +161,7 @@ export default function BriefReview() {
                     <Label className="text-sm font-bold leading-[18.62px] text-[#09090a]">Due date</Label>
                   </div>
                   <div className="border border-[#e0e0e0] rounded-[85px] px-5 py-2.5 bg-[#f9f9f9] text-sm text-[#09090a]">
-                    {mockBriefData.dueDate || "Pick a date"}
+                    {briefData.dueDate || "Pick a date"}
                   </div>
                 </div>
 
@@ -113,7 +171,7 @@ export default function BriefReview() {
                     <Label className="text-sm font-bold leading-[18.62px] text-[#09090a]">Project lead*</Label>
                   </div>
                   <div className="border border-[#e0e0e0] rounded-[85px] px-5 py-2.5 bg-[#f9f9f9] text-sm text-[#09090a]">
-                    {mockBriefData.projectLead || "-"}
+                    {briefData.projectLead || "-"}
                   </div>
                 </div>
 
@@ -123,97 +181,39 @@ export default function BriefReview() {
                     <Label className="text-sm font-bold leading-[18.62px] text-[#09090a]">Objective</Label>
                   </div>
                   <div className="border border-[#e0e0e0] rounded-lg px-5 py-2.5 bg-[#f9f9f9] text-sm text-[#09090a] min-h-[74px]">
-                    {mockBriefData.objective || "-"}
+                    {briefData.objective || "-"}
                   </div>
                 </div>
               </div>
             </div>
             </div>
 
-            {/* Right Panel */}
+            {/* Right: brief preview */}
             <div className="flex flex-col gap-2.5 pb-5 pl-2.5 pt-2.5 flex-[1_1_0%] min-w-0 h-full overflow-hidden">
-            {/* Brief Preview - made smaller to prevent scroll */}
-            <div className="bg-white flex flex-col gap-8 p-6 rounded-xl overflow-y-auto h-[89%]">
-              <div className="flex flex-col gap-4">
-                <div className="flex items-center justify-center">
-                  <p className="text-[22px] font-bold leading-[29.26px] text-black">
-                    {mockBriefData.projectTitle}
-                  </p>
-                </div>
-
-                <div className="flex flex-col gap-6">
-                  <div className="flex flex-col gap-2">
-                    <p className="text-sm leading-[18.62px] text-[#09090a]">
-                      <span className="font-bold">Launch date: </span>
-                      <span className="font-normal">{mockBriefData.dueDate}</span>
-                    </p>
-                  </div>
-
-                  <div className="flex flex-col gap-2">
-                    <p className="text-sm leading-[18.62px] text-[#09090a]">
-                      <span className="font-bold">Project lead: </span>
-                      <span className="font-normal">{mockBriefData.projectLead}</span>
-                    </p>
-                  </div>
-
-                  <p className="text-sm leading-[18.62px] text-[#09090a]">
-                    <span className="font-bold">Objective: </span>
-                    <span className="font-normal">{mockBriefData.objective}</span>
-                  </p>
-                </div>
-
-                {/* Mock deliverables preview */}
-                <div className="flex flex-col gap-3 mt-2">
-                  <div className="flex gap-2 items-center text-sm font-bold leading-[18.62px] text-black">
-                    <p className="flex-1">KV Type</p>
-                    <p className="w-[60px]">Variant</p>
-                    <p className="w-[200px]">Size</p>
-                  </div>
-                  <div className="h-px bg-[#e0e0e0]" />
-                  {deliverablesList.map((item, idx) => (
-                    <div key={idx} className="flex flex-col gap-2">
-                      {item.variants.map((variant, vIdx) => (
-                        <div key={vIdx}>
-                          <div className="flex gap-2 items-center text-[12px] leading-[15.96px] text-black">
-                            <p className={`flex-1 ${vIdx === 0 ? "font-bold" : ""}`}>
-                              {vIdx === 0 ? item.kvType : " "}
-                            </p>
-                            <p className="w-[60px] font-normal">{variant.variant}</p>
-                            <p className="w-[200px] font-normal">{variant.size}</p>
-                          </div>
-                          {vIdx < item.variants.length - 1 && (
-                            <div className="h-px bg-[#e0e0e0] mt-2" />
-                          )}
-                        </div>
-                      ))}
-                      {idx < deliverablesList.length - 1 && (
-                        <div className="h-px bg-[#e0e0e0] mt-2" />
-                      )}
-                    </div>
-                  ))}
-                </div>
+            <div className="bg-white flex flex-col gap-6 p-6 rounded-xl overflow-hidden h-[89%]">
+              <div className="flex-1 overflow-y-auto">
+                <BriefPreviewPanel
+                  projectTitle={briefData.projectTitle}
+                  launchDate={briefData.dueDate}
+                  projectLead={briefData.projectLead}
+                  objective={briefData.objective}
+                />
               </div>
             </div>
 
-            {/* Separator - matching left side line width and position */}
-            <div className="h-[9px] relative w-full shrink-0">
-              <div className="absolute h-px left-0 top-[4px] w-full bg-[#e0e0e0]" />
-            </div>
-
-            {/* Bottom actions */}
-            <div className="flex items-center w-full shrink-0 min-w-0">
+            <div className="flex items-center w-full min-w-0 gap-2">
               <button
                 onClick={handleEdit}
                 className="w-[25%] min-w-0 h-8 px-2 md:px-4 bg-[#03b3e2] text-black hover:opacity-80 rounded-[28px] transition flex items-center justify-center"
               >
-                <span className="text-[13px] font-semibold leading-[18.62px] text-black whitespace-nowrap truncate">Edit brief</span>
+                <span className="text-[13px] font-semibold leading-[18.62px] whitespace-nowrap">Edit brief</span>
               </button>
               <div className="w-[15%] shrink-0" />
               <button
                 onClick={handleSubmit}
-                className="w-[60%] min-w-0 h-8 px-2 md:px-4 bg-[#ffb546] hover:opacity-90 rounded-[28px] flex items-center justify-center gap-1 md:gap-[10px] transition"
+                className="btn w-[60%] min-w-0 h-8 px-2 md:px-4 bg-[#ffb546] hover:opacity-90 rounded-[28px] flex items-center justify-center gap-1 md:gap-[10px] transition"
               >
-                <span className="text-[13px] font-semibold leading-[18.62px] text-black whitespace-nowrap truncate">Submit brief</span>
+                <span className="text-[13px] font-semibold leading-[18.62px] text-black whitespace-nowrap">Submit brief</span>
                 <img src={createBriefArrowIcon} alt="" className="h-[14px] w-[15.567px] shrink-0" />
               </button>
             </div>
@@ -235,7 +235,7 @@ export default function BriefReview() {
                     <Label className="text-sm font-bold leading-[18.62px] text-[#09090a]">Project title</Label>
                   </div>
                   <div className="border border-[#e0e0e0] rounded-[85px] px-5 py-2.5 bg-[#f9f9f9] text-sm text-[#09090a]">
-                    {mockBriefData.projectTitle || "-"}
+                    {briefData.projectTitle || "-"}
                   </div>
                 </div>
 
@@ -245,7 +245,7 @@ export default function BriefReview() {
                     <Label className="text-sm font-bold leading-[18.62px] text-[#09090a]">Due date</Label>
                   </div>
                   <div className="border border-[#e0e0e0] rounded-[85px] px-5 py-2.5 bg-[#f9f9f9] text-sm text-[#09090a]">
-                    {mockBriefData.dueDate || "Pick a date"}
+                    {briefData.dueDate || "Pick a date"}
                   </div>
                 </div>
 
@@ -255,7 +255,7 @@ export default function BriefReview() {
                     <Label className="text-sm font-bold leading-[18.62px] text-[#09090a]">Project lead*</Label>
                   </div>
                   <div className="border border-[#e0e0e0] rounded-[85px] px-5 py-2.5 bg-[#f9f9f9] text-sm text-[#09090a]">
-                    {mockBriefData.projectLead || "-"}
+                    {briefData.projectLead || "-"}
                   </div>
                 </div>
 
@@ -265,7 +265,7 @@ export default function BriefReview() {
                     <Label className="text-sm font-bold leading-[18.62px] text-[#09090a]">Objective</Label>
                   </div>
                   <div className="border border-[#e0e0e0] rounded-lg px-5 py-2.5 bg-[#f9f9f9] text-sm text-[#09090a] min-h-[74px]">
-                    {mockBriefData.objective || "-"}
+                    {briefData.objective || "-"}
                   </div>
                 </div>
               </div>
@@ -282,62 +282,16 @@ export default function BriefReview() {
             {/* Brief Preview - Double height */}
             <div className="bg-white flex flex-col p-6 rounded-xl min-h-[600px] overflow-y-auto">
               <div className="flex flex-col gap-4">
-                <div className="flex items-center justify-center">
-                  <p className="text-[22px] font-bold leading-[29.26px] text-black">
-                    {mockBriefData.projectTitle}
-                  </p>
-                </div>
+                <BriefPreviewPanel
+                  projectTitle={briefData.projectTitle}
+                  launchDate={briefData.dueDate}
+                  projectLead={briefData.projectLead}
+                  objective={briefData.objective}
+                />
 
-                <div className="flex flex-col gap-6">
-                  <div className="flex flex-col gap-2">
-                    <p className="text-sm leading-[18.62px] text-[#09090a]">
-                      <span className="font-bold">Launch date: </span>
-                      <span className="font-normal">{mockBriefData.dueDate}</span>
-                    </p>
-                  </div>
-
-                  <div className="flex flex-col gap-2">
-                    <p className="text-sm leading-[18.62px] text-[#09090a]">
-                      <span className="font-bold">Project lead: </span>
-                      <span className="font-normal">{mockBriefData.projectLead}</span>
-                    </p>
-                  </div>
-
-                  <p className="text-sm leading-[18.62px] text-[#09090a]">
-                    <span className="font-bold">Objective: </span>
-                    <span className="font-normal">{mockBriefData.objective}</span>
-                  </p>
-                </div>
-
-                {/* Mock deliverables preview */}
-                <div className="flex flex-col gap-3 mt-2">
-                  <div className="flex gap-2 items-center text-sm font-bold leading-[18.62px] text-black">
-                    <p className="flex-1">KV Type</p>
-                    <p className="w-[60px]">Variant</p>
-                    <p className="w-[200px]">Size</p>
-                  </div>
-                  <div className="h-px bg-[#e0e0e0]" />
-                  {deliverablesList.map((item, idx) => (
-                    <div key={idx} className="flex flex-col gap-2">
-                      {item.variants.map((variant, vIdx) => (
-                        <div key={vIdx}>
-                          <div className="flex gap-2 items-center text-[12px] leading-[15.96px] text-black">
-                            <p className={`flex-1 ${vIdx === 0 ? "font-bold" : ""}`}>
-                              {vIdx === 0 ? item.kvType : " "}
-                            </p>
-                            <p className="w-[60px] font-normal">{variant.variant}</p>
-                            <p className="w-[200px] font-normal">{variant.size}</p>
-                          </div>
-                          {vIdx < item.variants.length - 1 && (
-                            <div className="h-px bg-[#e0e0e0] mt-2" />
-                          )}
-                        </div>
-                      ))}
-                      {idx < deliverablesList.length - 1 && (
-                        <div className="h-px bg-[#e0e0e0] mt-2" />
-                      )}
-                    </div>
-                  ))}
+                {/* Separator */}
+                <div className="h-[9px] relative w-full shrink-0">
+                  <div className="absolute h-px left-0 top-[4px] w-full bg-[#e0e0e0]" />
                 </div>
               </div>
             </div>
@@ -350,7 +304,6 @@ export default function BriefReview() {
 
           {/* Buttons section for mobile and tablet/iPad */}
           <div className="flex lg:hidden flex-col gap-2.5 w-full max-w-4xl pb-5">
-            {/* Action Buttons - Order: Edit brief, Submit brief - In a row */}
             <div className="flex flex-row items-center gap-2.5 w-full min-w-0">
               <button
                 onClick={handleEdit}
@@ -358,6 +311,7 @@ export default function BriefReview() {
               >
                 <span className="text-[13px] font-semibold leading-[18.62px] text-black whitespace-nowrap">Edit brief</span>
               </button>
+              <div className="w-[15%] shrink-0" />
               <button
                 onClick={handleSubmit}
                 className="btn flex-1 min-w-0 h-8 px-2 md:px-4 bg-[#ffb546] hover:opacity-90 rounded-[28px] flex items-center justify-center gap-1 md:gap-[10px] transition"
@@ -374,6 +328,11 @@ export default function BriefReview() {
           open={showConfirmation}
           onOpenChange={setShowConfirmation}
           onConfirm={handleViewAllBriefs}
+        />
+        <SuccessDialog
+          open={showSaveDraftConfirmation}
+          onOpenChange={setShowSaveDraftConfirmation}
+          onConfirm={handleViewAllBriefsFromSave}
         />
       </>
     </DashboardLayout>
