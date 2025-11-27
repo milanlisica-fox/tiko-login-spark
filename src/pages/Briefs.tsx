@@ -1,6 +1,6 @@
 import { useMemo, useState, useEffect, useRef, useCallback, ReactNode } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { Home, FileText, Folder, BarChart2, LogOut, Bell, ChevronDown, ArrowRight, Calculator, Coins, X, Calendar as CalendarIcon, ArrowLeft, Plus, ChevronDown as ChevronDownIcon } from "lucide-react";
+import { Home, FileText, Folder, BarChart2, LogOut, Bell, ChevronDown, ArrowRight, Calculator, Coins, X, Calendar as CalendarIcon, ArrowLeft, Plus, Minus, ChevronDown as ChevronDownIcon, HelpCircle } from "lucide-react";
 import { toast } from "sonner";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -28,6 +28,10 @@ import SuccessDialog from "@/components/common/SuccessDialog";
 import BriefPreviewPanel from "@/components/briefs/BriefPreviewPanel";
 import { StyledInput } from "@/components/common/StyledInput";
 import TabFilter from "@/components/common/TabFilter";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 
 // Reuse images from Dashboard for consistent visuals
 const logoImage = BRAND.logo;
@@ -43,6 +47,15 @@ const iconToolkit = TEMPLATE_ICONS.toolkit;
 const iconPartnerships = TEMPLATE_ICONS.assetAdaptation;
 const iconSocialContent = TEMPLATE_ICONS.pos;
 const arrowRightIcon = BRIEFS_ASSETS.arrowRightIcon;
+
+const FORM_TEMPLATE_OPTIONS: { id: string; title: string; icon: string }[] = [
+  { id: "asset-adaptation", title: "Asset adaptation", icon: iconAssetAdaptation },
+  { id: "bau-campaign", title: "BAU campaign", icon: iconBAU },
+  { id: "pos", title: "Point of Sale", icon: iconPOS },
+  { id: "digital-pos", title: "Digital POS", icon: iconDigitalPOS },
+  { id: "feature-asset", title: "Feature asset", icon: iconFeatureAsset },
+  { id: "toolkit", title: "Toolkit", icon: iconToolkit },
+];
 
 // New brief form images from Figma
 const briefLoadingIcon = BRIEFS_ASSETS.briefLoadingIcon;
@@ -61,6 +74,207 @@ const imgFrame14_v2 = BRIEFS_ASSETS.imgFrame14_v2;
 const imgFrame15_v2 = BRIEFS_ASSETS.imgFrame15_v2;
 // Upload icon (match profile picture dialog)
 const uploadIcon = BRIEFS_ASSETS.uploadIcon;
+
+const WORK_TYPE_OPTIONS = [
+  { value: "strategy", label: "Strategy" },
+  { value: "design", label: "Design" },
+  { value: "production", label: "Production" },
+  { value: "other", label: "Other" },
+];
+
+const CHANNEL_OPTIONS = [
+  "TVC",
+  "Print",
+  "Online",
+  "Social",
+  "Mobile",
+  "Retail",
+  "Out of home",
+];
+
+const OUTPUT_OPTIONS = ["Plan", "Print asset", "Video asset", "Digital toolkit", "Landing page"];
+
+const DEFAULT_CUSTOM_ASSET_PRICE = 8;
+
+const RECOMMENDED_ASSETS = [
+  {
+    id: "asset-brief-kit",
+    name: "Master toolkit",
+    description: "Full asset pack for campaign roll-out",
+    tokenPrice: 6,
+  },
+  {
+    id: "asset-key-visual",
+    name: "Key visual",
+    description: "Primary KV ready for localisation",
+    tokenPrice: 4,
+  },
+  {
+    id: "asset-launch-pack",
+    name: "Launch pack",
+    description: "Press + retail assets for launch week",
+    tokenPrice: 5,
+  },
+  {
+    id: "asset-social-media-pack",
+    name: "Social media pack",
+    description: "Complete set of social media assets",
+    tokenPrice: 3,
+  },
+  {
+    id: "asset-print-advertisement",
+    name: "Print advertisement",
+    description: "High-resolution print-ready advertisements",
+    tokenPrice: 4,
+  },
+  {
+    id: "asset-video-content",
+    name: "Video content",
+    description: "Video assets for digital channels",
+    tokenPrice: 7,
+  },
+  {
+    id: "asset-email-template",
+    name: "Email template",
+    description: "Responsive email templates",
+    tokenPrice: 2,
+  },
+  {
+    id: "asset-banner-ads",
+    name: "Banner ads",
+    description: "Display banner advertisements",
+    tokenPrice: 3,
+  },
+  {
+    id: "asset-infographic",
+    name: "Infographic",
+    description: "Visual data representation",
+    tokenPrice: 5,
+  },
+  {
+    id: "asset-presentation-deck",
+    name: "Presentation deck",
+    description: "Slide deck for presentations",
+    tokenPrice: 6,
+  },
+];
+
+const ADDITIONAL_ASSETS = [
+  {
+    id: "asset-web-banner",
+    name: "Web banner",
+    description: "Website banner advertisements",
+    tokenPrice: 3,
+  },
+  {
+    id: "asset-mobile-app-assets",
+    name: "Mobile app assets",
+    description: "Assets for mobile applications",
+    tokenPrice: 5,
+  },
+  {
+    id: "asset-billboard",
+    name: "Billboard",
+    description: "Large format outdoor advertising",
+    tokenPrice: 8,
+  },
+  {
+    id: "asset-radio-script",
+    name: "Radio script",
+    description: "Scripts for radio advertisements",
+    tokenPrice: 2,
+  },
+  {
+    id: "asset-podcast-cover",
+    name: "Podcast cover",
+    description: "Cover art for podcast episodes",
+    tokenPrice: 3,
+  },
+  {
+    id: "asset-merchandise-design",
+    name: "Merchandise design",
+    description: "Designs for branded merchandise",
+    tokenPrice: 6,
+  },
+  {
+    id: "asset-packaging-design",
+    name: "Packaging design",
+    description: "Product packaging designs",
+    tokenPrice: 7,
+  },
+  {
+    id: "asset-exhibition-stand",
+    name: "Exhibition stand",
+    description: "Designs for trade show booths",
+    tokenPrice: 9,
+  },
+  {
+    id: "asset-newsletter-template",
+    name: "Newsletter template",
+    description: "Email newsletter templates",
+    tokenPrice: 4,
+  },
+  {
+    id: "asset-landing-page",
+    name: "Landing page",
+    description: "Landing page designs",
+    tokenPrice: 8,
+  },
+  {
+    id: "asset-animated-gif",
+    name: "Animated GIF",
+    description: "Animated graphics for social media",
+    tokenPrice: 3,
+  },
+  {
+    id: "asset-story-template",
+    name: "Story template",
+    description: "Social media story templates",
+    tokenPrice: 2,
+  },
+  {
+    id: "asset-carousel-post",
+    name: "Carousel post",
+    description: "Multi-image carousel posts",
+    tokenPrice: 4,
+  },
+  {
+    id: "asset-reels-template",
+    name: "Reels template",
+    description: "Video reel templates",
+    tokenPrice: 5,
+  },
+  {
+    id: "asset-logo-variations",
+    name: "Logo variations",
+    description: "Different logo variations",
+    tokenPrice: 4,
+  },
+  {
+    id: "asset-brand-guidelines",
+    name: "Brand guidelines",
+    description: "Comprehensive brand guidelines",
+    tokenPrice: 10,
+  },
+  {
+    id: "asset-icon-set",
+    name: "Icon set",
+    description: "Custom icon collection",
+    tokenPrice: 5,
+  },
+  {
+    id: "asset-illustration-pack",
+    name: "Illustration pack",
+    description: "Custom illustrations",
+    tokenPrice: 6,
+  },
+  {
+    id: "asset-photography-brief",
+    name: "Photography brief",
+    description: "Photography direction and brief",
+    tokenPrice: 7,
+  },
+];
 
 const paperclipIcon = (
   <svg xmlns="http://www.w3.org/2000/svg" width="14" height="16" viewBox="0 0 14 16" fill="none">
@@ -89,6 +303,20 @@ const BriefLoadingGraphic = () => (
 type BriefStatus = "Draft" | "In review" | "SOW Ready to sign";
 type BriefBadge = "Creation" | "Adaptation" | "Resize" | "default";
 
+interface RecommendedAsset {
+  id: string;
+  name: string;
+  description: string;
+  tokenPrice: number;
+}
+
+interface SelectedAsset extends RecommendedAsset {
+  assetSpecification: string;
+  deliveryWeek: string;
+  quantity: number;
+  isCustom?: boolean;
+}
+
 interface BriefSummary {
   id: string;
   title: string;
@@ -107,6 +335,13 @@ interface NewBriefFormValues {
   dueDate?: Date;
   projectLead: string;
   objective: string;
+  workType: string;
+  channels: string[];
+  expectedOutputs: string[];
+  briefSummary: string;
+  assets: SelectedAsset[];
+  selectedTemplate: string;
+  additionalAssetDetails: string;
 }
 
 const PROJECT_LEADS = [
@@ -120,6 +355,13 @@ const createBriefFormDefaults = (): NewBriefFormValues => ({
   dueDate: undefined,
   projectLead: "",
   objective: "",
+  workType: "",
+  channels: [],
+  expectedOutputs: [],
+  briefSummary: "",
+  assets: [],
+  selectedTemplate: "",
+  additionalAssetDetails: "",
 });
 
 const initialBriefs: BriefSummary[] = [
@@ -194,8 +436,7 @@ export default function BriefsPage() {
   const location = useLocation();
   const [briefs, setBriefs] = useState<BriefSummary[]>(initialBriefs);
   const [isCreatingBrief, setIsCreatingBrief] = useState(false);
-  const [briefView, setBriefView] = useState<"templates" | "form" | "deliverables" | "ai-response">("templates");
-  const [aiInputText, setAiInputText] = useState("");
+  const [briefView, setBriefView] = useState<"templates" | "form">("templates");
 
   const draftBriefCount = useMemo(() => briefs.filter((brief) => brief.status === "Draft").length, [briefs]);
   const inReviewBriefCount = useMemo(() => briefs.filter((brief) => brief.status === "In review").length, [briefs]);
@@ -259,12 +500,12 @@ export default function BriefsPage() {
 
   const topbarRight = <DashboardTopbarRight />;
 
-  const pageTitle = isCreatingBrief && (briefView === "form" || briefView === "deliverables" || briefView === "ai-response") ? "New brief" : activeName;
+  const pageTitle = isCreatingBrief && briefView === "form" ? "New brief" : activeName;
 
   const titleNode = (
-    isCreatingBrief && (briefView === "form" || briefView === "deliverables" || briefView === "ai-response") ? (
+    isCreatingBrief && briefView === "form" ? (
       <div className="flex items-center gap-2">
-        <button onClick={() => briefView === "deliverables" || briefView === "ai-response" ? setBriefView("form") : setBriefView("templates")} className="hover:opacity-70 transition">
+        <button onClick={() => setBriefView("templates")} className="hover:opacity-70 transition">
           <ArrowLeft size={20} className="text-black" />
         </button>
         <span className="text-sm leading-[19.6px] text-black">{pageTitle}</span>
@@ -299,29 +540,19 @@ export default function BriefsPage() {
           {isCreatingBrief ? (
             briefView === "templates" ? (
               <TemplateSelectionScreen 
-                onCancel={() => setIsCreatingBrief(false)} 
+                onCancel={() => {
+                  setIsCreatingBrief(false);
+                  setBriefView("templates");
+                }}
                 onCreateBrief={() => setBriefView("form")}
               />
-            ) : briefView === "form" ? (
-              <NewBriefForm 
-                onCancel={() => setBriefView("templates")} 
-                onNext={() => setBriefView("deliverables")}
-                onSubmit={handleBriefSubmit}
-              />
-            ) : briefView === "deliverables" ? (
-              <DeliverablesSelectionScreen 
-                onCancel={() => setBriefView("form")}
-                onBack={() => setBriefView("form")}
-                onNavigateToAiResponse={(inputText) => {
-                  setAiInputText(inputText);
-                  setBriefView("ai-response");
-                }}
-              />
             ) : (
-              <AIResponseScreen 
-                userInput={aiInputText}
-                onBack={() => setBriefView("deliverables")}
-                onCancel={() => setBriefView("form")}
+              <NewBriefForm 
+                onCancel={() => {
+                  setIsCreatingBrief(false);
+                  setBriefView("templates");
+                }}
+                onSubmit={handleBriefSubmit}
               />
             )
           ) : (
@@ -681,30 +912,142 @@ function TemplateSelectionScreen({ onCancel, onCreateBrief }: { onCancel: () => 
   );
 }
 
-function NewBriefForm({
-  onCancel,
-  onNext,
-  onSubmit,
-}: {
-  onCancel: () => void;
-  onNext: () => void;
-  onSubmit: (data: NewBriefFormValues) => void;
-}) {
+function NewBriefForm({ onCancel, onSubmit }: { onCancel: () => void; onSubmit: (data: NewBriefFormValues) => void }) {
   const navigate = useNavigate();
   const [formData, setFormData] = useState<NewBriefFormValues>(createBriefFormDefaults());
   const [showConfirmation, setShowConfirmation] = useState(false);
   const [showSaveDraftConfirmation, setShowSaveDraftConfirmation] = useState(false);
+  const [previewOpen, setPreviewOpen] = useState(false);
+  const [showCustomAssetFields, setShowCustomAssetFields] = useState(false);
+  const [customAssetDraft, setCustomAssetDraft] = useState({ name: "", description: "", deliveryWeek: "" });
+  const [assetsWithDetails, setAssetsWithDetails] = useState<string[]>([]);
+  const [assetsToShow, setAssetsToShow] = useState(10);
+  const [additionalAssetsLoaded, setAdditionalAssetsLoaded] = useState(0);
 
-  // Check if form is complete
-  const isFormComplete = formData.projectTitle.trim() !== "" && 
+  const tokenEstimate = useMemo(
+    () => formData.assets
+      .filter((asset) => !asset.isCustom)
+      .reduce((total, asset) => total + asset.tokenPrice * asset.quantity, 0),
+    [formData.assets]
+  );
+
+  const hasCustomAssets = useMemo(
+    () => formData.assets.some((asset) => asset.isCustom),
+    [formData.assets]
+  );
+
+  const selectedTemplateName = useMemo(
+    () => FORM_TEMPLATE_OPTIONS.find((option) => option.id === formData.selectedTemplate)?.title || "",
+    [formData.selectedTemplate]
+  );
+
+  const isFormComplete =
+    formData.projectTitle.trim() !== "" &&
                          formData.dueDate !== undefined && 
                          formData.projectLead.trim() !== "" && 
                          formData.objective.trim() !== "";
 
-  const handleNext = () => {
-    if (isFormComplete) {
-    onNext();
+  const handleFieldChange = (field: keyof NewBriefFormValues, value: unknown) => {
+    setFormData((prev) => ({ ...prev, [field]: value }));
+  };
+
+  const handleMultiSelectToggle = (field: "channels" | "expectedOutputs", value: string) => {
+    setFormData((prev) => {
+      const currentValues = prev[field];
+      const exists = currentValues.includes(value);
+      const updated = exists ? currentValues.filter((item) => item !== value) : [...currentValues, value];
+      return { ...prev, [field]: updated };
+    });
+  };
+
+  const handleAddAsset = (asset: RecommendedAsset) => {
+    setFormData((prev) => {
+      const existingAsset = prev.assets.find((a) => a.id === asset.id);
+      if (existingAsset) {
+        return {
+          ...prev,
+          assets: prev.assets.map((a) => (a.id === asset.id ? { ...a, quantity: a.quantity + 1 } : a)),
+        };
+      }
+      return {
+        ...prev,
+        assets: [
+          ...prev.assets,
+          {
+            ...asset,
+            assetSpecification: "",
+            deliveryWeek: "",
+            quantity: 1,
+          },
+        ],
+      };
+    });
+  };
+
+  const handleAssetFieldChange = (assetId: string, field: "assetSpecification" | "deliveryWeek", value: string) => {
+    setFormData((prev) => ({
+      ...prev,
+      assets: prev.assets.map((asset) => (asset.id === assetId ? { ...asset, [field]: value } : asset)),
+    }));
+  };
+
+  const handleAssetQuantityChange = (assetId: string, delta: number) => {
+    setFormData((prev) => {
+      const updatedAssets = prev.assets.map((asset) => {
+        if (asset.id === assetId) {
+          const newQuantity = asset.quantity + delta;
+          if (newQuantity <= 0) {
+            return null;
+          }
+          return { ...asset, quantity: newQuantity };
+        }
+        return asset;
+      }).filter((asset): asset is SelectedAsset => asset !== null);
+      
+      // Remove from details if quantity becomes 0
+      if (delta < 0) {
+        const asset = prev.assets.find((a) => a.id === assetId);
+        if (asset && asset.quantity + delta <= 0) {
+          setAssetsWithDetails((prevDetails) => prevDetails.filter((id) => id !== assetId));
+        }
+      }
+      
+      return { ...prev, assets: updatedAssets };
+    });
+  };
+
+  const handleRemoveAsset = (assetId: string) => {
+    setFormData((prev) => ({
+      ...prev,
+      assets: prev.assets.filter((asset) => asset.id !== assetId),
+    }));
+    setAssetsWithDetails((prev) => prev.filter((id) => id !== assetId));
+  };
+
+  const handleAddCustomAsset = () => {
+    if (!customAssetDraft.name.trim()) {
+      return;
     }
+
+    const id = `custom-${Date.now()}`;
+    const newAsset: SelectedAsset = {
+      id,
+      name: customAssetDraft.name.trim(),
+      description: customAssetDraft.description.trim() || "Custom asset",
+      tokenPrice: DEFAULT_CUSTOM_ASSET_PRICE,
+      assetSpecification: customAssetDraft.description.trim(),
+      deliveryWeek: customAssetDraft.deliveryWeek.trim(),
+      quantity: 1,
+      isCustom: true,
+    };
+
+    setFormData((prev) => ({
+      ...prev,
+      assets: [...prev.assets, newAsset],
+    }));
+    setCustomAssetDraft({ name: "", description: "", deliveryWeek: "" });
+    setShowCustomAssetFields(false);
+    setAssetsWithDetails((prev) => [...prev, id]);
   };
 
   const handleSubmit = () => {
@@ -714,21 +1057,18 @@ function NewBriefForm({
 
     onSubmit(formData);
     setFormData(createBriefFormDefaults());
+    setAssetsWithDetails([]);
     setShowConfirmation(true);
+    setPreviewOpen(false);
   };
 
   const handleReviewBrief = () => {
-    if (!isFormComplete) {
-      return;
-    }
-
-    navigate("/dashboard/briefs/review");
+    setPreviewOpen(true);
   };
 
-  const handleChange = (field: string, value: string | Date | undefined) => {
-    setFormData((prev) => ({ ...prev, [field]: value }));
+  const handleTemplateSelect = (templateId: string) => {
+    setFormData((prev) => ({ ...prev, selectedTemplate: templateId }));
   };
-
 
   const handleViewAllBriefs = () => {
     setShowConfirmation(false);
@@ -752,43 +1092,35 @@ function NewBriefForm({
 
   return (
     <>
-      {/* Desktop Layout - Side by side */}
-      <div className="hidden lg:flex items-center justify-center w-full h-[85vh] px-6 lg:px-[10%] xl:px-[15%] overflow-hidden">
-        <div className="flex flex-row gap-4 w-full h-full">
-      {/* Left Form Section */}
-        <div className="flex flex-col gap-2 p-4 md:p-6 rounded-xl flex-[1_1_0%] min-w-0 h-full overflow-hidden">
-          <div className="flex flex-col gap-4 flex-1 min-h-0 overflow-y-auto p-2">
-          <p className="text-sm leading-[18.62px] text-[#424242] w-full">
-            Start your brief by filling out these required fields.
-          </p>
-
-          <div className="flex flex-col gap-6">
-            {/* Project Title */}
+      <div className="flex flex-col lg:flex-row gap-6 w-full">
+        <div className="flex-1 space-y-6">
+          <section className="rounded-2xl border border-[#ececec] bg-white/80 p-4 md:p-6 space-y-6">
+            <div className="flex flex-col gap-2">
+              <h3 className="text-[21.6px] font-semibold text-black">General information</h3>
+              <p className="text-sm text-[#424242]">Start your brief by filling out these required fields.</p>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <Field label="Project title" helpText="Give your brief a short, clear name">
               <StyledInput
                 value={formData.projectTitle}
-                onChange={(e) => handleChange("projectTitle", e.target.value)}
+                  onChange={(e) => handleFieldChange("projectTitle", e.target.value)}
                 placeholder="e.g. Spring Campaign 2025"
                 variant="brief"
               />
             </Field>
-
-            {/* Due Date */}
             <DateField
-              label={
-                <div className="flex items-center gap-2">
-                  <span>Due date</span>
-                </div>
-              }
+                label="Due date"
               helpText="When is this project due?"
               value={formData.dueDate}
-              onChange={(date) => handleChange("dueDate", date)}
-            />
-
-            {/* Project Lead */}
-            <Field label="Project lead*" helpText="Who will own this project?">
-              <Select value={formData.projectLead} onValueChange={(value) => handleChange("projectLead", value)}>
-                <SelectTrigger className={`border-[#e0e0e0] rounded-[85px] px-5 py-2.5 h-auto bg-[#f9f9f9] ${formData.projectLead ? '[&_span]:text-black' : '[&_span]:text-[#848487]'}`}>
+                onChange={(date) => handleFieldChange("dueDate", date)}
+              />
+              <Field label="Project lead*" helpText="Who will lead this project? *You can assign multiple leads">
+                <Select value={formData.projectLead} onValueChange={(value) => handleFieldChange("projectLead", value)}>
+                  <SelectTrigger
+                    className={`border-[#e0e0e0] rounded-[85px] px-5 py-2.5 h-auto bg-[#f9f9f9] ${
+                      formData.projectLead ? "[&_span]:text-black" : "[&_span]:text-[#848487]"
+                    }`}
+                  >
                   <SelectValue placeholder="Choose a lead" />
                 </SelectTrigger>
                 <SelectContent className="bg-[#f9f9f9]">
@@ -800,262 +1132,527 @@ function NewBriefForm({
                 </SelectContent>
               </Select>
             </Field>
+            </div>
+          </section>
 
-            {/* Objective */}
+          <section className="rounded-2xl border border-[#ececec] bg-white/80 p-4 md:p-6 space-y-6">
+            <div className="flex flex-col gap-2">
+              <h3 className="text-[21.6px] font-semibold text-black">Project description</h3>
+              <p className="text-sm text-[#424242]">Help Iris understand the context behind this request.</p>
+            </div>
+            <Field label="Brief summary" helpText="Give Iris a quick read on what matters most">
+              <Textarea
+                value={formData.briefSummary}
+                onChange={(e) => handleFieldChange("briefSummary", e.target.value)}
+                placeholder="What should Iris focus on?"
+                className="border-[#e0e0e0] rounded-lg px-5 py-2.5 min-h-[90px] resize-none bg-[#f9f9f9] text-black placeholder:text-[#848487]"
+              />
+            </Field>
+
             <Field label="Objective" helpText="What's the main goal of this project?">
               <Textarea
                 value={formData.objective}
-                onChange={(e) => handleChange("objective", e.target.value)}
+                onChange={(e) => handleFieldChange("objective", e.target.value)}
                 placeholder="e.g. Increase signups by 20% through targeted ads"
-                className="border-[#e0e0e0] rounded-lg px-5 py-2.5 min-h-[74px] resize-none bg-[#f9f9f9] text-black placeholder:text-[#848487]"
-                rows={3}
+                className="border-[#e0e0e0] rounded-lg px-5 py-2.5 min-h-[110px] resize-none bg-[#f9f9f9] text-black placeholder:text-[#848487]"
               />
             </Field>
-            </div>
-          </div>
 
-          {/* Separator line */}
-          <div className="h-[9px] relative w-full shrink-0">
-            <div className="absolute h-px left-0 top-[4px] w-full bg-[#e0e0e0]" />
-        </div>
-
-          {/* Note and Next Button */}
-          <div className="flex flex-col gap-2 shrink-0">
-            <p className="text-sm leading-[normal] opacity-[0.826] text-[#434343]">
-              *You can assign multiple leads
-            </p>
-            <button
-          onClick={handleNext}
-              disabled={!isFormComplete}
-              className={`w-full h-10 px-5 rounded-[28px] flex items-center justify-center transition ${
-                isFormComplete
-                  ? "bg-[#ffb546] hover:opacity-90 cursor-pointer"
-                  : "bg-[#f9f9f9] cursor-not-allowed opacity-50"
-              }`}
-            >
-              <span className={`text-sm font-semibold leading-[18.62px] ${
-                isFormComplete ? "text-black" : "text-[#848487]"
-              }`}>Next</span>
-            </button>
-          </div>
-      </div>
-
-        {/* Right Panel - Desktop only */}
-        <div className="flex flex-col gap-2.5 pb-5 pl-2.5 pt-2.5 flex-[1_1_0%] min-w-0 h-full overflow-hidden">
-        {/* Loading State */}
-          <div className="bg-white flex flex-col gap-8 items-center justify-center p-6 rounded-xl overflow-hidden h-[89%]">
-          <div className="flex flex-col gap-2 items-center">
-            <BriefLoadingGraphic />
-            <p className="text-sm font-bold leading-[18.62px] opacity-50 text-[#c1c1c3]">
-              Brief loading...
-            </p>
-          </div>
-        </div>
-
-        {/* Separator */}
-        <div className="h-[9px] relative w-full shrink-0">
-            <div className="absolute h-px left-0 top-[4px] w-full bg-[#e0e0e0]" />
-        </div>
-
-        {/* Footer */}
-          <div className="flex flex-col gap-1 items-end shrink-0 w-full">
-          {/* Token Estimate */}
-            <TokenEstimate value={0} />
-
-            {/* Action Buttons */}
-            <div className="flex items-center w-full min-w-0">
-              <button
-                onClick={onCancel}
-                className="w-[25%] min-w-0 h-8 px-2 md:px-4 bg-[#03b3e2] text-black hover:opacity-80 rounded-[28px] transition flex items-center justify-center"
-              >
-                <span className="text-[13px] font-semibold leading-[18.62px] whitespace-nowrap truncate">Discard</span>
-              </button>
-              <div className="w-[15%] shrink-0" />
-              <div className="flex gap-1 items-center w-[60%] min-w-0">
-                <button 
-                  onClick={handleSaveDraft}
-                  className="btn flex-1 min-w-0 h-8 px-2 md:px-4 bg-[#ffb546] hover:opacity-90 rounded-[28px] flex items-center justify-center transition"
-                >
-                  <span className="text-[13px] font-semibold leading-[18.62px] text-black whitespace-nowrap truncate">Save draft</span>
-                </button>
-                <button
-                  onClick={handleReviewBrief}
-                  disabled={!isFormComplete}
-                  className={`w-full md:flex-1 md:min-w-0 h-8 px-2 md:px-4 rounded-[28px] flex items-center justify-center transition ${
-                    isFormComplete ? "bg-[#ffb546] hover:opacity-90" : "bg-[#f9f9f9] cursor-not-allowed opacity-50"
-                  }`}
-                >
-                  <span
-                    className={`text-[13px] font-semibold leading-[18.62px] whitespace-nowrap ${
-                      isFormComplete ? "text-black" : "text-[#848487]"
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <Field label="Work type" helpText="Select the primary workstream">
+                <Select value={formData.workType} onValueChange={(value) => handleFieldChange("workType", value)}>
+                  <SelectTrigger
+                    className={`border-[#e0e0e0] rounded-[85px] px-5 py-2.5 h-auto bg-[#f9f9f9] flex items-center justify-between ${
+                      formData.workType ? "[&_span]:text-black" : "[&_span]:text-[#848487]"
                     }`}
                   >
-                    Review brief
-                  </span>
-                </button>
-              </div>
-            </div>
-            </div>
-        </div>
-        </div>
-      </div>
-
-      {/* Tablet/iPad Layout - Vertical stack: Form -> Line -> Document -> Line -> Buttons */}
-      <div className="flex lg:hidden flex-col items-center w-full min-h-[85vh] overflow-y-auto px-4 md:px-6 lg:px-[10%] xl:px-[15%] pb-8 pt-4">
-        {/* Form Section */}
-        <div className="flex flex-col gap-2 rounded-xl w-full max-w-4xl">
-          <div className="flex flex-col gap-4">
-            <p className="text-sm leading-[18.62px] text-[#424242] w-full">
-              Start your brief by filling out these required fields.
-            </p>
-
-            <div className="flex flex-col gap-6">
-              {/* Project Title */}
-              <Field label="Project title" helpText="Give your brief a short, clear name">
-                <StyledInput
-                  value={formData.projectTitle}
-                  onChange={(e) => handleChange("projectTitle", e.target.value)}
-                  placeholder="e.g. Spring Campaign 2025"
-                  variant="brief"
-                />
-              </Field>
-
-              {/* Due Date */}
-              <DateField
-                label={
-                  <div className="flex items-center gap-2">
-                    <span>Due date</span>
-                  </div>
-                }
-                helpText="When is this project due?"
-                value={formData.dueDate}
-                onChange={(date) => handleChange("dueDate", date)}
-              />
-
-              {/* Project Lead */}
-              <Field label="Project lead*" helpText="Who will own this project?">
-                <Select value={formData.projectLead} onValueChange={(value) => handleChange("projectLead", value)}>
-                  <SelectTrigger className={`border-[#e0e0e0] rounded-[85px] px-5 py-2.5 h-auto bg-[#f9f9f9] ${formData.projectLead ? '[&_span]:text-black' : '[&_span]:text-[#848487]'}`}>
-                    <SelectValue placeholder="Choose a lead" />
+                    <SelectValue placeholder="Choose a work type" />
                   </SelectTrigger>
                   <SelectContent className="bg-[#f9f9f9]">
-                    {PROJECT_LEADS.map((lead) => (
-                      <SelectItem key={lead.value} value={lead.value} className="text-black">
-                        {lead.label}
+                    {WORK_TYPE_OPTIONS.map((option) => (
+                      <SelectItem key={option.value} value={option.value} className="text-black">
+                        {option.label}
                       </SelectItem>
                     ))}
                   </SelectContent>
                 </Select>
               </Field>
+              <MultiSelectDropdown
+                label="Channels"
+                helpText="Where will this campaign live?"
+                placeholder="Choose channels"
+                options={CHANNEL_OPTIONS}
+                selectedValues={formData.channels}
+                onToggle={(value) => handleMultiSelectToggle("channels", value)}
+              />
+              <MultiSelectDropdown
+                label="Expected outputs"
+                helpText="What should Iris deliver?"
+                placeholder="Select outputs"
+                options={OUTPUT_OPTIONS}
+                selectedValues={formData.expectedOutputs}
+                onToggle={(value) => handleMultiSelectToggle("expectedOutputs", value)}
+              />
+        </div>
+          </section>
 
-              {/* Objective */}
-              <Field label="Objective" helpText="What's the main goal of this project?">
+          <section className="rounded-2xl border border-[#ececec] bg-white/80 p-4 md:p-6 space-y-6">
+            <div className="flex flex-col gap-2">
+              <div className="flex items-center justify-between">
+                <div>
+                  <h3 className="text-[21.6px] font-semibold text-black">Assets</h3>
+                  <p className="text-sm text-[#424242]">
+                    Add from recommendations or create your own. Keep specs, timing, and effort in one place.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div className="flex flex-col gap-2 border border-[#ececec] rounded-xl p-4">
+              <h4 className="text-base font-semibold text-black">Select template</h4>
+              <p className="text-sm text-[#424242]">Kickstart with a structure that matches your request.</p>
+              <div className="overflow-x-auto pb-2 mt-2">
+              <div className="flex gap-3 min-w-full">
+                {FORM_TEMPLATE_OPTIONS.map((template) => (
+            <button
+                    key={template.id}
+                    onClick={() => handleTemplateSelect(template.id)}
+                    className={`min-w-[180px] rounded-xl border px-4 py-3 text-left transition hover:bg-[#f9f9f9] ${
+                      formData.selectedTemplate === template.id ? "border-[#ffb546] bg-[#fff8ec]" : "border-[#e0e0e0]"
+                    }`}
+                  >
+                    <div className="flex items-center justify-between gap-2">
+                      <div>
+                        <p className="text-sm font-semibold text-black">{template.title}</p>
+                        <p className="text-xs text-[#6b6b6f]">Tap to use</p>
+          </div>
+                      <div className="h-8 w-8 rounded-full bg-[#f4f4f5] flex items-center justify-center">
+                        <div className="template-icon" dangerouslySetInnerHTML={{ __html: template.icon }} />
+      </div>
+          </div>
+                  </button>
+                ))}
+              </div>
+            </div>
+            </div>
+
+            <Field label="Tell us what you need">
+              <div className="space-y-3">
                 <Textarea
-                  value={formData.objective}
-                  onChange={(e) => handleChange("objective", e.target.value)}
-                  placeholder="e.g. Increase signups by 20% through targeted ads"
-                  className="border-[#e0e0e0] rounded-lg px-5 py-2.5 min-h-[74px] resize-none bg-[#f9f9f9] text-black placeholder:text-[#848487]"
-                  rows={3}
+                  value={formData.additionalAssetDetails}
+                  onChange={(e) => handleFieldChange("additionalAssetDetails", e.target.value)}
+                  className="border-[#e0e0e0] rounded-lg px-5 py-2.5 min-h-[90px] resize-none bg-[#f9f9f9] text-black placeholder:text-[#848487]"
+                  placeholder="Describe assets and we'll recommend suitable assets"
+                />
+                <button
+                  type="button"
+                  onClick={() => {
+                    // Handle submit logic here - could trigger AI recommendation or similar
+                    if (formData.additionalAssetDetails.trim()) {
+                      toast.success("Your request has been submitted");
+                    }
+                  }}
+                  disabled={!formData.additionalAssetDetails.trim()}
+                  className={`w-full rounded-[28px] px-4 py-2 text-sm font-semibold transition ${
+                    formData.additionalAssetDetails.trim()
+                      ? "bg-[#ffb546] text-black hover:opacity-90"
+                      : "bg-[#f4f4f5] text-[#9c9c9f] cursor-not-allowed"
+                  }`}
+                >
+                  Submit
+                </button>
+              </div>
+            </Field>
+
+            <div className="flex flex-col gap-5">
+              {(() => {
+                const loadedAdditionalAssets = ADDITIONAL_ASSETS.slice(0, additionalAssetsLoaded);
+                const allAssets = [...RECOMMENDED_ASSETS, ...loadedAdditionalAssets, ...formData.assets.filter((a) => a.isCustom)];
+                const displayedAssets = allAssets.slice(0, assetsToShow);
+                return displayedAssets.map((asset, index) => {
+                const selectedAsset = formData.assets.find((a) => a.id === asset.id);
+                const quantity = selectedAsset?.quantity || 0;
+                const showDetails = assetsWithDetails.includes(asset.id);
+                const isCustom = 'isCustom' in asset && asset.isCustom === true;
+                const totalTokens = quantity > 0 && selectedAsset && !isCustom ? selectedAsset.tokenPrice * quantity : 0;
+
+                return (
+                  <div key={asset.id}>
+                    <div className="flex items-center justify-between px-4 md:px-6 py-2 w-full">
+                      <div className="flex flex-col gap-0.5 flex-1 min-w-0 pr-4">
+                        <p className="text-sm leading-[18.62px] text-black truncate">{asset.name}</p>
+                        {!isCustom && (
+                          <p className="text-[16.24px] leading-[14px] text-black">
+                            {asset.tokenPrice} {asset.tokenPrice === 1 ? "token" : "tokens"}
+                          </p>
+                        )}
+                        {quantity > 0 && (
+                          <button
+                            onClick={() => setAssetsWithDetails((prev) => (prev.includes(asset.id) ? prev.filter((id) => id !== asset.id) : [...prev, asset.id]))}
+                            className="text-xs text-[#03B3E2] hover:underline text-left mt-1"
+                          >
+                            {showDetails ? "Hide details" : "Add details"}
+                          </button>
+                        )}
+                      </div>
+                      <div className="flex flex-col items-end gap-1 shrink-0">
+                        <div className="flex items-center gap-2 md:gap-4">
+                          {quantity > 0 && (
+                            <>
+                <button 
+                              onClick={() => {
+                                if (quantity === 1) {
+                                  handleRemoveAsset(asset.id);
+                                  setAssetsWithDetails((prev) => prev.filter((id) => id !== asset.id));
+                                } else {
+                                  handleAssetQuantityChange(asset.id, -1);
+                                }
+                              }}
+                              className="w-8 h-8 rounded-full bg-[#03B3E2] flex items-center justify-center hover:bg-[#e5e5e5] transition"
+                            >
+                              <span className="text-[#fff] text-lg">−</span>
+                </button>
+                            <div className="flex items-center gap-1">
+                              <span className="text-sm font-bold text-black w-6 text-center">{quantity}</span>
+                              {isCustom && (
+                                <TooltipProvider>
+                                  <Tooltip>
+                                    <TooltipTrigger asChild>
+                                      <HelpCircle size={14} className="text-[#848487] cursor-help" />
+                                    </TooltipTrigger>
+                                    <TooltipContent>
+                                      <p className="max-w-[250px]">
+                                        IRIS will review this asset and provide token price for this asset. You will be informed once IRIS set a token price.
+                                      </p>
+                                    </TooltipContent>
+                                  </Tooltip>
+                                </TooltipProvider>
+                              )}
+                            </div>
+                          </>
+                        )}
+                        {!isCustom && (
+                <button
+                            onClick={() => handleAddAsset(asset)}
+                            className="w-8 h-8 rounded-full bg-[#f1f1f3] flex items-center justify-center hover:bg-[#e5e5e5] transition"
+                          >
+                            <svg className="w-[17.778px] h-[17.778px]" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 14 14" fill="none">
+                              <path d="M13.0631 6.30331H7.41491V0.655165C7.41491 0.348498 7.16602 0.0996094 6.85936 0.0996094C6.55269 0.0996094 6.3038 0.348498 6.3038 0.655165V6.30331H0.655653C0.348987 6.30331 0.100098 6.5522 0.100098 6.85887C0.100098 7.16554 0.348987 7.41442 0.655653 7.41442H6.3038V13.0626C6.3038 13.3692 6.55269 13.6181 6.85936 13.6181C7.16602 13.6181 7.41491 13.3692 7.41491 13.0626V7.41442H13.0631C13.3697 7.41442 13.6186 7.16554 13.6186 6.85887C13.6186 6.5522 13.3697 6.30331 13.0631 6.30331Z" fill="#03B3E2" stroke="#03B3E2" strokeWidth="0.2"/>
+                            </svg>
+                </button>
+                        )}
+                        </div>
+                        {quantity > 0 && !isCustom && (
+                          <p className="text-[16.24px] leading-[14px] text-black">
+                            {totalTokens} {totalTokens === 1 ? "token" : "tokens"} total
+                          </p>
+                        )}
+                      </div>
+            </div>
+                    {showDetails && quantity > 0 && selectedAsset && (
+                      <div className="px-4 md:px-6 pb-4 space-y-4 border-t border-[#e0e0e0] mt-2 pt-4">
+                        <Field label="Description" helpText="Describe deliverable expectations">
+                          <Textarea
+                            value={selectedAsset.assetSpecification}
+                            onChange={(e) => handleAssetFieldChange(asset.id, "assetSpecification", e.target.value)}
+                            className="border-[#e0e0e0] rounded-lg px-4 py-2 min-h-[70px] bg-[#f9f9f9] text-black placeholder:text-[#848487]"
+                            placeholder="Formats, ratios, markets..."
+                          />
+                        </Field>
+                        <Field label="Delivery week" helpText="Which sprint/week should Iris target?">
+                          <StyledInput
+                            value={selectedAsset.deliveryWeek}
+                            onChange={(e) => handleAssetFieldChange(asset.id, "deliveryWeek", e.target.value)}
+                            placeholder="Week 32"
+                          />
+                        </Field>
+            </div>
+                    )}
+                    {index < displayedAssets.length - 1 && (
+                      <div className="h-px bg-[#e0e0e0] mt-5 mx-4 md:mx-6" />
+                    )}
+        </div>
+                  );
+                });
+              })()}
+            </div>
+            {(() => {
+              const loadedAdditionalAssets = ADDITIONAL_ASSETS.slice(0, additionalAssetsLoaded);
+              const allAssets = [...RECOMMENDED_ASSETS, ...loadedAdditionalAssets, ...formData.assets.filter((a) => a.isCustom)];
+              return allAssets.length > assetsToShow;
+            })() && (
+              <button
+                onClick={() => setAssetsToShow((prev) => prev + 10)}
+                className="w-full rounded-[28px] border border-[#e0e0e0] px-4 py-2 text-sm font-semibold text-[#424242] hover:bg-[#f9f9f9] transition"
+              >
+                More Assets
+              </button>
+            )}
+
+            <button
+              onClick={() => setShowCustomAssetFields((prev) => !prev)}
+              className="w-full rounded-[28px] border border-dashed border-[#cfcfcf] px-4 py-2 text-sm font-semibold text-[#424242] hover:border-[#a5a5a8] transition"
+            >
+              Add custom asset
+            </button>
+
+            {additionalAssetsLoaded < ADDITIONAL_ASSETS.length && (
+              <button
+                onClick={() => setAdditionalAssetsLoaded((prev) => Math.min(prev + 10, ADDITIONAL_ASSETS.length))}
+                className="w-full rounded-[28px] border border-[#e0e0e0] px-4 py-2 text-sm font-semibold text-[#424242] hover:bg-[#f9f9f9] transition"
+              >
+                More Assets
+              </button>
+            )}
+
+            {showCustomAssetFields && (
+              <div className="rounded-xl border border-[#ececec] p-4 space-y-4 bg-white">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <Field label="Asset name">
+                <StyledInput
+                      value={customAssetDraft.name}
+                      onChange={(e) => setCustomAssetDraft((prev) => ({ ...prev, name: e.target.value }))}
+                      placeholder="e.g. POS toolkit"
                 />
               </Field>
+                  <Field label="Delivery week">
+                    <StyledInput
+                      value={customAssetDraft.deliveryWeek}
+                      onChange={(e) => setCustomAssetDraft((prev) => ({ ...prev, deliveryWeek: e.target.value }))}
+                      placeholder="Week 32"
+                    />
+              </Field>
+                </div>
+                <Field label="Description">
+                <Textarea
+                    value={customAssetDraft.description}
+                    onChange={(e) => setCustomAssetDraft((prev) => ({ ...prev, description: e.target.value }))}
+                  className="border-[#e0e0e0] rounded-lg px-5 py-2.5 min-h-[74px] resize-none bg-[#f9f9f9] text-black placeholder:text-[#848487]"
+                    placeholder="Share any context for Iris"
+                />
+              </Field>
+                <div className="flex justify-end">
+                  <button
+                    onClick={handleAddCustomAsset}
+                    disabled={!customAssetDraft.name.trim()}
+                    className={`rounded-[28px] px-4 py-2 text-sm font-semibold transition ${
+                      customAssetDraft.name.trim()
+                        ? "bg-[#ffb546] text-black hover:opacity-90"
+                        : "bg-[#f4f4f5] text-[#9c9c9f] cursor-not-allowed"
+                    }`}
+                  >
+                    Add asset
+                  </button>
             </div>
           </div>
-
-          {/* Separator line */}
-          <div className="h-[9px] relative w-full shrink-0 mt-4">
-            <div className="absolute h-px left-0 top-[4px] w-full bg-[#e0e0e0]" />
-          </div>
-
-          {/* Note */}
-          <div className="shrink-0">
-            <p className="text-sm leading-[normal] opacity-[0.826] text-[#434343]">
-              *You can assign multiple leads
-            </p>
-          </div>
+            )}
+          </section>
         </div>
 
-        {/* White Document - Shown on mobile and tablet/iPad */}
-        <div className="flex lg:hidden flex-col gap-2.5 pb-5 w-full max-w-4xl mt-5">
-          {/* Loading State - Double height */}
-          <div className="bg-white flex flex-col gap-8 items-center justify-center rounded-xl min-h-[600px]">
-            <div className="flex flex-col gap-2 items-center">
-              <BriefLoadingGraphic />
-              <p className="text-sm font-bold leading-[18.62px] opacity-50 text-[#c1c1c3]">
-                Brief loading...
-              </p>
+        <div className="w-full lg:max-w-[1664px] space-y-4 lg:sticky lg:top-6 self-start">
+          <div className="rounded-2xl border border-[#ececec] bg-white/80 p-4 flex flex-col gap-4">
+            <div>
+              <p className="text-sm font-semibold text-black">Actions</p>
+              <p className="text-xs text-[#6b6b6f]">Review your brief at any time before submitting.</p>
             </div>
-          </div>
-
-          {/* Separator */}
-          <div className="h-[9px] relative w-full shrink-0">
-            <div className="absolute h-px left-0 top-[4px] w-full bg-[#e0e0e0]" />
-          </div>
-        </div>
-
-        {/* Buttons section for mobile and tablet/iPad */}
-        <div className="flex lg:hidden flex-col gap-2.5 w-full max-w-4xl pb-5">
-          {/* Token Estimate */}
-          <div className="flex w-full justify-end">
-            <TokenEstimate value={0} />
-          </div>
-
-          {/* Action Buttons - Order: Next, Discard, Save draft, Review brief - Stacked on mobile, row on tablet */}
-          <div className="flex flex-col md:flex-row items-center gap-2.5 w-full min-w-0">
-            <button
-              onClick={handleNext}
-              disabled={!isFormComplete}
-              className={`w-full md:flex-1 md:min-w-0 h-8 px-2 md:px-4 rounded-[28px] flex items-center justify-center transition ${
-                isFormComplete
-                  ? "bg-[#ffb546] hover:opacity-90 cursor-pointer"
-                  : "bg-[#f9f9f9] cursor-not-allowed opacity-50"
-              }`}
-            >
-              <span className={`text-[13px] font-semibold leading-[18.62px] whitespace-nowrap ${
-                isFormComplete ? "text-black" : "text-[#848487]"
-              }`}>Next</span>
-            </button>
-            <button
-              onClick={onCancel}
-              className="w-full md:flex-1 md:min-w-0 h-8 px-2 md:px-4 bg-[#03b3e2] text-black hover:opacity-80 rounded-[28px] transition flex items-center justify-center"
-            >
-              <span className="text-[13px] font-semibold leading-[18.62px] whitespace-nowrap">Discard</span>
-            </button>
-            <button 
-              onClick={handleSaveDraft}
-              className="w-full md:flex-1 md:min-w-0 h-8 px-2 md:px-4 bg-[#ffb546] hover:opacity-90 rounded-[28px] flex items-center justify-center transition"
-            >
-              <span className="text-[13px] font-semibold leading-[18.62px] text-black whitespace-nowrap">Save draft</span>
-            </button>
             <button
               onClick={handleReviewBrief}
-              disabled={!isFormComplete}
-              className={`w-full md:flex-1 md:min-w-0 h-8 px-2 md:px-4 rounded-[28px] flex items-center justify-center transition ${
-                isFormComplete ? "bg-[#ffb546] hover:opacity-90" : "bg-[#f9f9f9] cursor-not-allowed opacity-50"
-              }`}
+              className="w-full rounded-[28px] bg-[#ffb546] text-black font-semibold py-2 hover:opacity-90 transition"
             >
-              <span className={`text-[13px] font-semibold leading-[18.62px] whitespace-nowrap ${
-                isFormComplete ? "text-black" : "text-[#848487]"
-              }`}>Review brief</span>
+              Review brief
             </button>
+            <div className="pt-2 border-t border-dashed border-[#ececec]">
+              <div className="flex items-center gap-2">
+                <TokenEstimate value={tokenEstimate} />
+                {hasCustomAssets && (
+                  <TooltipProvider>
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <HelpCircle size={16} className="text-[#848487] cursor-help" />
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        <p className="max-w-[300px]">
+                          Your list of assets contains one or more custom assets. IRIS needs to review this asset and provide token price. You will be informed once the token price is set for you custom assets.
+                        </p>
+                      </TooltipContent>
+                    </Tooltip>
+                  </TooltipProvider>
+                )}
+              </div>
+            </div>
+          </div>
+          <div className="rounded-2xl border border-[#ececec] bg-white/80 p-4 space-y-2">
+            <p className="text-sm font-semibold text-black">Need a break?</p>
+            <p className="text-xs text-[#6b6b6f]">Save a draft and finish later. Iris will keep everything in sync.</p>
+            <button 
+              onClick={handleSaveDraft}
+              className="w-full rounded-[28px] border border-[#ffb546] text-black py-2 text-sm font-semibold hover:bg-[#fff4e0] transition"
+            >
+              Save draft
+            </button>
+          </div>
+          <div className="rounded-2xl border border-[#ececec] bg-white/80 p-4 space-y-3">
+            <div className="flex flex-col gap-2">
+            <button
+                onClick={handleSubmit}
+              disabled={!isFormComplete}
+                className={`w-full rounded-[28px] py-2 text-sm font-semibold transition ${
+                  isFormComplete ? "bg-[#ffb546] text-black hover:opacity-90" : "bg-[#f4f4f5] text-[#9c9c9f] cursor-not-allowed"
+                }`}
+              >
+                Submit brief
+              </button>
+              <button
+                onClick={onCancel}
+                className="w-full rounded-[28px] border border-[#ececec] text-[#424242] py-2 text-sm font-semibold hover:bg-[#f9f9f9] transition"
+              >
+                Cancel brief
+            </button>
+            </div>
           </div>
         </div>
       </div>
 
-      {/* Confirmation Dialog */}
-      <SuccessDialog
-        open={showConfirmation}
-        onOpenChange={setShowConfirmation}
-        onConfirm={handleViewAllBriefs}
-      />
+      <SuccessDialog open={showConfirmation} onOpenChange={setShowConfirmation} onConfirm={handleViewAllBriefs} />
 
-      {/* Save Draft Confirmation Dialog */}
       <SuccessDialog
         open={showSaveDraftConfirmation}
         onOpenChange={setShowSaveDraftConfirmation}
         onConfirm={handleViewAllBriefsFromSave}
         title="Brief successfully drafted!"
       />
+
+      <Dialog open={previewOpen} onOpenChange={setPreviewOpen}>
+        <DialogContent className="max-w-3xl">
+          <DialogHeader>
+            <DialogTitle>Brief preview</DialogTitle>
+            <DialogDescription>Make sure everything looks right before submitting.</DialogDescription>
+          </DialogHeader>
+          <div className="max-h-[65vh] overflow-y-auto space-y-6 pr-1">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <PreviewField label="Project title" value={formData.projectTitle || "—"} />
+              <PreviewField label="Due date" value={formData.dueDate ? format(formData.dueDate, "PPP") : "—"} />
+              <PreviewField
+                label="Project lead"
+                value={PROJECT_LEADS.find((lead) => lead.value === formData.projectLead)?.label || "—"}
+              />
+              <PreviewField
+                label="Work type"
+                value={WORK_TYPE_OPTIONS.find((option) => option.value === formData.workType)?.label || "—"}
+              />
+              <PreviewField label="Channels" value={formData.channels.length ? formData.channels.join(", ") : "—"} />
+              <PreviewField
+                label="Expected outputs"
+                value={formData.expectedOutputs.length ? formData.expectedOutputs.join(", ") : "—"}
+              />
+              <PreviewField label="Selected template" value={selectedTemplateName || "—"} />
+            </div>
+            <PreviewField label="Brief summary" value={formData.briefSummary || "—"} fullWidth />
+            <PreviewField label="Objective" value={formData.objective || "—"} fullWidth />
+
+            <div className="space-y-3">
+              <p className="text-sm font-semibold text-black">Assets</p>
+              {formData.assets.length === 0 ? (
+                <p className="text-sm text-[#848487]">No assets added.</p>
+              ) : (
+                <div className="space-y-3">
+                  {formData.assets.map((asset) => (
+                    <div key={asset.id} className="rounded-xl border border-[#ececec] p-4 bg-[#f9f9f9] space-y-2">
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <p className="text-sm font-semibold text-black">{asset.name}</p>
+                          <p className="text-xs text-[#6b6b6f]">{asset.description}</p>
+                        </div>
+                        <span className="text-xs text-[#424242]">
+                          {asset.quantity} × {asset.tokenPrice} tokens
+                        </span>
+                      </div>
+                      <p className="text-xs text-[#6b6b6f]">
+                        Specification: {asset.assetSpecification?.trim() ? asset.assetSpecification : "Not provided"}
+                      </p>
+                      <p className="text-xs text-[#6b6b6f]">
+                        Delivery week: {asset.deliveryWeek?.trim() ? asset.deliveryWeek : "Not provided"}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+            <PreviewField
+              label="Additional asset notes"
+              value={formData.additionalAssetDetails || "—"}
+              fullWidth
+            />
+          </div>
+        </DialogContent>
+      </Dialog>
     </>
+  );
+}
+
+interface PreviewFieldProps {
+  label: string;
+  value: string;
+  fullWidth?: boolean;
+}
+
+function PreviewField({ label, value, fullWidth }: PreviewFieldProps) {
+  return (
+    <div className={fullWidth ? "col-span-1 md:col-span-2 space-y-1" : "space-y-1"}>
+      <p className="text-xs uppercase tracking-wide text-[#848487]">{label}</p>
+      <p className="text-sm text-black whitespace-pre-line">{value}</p>
+    </div>
+  );
+}
+
+interface MultiSelectDropdownProps {
+  label: string;
+  placeholder: string;
+  options: string[];
+  selectedValues: string[];
+  onToggle: (value: string) => void;
+  helpText?: string;
+}
+
+function MultiSelectDropdown({ label, placeholder, options, selectedValues, onToggle, helpText }: MultiSelectDropdownProps) {
+  return (
+    <Field label={label} helpText={helpText}>
+      <Popover>
+        <PopoverTrigger asChild>
+          <button
+            type="button"
+            className={`w-full border border-[#e0e0e0] rounded-[28px] bg-[#f9f9f9] px-5 py-2.5 text-left text-sm flex items-center justify-between ${
+              selectedValues.length ? "text-black" : "text-[#848487]"
+            }`}
+          >
+            <span>{selectedValues.length ? `${selectedValues.length} selected` : placeholder}</span>
+            <ChevronDown className="h-4 w-4 opacity-50 shrink-0" />
+          </button>
+        </PopoverTrigger>
+        <PopoverContent align="start" className="w-[240px] p-3 space-y-2 bg-white shadow-lg rounded-xl">
+          {options.map((option) => (
+            <button
+              key={option}
+              type="button"
+              onClick={() => onToggle(option)}
+              className="flex w-full items-center gap-2 rounded-lg px-2 py-1 hover:bg-[#f4f4f5] transition text-left"
+            >
+              <Checkbox checked={selectedValues.includes(option)} onCheckedChange={() => onToggle(option)} />
+              <span className="text-sm text-black">{option}</span>
+            </button>
+          ))}
+        </PopoverContent>
+      </Popover>
+      {selectedValues.length > 0 && (
+        <div className="flex flex-wrap gap-2 pt-2">
+          {selectedValues.map((value) => (
+            <span key={value} className="rounded-full bg-[#f4f4f5] px-3 py-1 text-xs text-[#424242]">
+              {value}
+            </span>
+          ))}
+        </div>
+      )}
+    </Field>
   );
 }
 
