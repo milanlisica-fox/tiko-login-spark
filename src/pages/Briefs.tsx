@@ -1189,7 +1189,7 @@ function NewBriefForm({
       return;
     }
 
-    navigate("/dashboard/briefs/review", { state: { brief: formData } });
+    setPreviewOpen(true);
   };
 
   const handleTemplateSelect = (templateId: string) => {
@@ -1675,10 +1675,7 @@ function NewBriefForm({
             <span className="text-sm font-semibold leading-[18.62px] text-black whitespace-nowrap">Save draft</span>
           </button>
           <button
-            onClick={() => {
-              if (!isFormComplete) return;
-              navigate("/dashboard/briefs/review", { state: { brief: formData } });
-            }}
+            onClick={handleReviewBrief}
             disabled={!isFormComplete}
             className={`w-full md:w-auto md:flex-1 md:min-w-0 h-10 px-4 rounded-[28px] flex items-center justify-center transition ${
               isFormComplete ? "bg-[#ffb546] hover:opacity-90" : "bg-[#f9f9f9] cursor-not-allowed opacity-50"
@@ -1749,10 +1746,7 @@ function NewBriefForm({
               <span className="text-[13px] font-semibold leading-[18.62px] text-black whitespace-nowrap">Save draft</span>
             </button>
             <button
-              onClick={() => {
-                if (!isFormComplete) return;
-                navigate("/dashboard/briefs/review", { state: { brief: formData } });
-              }}
+              onClick={handleReviewBrief}
               disabled={!isFormComplete}
               className={`w-full md:flex-1 md:min-w-0 h-8 px-2 md:px-4 rounded-[28px] flex items-center justify-center transition ${
                 isFormComplete ? "bg-[#ffb546] hover:opacity-90" : "bg-[#f9f9f9] cursor-not-allowed opacity-50"
@@ -1828,12 +1822,12 @@ function NewBriefForm({
       />
 
       <Dialog open={previewOpen} onOpenChange={setPreviewOpen}>
-        <DialogContent className="max-w-3xl">
+        <DialogContent className="max-w-[62.4rem]">
           <DialogHeader>
             <DialogTitle>Brief preview</DialogTitle>
             <DialogDescription>Make sure everything looks right before submitting.</DialogDescription>
           </DialogHeader>
-          <div className="max-h-[65vh] overflow-y-auto space-y-6 pr-1">
+          <div className="space-y-6 pr-1">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <PreviewField label="Project title" value={formData.projectTitle || "—"} />
               <PreviewField label="Due date" value={formData.dueDate ? format(formData.dueDate, "PPP") : "—"} />
@@ -1858,25 +1852,48 @@ function NewBriefForm({
                 <p className="text-sm text-[#848487]">No assets added.</p>
               ) : (
                 <div className="space-y-3">
-                  {formData.assets.map((asset) => (
-                    <div key={asset.id} className="rounded-xl border border-[#ececec] p-4 bg-[#f9f9f9] space-y-2">
-                      <div className="flex items-center justify-between">
-                        <div>
-                          <p className="text-sm font-semibold text-black">{asset.name}</p>
-                          <p className="text-xs text-[#6b6b6f]">{asset.description}</p>
+                  {formData.assets.map((asset) => {
+                    const isCustom = asset.isCustom === true;
+                    return (
+                      <div key={asset.id} className="rounded-xl border border-[#ececec] p-4 bg-[#f9f9f9] space-y-2">
+                        <div className="flex items-center justify-between">
+                          <div>
+                            <p className="text-sm font-semibold text-black">{asset.name}</p>
+                            <p className="text-xs text-[#6b6b6f]">{asset.description}</p>
+                          </div>
+                          <div className="flex items-center gap-1">
+                            <span className="text-xs text-[#424242]">
+                              {asset.quantity} ×
+                            </span>
+                            {isCustom ? (
+                              <TooltipProvider>
+                                <Tooltip>
+                                  <TooltipTrigger asChild>
+                                    <HelpCircle size={14} className="text-[#848487] cursor-help" />
+                                  </TooltipTrigger>
+                                  <TooltipContent>
+                                    <p className="max-w-[300px]">
+                                      IRIS will review this asset and provide token price for it. You will be informed once this is done.
+                                    </p>
+                                  </TooltipContent>
+                                </Tooltip>
+                              </TooltipProvider>
+                            ) : (
+                              <span className="text-xs text-[#424242]">
+                                {asset.tokenPrice} tokens
+                              </span>
+                            )}
+                          </div>
                         </div>
-                        <span className="text-xs text-[#424242]">
-                          {asset.quantity} × {asset.tokenPrice} tokens
-                        </span>
+                        <p className="text-xs text-[#6b6b6f]">
+                          Specification: {asset.assetSpecification?.trim() ? asset.assetSpecification : "Not provided"}
+                        </p>
+                        <p className="text-xs text-[#6b6b6f]">
+                          Delivery week: {asset.deliveryWeek?.trim() ? asset.deliveryWeek : "Not provided"}
+                        </p>
                       </div>
-                      <p className="text-xs text-[#6b6b6f]">
-                        Specification: {asset.assetSpecification?.trim() ? asset.assetSpecification : "Not provided"}
-                      </p>
-                      <p className="text-xs text-[#6b6b6f]">
-                        Delivery week: {asset.deliveryWeek?.trim() ? asset.deliveryWeek : "Not provided"}
-                      </p>
-                    </div>
-                  ))}
+                    );
+                  })}
                 </div>
               )}
             </div>
@@ -1885,6 +1902,23 @@ function NewBriefForm({
               value={formData.additionalAssetDetails || "—"}
               fullWidth
             />
+          </div>
+          <div className="flex flex-col sm:flex-row gap-3 pt-4 border-t border-[#e0e0e0] mt-4">
+            <button
+              onClick={() => setPreviewOpen(false)}
+              className="w-full sm:flex-1 h-10 px-4 rounded-[28px] border border-[#ececec] text-[#424242] font-semibold hover:bg-[#f9f9f9] transition"
+            >
+              Edit brief
+            </button>
+            <button
+              onClick={handleSubmit}
+              disabled={!isFormComplete}
+              className={`w-full sm:flex-1 h-10 px-4 rounded-[28px] font-semibold transition ${
+                isFormComplete ? "bg-[#ffb546] text-black hover:opacity-90" : "bg-[#f9f9f9] text-[#848487] cursor-not-allowed opacity-50"
+              }`}
+            >
+              Submit Brief
+            </button>
           </div>
         </DialogContent>
       </Dialog>

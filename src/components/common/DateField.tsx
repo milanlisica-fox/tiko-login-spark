@@ -28,12 +28,15 @@ export default function DateField({ label, helpText, value, onChange, placeholde
             {value ? value.toLocaleDateString() : placeholder}
           </button>
         </PopoverTrigger>
-        <PopoverContent align="start" className="p-0 bg-[#f9f9f9] border border-[#e0e0e0] rounded-lg [&_button]:text-black [&_td]:text-black [&_.day]:text-black">
+        <PopoverContent align="start" className="p-0 bg-[#f9f9f9] border border-[#e0e0e0] rounded-lg [&_button]:text-black [&_td]:text-black [&_.day]:text-black [&_.caption_label]:text-black">
           <Calendar
             mode="single"
             selected={value}
             onSelect={handleSelect}
             initialFocus
+            classNames={{
+              caption_label: "text-sm font-medium text-black",
+            }}
           />
         </PopoverContent>
       </Popover>
