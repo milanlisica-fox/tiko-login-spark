@@ -28,14 +28,11 @@ import SuccessDialog from "@/components/common/SuccessDialog";
 import BriefPreviewPanel from "@/components/briefs/BriefPreviewPanel";
 import { StyledInput } from "@/components/common/StyledInput";
 import TabFilter from "@/components/common/TabFilter";
-<<<<<<< HEAD
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
-=======
 import { READY_TO_SIGN_SOWS } from "./SOW";
->>>>>>> 308156434ef2f340e50d6e56494ac03205972956
 
 // Reuse images from Dashboard for consistent visuals
 const logoImage = BRAND.logo;
@@ -80,10 +77,21 @@ const imgFrame15_v2 = BRIEFS_ASSETS.imgFrame15_v2;
 const uploadIcon = BRIEFS_ASSETS.uploadIcon;
 
 const WORK_TYPE_OPTIONS = [
-  { value: "strategy", label: "Strategy" },
-  { value: "design", label: "Design" },
-  { value: "production", label: "Production" },
-  { value: "other", label: "Other" },
+  "Strategy",
+  "Design",
+  "Production",
+"Planning",
+"Execution (Inc.Media booking)",
+"Delivery",
+"Purchase of goods",
+"Shelf",
+"Merchandising",
+"Sales staff",
+"Support",
+"Event",
+"Promotional",
+"Activity",
+"Other",
 ];
 
 const CHANNEL_OPTIONS = [
@@ -307,7 +315,13 @@ const BriefLoadingGraphic = () => (
 type BriefStatus = "Draft" | "In review" | "SOW Ready to sign";
 type BriefBadge = "Creation" | "Adaptation" | "Resize" | "default";
 
-<<<<<<< HEAD
+export type SubmittedBriefPayload = {
+  title: string;
+  objective: string;
+  status: "draft" | "in-review";
+  dueDate?: string;
+};
+
 interface RecommendedAsset {
   id: string;
   name: string;
@@ -322,17 +336,7 @@ interface SelectedAsset extends RecommendedAsset {
   isCustom?: boolean;
 }
 
-interface BriefSummary {
-=======
-export type SubmittedBriefPayload = {
-  title: string;
-  objective: string;
-  status: "draft" | "in-review";
-  dueDate?: string;
-};
-
 export interface BriefSummary {
->>>>>>> 308156434ef2f340e50d6e56494ac03205972956
   id: string;
   title: string;
   description: string;
@@ -350,7 +354,7 @@ interface NewBriefFormValues {
   dueDate?: Date;
   projectLead: string;
   objective: string;
-  workType: string;
+  workType: string[];
   channels: string[];
   expectedOutputs: string[];
   briefSummary: string;
@@ -370,7 +374,7 @@ const createBriefFormDefaults = (): NewBriefFormValues => ({
   dueDate: undefined,
   projectLead: "",
   objective: "",
-  workType: "",
+  workType: [],
   channels: [],
   expectedOutputs: [],
   briefSummary: "",
@@ -451,13 +455,9 @@ export default function BriefsPage() {
   const location = useLocation();
   const [briefs, setBriefs] = useState<BriefSummary[]>(initialBriefs);
   const [isCreatingBrief, setIsCreatingBrief] = useState(false);
-<<<<<<< HEAD
-  const [briefView, setBriefView] = useState<"templates" | "form">("templates");
-=======
   const [briefView, setBriefView] = useState<"templates" | "form" | "deliverables" | "ai-response">("templates");
   const [aiInputText, setAiInputText] = useState("");
   const [newBriefDraft, setNewBriefDraft] = useState<NewBriefFormValues>(createBriefFormDefaults());
->>>>>>> 308156434ef2f340e50d6e56494ac03205972956
 
   const draftBriefCount = useMemo(() => briefs.filter((brief) => brief.status === "Draft").length, [briefs]);
   const inReviewBriefCount = useMemo(() => briefs.filter((brief) => brief.status === "In review").length, [briefs]);
@@ -618,25 +618,10 @@ export default function BriefsPage() {
       TopbarRight={topbarRight}
     >
       {/* Briefs Content */}
-      <div className="px-4 md:px-6 pt-[24px] md:pt-[40px] pb-[24px] md:pb-[40px]">
+      <div className="px-4 md:px-6 pt-[24px] md:pt-[40px] pb-[24px] md:pb-[40px] max-w-full overflow-x-hidden">
           {isCreatingBrief ? (
             briefView === "templates" ? (
               <TemplateSelectionScreen 
-<<<<<<< HEAD
-                onCancel={() => {
-                  setIsCreatingBrief(false);
-                  setBriefView("templates");
-                }}
-                onCreateBrief={() => setBriefView("form")}
-              />
-            ) : (
-              <NewBriefForm 
-                onCancel={() => {
-                  setIsCreatingBrief(false);
-                  setBriefView("templates");
-                }}
-                onSubmit={handleBriefSubmit}
-=======
                 onCancel={() => setIsCreatingBrief(false)} 
                 onCreateBrief={() => {
                   setNewBriefDraft(createBriefFormDefaults());
@@ -671,7 +656,6 @@ export default function BriefsPage() {
                 onCancel={() => setBriefView("form")}
                 briefData={newBriefDraft}
                 onGoToReview={() => navigate("/dashboard/briefs/review", { state: { brief: newBriefDraft } })}
->>>>>>> 308156434ef2f340e50d6e56494ac03205972956
               />
             )
           ) : (
@@ -1035,9 +1019,6 @@ function TemplateSelectionScreen({ onCancel, onCreateBrief }: { onCancel: () => 
   );
 }
 
-<<<<<<< HEAD
-function NewBriefForm({ onCancel, onSubmit }: { onCancel: () => void; onSubmit: (data: NewBriefFormValues) => void }) {
-=======
 function NewBriefForm({
   onCancel,
   onNext,
@@ -1051,21 +1032,17 @@ function NewBriefForm({
   initialValues: NewBriefFormValues;
   onFormDataChange: (data: NewBriefFormValues) => void;
 }) {
->>>>>>> 308156434ef2f340e50d6e56494ac03205972956
   const navigate = useNavigate();
   const [formData, setFormData] = useState<NewBriefFormValues>(initialValues);
   const [showConfirmation, setShowConfirmation] = useState(false);
   const [showSaveDraftConfirmation, setShowSaveDraftConfirmation] = useState(false);
-<<<<<<< HEAD
   const [previewOpen, setPreviewOpen] = useState(false);
   const [showCustomAssetFields, setShowCustomAssetFields] = useState(false);
   const [customAssetDraft, setCustomAssetDraft] = useState({ name: "", description: "", deliveryWeek: "" });
   const [assetsWithDetails, setAssetsWithDetails] = useState<string[]>([]);
   const [assetsToShow, setAssetsToShow] = useState(10);
   const [additionalAssetsLoaded, setAdditionalAssetsLoaded] = useState(0);
-=======
   const [pendingDraftPayload, setPendingDraftPayload] = useState<SubmittedBriefPayload | null>(null);
->>>>>>> 308156434ef2f340e50d6e56494ac03205972956
 
   const tokenEstimate = useMemo(
     () => formData.assets
@@ -1094,7 +1071,7 @@ function NewBriefForm({
     setFormData((prev) => ({ ...prev, [field]: value }));
   };
 
-  const handleMultiSelectToggle = (field: "channels" | "expectedOutputs", value: string) => {
+  const handleMultiSelectToggle = (field: "channels" | "expectedOutputs" | "workType", value: string) => {
     setFormData((prev) => {
       const currentValues = prev[field];
       const exists = currentValues.includes(value);
@@ -1199,33 +1176,24 @@ function NewBriefForm({
     }
 
     onSubmit(formData);
-<<<<<<< HEAD
-    setFormData(createBriefFormDefaults());
-    setAssetsWithDetails([]);
-=======
     const reset = createBriefFormDefaults();
     setFormData(reset);
+    setAssetsWithDetails([]);
     onFormDataChange(reset);
->>>>>>> 308156434ef2f340e50d6e56494ac03205972956
     setShowConfirmation(true);
     setPreviewOpen(false);
   };
 
   const handleReviewBrief = () => {
-<<<<<<< HEAD
-    setPreviewOpen(true);
-  };
-
-  const handleTemplateSelect = (templateId: string) => {
-    setFormData((prev) => ({ ...prev, selectedTemplate: templateId }));
-  };
-
-=======
     if (!isFormComplete) {
       return;
     }
 
     navigate("/dashboard/briefs/review", { state: { brief: formData } });
+  };
+
+  const handleTemplateSelect = (templateId: string) => {
+    setFormData((prev) => ({ ...prev, selectedTemplate: templateId }));
   };
 
   const handleChange = (field: string, value: string | Date | undefined) => {
@@ -1239,8 +1207,6 @@ function NewBriefForm({
   useEffect(() => {
     setFormData(initialValues);
   }, [initialValues]);
-
->>>>>>> 308156434ef2f340e50d6e56494ac03205972956
   const handleViewAllBriefs = () => {
     setShowConfirmation(false);
     navigate("/dashboard/briefs", { state: { resetToOverview: true } });
@@ -1296,14 +1262,14 @@ function NewBriefForm({
 
   return (
     <>
-      <div className="flex flex-col lg:flex-row gap-6 w-full">
-        <div className="flex-1 space-y-6">
-          <section className="rounded-2xl border border-[#ececec] bg-white/80 p-4 md:p-6 space-y-6">
+      <div className="flex flex-col lg:flex-row gap-6 w-full max-w-full min-w-0 overflow-x-hidden">
+        <div className="flex-1 space-y-6 min-w-0 max-w-full">
+          <section className="rounded-2xl border border-[#ececec] bg-white/80 p-4 md:p-6 space-y-6 max-w-full min-w-0">
             <div className="flex flex-col gap-2">
               <h3 className="text-[21.6px] font-semibold text-black">General information</h3>
               <p className="text-sm text-[#424242]">Start your brief by filling out these required fields.</p>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 min-w-0">
             <Field label="Project title" helpText="Give your brief a short, clear name">
               <StyledInput
                 value={formData.projectTitle}
@@ -1339,21 +1305,21 @@ function NewBriefForm({
             </div>
           </section>
 
-          <section className="rounded-2xl border border-[#ececec] bg-white/80 p-4 md:p-6 space-y-6">
+          <section className="rounded-2xl border border-[#ececec] bg-white/80 p-4 md:p-6 space-y-6 max-w-full min-w-0">
             <div className="flex flex-col gap-2">
               <h3 className="text-[21.6px] font-semibold text-black">Project description</h3>
               <p className="text-sm text-[#424242]">Help Iris understand the context behind this request.</p>
             </div>
-            <Field label="Brief summary" helpText="Give Iris a quick read on what matters most">
+            <Field label="Brief summary" helpText="">
               <Textarea
                 value={formData.briefSummary}
                 onChange={(e) => handleFieldChange("briefSummary", e.target.value)}
-                placeholder="What should Iris focus on?"
+                placeholder="Please summarise briefly what you are requesting from an agency"
                 className="border-[#e0e0e0] rounded-lg px-5 py-2.5 min-h-[90px] resize-none bg-[#f9f9f9] text-black placeholder:text-[#848487]"
               />
             </Field>
 
-            <Field label="Objective" helpText="What's the main goal of this project?">
+            <Field label="Objective" helpText="">
               <Textarea
                 value={formData.objective}
                 onChange={(e) => handleFieldChange("objective", e.target.value)}
@@ -1362,115 +1328,16 @@ function NewBriefForm({
               />
             </Field>
 
-<<<<<<< HEAD
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <Field label="Work type" helpText="Select the primary workstream">
-                <Select value={formData.workType} onValueChange={(value) => handleFieldChange("workType", value)}>
-                  <SelectTrigger
-                    className={`border-[#e0e0e0] rounded-[85px] px-5 py-2.5 h-auto bg-[#f9f9f9] flex items-center justify-between ${
-                      formData.workType ? "[&_span]:text-black" : "[&_span]:text-[#848487]"
-=======
-          {/* Separator line */}
-          <div className="h-[9px] relative w-full shrink-0">
-            <div className="absolute h-px left-0 top-[4px] w-full bg-[#e0e0e0]" />
-        </div>
-
-          {/* Note and Next Button */}
-          <div className="flex flex-col gap-2 shrink-0">
-            <p className="text-sm leading-[normal] opacity-[0.826] text-[#434343]">
-              *You can assign multiple leads
-            </p>
-          {/* Next */}
-            <div className="flex flex-col md:flex-row md:items-center md:gap-2.5">
-              <button
-                onClick={handleNext}
-                disabled={!isFormComplete}
-                className={`w-full md:flex-1 md:min-w-0 h-10 md:h-8 px-5 md:px-4 rounded-[28px] flex items-center justify-center transition ${
-                   isFormComplete
-                     ? "bg-[#ffb546] hover:opacity-90 cursor-pointer"
-                     : "bg-[#f9f9f9] cursor-not-allowed opacity-50"
-                 }`}
-              >
-                <span className={`text-sm font-semibold leading-[18.62px] ${
-                  isFormComplete ? "text-black" : "text-[#848487]"
-                }`}>Next</span>
-              </button>
-            </div>
-          </div>
-      </div>
-
-        {/* Right Panel - Desktop only */}
-        <div className="flex flex-col gap-2.5 pb-5 pl-2.5 pt-2.5 flex-[1_1_0%] min-w-0 h-full overflow-hidden">
-        {/* Preview / Loading State */}
-          <div
-            className={`bg-white rounded-xl overflow-hidden h-[89%] w-full ${
-              hasFormProgress ? "p-6 flex items-start justify-start" : "p-6 flex flex-col gap-8 items-center justify-center"
-            }`}
-          >
-          {hasFormProgress ? (
-            <div className="w-full h-full overflow-y-auto">
-              {renderPreviewPanel()}
-            </div>
-          ) : (
-            <div className="flex flex-col gap-2 items-center">
-              <BriefLoadingGraphic />
-              <p className="text-sm font-bold leading-[18.62px] opacity-50 text-[#c1c1c3]">
-                Brief loading...
-              </p>
-            </div>
-          )}
-        </div>
-
-        {/* Separator */}
-        <div className="h-[9px] relative w-full shrink-0">
-            <div className="absolute h-px left-0 top-[4px] w-full bg-[#e0e0e0]" />
-        </div>
-
-        {/* Footer */}
-          <div className="flex flex-col gap-1 items-end shrink-0 w-full">
-          {/* Token Estimate */}
-            <TokenEstimate value={0} />
-
-            {/* Action Buttons */}
-            <div className="flex items-center w-full min-w-0">
-              <button
-                onClick={onCancel}
-                className="w-[25%] min-w-0 h-8 px-2 md:px-4 bg-[#03b3e2] text-black hover:opacity-80 rounded-[28px] transition flex items-center justify-center"
-              >
-                <span className="text-[13px] font-semibold leading-[18.62px] whitespace-nowrap truncate">Discard</span>
-              </button>
-              <div className="w-[15%] shrink-0" />
-              <div className="flex gap-1 items-center w-[60%] min-w-0">
-                <button 
-                  onClick={handleSaveDraft}
-                  className="btn flex-1 min-w-0 h-8 px-2 md:px-4 bg-[#ffb546] hover:opacity-90 rounded-[28px] flex items-center justify-center transition"
-                >
-                  <span className="text-[13px] font-semibold leading-[18.62px] text-black whitespace-nowrap truncate">Save draft</span>
-                </button>
-                <button
-                  onClick={() => navigate("/dashboard/briefs/review", { state: { brief: formData } })}
-                  disabled={!isFormComplete}
-                  className={`w-full md:flex-1 md:min-w-0 h-8 px-2 md:px-4 rounded-[28px] flex items-center justify-center transition ${
-                    isFormComplete ? "bg-[#ffb546] hover:opacity-90" : "bg-[#f9f9f9] cursor-not-allowed opacity-50"
-                  }`}
-                >
-                  <span
-                    className={`text-[13px] font-semibold leading-[18.62px] whitespace-nowrap ${
-                      isFormComplete ? "text-black" : "text-[#848487]"
->>>>>>> 308156434ef2f340e50d6e56494ac03205972956
-                    }`}
-                  >
-                    <SelectValue placeholder="Choose a work type" />
-                  </SelectTrigger>
-                  <SelectContent className="bg-[#f9f9f9]">
-                    {WORK_TYPE_OPTIONS.map((option) => (
-                      <SelectItem key={option.value} value={option.value} className="text-black">
-                        {option.label}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </Field>
+            {/* Work type and other fields */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 min-w-0">
+              <MultiSelectDropdown
+                label="Work type"
+                helpText="Select the primary workstream"
+                placeholder="Choose work types"
+                options={WORK_TYPE_OPTIONS}
+                selectedValues={formData.workType}
+                onToggle={(value) => handleMultiSelectToggle("workType", value)}
+              />
               <MultiSelectDropdown
                 label="Channels"
                 helpText="Where will this campaign live?"
@@ -1487,10 +1354,10 @@ function NewBriefForm({
                 selectedValues={formData.expectedOutputs}
                 onToggle={(value) => handleMultiSelectToggle("expectedOutputs", value)}
               />
-        </div>
+            </div>
           </section>
 
-          <section className="rounded-2xl border border-[#ececec] bg-white/80 p-4 md:p-6 space-y-6">
+          <section className="rounded-2xl border border-[#ececec] bg-white/80 p-4 md:p-6 space-y-6 max-w-full min-w-0">
             <div className="flex flex-col gap-2">
               <div className="flex items-center justify-between">
                 <div>
@@ -1502,11 +1369,11 @@ function NewBriefForm({
               </div>
             </div>
 
-            <div className="flex flex-col gap-2 border border-[#ececec] rounded-xl p-4">
+            <div className="flex flex-col gap-2 border border-[#ececec] rounded-xl p-4 min-w-0">
               <h4 className="text-base font-semibold text-black">Select template</h4>
-              <p className="text-sm text-[#424242]">Kickstart with a structure that matches your request.</p>
-              <div className="overflow-x-auto pb-2 mt-2">
-              <div className="flex gap-3 min-w-full">
+              <p className="text-sm text-[#424242]">Each template contains bundle of suitable assets.</p>
+              <div className="overflow-x-auto pb-2 mt-2 -mx-4 px-4">
+              <div className="flex gap-3 min-w-max">
                 {FORM_TEMPLATE_OPTIONS.map((template) => (
             <button
                     key={template.id}
@@ -1561,8 +1428,12 @@ function NewBriefForm({
             <div className="flex flex-col gap-5">
               {(() => {
                 const loadedAdditionalAssets = ADDITIONAL_ASSETS.slice(0, additionalAssetsLoaded);
-                const allAssets = [...RECOMMENDED_ASSETS, ...loadedAdditionalAssets, ...formData.assets.filter((a) => a.isCustom)];
-                const displayedAssets = allAssets.slice(0, assetsToShow);
+                // Include custom assets at the end of the list - always show them
+                const customAssets = formData.assets.filter((a) => a.isCustom);
+                const regularAssets = [...RECOMMENDED_ASSETS, ...loadedAdditionalAssets];
+                const displayedRegularAssets = regularAssets.slice(0, assetsToShow);
+                // Always include all custom assets, regardless of the display limit
+                const displayedAssets = [...displayedRegularAssets, ...customAssets];
                 return displayedAssets.map((asset, index) => {
                 const selectedAsset = formData.assets.find((a) => a.id === asset.id);
                 const quantity = selectedAsset?.quantity || 0;
@@ -1579,6 +1450,22 @@ function NewBriefForm({
                           <p className="text-[16.24px] leading-[14px] text-black">
                             {asset.tokenPrice} {asset.tokenPrice === 1 ? "token" : "tokens"}
                           </p>
+                        )}
+                        {isCustom && (
+                          <div className="flex items-center gap-1">
+                            <TooltipProvider>
+                              <Tooltip>
+                                <TooltipTrigger asChild>
+                                  <HelpCircle size={14} className="text-[#848487] cursor-help" />
+                                </TooltipTrigger>
+                                <TooltipContent>
+                                  <p className="max-w-[300px]">
+                                    IRIS will review this asset and provide token price for it. You will be informed once this is done.
+                                  </p>
+                                </TooltipContent>
+                              </Tooltip>
+                            </TooltipProvider>
+                          </div>
                         )}
                         {quantity > 0 && (
                           <button
@@ -1615,8 +1502,8 @@ function NewBriefForm({
                                       <HelpCircle size={14} className="text-[#848487] cursor-help" />
                                     </TooltipTrigger>
                                     <TooltipContent>
-                                      <p className="max-w-[250px]">
-                                        IRIS will review this asset and provide token price for this asset. You will be informed once IRIS set a token price.
+                                      <p className="max-w-[300px]">
+                                        IRIS will review this asset and provide token price for it. You will be informed once this is done.
                                       </p>
                                     </TooltipContent>
                                   </Tooltip>
@@ -1672,8 +1559,9 @@ function NewBriefForm({
             </div>
             {(() => {
               const loadedAdditionalAssets = ADDITIONAL_ASSETS.slice(0, additionalAssetsLoaded);
-              const allAssets = [...RECOMMENDED_ASSETS, ...loadedAdditionalAssets, ...formData.assets.filter((a) => a.isCustom)];
-              return allAssets.length > assetsToShow;
+              const regularAssets = [...RECOMMENDED_ASSETS, ...loadedAdditionalAssets];
+              // Only check if there are more regular assets to show (custom assets are always shown)
+              return regularAssets.length > assetsToShow;
             })() && (
               <button
                 onClick={() => setAssetsToShow((prev) => prev + 10)}
@@ -1739,35 +1627,72 @@ function NewBriefForm({
                   </button>
             </div>
           </div>
-<<<<<<< HEAD
             )}
-          </section>
+
+        </section>
+
+        {/* Token Estimate */}
+        <div className="flex items-center gap-2 pt-4 pb-2">
+          <div className="flex gap-4 items-center pb-2">
+            <span className="h-10 w-10 flex items-center justify-center">
+              <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 20 20" fill="none">
+                <path d="M10.0016 16.6012C13.3865 16.6012 16.1306 15.5303 16.1306 14.2093C16.1306 12.8882 13.3865 11.8173 10.0016 11.8173C6.61662 11.8173 3.87256 12.8882 3.87256 14.2093C3.87256 15.5303 6.61662 16.6012 10.0016 16.6012Z" fill="#03B3E2" />
+                <path d="M10.0016 7.54461C13.387 7.54461 16.1306 8.61587 16.1306 9.93653C16.1306 11.2572 13.387 12.3284 10.0016 12.3284C6.6161 12.3284 3.87256 11.2572 3.87256 9.93653C3.87256 8.61587 6.6161 7.54461 10.0016 7.54461Z" fill="#03B3E2" />
+                <path d="M10.0018 8.05164C13.3867 8.05164 16.1308 6.98073 16.1308 5.65972C16.1308 4.33871 13.3867 3.26782 10.0018 3.26782C6.61682 3.26782 3.87276 4.33871 3.87276 5.65972C3.87276 6.98073 6.61682 8.05164 10.0018 8.05164Z" fill="#03B3E2" />
+              </svg>
+            </span>
+            <span className="text-[26px] leading-[37.24px] text-black font-medium">{tokenEstimate}</span>
+            <span className="text-[26px] leading-[37.24px] text-[#848487]">Tokens estimate</span>
+          </div>
+          {hasCustomAssets && (
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <HelpCircle size={16} className="text-[#848487] cursor-help" />
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p className="max-w-[300px]">
+                    Your list of assets contains one or more custom assets. IRIS will review it and set the token price. You will be informed once this is done.
+                  </p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+          )}
         </div>
 
-        <div className="w-full lg:max-w-[1664px] space-y-4 lg:sticky lg:top-6 self-start">
-          <div className="rounded-2xl border border-[#ececec] bg-white/80 p-4 flex flex-col gap-4">
-            <div>
-              <p className="text-sm font-semibold text-black">Actions</p>
-              <p className="text-xs text-[#6b6b6f]">Review your brief at any time before submitting.</p>
-            </div>
-            <button
-              onClick={handleReviewBrief}
-              className="w-full rounded-[28px] bg-[#ffb546] text-black font-semibold py-2 hover:opacity-90 transition"
+        {/* Bottom Action Buttons */}
+        <div className="flex flex-col md:flex-row items-center gap-2.5 w-full pt-2">
+          <button
+            onClick={onCancel}
+            className="w-full md:w-auto md:flex-1 md:min-w-0 h-10 px-4 bg-[#03b3e2] text-black hover:opacity-80 rounded-[28px] transition flex items-center justify-center"
+          >
+            <span className="text-sm font-semibold leading-[18.62px] whitespace-nowrap">Cancel</span>
+          </button>
+          <button
+            onClick={handleSaveDraft}
+            className="w-full md:w-auto md:flex-1 md:min-w-0 h-10 px-4 bg-[#ffb546] hover:opacity-90 rounded-[28px] flex items-center justify-center transition"
+          >
+            <span className="text-sm font-semibold leading-[18.62px] text-black whitespace-nowrap">Save draft</span>
+          </button>
+          <button
+            onClick={() => {
+              if (!isFormComplete) return;
+              navigate("/dashboard/briefs/review", { state: { brief: formData } });
+            }}
+            disabled={!isFormComplete}
+            className={`w-full md:w-auto md:flex-1 md:min-w-0 h-10 px-4 rounded-[28px] flex items-center justify-center transition ${
+              isFormComplete ? "bg-[#ffb546] hover:opacity-90" : "bg-[#f9f9f9] cursor-not-allowed opacity-50"
+            }`}
+          >
+            <span
+              className={`text-sm font-semibold leading-[18.62px] whitespace-nowrap ${
+                isFormComplete ? "text-black" : "text-[#848487]"
+              }`}
             >
               Review brief
-=======
-
-          {/* Separator line */}
-          <div className="h-[9px] relative w-full shrink-0 mt-4">
-            <div className="absolute h-px left-0 top-[4px] w-full bg-[#e0e0e0]" />
-          </div>
-
-          {/* Note */}
-          <div className="shrink-0">
-            <p className="text-sm leading-[normal] opacity-[0.826] text-[#434343]">
-              *You can assign multiple leads
-            </p>
-          </div>
+            </span>
+          </button>
+        </div>
 
         </div>
 
@@ -1777,19 +1702,12 @@ function NewBriefForm({
             className={`bg-white rounded-xl min-h-[600px] w-full ${
               hasFormProgress
                 ? "p-6 flex items-start justify-start"
-                : "p-6 flex flex-col gap-8 items-center justify-center"
+                : "hidden"
             }`}
           >
-            {hasFormProgress ? (
+            {hasFormProgress && (
               <div className="w-full">
                 {renderPreviewPanel()}
-              </div>
-            ) : (
-              <div className="flex flex-col gap-2 items-center">
-                <BriefLoadingGraphic />
-                <p className="text-sm font-bold leading-[18.62px] opacity-50 text-[#c1c1c3]">
-                  Brief loading...
-                </p>
               </div>
             )}
           </div>
@@ -1802,7 +1720,7 @@ function NewBriefForm({
           {/* Action Buttons - Discard, Save draft, Review brief */}
           <div className="flex flex-col md:flex-row items-center gap-2.5 w-full min-w-0">
             <button
-              onClick={handleNext}
+              onClick={onNext}
               disabled={!isFormComplete}
               className={`w-full md:flex-1 md:min-w-0 h-8 md:h-10 px-2 md:px-4 rounded-[28px] flex items-center justify-center transition ${
                 isFormComplete
@@ -1847,7 +1765,6 @@ function NewBriefForm({
               >
                 Review brief
               </span>
->>>>>>> 308156434ef2f340e50d6e56494ac03205972956
             </button>
             <div className="pt-2 border-t border-dashed border-[#ececec]">
               <div className="flex items-center gap-2">
@@ -1924,10 +1841,7 @@ function NewBriefForm({
                 label="Project lead"
                 value={PROJECT_LEADS.find((lead) => lead.value === formData.projectLead)?.label || "—"}
               />
-              <PreviewField
-                label="Work type"
-                value={WORK_TYPE_OPTIONS.find((option) => option.value === formData.workType)?.label || "—"}
-              />
+              <PreviewField label="Work type" value={formData.workType.length ? formData.workType.join(", ") : "—"} />
               <PreviewField label="Channels" value={formData.channels.length ? formData.channels.join(", ") : "—"} />
               <PreviewField
                 label="Expected outputs"
@@ -1978,7 +1892,6 @@ function NewBriefForm({
   );
 }
 
-<<<<<<< HEAD
 interface PreviewFieldProps {
   label: string;
   value: string;
@@ -2045,8 +1958,6 @@ function MultiSelectDropdown({ label, placeholder, options, selectedValues, onTo
   );
 }
 
-function DeliverablesSelectionScreen({ onCancel, onBack, onNavigateToAiResponse }: { onCancel: () => void; onBack: () => void; onNavigateToAiResponse: (inputText: string) => void }) {
-=======
 function DeliverablesSelectionScreen({
   onCancel,
   onBack,
@@ -2058,7 +1969,6 @@ function DeliverablesSelectionScreen({
   onNavigateToAiResponse: (inputText: string) => void;
   briefData: NewBriefFormValues;
 }) {
->>>>>>> 308156434ef2f340e50d6e56494ac03205972956
   const navigate = useNavigate();
   const [selectedDeliverables, setSelectedDeliverables] = useState<string[]>([]);
   const [tokenEstimate, setTokenEstimate] = useState(0);
