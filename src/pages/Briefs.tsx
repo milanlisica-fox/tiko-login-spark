@@ -102,9 +102,27 @@ const CHANNEL_OPTIONS = [
   "Mobile",
   "Retail",
   "Out of home",
+"Experiential",
+"B2B",
+"Contact Centre",
+"Field Force",
+"Other",
 ];
 
-const OUTPUT_OPTIONS = ["Plan", "Print asset", "Video asset", "Digital toolkit", "Landing page"];
+const OUTPUT_OPTIONS = [
+"Plan",
+"Idea",
+"Copy asset",
+"Print asset",
+"Video asset",
+"Execution (live to consumer)",
+"Furniture",
+"Shop Display(s)",
+"Point of sale",
+"Digital",
+"Marketing asset",
+"Other",
+];
 
 const DEFAULT_CUSTOM_ASSET_PRICE = 8;
 
