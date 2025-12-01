@@ -330,7 +330,7 @@ const BriefLoadingGraphic = () => (
   </svg>
 );
 
-type BriefStatus = "Draft" | "In review" | "SOW Ready to sign";
+type BriefStatus = "Draft" | "In review" | "SOW ready to sign";
 type BriefBadge = "Creation" | "Adaptation" | "Resize" | "default";
 
 export type SubmittedBriefPayload = {
@@ -736,7 +736,7 @@ export default function BriefsPage() {
                     )
                   },
                   { 
-                    title: "SOW Ready to sign",
+                    title: "SOW ready to sign",
                     titleBold: true,
                     value: sowReadyBriefCount,
                     icon: (
@@ -746,7 +746,7 @@ export default function BriefsPage() {
                     )
                   },
                 ].map((card) => {
-                  const isSOWCard = card.title === "SOW Ready to sign";
+                  const isSOWCard = card.title === "SOW ready to sign";
                   
                   if (isSOWCard) {
                     return (

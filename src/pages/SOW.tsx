@@ -105,7 +105,7 @@ export default function SOWPage() {
       <button onClick={() => navigate("/dashboard/briefs")} className="hover:opacity-70 transition">
         <ArrowLeft size={20} className="text-black" />
       </button>
-      <span className="text-sm leading-[19.6px] text-black">SOW Ready to sign</span>
+      <span className="text-sm leading-[19.6px] text-black">SOW ready to sign</span>
     </div>
   );
 
@@ -137,11 +137,11 @@ export default function SOWPage() {
         <div className="space-y-6 md:space-y-10">
           {/* Header */}
           <div className="flex flex-col gap-1 md:text-center lg:text-left">
-            <h1 className="h1-heading text-2xl md:text-h1 text-black">SOW Ready to sign</h1>
+            <h1 className="h1-heading text-2xl md:text-h1 text-black">SOW ready to sign</h1>
             <p className="text-sm md:text-body text-black">Review and sign your Statements of Work</p>
           </div>
 
-          {/* SOW Ready to Sign Section */}
+          {/* SOW ready to Sign Section */}
           <div className="space-y-4">
             <h2 className="text-base font-semibold leading-[21.28px] text-black">SOW ready to sign</h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">

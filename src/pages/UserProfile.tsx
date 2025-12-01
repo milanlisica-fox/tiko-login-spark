@@ -38,7 +38,6 @@ const avatarImg18 = "https://www.figma.com/api/mcp/asset/56c68c66-b882-4196-b347
 const avatarImg19 = "https://www.figma.com/api/mcp/asset/dc9b97c8-f3c8-41eb-b2ca-c36e2fedc0df";
 const avatarImg20 = "https://www.figma.com/api/mcp/asset/11300247-38f8-478d-9479-40935b534eef";
 const avatarImg21 = "https://www.figma.com/api/mcp/asset/51b54793-bcea-4985-bc14-75237d0帖3404";
-const arrowRightIcon = "https://www.figma.com/api/mcp/asset/8d6284a1-722e-4575-b9f8-e41d481a0036";
 
 // Hover state avatar images from Figma
 const avatarHoverImg1 = "https://www.figma.com/api/mcp/asset/407be802-dcd7-4078-90fa-ac28c700f8eb";
@@ -69,10 +68,6 @@ export default function UserProfilePage() {
 
   // nav items centralized via DashboardLayout
   const { activeName } = useActiveNav();
-
-  const handleChangeEmail = () => {
-    toast.info("Change email functionality coming soon");
-  };
 
   // Change password functionality removed
 
@@ -138,18 +133,6 @@ export default function UserProfilePage() {
                         murray.g@samsung.com
                       </p>
                     </div>
-                    <Button
-                      onClick={handleChangeEmail}
-                      variant="ghost"
-                      className="backdrop-blur-[6px] flex gap-[8px] h-[24px] items-center justify-center rounded-[28px] hover:bg-transparent p-0"
-                    >
-                      <span className="text-[12px] font-semibold leading-[23.94px] text-[#848487]">
-                        Change
-                      </span>
-                      <div className="overflow-clip relative shrink-0 size-[16px]">
-                        <img src={arrowRightIcon} alt="" className="block max-w-none size-full" />
-                      </div>
-                    </Button>
                   </div>
                 </CardContent>
               </Card>
@@ -162,10 +145,10 @@ export default function UserProfilePage() {
                   <div className="flex gap-[16px] items-start justify-between pb-[4px]">
                     <div className="flex flex-1 flex-col gap-[4px]">
                       <h3 className="text-[22px] font-bold leading-[29.26px] text-black">
-                        Access
+                        Access level
                       </h3>
                       <p className="text-sm leading-[18.62px] text-black">
-                        Member
+                        Marketing lead
                       </p>
                     </div>
                   </div>
