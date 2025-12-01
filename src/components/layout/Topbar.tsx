@@ -58,7 +58,7 @@ export default function Topbar({
               <TokensIcon size={18} className="text-[#848487] lg:w-5 lg:h-5" />
               <span className="text-xs leading-[15.96px] text-[#646464]">372 Tokens</span>
             </button>
-            <UserMenu name="Henry Bray" dept="Marcomms" onClick={() => navigate("/dashboard/profile")} />
+            <UserMenu name="Murray Gordon" dept="Marcomms" onClick={() => navigate("/dashboard/profile")} />
           </>
         )}
       </div>

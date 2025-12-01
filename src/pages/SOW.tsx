@@ -42,7 +42,7 @@ export const READY_TO_SIGN_SOWS: SOW[] = [
   {
     id: "2",
     title: "Fold Toolkit Q3 2025",
-    projectLead: "Henry Bray",
+    projectLead: "Murray Gordon",
     date: "15/05/25",
     status: "ready_to_sign",
     icon: (
@@ -69,7 +69,7 @@ export const SIGNED_SOWS: SOW[] = [
   {
     id: "4",
     title: "W Summer Festival 2025",
-    projectLead: "Henry Bray",
+    projectLead: "Murray Gordon",
     date: "27/08/24",
     status: "signed",
     icon: (

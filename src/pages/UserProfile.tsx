@@ -116,7 +116,7 @@ export default function UserProfilePage() {
               {/* User Info */}
               <div className="flex flex-1 flex-col gap-[4px]">
                 <h1 className="h1-heading text-h1 text-black">
-                  Henry Bray
+                  Murray Gordon
                 </h1>
                 <p className="text-body text-black">
                   Marcomms
@@ -135,7 +135,7 @@ export default function UserProfilePage() {
                         Email
                       </h3>
                       <p className="text-sm leading-[18.62px] text-black">
-                        henry.bray@marcomms-samsung.com
+                        murray.g@samsung.com
                       </p>
                     </div>
                     <Button

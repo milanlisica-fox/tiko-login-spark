@@ -382,7 +382,7 @@ interface NewBriefFormValues {
 }
 
 export const PROJECT_LEADS = [
-  { value: "henry-bray", label: "Henry Bray" },
+  { value: "murray-bray", label: "Murray Gordon" },
   { value: "john-doe", label: "John Doe" },
   { value: "jane-smith", label: "Jane Smith" },
 ];

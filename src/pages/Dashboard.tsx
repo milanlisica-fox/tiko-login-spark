@@ -78,11 +78,11 @@ const [open, setOpen] = useState(false);
       </span>
     ))}
 
-    {/* Animate " Henry!" separately */}
+    {/* Animate " Murray!" separately */}
     <span className="text-[#00C3B1]">
-      {" Henry!".split("").map((char, i) => (
+      {" Murray!".split("").map((char, i) => (
         <span
-          key={`henry-${i}`}
+          key={`murray-${i}`}
           style={{ animationDelay: `${(i + 12) * 0.1}s` }}
         >
           {char}
