@@ -96,10 +96,22 @@ const Login = () => {
           <Button
             type="submit"
             disabled={isLoading}
-            className="login-btn w-full h-14 rounded-full bg-accent hover:bg-accent/90 text-accent-foreground font-semibold text-lg shadow-lg hover:shadow-xl transition-all animate-gentle-bounce"
+            className="login-btn w-full h-14 rounded-full bg-accent hover:bg-accent/90 text-accent-foreground font-semibold text-lg shadow-lg hover:shadow-xl transition-all animate-gentle-bounce flex items-center justify-center gap-[10px]"
           >
-            Login
-            <img src="https://www.figma.com/api/mcp/asset/33c5c1d3-721c-423d-8e72-cd89fd07637c" alt="" className="h-[14px] w-[15.567px]"/>
+            <span>Login</span>
+            <svg
+              className="h-[14px] w-[15.567px]"
+              width="45"
+              height="40"
+              viewBox="0 0 45 40"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M23.8229 40H5.80935C2.59694 40 0 37.4332 0 34.2582V31.8843C0 30.5935 0.795591 29.4362 2.0115 28.9614L14.9212 22.908C17.5932 21.8546 17.5932 18.1306 14.9362 17.0623L1.99648 10.8902C0.795576 10.4154 0 9.25816 0 7.96736V5.74184C0 2.56677 2.59694 0 5.80935 0H23.8229C25.0838 0 26.3147 0.400603 27.3205 1.15728L42.692 15.4154C45.7693 17.7151 45.7693 22.27 42.692 24.5697L27.3205 38.8279C26.3147 39.5846 25.0838 39.9852 23.8229 39.9852V40Z"
+                fill="#000"
+              ></path>
+            </svg>
           </Button>
           <div className="h-14">
             <div

@@ -159,7 +159,7 @@ const [open, setOpen] = useState(false);
 
                   {/* Buttons Section - 25% on desktop */}
                 {/* Desktop version (visible on sm and above) */}
-      <div className="cs-item hidden sm:flex flex-col sm:flex-row lg:flex-col gap-2.5 lg:w-[25%]">
+      <div className="cs-item hidden sm:flex flex-col sm:flex-row lg:flex-col gap-2.5 lg:w-[25%] items-center sm:justify-center lg:items-center">
         {/* Create brief */}
         <button
           onClick={() =>
@@ -200,17 +200,6 @@ const [open, setOpen] = useState(false);
           <span className="text-base font-semibold leading-[23.94px] text-black whitespace-nowrap">
             Quick calculator
           </span>
-        </button>
-
-        {/* View all */}
-        <button
-          onClick={() => navigate("/dashboard/briefs")}
-          className="btn btn-transp w-full sm:flex-1 lg:flex-none h-[48px] bg-[#ffb546] backdrop-blur-sm rounded-[28px] flex items-center justify-center gap-[10px] px-[24px] py-[18px] hover:opacity-90 transition"
-        >
-          <span className="text-base font-semibold leading-[23.94px] text-black whitespace-nowrap">
-            View all
-          </span>
-          <ArrowRight size={16} className="text-black" />
         </button>
       </div>
 
