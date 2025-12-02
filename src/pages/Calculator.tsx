@@ -111,6 +111,11 @@ export default function CalculatorPage() {
     });
   };
 
+  const handleClearAllAssets = () => {
+    setSelectedAssets([]);
+    setQuantityInputs({});
+  };
+
   const handleAssetQuantityInput = (assetId: string, value: string) => {
     // Update the input value state
     setQuantityInputs((prev) => ({ ...prev, [assetId]: value }));
@@ -352,6 +357,18 @@ export default function CalculatorPage() {
                   </button>
                 )}
               </div>
+
+              {selectedAssets.length > 0 && (
+                <div className="flex justify-end mb-2">
+                  <button
+                    type="button"
+                    onClick={handleClearAllAssets}
+                    className="text-sm font-semibold text-[#848487] hover:text-black transition underline"
+                  >
+                    Clear all
+                  </button>
+                </div>
+              )}
 
               <div className="flex flex-col gap-5 w-full">
                 {filteredAssets.map((asset, index) => {

@@ -1283,6 +1283,15 @@ function NewBriefForm({
     });
   };
 
+  const handleClearAllAssets = () => {
+    setFormData((prev) => ({
+      ...prev,
+      assets: [],
+    }));
+    setAssetsWithDetails([]);
+    setQuantityInputs({});
+  };
+
   const handleAddCustomAsset = () => {
     if (!customAssetDraft.name.trim()) {
       return;
@@ -1579,6 +1588,18 @@ function NewBriefForm({
                 </button>
               </div>
             </Field>
+
+            {formData.assets.length > 0 && (
+              <div className="flex justify-end">
+                <button
+                  type="button"
+                  onClick={handleClearAllAssets}
+                  className="text-sm font-semibold text-[#848487] hover:text-black transition underline"
+                >
+                  Clear all
+                </button>
+              </div>
+            )}
 
             <div className="flex flex-col gap-5">
               {(() => {
