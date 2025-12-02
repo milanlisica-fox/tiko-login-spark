@@ -1500,11 +1500,38 @@ function NewBriefForm({
               <div className="flex items-center justify-between">
                 <div>
                   <h3 className="text-[21.6px] font-semibold text-black">Assets</h3>
-                  <p className="text-sm text-[#424242]">
-                    Add from recommendations or create your own. Keep specs, timing, and effort in one place.
-                  </p>
                 </div>
               </div>
+            </div>
+
+            {/* Explanatory block for asset selection methods */}
+            <div className="rounded-lg border border-[#e0e0e0] bg-[#f9f9f9] p-4 space-y-3">
+              <p className="text-sm font-semibold text-black">
+                You can add assets to your brief in three ways:
+              </p>
+              <ol className="space-y-2.5 list-none pl-0">
+                <li className="flex gap-3">
+                  <span className="flex-shrink-0 w-5 h-5 rounded-full bg-[#03B3E2] text-white text-xs font-semibold flex items-center justify-center mt-0.5">1</span>
+                  <div className="flex-1">
+                    <span className="text-sm font-medium text-black">Select a template</span>
+                    <span className="text-sm text-[#424242]"> - Choose from predefined templates that contain a bundle of assets.</span>
+                  </div>
+                </li>
+                <li className="flex gap-3">
+                  <span className="flex-shrink-0 w-5 h-5 rounded-full bg-[#03B3E2] text-white text-xs font-semibold flex items-center justify-center mt-0.5">2</span>
+                  <div className="flex-1">
+                    <span className="text-sm font-medium text-black">Choose assets individually</span>
+                    <span className="text-sm text-[#424242]"> - Browse the list of recommended assets or add custom assets as needed.</span>
+                  </div>
+                </li>
+                <li className="flex gap-3">
+                  <span className="flex-shrink-0 w-5 h-5 rounded-full bg-[#03B3E2] text-white text-xs font-semibold flex items-center justify-center mt-0.5">3</span>
+                  <div className="flex-1">
+                    <span className="text-sm font-medium text-black">Use AI assistance</span>
+                    <span className="text-sm text-[#424242]"> - Chat with AI to help you identify which assets your project requires.</span>
+                  </div>
+                </li>
+              </ol>
             </div>
 
             <div className="flex flex-col gap-2 border border-[#ececec] rounded-xl p-4 min-w-0">
@@ -1535,7 +1562,7 @@ function NewBriefForm({
             </div>
             </div>
 
-            <Field label="Tell us what you need">
+            <Field label="AI Assistant">
               <div className="space-y-3">
                 <Textarea
                   value={formData.additionalAssetDetails}
