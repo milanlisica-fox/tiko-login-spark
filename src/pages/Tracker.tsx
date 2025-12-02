@@ -2489,6 +2489,58 @@ export default function TrackerPage() {
             <TabsContent value="project-performance" className="mt-6">
               {/* Desktop: Grid Layout */}
               <div className="hidden lg:block space-y-6">
+                {/* Completed projects */}
+              <Card className="border border-[#ececec] bg-white">
+                <CardHeader className="pb-3">
+                  <div className="flex flex-col gap-1">
+                    <CardTitle className="text-base font-bold leading-[21.28px] text-[#03b3e2]">Completed projects</CardTitle>
+                    <p className="text-sm text-[#646464]">Most recent deliveries with key delivery metrics.</p>
+                  </div>
+                </CardHeader>
+                <CardContent>
+                  <Table>
+                    <TableHeader>
+                      <TableRow className="bg-[#f1f1f3] hover:bg-[#f1f1f3] border-b border-[#ececec]">
+                        <TableHead className="h-12 px-4 text-left font-bold text-black">Project</TableHead>
+                        <TableHead className="h-12 px-4 text-left font-bold text-black">Team</TableHead>
+                        <TableHead className="h-12 px-4 text-left font-bold text-black">Category</TableHead>
+                        <TableHead className="h-12 px-4 text-left font-bold text-black">Tokens spent</TableHead>
+                        <TableHead className="h-12 px-4 text-left font-bold text-black">Duration</TableHead>
+                        <TableHead className="h-12 px-4 text-left font-bold text-black">On-time</TableHead>
+                        <TableHead className="h-12 px-4 text-left font-bold text-black">Change requests</TableHead>
+                        <TableHead className="h-12 px-4 text-left font-bold text-black">Average rounds of amends</TableHead>
+                        <TableHead className="h-12 px-4 text-left font-bold text-black">Assets RFT</TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      {completedProjectsData.map((project, index) => {
+                        const onTimeClasses = project.onTime
+                          ? "inline-flex items-center px-2 py-1 rounded-md bg-[#00C3B10F] text-[#00C3B1] text-xs font-medium"
+                          : "inline-flex items-center px-2 py-1 rounded-md bg-[#FF43370F] text-[#FF4337] text-xs font-medium";
+                        return (
+                          <TableRow
+                            key={project.id}
+                            className={`border-b border-[#ececec] ${index % 2 === 0 ? 'bg-white' : 'bg-[#f9f9f9]'} hover:bg-[#f1f1f3]`}
+                          >
+                            <TableCell className="px-4 py-4 text-black font-medium">{project.projectName}</TableCell>
+                            <TableCell className="px-4 py-4 text-black">{project.deliveryTeam}</TableCell>
+                            <TableCell className="px-4 py-4 text-black">{project.category}</TableCell>
+                            <TableCell className="px-4 py-4 text-black">{project.tokensSpent.toLocaleString()}</TableCell>
+                            <TableCell className="px-4 py-4 text-black">{project.durationWeeks} wks</TableCell>
+                            <TableCell className="px-4 py-4 text-black">
+                              <span className={onTimeClasses}>{project.onTime ? "On time" : "Delayed"}</span>
+                            </TableCell>
+                            <TableCell className="px-4 py-4 text-black">{project.changeRequests}</TableCell>
+                            <TableCell className="px-4 py-4 text-black">{project.roundsOfAmends}</TableCell>
+                            <TableCell className="px-4 py-4 text-black">{project.assetsRightFirstTime}%</TableCell>
+                          </TableRow>
+                        );
+                      })}
+                    </TableBody>
+                  </Table>
+                </CardContent>
+              </Card>
+
                 {/* Row 1: Rounds 30% / Change Requests 70% */}
                 <div className="grid grid-cols-10 gap-5">
                   {/* Average rounds of amends */}
@@ -2966,7 +3018,11 @@ export default function TrackerPage() {
                     </Table>
                   </CardContent>
                 </Card>
+              </div>
 
+              {/* Tablet/Mobile: Vertical Stack */}
+              <div className="lg:hidden space-y-6">
+                {/* Completed projects */}
               <Card className="border border-[#ececec] bg-white">
                 <CardHeader className="pb-3">
                   <div className="flex flex-col gap-1">
@@ -3017,11 +3073,7 @@ export default function TrackerPage() {
                   </Table>
                 </CardContent>
               </Card>
-              </div>
 
-              {/* Tablet/Mobile: Vertical Stack */}
-              <div className="lg:hidden space-y-6">
-                {/* Keep all cards in vertical order as they currently are */}
                 {/* Row 1: Additional token spend */}
                 <Card className="border border-[#ececec] bg-white flex flex-col">
                   <CardHeader className="pb-3">
@@ -3472,57 +3524,6 @@ export default function TrackerPage() {
                     </Table>
                   </CardContent>
                 </Card>
-
-              <Card className="border border-[#ececec] bg-white">
-                <CardHeader className="pb-3">
-                  <div className="flex flex-col gap-1">
-                    <CardTitle className="text-base font-bold leading-[21.28px] text-[#03b3e2]">Completed projects</CardTitle>
-                    <p className="text-sm text-[#646464]">Most recent deliveries with key delivery metrics.</p>
-                  </div>
-                </CardHeader>
-                <CardContent>
-                  <Table>
-                    <TableHeader>
-                      <TableRow className="bg-[#f1f1f3] hover:bg-[#f1f1f3] border-b border-[#ececec]">
-                        <TableHead className="h-12 px-4 text-left font-bold text-black">Project</TableHead>
-                        <TableHead className="h-12 px-4 text-left font-bold text-black">Team</TableHead>
-                        <TableHead className="h-12 px-4 text-left font-bold text-black">Category</TableHead>
-                        <TableHead className="h-12 px-4 text-left font-bold text-black">Tokens spent</TableHead>
-                        <TableHead className="h-12 px-4 text-left font-bold text-black">Duration</TableHead>
-                        <TableHead className="h-12 px-4 text-left font-bold text-black">On-time</TableHead>
-                        <TableHead className="h-12 px-4 text-left font-bold text-black">Change requests</TableHead>
-                        <TableHead className="h-12 px-4 text-left font-bold text-black">Average rounds of amends</TableHead>
-                        <TableHead className="h-12 px-4 text-left font-bold text-black">Assets RFT</TableHead>
-                      </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                      {completedProjectsData.map((project, index) => {
-                        const onTimeClasses = project.onTime
-                          ? "inline-flex items-center px-2 py-1 rounded-md bg-[#00C3B10F] text-[#00C3B1] text-xs font-medium"
-                          : "inline-flex items-center px-2 py-1 rounded-md bg-[#FF43370F] text-[#FF4337] text-xs font-medium";
-                        return (
-                          <TableRow
-                            key={project.id}
-                            className={`border-b border-[#ececec] ${index % 2 === 0 ? 'bg-white' : 'bg-[#f9f9f9]'} hover:bg-[#f1f1f3]`}
-                          >
-                            <TableCell className="px-4 py-4 text-black font-medium">{project.projectName}</TableCell>
-                            <TableCell className="px-4 py-4 text-black">{project.deliveryTeam}</TableCell>
-                            <TableCell className="px-4 py-4 text-black">{project.category}</TableCell>
-                            <TableCell className="px-4 py-4 text-black">{project.tokensSpent.toLocaleString()}</TableCell>
-                            <TableCell className="px-4 py-4 text-black">{project.durationWeeks} wks</TableCell>
-                            <TableCell className="px-4 py-4 text-black">
-                              <span className={onTimeClasses}>{project.onTime ? "On time" : "Delayed"}</span>
-                            </TableCell>
-                            <TableCell className="px-4 py-4 text-black">{project.changeRequests}</TableCell>
-                            <TableCell className="px-4 py-4 text-black">{project.roundsOfAmends}</TableCell>
-                            <TableCell className="px-4 py-4 text-black">{project.assetsRightFirstTime}%</TableCell>
-                          </TableRow>
-                        );
-                      })}
-                    </TableBody>
-                  </Table>
-                </CardContent>
-              </Card>
               </div>
             </TabsContent>
 

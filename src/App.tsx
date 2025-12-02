@@ -13,6 +13,7 @@ import Calculator from "./pages/Calculator";
 import UserProfile from "./pages/UserProfile";
 import NotFound from "./pages/NotFound";
 import BriefReview from "./pages/BriefReview";
+import BriefSingle from "./pages/BriefSingle";
 import SOW from "./pages/SOW";
 
 const queryClient = new QueryClient();
@@ -32,6 +33,7 @@ const AppRoutes = () => (
           <Route path="/signup" element={<Signup />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/dashboard/briefs" element={<Briefs />} />
+          <Route path="/dashboard/briefs/:id" element={<BriefSingle />} />
           <Route path="/dashboard/briefs/review" element={<BriefReview />} />
           <Route path="/dashboard/projects" element={<Projects />} />
           <Route path="/dashboard/tracker" element={<Tracker />} />

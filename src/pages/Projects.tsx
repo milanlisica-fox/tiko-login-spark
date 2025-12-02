@@ -177,7 +177,7 @@ export default function ProjectsPage() {
           <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
             <div className="flex flex-col gap-1">
               <h1 className="h1-heading text-2xl md:text-h1 text-black">Work at a glance</h1>
-              <p className="text-sm md:text-base leading-[24px] text-black">A clear view of your team's active projects and priorities.</p>
+              <p className="text-sm md:text-base leading-[24px] text-black">A clear view of your team's active projects and priorities</p>
             </div>
             <Button variant="outline" className="h-10 px-6 border-none bg-[#ffb546] hover:opacity-90 gap-2">
               <span className="text-sm font-semibold leading-[24px] text-black">View all</span>

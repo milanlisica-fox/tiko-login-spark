@@ -10,6 +10,8 @@ import { Sheet, SheetContent } from "@/components/ui/sheet";
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Label } from "@/components/ui/label";
 
 export default function DashboardLayout({
   title,
@@ -34,11 +36,13 @@ export default function DashboardLayout({
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isHelpOpen, setIsHelpOpen] = useState(false);
   const [helpMessage, setHelpMessage] = useState("");
+  const [helpType, setHelpType] = useState<"account-manager" | "report-bug">("account-manager");
 
   const openHelp = () => setIsHelpOpen(true);
   const closeHelp = () => {
     setIsHelpOpen(false);
     setHelpMessage("");
+    setHelpType("account-manager");
   };
 
   const handleNavigate = (path: string) => {
@@ -103,17 +107,36 @@ export default function DashboardLayout({
       <Dialog open={isHelpOpen} onOpenChange={(open) => (open ? setIsHelpOpen(true) : closeHelp())}>
         <DialogContent className="max-w-2xl">
           <DialogHeader>
-            <DialogTitle>Send a question to your Account Manager</DialogTitle>
+            <DialogTitle>Send a question</DialogTitle>
           </DialogHeader>
           <div className="space-y-4">
+            <div className="space-y-3">
+              <Label className="text-sm font-medium">Select recipient</Label>
+              <RadioGroup value={helpType} onValueChange={(value) => setHelpType(value as "account-manager" | "report-bug")}>
+                <div className="flex items-center space-x-2">
+                  <RadioGroupItem value="account-manager" id="account-manager" />
+                  <Label htmlFor="account-manager" className="font-normal cursor-pointer">
+                    Account Manager
+                  </Label>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <RadioGroupItem value="report-bug" id="report-bug" />
+                  <Label htmlFor="report-bug" className="font-normal cursor-pointer">
+                    Report bug
+                  </Label>
+                </div>
+              </RadioGroup>
+            </div>
             <Textarea
               value={helpMessage}
               onChange={(e) => setHelpMessage(e.target.value)}
-              placeholder="Type your question here..."
+              placeholder={helpType === "account-manager" ? "Type your question here..." : "Describe the bug you encountered..."}
               className="min-h-[160px] bg-[#f9f9f9] text-black"
             />
             <p className="text-xs text-black/80">
-              We’ll route this directly to your Account Manager at Iris. Expect a response within one business day.
+              {helpType === "account-manager"
+                ? "We'll route this directly to your Account Manager at Iris. Expect a response within one business day."
+                : "We'll review your bug report and get back to you as soon as possible."}
             </p>
           </div>
           <DialogFooter>
@@ -122,7 +145,7 @@ export default function DashboardLayout({
             </Button>
             <Button
               onClick={() => {
-                toast.success("Question submitted");
+                toast.success(helpType === "account-manager" ? "Question submitted" : "Bug report submitted");
                 closeHelp();
               }}
               disabled={!helpMessage.trim()}

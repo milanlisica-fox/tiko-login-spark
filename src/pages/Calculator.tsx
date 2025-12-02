@@ -10,6 +10,7 @@ import DashboardTopbarRight from "@/components/layout/DashboardTopbarRight";
 import { useActiveNav } from "@/hooks/useActiveNav";
 import { BRAND } from "@/constants/branding";
 import { CALCULATOR_ASSETS } from "@/constants/calculator-assets";
+import { StyledInput } from "@/components/common/StyledInput";
 
 // Reuse images from Dashboard for consistent visuals
 const logoImage = BRAND.logo;
@@ -51,6 +52,7 @@ export default function CalculatorPage() {
   const [selectedNDA, setSelectedNDA] = useState<string[]>([]);
   const [selectedTaskType, setSelectedTaskType] = useState<string[]>([]);
   const [filtersApplied, setFiltersApplied] = useState(false);
+  const [quantityInputs, setQuantityInputs] = useState<Record<string, string>>({});
 
   // nav items centralized via DashboardLayout
   const { activeName } = useActiveNav();
@@ -82,6 +84,12 @@ export default function CalculatorPage() {
     } else {
       setSelectedAssets([...selectedAssets, { ...asset, quantity: 1 }]);
     }
+    // Clear input state when using + button
+    setQuantityInputs((prev) => {
+      const next = { ...prev };
+      delete next[asset.id];
+      return next;
+    });
   };
 
   const handleRemoveAsset = (assetId: string) => {
@@ -94,6 +102,67 @@ export default function CalculatorPage() {
       );
     } else {
       setSelectedAssets(selectedAssets.filter((a) => a.id !== assetId));
+    }
+    // Clear input state when removing asset
+    setQuantityInputs((prev) => {
+      const next = { ...prev };
+      delete next[assetId];
+      return next;
+    });
+  };
+
+  const handleAssetQuantityInput = (assetId: string, value: string) => {
+    // Update the input value state
+    setQuantityInputs((prev) => ({ ...prev, [assetId]: value }));
+    
+    const numValue = parseInt(value, 10);
+    // Only update quantity if it's a valid number >= 1
+    if (value !== "" && !isNaN(numValue) && numValue >= 1) {
+      setSelectedAssets((prev) => {
+        const existingAsset = prev.find((a) => a.id === assetId);
+        if (existingAsset) {
+          return prev.map((a) =>
+            a.id === assetId ? { ...a, quantity: numValue } : a
+          );
+        }
+        // If asset doesn't exist, add it with the quantity
+        const assetItem = availableAssets.find((a) => a.id === assetId);
+        if (assetItem) {
+          return [...prev, { ...assetItem, quantity: numValue }];
+        }
+        return prev;
+      });
+    }
+  };
+
+  const handleAssetQuantityBlur = (assetId: string, value: string) => {
+    const numValue = parseInt(value.trim(), 10);
+    // Clear the input state
+    setQuantityInputs((prev) => {
+      const next = { ...prev };
+      delete next[assetId];
+      return next;
+    });
+    
+    if (value.trim() === "" || isNaN(numValue) || numValue <= 0) {
+      // Remove asset if input is empty or invalid
+      setSelectedAssets((prev) => prev.filter((a) => a.id !== assetId));
+    } else {
+      // Ensure quantity is set to the valid number
+      setSelectedAssets((prev) => {
+        const existingAsset = prev.find((a) => a.id === assetId);
+        if (existingAsset) {
+          return prev.map((a) =>
+            a.id === assetId ? { ...a, quantity: numValue } : a
+          );
+        }
+        // If asset doesn't exist, add it with the quantity
+        const assetItem = availableAssets.find((a) => a.id === assetId);
+        if (assetItem) {
+          return [...prev, { ...assetItem, quantity: numValue }];
+        }
+        return prev;
+      });
     }
   };
 
@@ -197,6 +266,15 @@ export default function CalculatorPage() {
       state: {
         createBrief: true,
         showForm: true,
+        calculatorAssets: selectedAssets.map((asset) => {
+          const assetItem = availableAssets.find((a) => a.id === asset.id);
+          return {
+            id: asset.id,
+            title: assetItem?.title || "",
+            tokens: asset.tokens,
+            quantity: asset.quantity,
+          };
+        }),
       },
     });
   };
@@ -295,14 +373,35 @@ export default function CalculatorPage() {
                             {quantity > 0 && (
                               <>
                                 <button
-                                  onClick={() => handleRemoveAsset(asset.id)}
+                                  onClick={() => {
+                                    if (quantity === 1) {
+                                      handleRemoveAsset(asset.id);
+                                    } else {
+                                      setSelectedAssets((prev) =>
+                                        prev.map((a) =>
+                                          a.id === asset.id ? { ...a, quantity: a.quantity - 1 } : a
+                                        )
+                                      );
+                                      // Clear input state when using - button
+                                      setQuantityInputs((prev) => {
+                                        const next = { ...prev };
+                                        delete next[asset.id];
+                                        return next;
+                                      });
+                                    }
+                                  }}
                                   className="next w-8 h-8 rounded-full bg-[#03B3E2] flex items-center justify-center hover:bg-[#e5e5e5] transition"
                                 >
                                   <span className="text-[#fff] text-lg">−</span>
                                 </button>
-                                <span className="text-sm font-bold text-black w-6 text-center">
-                                  {quantity}
-                                </span>
+                                <StyledInput
+                                  type="number"
+                                  min="1"
+                                  value={quantityInputs[asset.id] !== undefined ? quantityInputs[asset.id] : (quantity > 0 ? quantity.toString() : "")}
+                                  onChange={(e) => handleAssetQuantityInput(asset.id, e.target.value)}
+                                  onBlur={(e) => handleAssetQuantityBlur(asset.id, e.target.value)}
+                                  className="w-12 h-8 text-sm font-bold text-black text-center border-[#e0e0e0] rounded-lg bg-[#f9f9f9] px-2 py-1 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                                />
                               </>
                             )}
                             <button

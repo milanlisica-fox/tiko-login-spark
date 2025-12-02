@@ -49,7 +49,7 @@ const iconPartnerships = TEMPLATE_ICONS.assetAdaptation;
 const iconSocialContent = TEMPLATE_ICONS.pos;
 const arrowRightIcon = BRIEFS_ASSETS.arrowRightIcon;
 
-const FORM_TEMPLATE_OPTIONS: { id: string; title: string; icon: string }[] = [
+export const FORM_TEMPLATE_OPTIONS: { id: string; title: string; icon: string }[] = [
   { id: "asset-adaptation", title: "Asset adaptation", icon: iconAssetAdaptation },
   { id: "bau-campaign", title: "BAU campaign", icon: iconBAU },
   { id: "pos", title: "Point of Sale", icon: iconPOS },
@@ -76,25 +76,24 @@ const imgFrame15_v2 = BRIEFS_ASSETS.imgFrame15_v2;
 // Upload icon (match profile picture dialog)
 const uploadIcon = BRIEFS_ASSETS.uploadIcon;
 
-const WORK_TYPE_OPTIONS = [
+export const WORK_TYPE_OPTIONS = [
   "Strategy",
   "Design",
   "Production",
-"Planning",
-"Execution (Inc.Media booking)",
-"Delivery",
-"Purchase of goods",
-"Shelf",
-"Merchandising",
-"Sales staff",
-"Support",
-"Event",
-"Promotional",
-"Activity",
-"Other",
+  "Planning",
+  "Execution (Inc.Media booking)",
+  "Delivery",
+  "Purchase of goods",
+  "Shelf",
+  "Merchandising",
+  "Sales staff",
+  "Support",
+  "Event",
+  "Promotional activity",
+  "Other",
 ];
 
-const CHANNEL_OPTIONS = [
+export const CHANNEL_OPTIONS = [
   "TVC",
   "Print",
   "Online",
@@ -102,14 +101,14 @@ const CHANNEL_OPTIONS = [
   "Mobile",
   "Retail",
   "Out of home",
-"Experiential",
-"B2B",
-"Contact Centre",
-"Field Force",
-"Other",
+  "Experiential",
+  "B2B",
+  "Contact Centre",
+  "Field Force",
+  "Other",
 ];
 
-const OUTPUT_OPTIONS = [
+export const OUTPUT_OPTIONS = [
 "Plan",
 "Idea",
 "Copy asset",
@@ -119,8 +118,7 @@ const OUTPUT_OPTIONS = [
 "Furniture",
 "Shop Display(s)",
 "Point of sale",
-"Digital",
-"Marketing asset",
+"Digital marketing asset",
 "Other",
 ];
 
@@ -347,7 +345,7 @@ interface RecommendedAsset {
   tokenPrice: number;
 }
 
-interface SelectedAsset extends RecommendedAsset {
+export interface SelectedAsset extends RecommendedAsset {
   assetSpecification: string;
   deliveryWeek: string;
   quantity: number;
@@ -367,7 +365,7 @@ export interface BriefSummary {
   projectLead?: string;
 }
 
-interface NewBriefFormValues {
+export interface NewBriefFormValues {
   projectTitle: string;
   dueDate?: Date;
   projectLead: string;
@@ -379,6 +377,7 @@ interface NewBriefFormValues {
   assets: SelectedAsset[];
   selectedTemplate: string;
   additionalAssetDetails: string;
+  attachedDocuments: File[];
 }
 
 export const PROJECT_LEADS = [
@@ -399,6 +398,7 @@ const createBriefFormDefaults = (): NewBriefFormValues => ({
   assets: [],
   selectedTemplate: "",
   additionalAssetDetails: "",
+  attachedDocuments: [],
 });
 
 const initialBriefs: BriefSummary[] = [
@@ -408,7 +408,7 @@ const initialBriefs: BriefSummary[] = [
     description:
       "Develop visual guide for  the Summer Campaign Festival 2025. Create full set of campaign visuals, formats, and variations, for digital, print media.",
     badge: "Creation",
-    date: "27 AUG",
+    date: "15 Dec",
     comments: 23,
     avatars: 2,
     status: "Draft",
@@ -424,7 +424,7 @@ const initialBriefs: BriefSummary[] = [
     description:
       "Develop visual guide for  the Summer Campaign Festival 2025. Create full set of campaign visuals, formats, and variations, for digital, print media.",
     badge: "Adaptation",
-    date: "3 SEP",
+    date: "18 Dec",
     comments: 4,
     avatars: 3,
     status: "Draft",
@@ -440,7 +440,7 @@ const initialBriefs: BriefSummary[] = [
     description:
       "Develop visual guide for  the Summer Campaign Festival 2025. Create full set of campaign visuals, formats, and variations, for digital, print media.",
     badge: "Creation",
-    date: "28 AUG",
+    date: "22 Dec",
     comments: 4,
     avatars: 3,
     status: "In review",
@@ -456,7 +456,7 @@ const initialBriefs: BriefSummary[] = [
     description:
       "Develop visual guide for  the Summer Campaign Festival 2025. Create full set of campaign visuals, formats, and variations, for digital, print media.",
     badge: "Creation",
-    date: format(new Date(), "d MMM").toUpperCase(),
+    date: "14 Dec",
     comments: 0,
     avatars: 3,
     status: "Draft",
@@ -515,6 +515,12 @@ export default function BriefsPage() {
       resetToOverview?: boolean;
       brief?: NewBriefFormValues;
       submittedBrief?: SubmittedBriefPayload;
+      calculatorAssets?: Array<{
+        id: string;
+        title: string;
+        tokens: number;
+        quantity: number;
+      }>;
     } | null;
 
     if (!state) {
@@ -539,6 +545,30 @@ export default function BriefsPage() {
     }
 
     if (state.createBrief) {
+      // Convert calculator assets to SelectedAsset format and pre-populate form
+      if (state.calculatorAssets && state.calculatorAssets.length > 0) {
+        const convertedAssets: SelectedAsset[] = state.calculatorAssets.map((calcAsset) => ({
+          id: `calc-${calcAsset.id}`,
+          name: calcAsset.title,
+          description: calcAsset.title,
+          tokenPrice: calcAsset.tokens,
+          assetSpecification: "",
+          deliveryWeek: "",
+          quantity: calcAsset.quantity,
+          isCustom: false,
+        }));
+        
+        // Create new draft with assets pre-populated
+        const draftWithAssets: NewBriefFormValues = {
+          ...createBriefFormDefaults(),
+          assets: convertedAssets,
+        };
+        setNewBriefDraft(draftWithAssets);
+      } else {
+        // Reset to defaults if no calculator assets
+        setNewBriefDraft(createBriefFormDefaults());
+      }
+      
       setIsCreatingBrief(true);
       setBriefView(state.showForm ? "form" : "templates");
       shouldReplace = true;
@@ -855,53 +885,62 @@ export default function BriefsPage() {
                         </span>
                       ),
                     },
-                  ].map((card, i) => (
-                    <BriefCard
-                      key={i}
-                      title={card.title}
-                      description={card.content}
-                      right={
-                        <div className="relative">
-                          {card.badgeIcon}
-                          {card.notificationBadge}
-                        </div>
-                      }
-                      meta={
-                        <div className="flex items-center justify-between">
-                          {card.statusBadge}
-                          <div className="flex -space-x-2">
-                            {[0,1,2].map((a) => {
-                              const seed = `avatar_${i}_${a}`;
-                              return (
-                                <Avatar key={a} className="w-6 h-6 border-2 border-white">
-                                  <AvatarImage 
-                                    src={`https://api.dicebear.com/7.x/personas/png?seed=${seed}&size=64`} 
-                                    alt={`Avatar ${a + 1}`}
-                                  />
-                                  <AvatarFallback className="text-xs bg-gradient-to-br from-blue-200 to-blue-300">
-                                    {String.fromCharCode(65 + a)}
-                                  </AvatarFallback>
-                                </Avatar>
-                              );
-                            })}
+                  ].map((card, i) => {
+                    const dates = ["12 Dec", "15 Dec", "18 Dec", "20 Dec"];
+                    const briefIds = ["brief-1", "brief-2", "brief-3", "brief-4"];
+                    return (
+                      <button
+                        key={i}
+                        onClick={() => navigate(`/dashboard/briefs/${briefIds[i]}`)}
+                        className="text-left w-full"
+                      >
+                        <BriefCard
+                          title={card.title}
+                          description={card.content}
+                          right={
+                            <div className="relative">
+                              {card.badgeIcon}
+                              {card.notificationBadge}
+                            </div>
+                          }
+                          meta={
+                            <div className="flex items-center justify-between">
+                              {card.statusBadge}
+                              <div className="flex -space-x-2">
+                                {[0,1,2].map((a) => {
+                                  const seed = `avatar_${i}_${a}`;
+                                  return (
+                                    <Avatar key={a} className="w-6 h-6 border-2 border-white">
+                                      <AvatarImage 
+                                        src={`https://api.dicebear.com/7.x/personas/png?seed=${seed}&size=64`} 
+                                        alt={`Avatar ${a + 1}`}
+                                      />
+                                      <AvatarFallback className="text-xs bg-gradient-to-br from-blue-200 to-blue-300">
+                                        {String.fromCharCode(65 + a)}
+                                      </AvatarFallback>
+                                    </Avatar>
+                                  );
+                                })}
+                              </div>
+                            </div>
+                          }
+                          className="h-full hover:opacity-90 transition cursor-pointer"
+                        >
+                          <div className="h-px bg-[#ececec]" />
+                          <div className="flex items-center justify-between text-xs text-[#848487]">
+                            <div className="flex items-center gap-1">
+                              <span>💬</span>
+                              <span>12</span>
+                            </div>
+                            <div className="flex items-center gap-1">
+                              <CalendarIcon size={14} className="text-[#848487]" />
+                              <span>{dates[i]}</span>
+                            </div>
                           </div>
-                        </div>
-                      }
-                      className="h-full"
-                    >
-                      <div className="h-px bg-[#ececec]" />
-                      <div className="flex items-center justify-between text-xs text-[#848487]">
-                        <div className="flex items-center gap-1">
-                          <span>💬</span>
-                          <span>12</span>
-                        </div>
-                        <div className="flex items-center gap-1">
-                          <span>🕒</span>
-                          <span>3h</span>
-                        </div>
-                      </div>
-                    </BriefCard>
-                  ))}
+                        </BriefCard>
+                      </button>
+                    );
+                  })}
                 </div>
               </div>
 
@@ -949,16 +988,8 @@ function TemplateSelectionScreen({ onCancel, onCreateBrief }: { onCancel: () => 
         </div>
         
         {/* Action Buttons */}
-        <div className="flex flex-col sm:flex-row gap-2.5 items-center w-full sm:w-auto">
-          <button
-            onClick={() => navigate("/dashboard/calculator")}
-            className="btn w-full sm:w-[216px] h-[48px] bg-[#03b3e2] backdrop-blur-sm rounded-[28px] flex items-center justify-center gap-[10px] px-[24px] py-[18px] hover:opacity-90 transition"
-          >
-            <Icons.calculator size={16} className="text-black" />
-            <span className="text-base font-semibold leading-[23.94px] text-black whitespace-nowrap">
-              Quick calculator
-            </span>
-          </button>
+        <div className="flex flex-col gap-2.5 items-center w-full">
+          {/* Create Brief Button - Centered */}
           <button 
             onClick={onCreateBrief}
             className="btn w-full sm:w-[216px] h-[48px] backdrop-blur-[6px] backdrop-filter bg-[#ffb546] px-[24px] py-[18px] rounded-[28px] flex items-center justify-center gap-[10px] hover:opacity-90 transition"
@@ -966,30 +997,29 @@ function TemplateSelectionScreen({ onCancel, onCreateBrief }: { onCancel: () => 
             <span className="text-[16px] font-semibold leading-[23.94px] text-black whitespace-nowrap">
               Create brief
             </span>
-        <svg className="h-[14px] w-[15.567px]" width="45" height="40" viewBox="0 0 45 40" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M23.8229 40H5.80935C2.59694 40 0 37.4332 0 34.2582V31.8843C0 30.5935 0.795591 29.4362 2.0115 28.9614L14.9212 22.908C17.5932 21.8546 17.5932 18.1306 14.9362 17.0623L1.99648 10.8902C0.795576 10.4154 0 9.25816 0 7.96736V5.74184C0 2.56677 2.59694 0 5.80935 0H23.8229C25.0838 0 26.3147 0.400603 27.3205 1.15728L42.692 15.4154C45.7693 17.7151 45.7693 22.27 42.692 24.5697L27.3205 38.8279C26.3147 39.5846 25.0838 39.9852 23.8229 39.9852V40Z" fill="#000"></path></svg>
+            <svg className="h-[14px] w-[15.567px]" width="45" height="40" viewBox="0 0 45 40" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M23.8229 40H5.80935C2.59694 40 0 37.4332 0 34.2582V31.8843C0 30.5935 0.795591 29.4362 2.0115 28.9614L14.9212 22.908C17.5932 21.8546 17.5932 18.1306 14.9362 17.0623L1.99648 10.8902C0.795576 10.4154 0 9.25816 0 7.96736V5.74184C0 2.56677 2.59694 0 5.80935 0H23.8229C25.0838 0 26.3147 0.400603 27.3205 1.15728L42.692 15.4154C45.7693 17.7151 45.7693 22.27 42.692 24.5697L27.3205 38.8279C26.3147 39.5846 25.0838 39.9852 23.8229 39.9852V40Z" fill="#000"></path></svg>
           </button>
-        </div>
 
-        {/* Upload existing brief - centered below buttons */}
-        <div className="flex flex-col items-center mt-2 w-full">
-          <div className="flex flex-col sm:flex-row items-center gap-2 justify-center text-center">
-            <p className="text-sm leading-[18.62px] text-black">
+          {/* Upload existing brief - below Create button */}
+          <div className="flex flex-col items-center gap-2 w-full">
+            <p className="text-sm leading-[18.62px] text-black text-center">
               Already have a brief file, please upload it.
             </p>
             <input ref={uploadInputRef} type="file" className="hidden" />
             <button
               type="button"
-              className="flex gap-[4px] items-center justify-center sm:justify-start hover:opacity-80 transition cursor-pointer w-full sm:w-auto"
               onClick={() => uploadInputRef.current?.click()}
+              className="btn w-full sm:w-[216px] h-[48px] bg-[#03b3e2] backdrop-blur-sm rounded-[28px] flex items-center justify-center gap-[10px] px-[24px] py-[18px] hover:opacity-90 transition"
             >
               <div className="overflow-clip relative shrink-0 size-[20px]">
-                 <svg className="h-[18px]" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none">
-<path d="M18.5 20L18.5 14M18.5 14L21 16.5M18.5 14L16 16.5" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-<path d="M12 19H5C3.89543 19 3 18.1046 3 17V7C3 5.89543 3.89543 5 5 5H9.58579C9.851 5 10.1054 5.10536 10.2929 5.29289L12 7H19C20.1046 7 21 7.89543 21 9V11" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-</svg>
-               
+                <svg className="h-[18px]" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none">
+                  <path d="M18.5 20L18.5 14M18.5 14L21 16.5M18.5 14L16 16.5" stroke="#000000" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                  <path d="M12 19H5C3.89543 19 3 18.1046 3 17V7C3 5.89543 3.89543 5 5 5H9.58579C9.851 5 10.1054 5.10536 10.2929 5.29289L12 7H19C20.1046 7 21 7.89543 21 9V11" stroke="#000000" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
               </div>
-              <p className="text-[14px] font-bold leading-[18.62px] text-[#09090a]">Upload</p>
+              <span className="text-base font-semibold leading-[23.94px] text-black whitespace-nowrap">
+                Upload
+              </span>
             </button>
           </div>
         </div>
@@ -1056,11 +1086,12 @@ function NewBriefForm({
   const [showSaveDraftConfirmation, setShowSaveDraftConfirmation] = useState(false);
   const [previewOpen, setPreviewOpen] = useState(false);
   const [showCustomAssetFields, setShowCustomAssetFields] = useState(false);
-  const [customAssetDraft, setCustomAssetDraft] = useState({ name: "", description: "", deliveryWeek: "" });
+  const [customAssetDraft, setCustomAssetDraft] = useState({ name: "", description: "", deliveryWeek: "", quantity: 1 });
   const [assetsWithDetails, setAssetsWithDetails] = useState<string[]>([]);
   const [assetsToShow, setAssetsToShow] = useState(10);
   const [additionalAssetsLoaded, setAdditionalAssetsLoaded] = useState(0);
   const [pendingDraftPayload, setPendingDraftPayload] = useState<SubmittedBriefPayload | null>(null);
+  const [quantityInputs, setQuantityInputs] = useState<Record<string, string>>({});
 
   const tokenEstimate = useMemo(
     () => formData.assets
@@ -1120,6 +1151,12 @@ function NewBriefForm({
         ],
       };
     });
+    // Clear any input state for this asset when adding
+    setQuantityInputs((prev) => {
+      const next = { ...prev };
+      delete next[asset.id];
+      return next;
+    });
   };
 
   const handleAssetFieldChange = (assetId: string, field: "assetSpecification" | "deliveryWeek", value: string) => {
@@ -1147,11 +1184,87 @@ function NewBriefForm({
         const asset = prev.assets.find((a) => a.id === assetId);
         if (asset && asset.quantity + delta <= 0) {
           setAssetsWithDetails((prevDetails) => prevDetails.filter((id) => id !== assetId));
+          setQuantityInputs((prevInputs) => {
+            const next = { ...prevInputs };
+            delete next[assetId];
+            return next;
+          });
         }
       }
       
       return { ...prev, assets: updatedAssets };
     });
+    // Clear input state when using +/- buttons
+    setQuantityInputs((prev) => {
+      const next = { ...prev };
+      delete next[assetId];
+      return next;
+    });
+  };
+
+  const handleAssetQuantityInput = (assetId: string, value: string) => {
+    // Update the input value state
+    setQuantityInputs((prev) => ({ ...prev, [assetId]: value }));
+    
+    const numValue = parseInt(value, 10);
+    // Only update quantity if it's a valid number >= 1
+    if (value !== "" && !isNaN(numValue) && numValue >= 1) {
+      setFormData((prev) => {
+        const updatedAssets = prev.assets.map((asset) => {
+          if (asset.id === assetId) {
+            return { ...asset, quantity: numValue };
+          }
+          return asset;
+        });
+        
+        return { ...prev, assets: updatedAssets };
+      });
+    }
+  };
+
+  const handleAssetQuantityBlur = (assetId: string, value: string) => {
+    const numValue = parseInt(value.trim(), 10);
+    // Clear the input state
+    setQuantityInputs((prev) => {
+      const next = { ...prev };
+      delete next[assetId];
+      return next;
+    });
+    
+    if (value.trim() === "" || isNaN(numValue) || numValue <= 0) {
+      // Remove asset if input is empty or invalid
+      handleRemoveAsset(assetId);
+      setAssetsWithDetails((prev) => prev.filter((id) => id !== assetId));
+    } else {
+      // Ensure quantity is set to the valid number
+      setFormData((prev) => {
+        const updatedAssets = prev.assets.map((asset) => {
+          if (asset.id === assetId) {
+            return { ...asset, quantity: numValue };
+          }
+          return asset;
+        });
+        
+        return { ...prev, assets: updatedAssets };
+      });
+    }
+  };
+
+  const handleDocumentUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = Array.from(e.target.files || []);
+    if (files.length > 0) {
+      setFormData((prev) => ({
+        ...prev,
+        attachedDocuments: [...prev.attachedDocuments, ...files],
+      }));
+    }
+  };
+
+  const handleRemoveDocument = (index: number) => {
+    setFormData((prev) => ({
+      ...prev,
+      attachedDocuments: prev.attachedDocuments.filter((_, i) => i !== index),
+    }));
   };
 
   const handleRemoveAsset = (assetId: string) => {
@@ -1160,6 +1273,11 @@ function NewBriefForm({
       assets: prev.assets.filter((asset) => asset.id !== assetId),
     }));
     setAssetsWithDetails((prev) => prev.filter((id) => id !== assetId));
+    setQuantityInputs((prev) => {
+      const next = { ...prev };
+      delete next[assetId];
+      return next;
+    });
   };
 
   const handleAddCustomAsset = () => {
@@ -1168,6 +1286,7 @@ function NewBriefForm({
     }
 
     const id = `custom-${Date.now()}`;
+    const quantity = customAssetDraft.quantity > 0 ? customAssetDraft.quantity : 1;
     const newAsset: SelectedAsset = {
       id,
       name: customAssetDraft.name.trim(),
@@ -1175,7 +1294,7 @@ function NewBriefForm({
       tokenPrice: DEFAULT_CUSTOM_ASSET_PRICE,
       assetSpecification: customAssetDraft.description.trim(),
       deliveryWeek: customAssetDraft.deliveryWeek.trim(),
-      quantity: 1,
+      quantity: quantity,
       isCustom: true,
     };
 
@@ -1183,7 +1302,7 @@ function NewBriefForm({
       ...prev,
       assets: [...prev.assets, newAsset],
     }));
-    setCustomAssetDraft({ name: "", description: "", deliveryWeek: "" });
+    setCustomAssetDraft({ name: "", description: "", deliveryWeek: "", quantity: 1 });
     setShowCustomAssetFields(false);
     setAssetsWithDetails((prev) => [...prev, id]);
   };
@@ -1197,6 +1316,7 @@ function NewBriefForm({
     const reset = createBriefFormDefaults();
     setFormData(reset);
     setAssetsWithDetails([]);
+    setQuantityInputs({});
     onFormDataChange(reset);
     setShowConfirmation(true);
     setPreviewOpen(false);
@@ -1292,7 +1412,7 @@ function NewBriefForm({
               <StyledInput
                 value={formData.projectTitle}
                   onChange={(e) => handleFieldChange("projectTitle", e.target.value)}
-                placeholder="e.g. Spring Campaign 2025"
+                placeholder="Please write it in the following format: Project name - Campaign name - Year"
                 variant="brief"
               />
             </Field>
@@ -1450,8 +1570,12 @@ function NewBriefForm({
                 const customAssets = formData.assets.filter((a) => a.isCustom);
                 const regularAssets = [...RECOMMENDED_ASSETS, ...loadedAdditionalAssets];
                 const displayedRegularAssets = regularAssets.slice(0, assetsToShow);
-                // Always include all custom assets, regardless of the display limit
-                const displayedAssets = [...displayedRegularAssets, ...customAssets];
+                // Include selected assets from Calculator that aren't in the regular assets list
+                const calculatorAssets = formData.assets.filter(
+                  (a) => !a.isCustom && a.id.startsWith('calc-') && !regularAssets.some((ra) => ra.id === a.id)
+                );
+                // Always include all custom assets and calculator assets, regardless of the display limit
+                const displayedAssets = [...displayedRegularAssets, ...customAssets, ...calculatorAssets];
                 return displayedAssets.map((asset, index) => {
                 const selectedAsset = formData.assets.find((a) => a.id === asset.id);
                 const quantity = selectedAsset?.quantity || 0;
@@ -1512,7 +1636,14 @@ function NewBriefForm({
                               <span className="text-[#fff] text-lg">−</span>
                 </button>
                             <div className="flex items-center gap-1">
-                              <span className="text-sm font-bold text-black w-6 text-center">{quantity}</span>
+                              <StyledInput
+                                type="number"
+                                min="1"
+                                value={quantityInputs[asset.id] !== undefined ? quantityInputs[asset.id] : (quantity > 0 ? quantity.toString() : "")}
+                                onChange={(e) => handleAssetQuantityInput(asset.id, e.target.value)}
+                                onBlur={(e) => handleAssetQuantityBlur(asset.id, e.target.value)}
+                                className="w-12 h-8 text-sm font-bold text-black text-center border-[#e0e0e0] rounded-lg bg-[#f9f9f9] px-2 py-1 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                              />
                               {isCustom && (
                                 <TooltipProvider>
                                   <Tooltip>
@@ -1593,7 +1724,7 @@ function NewBriefForm({
               onClick={() => setShowCustomAssetFields((prev) => !prev)}
               className="w-full rounded-[28px] border border-dashed border-[#cfcfcf] px-4 py-2 text-sm font-semibold text-[#424242] hover:border-[#a5a5a8] transition"
             >
-              Add custom asset
+              Add custom requirement/deliverable
             </button>
 
             {additionalAssetsLoaded < ADDITIONAL_ASSETS.length && (
@@ -1623,6 +1754,27 @@ function NewBriefForm({
                     />
               </Field>
                 </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <Field label="Quantity" helpText="How many of this asset do you need?">
+                    <StyledInput
+                      type="number"
+                      min="1"
+                      value={customAssetDraft.quantity > 0 ? customAssetDraft.quantity.toString() : ""}
+                      onChange={(e) => {
+                        const value = e.target.value;
+                        const numValue = parseInt(value, 10);
+                        if (value === "" || (!isNaN(numValue) && numValue >= 1)) {
+                          setCustomAssetDraft((prev) => ({ 
+                            ...prev, 
+                            quantity: value === "" ? 1 : numValue 
+                          }));
+                        }
+                      }}
+                      placeholder="1"
+                      className="[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                    />
+                  </Field>
+                </div>
                 <Field label="Description">
                 <Textarea
                     value={customAssetDraft.description}
@@ -1647,6 +1799,67 @@ function NewBriefForm({
           </div>
             )}
 
+        </section>
+
+        {/* Attach Documents Section */}
+        <section className="rounded-2xl border border-[#ececec] bg-white/80 p-4 md:p-6 space-y-4 max-w-full min-w-0">
+          <div className="flex flex-col gap-2">
+            <h3 className="text-[21.6px] font-semibold text-black">Attach documents</h3>
+            <p className="text-sm text-[#424242]">Upload any relevant documents to support your brief.</p>
+          </div>
+          
+          <div className="flex flex-col gap-3">
+            <input
+              type="file"
+              id="document-upload"
+              multiple
+              onChange={handleDocumentUpload}
+              className="hidden"
+            />
+            <label
+              htmlFor="document-upload"
+              className="w-full rounded-[28px] border border-dashed border-[#cfcfcf] px-4 py-3 text-sm font-semibold text-[#424242] hover:border-[#a5a5a8] transition cursor-pointer flex items-center justify-center gap-2"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                <polyline points="17 8 12 3 7 8" />
+                <line x1="12" y1="3" x2="12" y2="15" />
+              </svg>
+              <span>Upload documents</span>
+            </label>
+            
+            {formData.attachedDocuments.length > 0 && (
+              <div className="flex flex-col gap-2 mt-2">
+                {formData.attachedDocuments.map((file, index) => (
+                  <div
+                    key={index}
+                    className="flex items-center justify-between p-3 bg-[#f9f9f9] border border-[#e0e0e0] rounded-lg"
+                  >
+                    <div className="flex items-center gap-2 flex-1 min-w-0">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-[#848487] shrink-0">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                        <polyline points="14 2 14 8 20 8" />
+                        <line x1="16" y1="13" x2="8" y2="13" />
+                        <line x1="16" y1="17" x2="8" y2="17" />
+                        <polyline points="10 9 9 9 8 9" />
+                      </svg>
+                      <span className="text-sm text-black truncate">{file.name}</span>
+                      <span className="text-xs text-[#848487] shrink-0">
+                        ({(file.size / 1024).toFixed(1)} KB)
+                      </span>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => handleRemoveDocument(index)}
+                      className="ml-2 p-1 hover:bg-[#e5e5e5] rounded transition shrink-0"
+                    >
+                      <X size={16} className="text-[#848487]" />
+                    </button>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
         </section>
 
         {/* Token Estimate */}
@@ -2729,6 +2942,7 @@ function AIResponseScreen({
 }
 
 function AllBriefsSection({ briefs: allBriefs }: { briefs: BriefSummary[] }) {
+  const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState<"All" | "Drafts" | "In review">("All");
 
   const filtered = allBriefs.filter((b) =>
@@ -2747,40 +2961,46 @@ function AllBriefsSection({ briefs: allBriefs }: { briefs: BriefSummary[] }) {
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {filtered.map((b) => {
           return (
-            <BriefCard
+            <button
               key={b.id}
-              title={b.title}
-              description={b.description}
-              right={b.icon}
-              meta={
-                <div className="flex items-center justify-between">
-                  <Badge
-                    label={b.badge}
-                    intent={b.badge === "Creation" ? "creation" : b.badge === "Adaptation" ? "adaptation" : b.badge === "Resize" ? "resize" : "default"}
-                    width={b.badge === "Creation" ? "creation" : b.badge === "Adaptation" ? "adaptation" : b.badge === "Resize" ? "resize" : "auto"}
-                  />
-                  <AvatarStack count={b.avatars} seedPrefix={`brief_${b.id}_avatar`} />
-                </div>
-              }
+              onClick={() => navigate(`/dashboard/briefs/${b.id}`)}
+              className="text-left w-full"
             >
-              <div className="h-px bg-[#ececec]" />
-              {b.projectLead && (
-                <div className="flex items-center justify-between py-2 text-xs text-[#848487]">
-                  <span>Lead</span>
-                  <span>{b.projectLead}</span>
+              <BriefCard
+                title={b.title}
+                description={b.description}
+                right={b.icon}
+                meta={
+                  <div className="flex items-center justify-between">
+                    <Badge
+                      label={b.badge}
+                      intent={b.badge === "Creation" ? "creation" : b.badge === "Adaptation" ? "adaptation" : b.badge === "Resize" ? "resize" : "default"}
+                      width={b.badge === "Creation" ? "creation" : b.badge === "Adaptation" ? "adaptation" : b.badge === "Resize" ? "resize" : "auto"}
+                    />
+                    <AvatarStack count={b.avatars} seedPrefix={`brief_${b.id}_avatar`} />
+                  </div>
+                }
+                className="hover:opacity-90 transition cursor-pointer"
+              >
+                <div className="h-px bg-[#ececec]" />
+                {b.projectLead && (
+                  <div className="flex items-center justify-between py-2 text-xs text-[#848487]">
+                    <span>Lead</span>
+                    <span>{b.projectLead}</span>
+                  </div>
+                )}
+                <div className="flex items-center justify-between text-xs text-[#848487]">
+                  <div className="flex items-center gap-1">
+                    <span>💬</span>
+                    <span>{b.comments}</span>
+                  </div>
+                  <div className="flex items-center gap-1">
+                    <CalendarIcon size={14} className="text-[#848487]" />
+                    <span>{b.date}</span>
+                  </div>
                 </div>
-              )}
-              <div className="flex items-center justify-between text-xs text-[#848487]">
-                <div className="flex items-center gap-1">
-                  <span>💬</span>
-                  <span>{b.comments}</span>
-                </div>
-                <div className="flex items-center gap-1">
-                  <span>🕒</span>
-                  <span>{b.date}</span>
-                </div>
-              </div>
-            </BriefCard>
+              </BriefCard>
+            </button>
           );
         })}
       </div>

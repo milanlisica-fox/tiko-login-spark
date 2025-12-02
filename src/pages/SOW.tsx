@@ -1,6 +1,6 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { FileText, ArrowLeft, X } from "lucide-react";
+import { FileText, ArrowLeft, X, Download } from "lucide-react";
 import DashboardLayout from "@/components/layout/DashboardLayout";
 import DashboardTopbarRight from "@/components/layout/DashboardTopbarRight";
 import { useActiveNav } from "@/hooks/useActiveNav";
@@ -10,6 +10,8 @@ import BriefCard from "@/components/common/BriefCard";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
+import SuccessDialog from "@/components/common/SuccessDialog";
+import { triggerSuccessConfetti } from "@/lib/animations";
 
 const logoImage = BRAND.logo;
 const logoDot = BRAND.logoDot;
@@ -97,6 +99,8 @@ export default function SOWPage() {
   const { activeName } = useActiveNav();
   const [selectedSOW, setSelectedSOW] = useState<SOW | null>(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [isConfirmDialogOpen, setIsConfirmDialogOpen] = useState(false);
+  const [isSuccessDialogOpen, setIsSuccessDialogOpen] = useState(false);
 
   const topbarRight = <DashboardTopbarRight />;
 
@@ -114,15 +118,36 @@ export default function SOWPage() {
     setIsDialogOpen(true);
   };
 
+  const handleDownloadSOW = () => {
+    // TODO: Implement download SOW functionality
+    console.log("Download SOW clicked for:", selectedSOW?.title);
+  };
+
   const handleWriteComments = () => {
     // TODO: Implement write comments functionality
     console.log("Write comments clicked for:", selectedSOW?.title);
   };
 
   const handleSignSOW = () => {
+    setIsConfirmDialogOpen(true);
+  };
+
+  const handleConfirmSignSOW = () => {
     // TODO: Implement sign SOW functionality
-    console.log("Sign SOW clicked for:", selectedSOW?.title);
+    console.log("Sign SOW confirmed for:", selectedSOW?.title);
+    setIsConfirmDialogOpen(false);
     setIsDialogOpen(false);
+    setIsSuccessDialogOpen(true);
+  };
+
+  useEffect(() => {
+    if (isSuccessDialogOpen) {
+      triggerSuccessConfetti();
+    }
+  }, [isSuccessDialogOpen]);
+
+  const handleCloseSuccessDialog = () => {
+    setIsSuccessDialogOpen(false);
   };
 
   return (
@@ -241,6 +266,13 @@ export default function SOWPage() {
 
           <DialogFooter className="flex flex-col sm:flex-row gap-2 p-6 pt-4 border-t border-[#e0e0e0] shrink-0">
             <Button
+              onClick={handleDownloadSOW}
+              variant="outline"
+              className="w-full sm:w-auto bg-[#f9f9f9] border-[#e0e0e0] text-black hover:bg-[#e5e5e5] h-10 px-6 whitespace-nowrap"
+            >
+              Download SOW
+            </Button>
+            <Button
               onClick={handleWriteComments}
               variant="outline"
               className="w-full sm:w-auto bg-[#f9f9f9] border-[#e0e0e0] text-black hover:bg-[#e5e5e5] h-10 px-6 whitespace-nowrap"
@@ -256,6 +288,38 @@ export default function SOWPage() {
           </DialogFooter>
         </DialogContent>
       </Dialog>
+
+      {/* Confirmation Dialog */}
+      <Dialog open={isConfirmDialogOpen} onOpenChange={setIsConfirmDialogOpen}>
+        <DialogContent className="max-w-md p-6 bg-white">
+          <DialogHeader>
+            <DialogTitle className="text-lg font-semibold text-black">
+              Confirm Sign SOW
+            </DialogTitle>
+            <DialogDescription className="text-sm text-black mt-2">
+              Please confirm that you want to sign the SOW. Your name will appear on the SOW page.
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter className="mt-4">
+            <Button
+              onClick={handleConfirmSignSOW}
+              className="w-full bg-[#ffb546] text-black hover:opacity-90 h-10 px-6"
+            >
+              Confirm
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Success Dialog */}
+      <SuccessDialog
+        open={isSuccessDialogOpen}
+        onOpenChange={setIsSuccessDialogOpen}
+        onConfirm={handleCloseSuccessDialog}
+        title="SOW successfully signed!"
+        description="We are now ready to start to work on your project."
+        confirmText="Close"
+      />
     </DashboardLayout>
   );
 }
