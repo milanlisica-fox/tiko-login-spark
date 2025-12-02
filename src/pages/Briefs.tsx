@@ -476,6 +476,7 @@ export default function BriefsPage() {
   const [briefView, setBriefView] = useState<"templates" | "form" | "deliverables" | "ai-response">("templates");
   const [aiInputText, setAiInputText] = useState("");
   const [newBriefDraft, setNewBriefDraft] = useState<NewBriefFormValues>(createBriefFormDefaults());
+  const [fromCalculator, setFromCalculator] = useState(false);
 
   const draftBriefCount = useMemo(() => briefs.filter((brief) => brief.status === "Draft").length, [briefs]);
   const inReviewBriefCount = useMemo(() => briefs.filter((brief) => brief.status === "In review").length, [briefs]);
@@ -567,9 +568,11 @@ export default function BriefsPage() {
           assets: convertedAssets,
         };
         setNewBriefDraft(draftWithAssets);
+        setFromCalculator(true);
       } else {
         // Reset to defaults if no calculator assets
         setNewBriefDraft(createBriefFormDefaults());
+        setFromCalculator(false);
       }
       
       setIsCreatingBrief(true);
@@ -684,11 +687,13 @@ export default function BriefsPage() {
                 onCancel={() => {
                   setBriefView("templates");
                   setNewBriefDraft(createBriefFormDefaults());
+                  setFromCalculator(false);
                 }} 
                 onNext={() => setBriefView("deliverables")}
                 onSubmit={handleBriefSubmit}
                 initialValues={newBriefDraft}
                 onFormDataChange={(data) => setNewBriefDraft({ ...data })}
+                fromCalculator={fromCalculator}
               />
             ) : briefView === "deliverables" ? (
               <DeliverablesSelectionScreen 
@@ -749,7 +754,7 @@ export default function BriefsPage() {
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5">
                 {[
                   { 
-                    title: "Draft briefs",
+                    title: "In Draft",
                     titleBold: true,
                     value: draftBriefCount,
                     icon: (
@@ -759,7 +764,7 @@ export default function BriefsPage() {
                     )
                   },
                   { 
-                    title: "In review",
+                    title: "In Review",
                     titleBold: true,
                     value: inReviewBriefCount,
                     icon: (
@@ -769,7 +774,7 @@ export default function BriefsPage() {
                     )
                   },
                   { 
-                    title: "SOW ready to sign",
+                    title: "Ready to sign-off",
                     titleBold: true,
                     value: sowReadyBriefCount,
                     icon: (
@@ -984,9 +989,7 @@ function TemplateSelectionScreen({ onCancel, onCreateBrief }: { onCancel: () => 
             Write your next brief in minutes
           </h1>
           <p className="text-sm leading-[18.62px] text-black text-center max-w-[600px]">
-            Custom briefs, fast and easy.
-            <br />
-            Not sure where to begin? Try the budget planner first.
+          Use our smart briefing template to get started, or upload an existing brief and we’ll auto-populate the fields for you ensuring a streamlined, friction-free setup
           </p>
         </div>
         
@@ -1006,7 +1009,7 @@ function TemplateSelectionScreen({ onCancel, onCreateBrief }: { onCancel: () => 
           {/* Upload existing brief - below Create button */}
           <div className="flex flex-col items-center gap-2 w-full">
             <p className="text-sm leading-[18.62px] text-black text-center">
-              Already have a brief file, please upload it.
+             
             </p>
             <input ref={uploadInputRef} type="file" className="hidden" />
             <button
@@ -1076,12 +1079,14 @@ function NewBriefForm({
   onSubmit,
   initialValues,
   onFormDataChange,
+  fromCalculator = false,
 }: {
   onCancel: () => void;
   onNext: () => void;
   onSubmit: (data: NewBriefFormValues) => void;
   initialValues: NewBriefFormValues;
   onFormDataChange: (data: NewBriefFormValues) => void;
+  fromCalculator?: boolean;
 }) {
   const navigate = useNavigate();
   const [formData, setFormData] = useState<NewBriefFormValues>(initialValues);
@@ -1603,23 +1608,19 @@ function NewBriefForm({
 
             <div className="flex flex-col gap-5">
               {(() => {
-                const loadedAdditionalAssets = ADDITIONAL_ASSETS.slice(0, additionalAssetsLoaded);
-                // Include custom assets at the end of the list - always show them
-                const customAssets = formData.assets.filter((a) => a.isCustom);
-                const regularAssets = [...RECOMMENDED_ASSETS, ...loadedAdditionalAssets];
-                const displayedRegularAssets = regularAssets.slice(0, assetsToShow);
-                // Include selected assets from Calculator that aren't in the regular assets list
-                const calculatorAssets = formData.assets.filter(
-                  (a) => !a.isCustom && a.id.startsWith('calc-') && !regularAssets.some((ra) => ra.id === a.id)
-                );
-                // Always include all custom assets and calculator assets, regardless of the display limit
-                const displayedAssets = [...displayedRegularAssets, ...customAssets, ...calculatorAssets];
-                return displayedAssets.map((asset, index) => {
-                const selectedAsset = formData.assets.find((a) => a.id === asset.id);
-                const quantity = selectedAsset?.quantity || 0;
-                const showDetails = assetsWithDetails.includes(asset.id);
-                const isCustom = 'isCustom' in asset && asset.isCustom === true;
-                const totalTokens = quantity > 0 && selectedAsset && !isCustom ? selectedAsset.tokenPrice * quantity : 0;
+                // If coming from calculator, only show calculator assets and custom assets
+                if (fromCalculator) {
+                  const customAssets = formData.assets.filter((a) => a.isCustom);
+                  const calculatorAssets = formData.assets.filter(
+                    (a) => !a.isCustom && a.id.startsWith('calc-')
+                  );
+                  const displayedAssets = [...calculatorAssets, ...customAssets];
+                  return displayedAssets.map((asset, index) => {
+                    const selectedAsset = formData.assets.find((a) => a.id === asset.id);
+                    const quantity = selectedAsset?.quantity || 0;
+                    const showDetails = assetsWithDetails.includes(asset.id);
+                    const isCustom = 'isCustom' in asset && asset.isCustom === true;
+                    const totalTokens = quantity > 0 && selectedAsset && !isCustom ? selectedAsset.tokenPrice * quantity : 0;
 
                 return (
                   <div key={asset.id}>
@@ -1742,9 +1743,150 @@ function NewBriefForm({
         </div>
                   );
                 });
+                } else {
+                  // Normal flow: show regular assets, custom assets, and calculator assets
+                  const loadedAdditionalAssets = ADDITIONAL_ASSETS.slice(0, additionalAssetsLoaded);
+                  const customAssets = formData.assets.filter((a) => a.isCustom);
+                  const regularAssets = [...RECOMMENDED_ASSETS, ...loadedAdditionalAssets];
+                  const displayedRegularAssets = regularAssets.slice(0, assetsToShow);
+                  // Include selected assets from Calculator that aren't in the regular assets list
+                  const calculatorAssets = formData.assets.filter(
+                    (a) => !a.isCustom && a.id.startsWith('calc-') && !regularAssets.some((ra) => ra.id === a.id)
+                  );
+                  // Always include all custom assets and calculator assets, regardless of the display limit
+                  const displayedAssets = [...displayedRegularAssets, ...customAssets, ...calculatorAssets];
+                  return displayedAssets.map((asset, index) => {
+                    const selectedAsset = formData.assets.find((a) => a.id === asset.id);
+                    const quantity = selectedAsset?.quantity || 0;
+                    const showDetails = assetsWithDetails.includes(asset.id);
+                    const isCustom = 'isCustom' in asset && asset.isCustom === true;
+                    const totalTokens = quantity > 0 && selectedAsset && !isCustom ? selectedAsset.tokenPrice * quantity : 0;
+
+                    return (
+                      <div key={asset.id}>
+                        <div className="flex items-center justify-between px-4 md:px-6 py-2 w-full">
+                          <div className="flex flex-col gap-0.5 flex-1 min-w-0 pr-4">
+                            <p className="text-sm leading-[18.62px] text-black truncate">{asset.name}</p>
+                            {!isCustom && (
+                              <p className="text-[16.24px] leading-[14px] text-black">
+                                {asset.tokenPrice} {asset.tokenPrice === 1 ? "token" : "tokens"}
+                              </p>
+                            )}
+                            {isCustom && (
+                              <div className="flex items-center gap-1">
+                                <TooltipProvider>
+                                  <Tooltip>
+                                    <TooltipTrigger asChild>
+                                      <HelpCircle size={14} className="text-[#848487] cursor-help" />
+                                    </TooltipTrigger>
+                                    <TooltipContent>
+                                      <p className="max-w-[300px]">
+                                        IRIS will review this asset and provide token price for it. You will be informed once this is done.
+                                      </p>
+                                    </TooltipContent>
+                                  </Tooltip>
+                                </TooltipProvider>
+                              </div>
+                            )}
+                            {quantity > 0 && (
+                              <button
+                                onClick={() => setAssetsWithDetails((prev) => (prev.includes(asset.id) ? prev.filter((id) => id !== asset.id) : [...prev, asset.id]))}
+                                className="text-xs text-[#03B3E2] hover:underline text-left mt-1"
+                              >
+                                {showDetails ? "Hide details" : "Add details"}
+                              </button>
+                            )}
+                          </div>
+                          <div className="flex flex-col items-end gap-1 shrink-0">
+                            <div className="flex items-center gap-2 md:gap-4">
+                              {quantity > 0 && (
+                                <>
+                                  <button 
+                                    onClick={() => {
+                                      if (quantity === 1) {
+                                        handleRemoveAsset(asset.id);
+                                        setAssetsWithDetails((prev) => prev.filter((id) => id !== asset.id));
+                                      } else {
+                                        handleAssetQuantityChange(asset.id, -1);
+                                      }
+                                    }}
+                                    className="w-8 h-8 rounded-full bg-[#03B3E2] flex items-center justify-center hover:bg-[#e5e5e5] transition"
+                                  >
+                                    <span className="text-[#fff] text-lg">−</span>
+                                  </button>
+                                  <div className="flex items-center gap-1">
+                                    <StyledInput
+                                      type="number"
+                                      min="1"
+                                      value={quantityInputs[asset.id] !== undefined ? quantityInputs[asset.id] : (quantity > 0 ? quantity.toString() : "")}
+                                      onChange={(e) => handleAssetQuantityInput(asset.id, e.target.value)}
+                                      onBlur={(e) => handleAssetQuantityBlur(asset.id, e.target.value)}
+                                      className="w-12 h-8 text-sm font-bold text-black text-center border-[#e0e0e0] rounded-lg bg-[#f9f9f9] px-2 py-1 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                                    />
+                                    {isCustom && (
+                                      <TooltipProvider>
+                                        <Tooltip>
+                                          <TooltipTrigger asChild>
+                                            <HelpCircle size={14} className="text-[#848487] cursor-help" />
+                                          </TooltipTrigger>
+                                          <TooltipContent>
+                                            <p className="max-w-[300px]">
+                                              IRIS will review this asset and provide token price for it. You will be informed once this is done.
+                                            </p>
+                                          </TooltipContent>
+                                        </Tooltip>
+                                      </TooltipProvider>
+                                    )}
+                                  </div>
+                                </>
+                              )}
+                              {!isCustom && (
+                                <button
+                                  onClick={() => handleAddAsset(asset)}
+                                  className="w-8 h-8 rounded-full bg-[#f1f1f3] flex items-center justify-center hover:bg-[#e5e5e5] transition"
+                                >
+                                  <svg className="w-[17.778px] h-[17.778px]" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 14 14" fill="none">
+                                    <path d="M13.0631 6.30331H7.41491V0.655165C7.41491 0.348498 7.16602 0.0996094 6.85936 0.0996094C6.55269 0.0996094 6.3038 0.348498 6.3038 0.655165V6.30331H0.655653C0.348987 6.30331 0.100098 6.5522 0.100098 6.85887C0.100098 7.16554 0.348987 7.41442 0.655653 7.41442H6.3038V13.0626C6.3038 13.3692 6.55269 13.6181 6.85936 13.6181C7.16602 13.6181 7.41491 13.3692 7.41491 13.0626V7.41442H13.0631C13.3697 7.41442 13.6186 7.16554 13.6186 6.85887C13.6186 6.5522 13.3697 6.30331 13.0631 6.30331Z" fill="#03B3E2" stroke="#03B3E2" strokeWidth="0.2"/>
+                                  </svg>
+                                </button>
+                              )}
+                            </div>
+                            {quantity > 0 && !isCustom && (
+                              <p className="text-[16.24px] leading-[14px] text-black">
+                                {totalTokens} {totalTokens === 1 ? "token" : "tokens"} total
+                              </p>
+                            )}
+                          </div>
+                        </div>
+                        {showDetails && quantity > 0 && selectedAsset && (
+                          <div className="px-4 md:px-6 pb-4 space-y-4 border-t border-[#e0e0e0] mt-2 pt-4">
+                            <Field label="Description" helpText="Describe deliverable expectations">
+                              <Textarea
+                                value={selectedAsset.assetSpecification}
+                                onChange={(e) => handleAssetFieldChange(asset.id, "assetSpecification", e.target.value)}
+                                className="border-[#e0e0e0] rounded-lg px-4 py-2 min-h-[70px] bg-[#f9f9f9] text-black placeholder:text-[#848487]"
+                                placeholder="Formats, ratios, markets..."
+                              />
+                            </Field>
+                            <Field label="Delivery week" helpText="Which sprint/week should Iris target?">
+                              <StyledInput
+                                value={selectedAsset.deliveryWeek}
+                                onChange={(e) => handleAssetFieldChange(asset.id, "deliveryWeek", e.target.value)}
+                                placeholder="Week 32"
+                              />
+                            </Field>
+                          </div>
+                        )}
+                        {index < displayedAssets.length - 1 && (
+                          <div className="h-px bg-[#e0e0e0] mt-5 mx-4 md:mx-6" />
+                        )}
+                      </div>
+                    );
+                  });
+                }
               })()}
             </div>
-            {(() => {
+            {!fromCalculator && (() => {
               const loadedAdditionalAssets = ADDITIONAL_ASSETS.slice(0, additionalAssetsLoaded);
               const regularAssets = [...RECOMMENDED_ASSETS, ...loadedAdditionalAssets];
               // Only check if there are more regular assets to show (custom assets are always shown)
@@ -1765,7 +1907,7 @@ function NewBriefForm({
               Add custom requirement/deliverable
             </button>
 
-            {additionalAssetsLoaded < ADDITIONAL_ASSETS.length && (
+            {!fromCalculator && additionalAssetsLoaded < ADDITIONAL_ASSETS.length && (
               <button
                 onClick={() => setAdditionalAssetsLoaded((prev) => Math.min(prev + 10, ADDITIONAL_ASSETS.length))}
                 className="w-full rounded-[28px] border border-[#e0e0e0] px-4 py-2 text-sm font-semibold text-[#424242] hover:bg-[#f9f9f9] transition"

@@ -122,7 +122,7 @@ export default function DashboardLayout({
                 <div className="flex items-center space-x-2">
                   <RadioGroupItem value="report-bug" id="report-bug" />
                   <Label htmlFor="report-bug" className="font-normal cursor-pointer">
-                    Report bug
+                    Report a bug
                   </Label>
                 </div>
               </RadioGroup>
