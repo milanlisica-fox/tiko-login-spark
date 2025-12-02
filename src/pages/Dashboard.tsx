@@ -99,11 +99,22 @@ const [open, setOpen] = useState(false);
 
               {/* Briefs Section */}
               <div className="section bg-white rounded-xl p-4 md:p-6 flex flex-col gap-4 border-o">
-                <div className="flex flex-col gap-1">
-                  <h2 className="text-[22px] font-bold leading-[29.26px] text-[#fa9f41]">Briefs</h2>
-                  <p className="text-sm leading-[18.62px] text-black">
-                    Kickstart your next project with clarity and ease
-                  </p>
+                <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3 sm:gap-0 pb-1">
+                  <div className="flex flex-col gap-1">
+                    <h2 className="text-[22px] font-bold leading-[29.26px] text-[#fa9f41]">Briefs</h2>
+                    <p className="text-sm leading-[18.62px] text-black">
+                      Kickstart your next project with clarity and ease
+                    </p>
+                  </div>
+                  <button 
+                    onClick={() => navigate("/dashboard/briefs")}
+                    className="hidden sm:flex card-brief items-center gap-2 px-4 py-2 rounded-[28px] backdrop-blur-sm hover:bg-gray-50 transition self-auto bg-[#ffb546]"
+                  >
+                    <span className="text-sm font-semibold leading-[23.94px] text-black whitespace-nowrap">
+                      View all
+                    </span>
+                    <ArrowRight size={18} className="text-black" />
+                  </button>
                 </div>
 
                 <div className="flex flex-col lg:flex-row gap-4 cards-section">
