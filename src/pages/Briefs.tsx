@@ -368,7 +368,7 @@ export interface BriefSummary {
 export interface NewBriefFormValues {
   projectTitle: string;
   dueDate?: Date;
-  projectLead: string;
+  projectLead: string[];
   objective: string;
   workType: string[];
   channels: string[];
@@ -389,7 +389,7 @@ export const PROJECT_LEADS = [
 const createBriefFormDefaults = (): NewBriefFormValues => ({
   projectTitle: "",
   dueDate: undefined,
-  projectLead: "",
+  projectLead: [],
   objective: "",
   workType: [],
   channels: [],
@@ -483,7 +483,10 @@ export default function BriefsPage() {
 
   const handleBriefSubmit = useCallback(
     (data: NewBriefFormValues) => {
-      const projectLeadLabel = PROJECT_LEADS.find((lead) => lead.value === data.projectLead)?.label;
+      const projectLeadLabels = data.projectLead
+        .map((leadValue) => PROJECT_LEADS.find((lead) => lead.value === leadValue)?.label)
+        .filter((label): label is string => Boolean(label))
+        .join(", ");
       const dueDateLabel = data.dueDate
         ? format(data.dueDate, "d MMM").toUpperCase()
         : format(new Date(), "d MMM").toUpperCase();
@@ -498,7 +501,7 @@ export default function BriefsPage() {
         avatars: 1,
         status: "Draft",
         icon: <Icons.briefs size={16} className="text-[#FFB546]" />,
-        projectLead: projectLeadLabel,
+        projectLead: projectLeadLabels || undefined,
       };
 
       setBriefs((prev) => [newBrief, ...prev]);
@@ -1113,14 +1116,14 @@ function NewBriefForm({
   const isFormComplete =
     formData.projectTitle.trim() !== "" &&
                          formData.dueDate !== undefined && 
-                         formData.projectLead.trim() !== "" && 
+                         formData.projectLead.length > 0 && 
                          formData.objective.trim() !== "";
 
   const handleFieldChange = (field: keyof NewBriefFormValues, value: unknown) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
   };
 
-  const handleMultiSelectToggle = (field: "channels" | "expectedOutputs" | "workType", value: string) => {
+  const handleMultiSelectToggle = (field: "channels" | "expectedOutputs" | "workType" | "projectLead", value: string) => {
     setFormData((prev) => {
       const currentValues = prev[field];
       const exists = currentValues.includes(value);
@@ -1380,12 +1383,15 @@ function NewBriefForm({
   const hasFormProgress =
     formData.projectTitle.trim() !== "" ||
     Boolean(formData.dueDate) ||
-    formData.projectLead !== "" ||
+    formData.projectLead.length > 0 ||
     formData.objective.trim() !== "";
 
   const formattedDueDate = formData.dueDate ? format(formData.dueDate, "MMMM d, yyyy") : "";
-  const projectLeadLabel = formData.projectLead
-    ? PROJECT_LEADS.find((lead) => lead.value === formData.projectLead)?.label ?? formData.projectLead
+  const projectLeadLabel = formData.projectLead.length > 0
+    ? formData.projectLead
+        .map((leadValue) => PROJECT_LEADS.find((lead) => lead.value === leadValue)?.label)
+        .filter((label): label is string => Boolean(label))
+        .join(", ")
     : "";
 
   // Shared preview card
@@ -1408,7 +1414,7 @@ function NewBriefForm({
               <p className="text-sm text-[#424242]">Start your brief by filling out these required fields.</p>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 min-w-0">
-            <Field label="Project title" helpText="Give your brief a short, clear name">
+            <Field label="Project title">
               <StyledInput
                 value={formData.projectTitle}
                   onChange={(e) => handleFieldChange("projectTitle", e.target.value)}
@@ -1418,28 +1424,15 @@ function NewBriefForm({
             </Field>
             <DateField
                 label="Due date"
-              helpText="When is this project due?"
               value={formData.dueDate}
                 onChange={(date) => handleFieldChange("dueDate", date)}
               />
-              <Field label="Project lead*" helpText="Who will lead this project? *You can assign multiple leads">
-                <Select value={formData.projectLead} onValueChange={(value) => handleFieldChange("projectLead", value)}>
-                  <SelectTrigger
-                    className={`border-[#e0e0e0] rounded-[85px] px-5 py-2.5 h-auto bg-[#f9f9f9] ${
-                      formData.projectLead ? "[&_span]:text-black" : "[&_span]:text-[#848487]"
-                    }`}
-                  >
-                  <SelectValue placeholder="Choose a lead" />
-                </SelectTrigger>
-                <SelectContent className="bg-[#f9f9f9]">
-                  {PROJECT_LEADS.map((lead) => (
-                    <SelectItem key={lead.value} value={lead.value} className="text-black">
-                      {lead.label}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </Field>
+              <ProjectLeadMultiSelect
+                label="Project lead*"
+                helpText="Who will lead this project? *You can assign multiple leads"
+                selectedValues={formData.projectLead}
+                onToggle={(value) => handleMultiSelectToggle("projectLead", value)}
+              />
             </div>
           </section>
 
@@ -1470,7 +1463,6 @@ function NewBriefForm({
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 min-w-0">
               <MultiSelectDropdown
                 label="Work type"
-                helpText="Select the primary workstream"
                 placeholder="Choose work types"
                 options={WORK_TYPE_OPTIONS}
                 selectedValues={formData.workType}
@@ -1478,7 +1470,6 @@ function NewBriefForm({
               />
               <MultiSelectDropdown
                 label="Channels"
-                helpText="Where will this campaign live?"
                 placeholder="Choose channels"
                 options={CHANNEL_OPTIONS}
                 selectedValues={formData.channels}
@@ -1486,7 +1477,6 @@ function NewBriefForm({
               />
               <MultiSelectDropdown
                 label="Expected outputs"
-                helpText="What should Iris deliver?"
                 placeholder="Select outputs"
                 options={OUTPUT_OPTIONS}
                 selectedValues={formData.expectedOutputs}
@@ -2091,7 +2081,14 @@ function NewBriefForm({
               <PreviewField label="Due date" value={formData.dueDate ? format(formData.dueDate, "PPP") : "—"} />
               <PreviewField
                 label="Project lead"
-                value={PROJECT_LEADS.find((lead) => lead.value === formData.projectLead)?.label || "—"}
+                value={
+                  formData.projectLead.length > 0
+                    ? formData.projectLead
+                        .map((leadValue) => PROJECT_LEADS.find((lead) => lead.value === leadValue)?.label)
+                        .filter((label): label is string => Boolean(label))
+                        .join(", ")
+                    : "—"
+                }
               />
               <PreviewField label="Work type" value={formData.workType.length ? formData.workType.join(", ") : "—"} />
               <PreviewField label="Channels" value={formData.channels.length ? formData.channels.join(", ") : "—"} />
@@ -2250,6 +2247,61 @@ function MultiSelectDropdown({ label, placeholder, options, selectedValues, onTo
   );
 }
 
+interface ProjectLeadMultiSelectProps {
+  label: string;
+  placeholder?: string;
+  selectedValues: string[];
+  onToggle: (value: string) => void;
+  helpText?: string;
+}
+
+function ProjectLeadMultiSelect({ label, placeholder = "Choose leads", selectedValues, onToggle, helpText }: ProjectLeadMultiSelectProps) {
+  const leadOptions = PROJECT_LEADS.map((lead) => lead.value);
+  const selectedLabels = selectedValues
+    .map((value) => PROJECT_LEADS.find((lead) => lead.value === value)?.label)
+    .filter((label): label is string => Boolean(label));
+
+  return (
+    <Field label={label} helpText={helpText}>
+      <Popover>
+        <PopoverTrigger asChild>
+          <button
+            type="button"
+            className={`w-full border border-[#e0e0e0] rounded-[28px] bg-[#f9f9f9] px-5 py-2.5 text-left text-sm flex items-center justify-between ${
+              selectedValues.length ? "text-black" : "text-[#848487]"
+            }`}
+          >
+            <span>{selectedValues.length ? (selectedValues.length === 1 ? selectedLabels[0] : `${selectedValues.length} selected`) : placeholder}</span>
+            <ChevronDown className="h-4 w-4 opacity-50 shrink-0" />
+          </button>
+        </PopoverTrigger>
+        <PopoverContent align="start" className="w-[240px] p-3 space-y-2 bg-white shadow-lg rounded-xl">
+          {PROJECT_LEADS.map((lead) => (
+            <button
+              key={lead.value}
+              type="button"
+              onClick={() => onToggle(lead.value)}
+              className="flex w-full items-center gap-2 rounded-lg px-2 py-1 hover:bg-[#f4f4f5] transition text-left"
+            >
+              <Checkbox checked={selectedValues.includes(lead.value)} onCheckedChange={() => onToggle(lead.value)} />
+              <span className="text-sm text-black">{lead.label}</span>
+            </button>
+          ))}
+        </PopoverContent>
+      </Popover>
+      {selectedValues.length > 0 && (
+        <div className="flex flex-wrap gap-2 pt-2">
+          {selectedLabels.map((label, index) => (
+            <span key={selectedValues[index]} className="rounded-full bg-[#f4f4f5] px-3 py-1 text-xs text-[#424242]">
+              {label}
+            </span>
+          ))}
+        </div>
+      )}
+    </Field>
+  );
+}
+
 function DeliverablesSelectionScreen({
   onCancel,
   onBack,
@@ -2270,14 +2322,17 @@ function DeliverablesSelectionScreen({
   const [pendingDraftPayload, setPendingDraftPayload] = useState<SubmittedBriefPayload | null>(null);
 
   const formattedLaunchDate = briefData.dueDate ? format(briefData.dueDate, "MMMM d, yyyy") : "";
-  const projectLeadLabel = briefData.projectLead
-    ? PROJECT_LEADS.find((lead) => lead.value === briefData.projectLead)?.label ?? briefData.projectLead
+  const projectLeadLabel = briefData.projectLead.length > 0
+    ? briefData.projectLead
+        .map((leadValue) => PROJECT_LEADS.find((lead) => lead.value === leadValue)?.label)
+        .filter((label): label is string => Boolean(label))
+        .join(", ")
     : "";
 
   const hasBriefPreview =
     briefData.projectTitle.trim() !== "" ||
     Boolean(briefData.dueDate) ||
-    briefData.projectLead !== "" ||
+    briefData.projectLead.length > 0 ||
     briefData.objective.trim() !== "";
 
   const renderBriefPreview = () => (
@@ -2668,8 +2723,11 @@ function AIResponseScreen({
   }, [showConfirmation]);
 
   const formattedLaunchDate = briefData.dueDate ? format(briefData.dueDate, "MMMM d, yyyy") : "";
-  const projectLeadLabel = briefData.projectLead
-    ? PROJECT_LEADS.find((lead) => lead.value === briefData.projectLead)?.label ?? briefData.projectLead
+  const projectLeadLabel = briefData.projectLead.length > 0
+    ? briefData.projectLead
+        .map((leadValue) => PROJECT_LEADS.find((lead) => lead.value === leadValue)?.label)
+        .filter((label): label is string => Boolean(label))
+        .join(", ")
     : "";
 
   // Mock deliverables list from Figma
@@ -2678,7 +2736,7 @@ function AIResponseScreen({
   const hasBriefPreview =
     briefData.projectTitle.trim() !== "" ||
     Boolean(briefData.dueDate) ||
-    briefData.projectLead !== "" ||
+    briefData.projectLead.length > 0 ||
     briefData.objective.trim() !== "";
 
   const handleSubmit = () => {
