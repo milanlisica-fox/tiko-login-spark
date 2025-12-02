@@ -1517,7 +1517,7 @@ function NewBriefForm({
                 <li className="flex gap-3">
                   <span className="flex-shrink-0 w-5 h-5 rounded-full bg-[#03B3E2] text-white text-xs font-semibold flex items-center justify-center mt-0.5">3</span>
                   <div className="flex-1">
-                    <span className="text-sm font-medium text-black">Use AI assistance</span>
+                    <span className="text-sm font-medium text-black">AI assistance</span>
                     <span className="text-sm text-[#424242]"> - Chat with AI to help you identify which assets your project requires.</span>
                   </div>
                 </li>
