@@ -785,7 +785,7 @@ export default function BriefsPage() {
                     )
                   },
                 ].map((card) => {
-                  const isSOWCard = card.title === "SOW ready to sign";
+                  const isSOWCard = card.title === "Ready to sign-off";
                   
                   if (isSOWCard) {
                     return (

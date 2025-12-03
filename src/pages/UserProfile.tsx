@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Home, FileText, Folder, BarChart2, LogOut, ArrowRight, User, Bell, Coins, ChevronDown } from "lucide-react";
 import { toast } from "sonner";
@@ -52,9 +52,6 @@ const dialogAvatarImg2 = "https://www.figma.com/api/mcp/asset/4893e373-71e6-4fb7
 const dialogAvatarImg3 = "https://www.figma.com/api/mcp/asset/eace1dce-6e7b-47de-893c-ad63627f2688";
 const dialogAvatarImg4 = "https://www.figma.com/api/mcp/asset/b9e47adb-9894-4768-9595-8784ac6223ff";
 const dialogAvatarImg5 = "https://www.figma.com/api/mcp/asset/828ea941-738b-4109-9ace-f7cec7a5bac7";
-const uploadIcon = "https://www.figma.com/api/mcp/asset/ddbd83a4-2dd8-426f-9875-8383e44a9aa0";
-const deleteIcon = "https://www.figma.com/api/mcp/asset/f07e3248-cac6-46be-bc96-60eec0848c5d";
-const dividerLine = "https://www.figma.com/api/mcp/asset/e2a2fcaa-d006-4987-a053-d9609ffc1a58";
 const closeIcon = "https://www.figma.com/api/mcp/asset/da3bf0f3-859a-44ec-a211-7e6bcf5021ee";
 
 // Password section removed
@@ -64,7 +61,6 @@ export default function UserProfilePage() {
   const [isPhotoDialogOpen, setIsPhotoDialogOpen] = useState(false);
   const [avatarSrc, setAvatarSrc] = useState<string | undefined>(undefined);
   const [tempAvatarSrc, setTempAvatarSrc] = useState<string | undefined>(undefined);
-  const fileInputRef = useRef<HTMLInputElement | null>(null);
 
   // nav items centralized via DashboardLayout
   const { activeName } = useActiveNav();
@@ -103,7 +99,7 @@ export default function UserProfilePage() {
                     className="text-[22px] font-bold leading-[29.26px] text-[#fcfcff] not-italic"
                     style={{ textShadow: '0px 1px 4px rgba(0,0,0,0.25)' }}
                   >
-                    Add photo
+                    Add avatar
                   </p>
                 </div>
               </div>
@@ -179,84 +175,40 @@ export default function UserProfilePage() {
           <div className="flex flex-col gap-[40px]">
             {/* Title */}
             <h2 className="text-[28px] font-bold leading-[37.24px] text-black">
-              Change your profile picture
+              Change your profile avatar
             </h2>
 
             <div className="flex flex-col gap-[40px]">
-              <div className="flex flex-col gap-[40px]">
-                {/* Avatar Preview and Actions */}
-                <div className="flex flex-col gap-[40px] items-center">
-                  {/* Large Avatar Preview */}
-                  <HBAvatar size={160} src={tempAvatarSrc} />
-
-                  {/* Upload and Remove Buttons */}
-                  <div className="flex gap-[40px] items-start">
-                    <input
-                      ref={fileInputRef}
-                      type="file"
-                      accept="image/*"
-                      className="hidden"
-                      onChange={(e) => {
-                        const file = e.target.files && e.target.files[0];
-                        if (!file) return;
-                        if (file.size > 1024 * 1024) {
-                          toast.error("Max file size is 1 MB");
-                          e.currentTarget.value = "";
-                          return;
-                        }
-                        if (!file.type.startsWith("image/")) {
-                          toast.error("Please select an image file");
-                          e.currentTarget.value = "";
-                          return;
-                        }
-                        const objectUrl = URL.createObjectURL(file);
-                        setTempAvatarSrc((prev) => {
-                          if (prev && prev.startsWith("blob:")) URL.revokeObjectURL(prev);
-                          return objectUrl;
-                        });
-                      }}
-                    />
-                    <button className="flex gap-[4px] items-start hover:opacity-80 transition cursor-pointer" onClick={() => fileInputRef.current?.click()}>
-                      <div className="overflow-clip relative shrink-0 size-[20px]">
-                        <img src={uploadIcon} alt="Upload" className="block max-w-none size-full" />
-                      </div>
-                      <p className="text-[14px] font-bold leading-[18.62px] text-[#09090a]">
-                        Upload
-                      </p>
+              {/* Avatar Selection Grid */}
+              <div className="grid grid-cols-6 gap-[16px]">
+                {Array.from({ length: 24 }).map((_, index) => {
+                  const seed = `avatar_${index}`;
+                  const avatarUrl = `https://api.dicebear.com/7.x/personas/png?seed=${seed}&size=64`;
+                  const isSelected = tempAvatarSrc === avatarUrl;
+                  
+                  return (
+                    <button
+                      key={index}
+                      onClick={() => setTempAvatarSrc(avatarUrl)}
+                      className={`relative rounded-full overflow-hidden transition-all ${
+                        isSelected 
+                          ? 'ring-4 ring-blue-500 ring-offset-2' 
+                          : 'hover:ring-2 hover:ring-gray-300'
+                      }`}
+                    >
+                      <HBAvatar size={64} src={avatarUrl} className="rounded-full" />
                     </button>
-                    <button className="flex gap-[4px] items-start hover:opacity-80 transition cursor-pointer" onClick={() => {
-                      setTempAvatarSrc((prev) => {
-                        if (prev && prev.startsWith("blob:")) URL.revokeObjectURL(prev);
-                        return undefined;
-                      });
-                    }}>
-                      <div className="overflow-clip relative shrink-0 size-[20px]">
-                        <img src={deleteIcon} alt="Remove" className="block max-w-none size-full" />
-                      </div>
-                      <p className="text-[14px] font-bold leading-[18.62px] text-[#09090a]">
-                        Remove
-                      </p>
-                    </button>
-                  </div>
-                </div>
-
-                {/* Divider and File Info */}
-                <div className="flex flex-col gap-[8px]">
-                  <div className="h-px relative">
-                    <div className="absolute bottom-[25%] left-[-0.05%] right-[-0.05%] top-[25%]">
-                      <img src={dividerLine} alt="" className="block max-w-none size-full" />
-                    </div>
-                  </div>
-                  <p className="text-[14px] leading-normal opacity-[0.826] text-[#434343]">
-                    Max file size: 1 MB · Recommended size: 240 × 240 px
-                  </p>
-                </div>
+                  );
+                })}
               </div>
 
               {/* Action Buttons */}
               <div className="flex gap-[10px] items-center">
                 <Button
-                  onClick={() => setIsPhotoDialogOpen(false)}
+                  onClick={() => {
+                    setTempAvatarSrc(avatarSrc);
+                    setIsPhotoDialogOpen(false);
+                  }}
                   className="flex-1 h-[32px] bg-[#f1f1f3] hover:bg-[#e5e5e5] backdrop-blur-[6px] rounded-[28px] px-[24px] py-[18px]"
                 >
                   <span className="text-[13px] font-semibold leading-[18.62px] text-black">
@@ -274,9 +226,17 @@ export default function UserProfilePage() {
                     toast.success("Profile picture saved");
                     setIsPhotoDialogOpen(false);
                   }}
-                  className="flex-1 h-[32px] bg-[#f9f9f9] hover:bg-[#e5e5e5] backdrop-blur-[6px] rounded-[28px] px-[24px] py-[18px]"
+                  className={`flex-1 h-[32px] backdrop-blur-[6px] rounded-[28px] px-[24px] py-[18px] ${
+                    tempAvatarSrc && tempAvatarSrc !== avatarSrc
+                      ? 'bg-yellow-500 hover:bg-yellow-600'
+                      : 'bg-[#f9f9f9] hover:bg-[#e5e5e5]'
+                  }`}
                 >
-                  <span className="text-[14px] font-semibold leading-[18.62px] text-[#848487]">
+                  <span className={`text-[14px] font-semibold leading-[18.62px] ${
+                    tempAvatarSrc && tempAvatarSrc !== avatarSrc
+                      ? 'text-black'
+                      : 'text-[#848487]'
+                  }`}>
                     Save
                   </span>
                 </Button>
