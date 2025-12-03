@@ -1802,7 +1802,7 @@ function NewBriefForm({
             {/* Explanatory block for asset selection methods */}
             <div className="rounded-lg border border-[#e0e0e0] bg-[#f9f9f9] p-4 space-y-3">
               <p className="text-sm font-semibold text-black">
-                You can add assets to your brief in three ways:
+                You can add assets to your brief in two ways:
               </p>
               <ol className="space-y-2.5 list-none pl-0">
                 <li className="flex gap-3">
