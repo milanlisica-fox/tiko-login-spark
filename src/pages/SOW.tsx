@@ -260,6 +260,8 @@ export default function SOWPage() {
                 src={sowDocumentImage}
                 alt={`SOW Document: ${selectedSOW?.title}`}
                 className="w-full h-auto object-contain"
+                loading="eager"
+                decoding="async"
               />
             </div>
           </div>

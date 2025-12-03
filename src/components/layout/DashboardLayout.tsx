@@ -107,11 +107,11 @@ export default function DashboardLayout({
       <Dialog open={isHelpOpen} onOpenChange={(open) => (open ? setIsHelpOpen(true) : closeHelp())}>
         <DialogContent className="max-w-2xl">
           <DialogHeader>
-            <DialogTitle>Send a question</DialogTitle>
+            <DialogTitle>Submit a Request</DialogTitle>
           </DialogHeader>
           <div className="space-y-4">
             <div className="space-y-3">
-              <Label className="text-sm font-medium">Select recipient</Label>
+              <Label className="text-sm font-medium">Choose a recipient</Label>
               <RadioGroup value={helpType} onValueChange={(value) => setHelpType(value as "account-manager" | "report-bug")}>
                 <div className="flex items-center space-x-2">
                   <RadioGroupItem value="account-manager" id="account-manager" />
@@ -122,7 +122,7 @@ export default function DashboardLayout({
                 <div className="flex items-center space-x-2">
                   <RadioGroupItem value="report-bug" id="report-bug" />
                   <Label htmlFor="report-bug" className="font-normal cursor-pointer">
-                    Report a bug
+                  Technical Support (Report a Bug)
                   </Label>
                 </div>
               </RadioGroup>

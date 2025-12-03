@@ -121,7 +121,10 @@ const [open, setOpen] = useState(false);
                   {/* Cards Section - 75% on desktop */}
                   <div className="cs-item grid-col-item  flex-1 lg:flex-[3] grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
                     {/* Draft briefs */}
-                    <div className="flex-1 bg-[#f9f9f9] rounded-[12px] p-4 md:p-[20px] flex flex-col gap-[10px] relative overflow-clip">
+                    <button
+                      onClick={() => navigate("/dashboard/briefs")}
+                      className="card-item flex-1 bg-[#f9f9f9] rounded-[12px] p-4 md:p-[20px] flex flex-col gap-[10px] relative overflow-clip hover:bg-[#f0f0f0] transition cursor-pointer text-left"
+                    >
                       <p className="text-xs md:text-sm font-bold leading-[18.62px] text-black pr-4">Draft briefs</p>
                       <p className="text-2xl md:text-[40px] font-medium leading-[45.6px] text-black">5</p>
                       <img 
@@ -129,10 +132,13 @@ const [open, setOpen] = useState(false);
                         alt="" 
                         className="absolute right-0 top-[10px] md:top-[20px] w-[35px] h-[45px]"
                       />
-                    </div>
+                    </button>
 
                     {/* In review */}
-                    <div className="flex-1 bg-[#f9f9f9] rounded-[12px] p-4 md:p-[20px] flex flex-col gap-[10px] relative overflow-clip">
+                    <button
+                      onClick={() => navigate("/dashboard/briefs")}
+                      className="card-item flex-1 bg-[#f9f9f9] rounded-[12px] p-4 md:p-[20px] flex flex-col gap-[10px] relative overflow-clip hover:bg-[#f0f0f0] transition cursor-pointer text-left"
+                    >
                       <p className="text-xs md:text-sm font-bold leading-[18.62px] text-black pr-4">In review</p>
                       <p className="text-2xl md:text-[40px] font-medium leading-[45.6px] text-black">4</p>
                       <img 
@@ -140,7 +146,7 @@ const [open, setOpen] = useState(false);
                         alt="" 
                         className="absolute right-0 top-[10px] md:top-[20px] w-[35px] h-[45px]"
                       />
-                    </div>
+                    </button>
 
                     {/* SOW ready to sign */}
                     <button
