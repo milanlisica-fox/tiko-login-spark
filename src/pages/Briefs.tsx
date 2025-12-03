@@ -433,6 +433,7 @@ export interface NewBriefFormValues {
   assets: SelectedAsset[];
   selectedTemplate: string;
   additionalAssetDetails: string;
+  watermarkFiles: boolean;
   attachedDocuments: File[];
 }
 
@@ -454,6 +455,7 @@ const createBriefFormDefaults = (): NewBriefFormValues => ({
   assets: [],
   selectedTemplate: "",
   additionalAssetDetails: "",
+  watermarkFiles: false,
   attachedDocuments: [],
 });
 
@@ -1239,10 +1241,10 @@ function NewBriefForm({
             assets: prev.assets.map((a) => (a.id === asset.id ? { ...a, quantity: a.quantity === 0 ? 1 : 0 } : a)),
           };
         } else {
-          return {
-            ...prev,
-            assets: prev.assets.map((a) => (a.id === asset.id ? { ...a, quantity: a.quantity + 1 } : a)),
-          };
+        return {
+          ...prev,
+          assets: prev.assets.map((a) => (a.id === asset.id ? { ...a, quantity: a.quantity + 1 } : a)),
+        };
         }
       }
       return {
@@ -1862,7 +1864,7 @@ function NewBriefForm({
 
             <div className="flex flex-col gap-5">
               {renderedAssets}
-            </div>
+                          </div>
             {formData.selectedTemplate === "other" && RECOMMENDED_ASSETS.length > assetsToShow && (
               <button
                 onClick={() => setAssetsToShow((prev) => prev + 10)}
@@ -1935,6 +1937,34 @@ function NewBriefForm({
           </div>
             )}
 
+        </section>
+
+        {/* Watermark Files Section */}
+        <section className="rounded-2xl border border-[#ececec] bg-white/80 p-4 md:p-6 space-y-4 max-w-full min-w-0">
+          <div className="flex items-start gap-3">
+            <Checkbox
+              id="watermark-files"
+              checked={formData.watermarkFiles}
+              onCheckedChange={(checked) => {
+                setFormData((prev) => ({
+                  ...prev,
+                  watermarkFiles: checked === true,
+                }));
+              }}
+              className="mt-0.5"
+            />
+            <div className="flex flex-col gap-1 flex-1">
+              <label
+                htmlFor="watermark-files"
+                className="text-sm font-medium text-black cursor-pointer"
+              >
+                Watermark files
+              </label>
+              <p className="text-sm text-[#424242]">
+                When selected, IRIS will automatically watermark all deliverable files.
+              </p>
+            </div>
+          </div>
         </section>
 
         {/* Attach Documents Section */}
