@@ -50,13 +50,56 @@ const iconSocialContent = TEMPLATE_ICONS.pos;
 const arrowRightIcon = BRIEFS_ASSETS.arrowRightIcon;
 
 export const FORM_TEMPLATE_OPTIONS: { id: string; title: string; icon: string }[] = [
-  { id: "asset-adaptation", title: "Asset adaptation", icon: iconAssetAdaptation },
+  { id: "promotional-campaign", title: "Promotional campaign", icon: iconBAU },
   { id: "bau-campaign", title: "BAU campaign", icon: iconBAU },
-  { id: "pos", title: "Point of Sale", icon: iconPOS },
-  { id: "digital-pos", title: "Digital POS", icon: iconDigitalPOS },
-  { id: "feature-asset", title: "Feature asset", icon: iconFeatureAsset },
-  { id: "toolkit", title: "Toolkit", icon: iconToolkit },
+  { id: "flagship-campaign", title: "Flagship campaign", icon: iconFeatureAsset },
+  { id: "other", title: "Other", icon: iconToolkit },
 ];
+
+// Template to asset mapping
+export const TEMPLATE_ASSETS_MAP: Record<string, string[]> = {
+  "promotional-campaign": [
+    "calc-1", // Master KV creation (PSD, JPEG, INDD, PDF)
+    "calc-2", // Static KV adaption (PSD, JPEG)
+    "calc-3", // Static KV adaption (INDD, PDF)
+    "calc-4", // Master KV animation creation (MP4, AEP)
+    "calc-5", // Master KV animation adaption (MP4, AEP)
+    "calc-6", // PPT Files
+    "calc-7", // Roundel
+    "calc-8", // Urgency tag
+    "calc-9", // Video creation
+    "calc-10", // Video adaptation
+    "calc-11", // Watermarked files (checkbox)
+  ],
+  "bau-campaign": [
+    "calc-12", // Master KV
+    "calc-13", // Digital display banner
+    "calc-14", // Social banners static
+    "calc-15", // Social banners animation
+    "calc-3", // Static KV adaption (INDD, PDF)
+    "calc-4", // Master KV animation creation (MP4, AEP)
+    "calc-5", // Master KV animation adaption (MP4, AEP)
+  ],
+  "flagship-campaign": [
+    "calc-16", // Toolkit
+    "calc-17", // USP messaging
+    "calc-18", // Redacted KVs
+    "calc-19", // Static KVs
+    "calc-20", // Animated KVs
+    "calc-21", // Roundels
+    "calc-22", // Urgency Tag
+    "calc-23", // Digi banners
+    "calc-24", // Storyboards
+    "calc-25", // Icons
+    "calc-26", // Feature assets localisation
+    "calc-27", // Feature assets origination
+    "calc-28", // Ecosystem KVs
+    "calc-29", // Accessories statics
+    "calc-30", // Accessories animations
+    "calc-31", // Screenfills
+  ],
+  "other": [], // Empty array means show all assets
+};
 
 // New brief form images from Figma
 const briefLoadingIcon = BRIEFS_ASSETS.briefLoadingIcon;
@@ -124,185 +167,198 @@ export const OUTPUT_OPTIONS = [
 
 const DEFAULT_CUSTOM_ASSET_PRICE = 8;
 
-const RECOMMENDED_ASSETS = [
+// Calculator assets - same as Quick calculator
+const CALCULATOR_ASSETS_LIST: RecommendedAsset[] = [
   {
-    id: "asset-brief-kit",
-    name: "Master toolkit",
-    description: "Full asset pack for campaign roll-out",
-    tokenPrice: 6,
-  },
-  {
-    id: "asset-key-visual",
-    name: "Key visual",
-    description: "Primary KV ready for localisation",
-    tokenPrice: 4,
-  },
-  {
-    id: "asset-launch-pack",
-    name: "Launch pack",
-    description: "Press + retail assets for launch week",
-    tokenPrice: 5,
-  },
-  {
-    id: "asset-social-media-pack",
-    name: "Social media pack",
-    description: "Complete set of social media assets",
-    tokenPrice: 3,
-  },
-  {
-    id: "asset-print-advertisement",
-    name: "Print advertisement",
-    description: "High-resolution print-ready advertisements",
-    tokenPrice: 4,
-  },
-  {
-    id: "asset-video-content",
-    name: "Video content",
-    description: "Video assets for digital channels",
-    tokenPrice: 7,
-  },
-  {
-    id: "asset-email-template",
-    name: "Email template",
-    description: "Responsive email templates",
-    tokenPrice: 2,
-  },
-  {
-    id: "asset-banner-ads",
-    name: "Banner ads",
-    description: "Display banner advertisements",
-    tokenPrice: 3,
-  },
-  {
-    id: "asset-infographic",
-    name: "Infographic",
-    description: "Visual data representation",
-    tokenPrice: 5,
-  },
-  {
-    id: "asset-presentation-deck",
-    name: "Presentation deck",
-    description: "Slide deck for presentations",
-    tokenPrice: 6,
-  },
-];
-
-const ADDITIONAL_ASSETS = [
-  {
-    id: "asset-web-banner",
-    name: "Web banner",
-    description: "Website banner advertisements",
-    tokenPrice: 3,
-  },
-  {
-    id: "asset-mobile-app-assets",
-    name: "Mobile app assets",
-    description: "Assets for mobile applications",
-    tokenPrice: 5,
-  },
-  {
-    id: "asset-billboard",
-    name: "Billboard",
-    description: "Large format outdoor advertising",
+    id: "calc-1",
+    name: "Master KV creation (PSD, JPEG, INDD, PDF)",
+    description: "Master KV creation (PSD, JPEG, INDD, PDF)",
     tokenPrice: 8,
   },
   {
-    id: "asset-radio-script",
-    name: "Radio script",
-    description: "Scripts for radio advertisements",
-    tokenPrice: 2,
-  },
-  {
-    id: "asset-podcast-cover",
-    name: "Podcast cover",
-    description: "Cover art for podcast episodes",
-    tokenPrice: 3,
-  },
-  {
-    id: "asset-merchandise-design",
-    name: "Merchandise design",
-    description: "Designs for branded merchandise",
-    tokenPrice: 6,
-  },
-  {
-    id: "asset-packaging-design",
-    name: "Packaging design",
-    description: "Product packaging designs",
-    tokenPrice: 7,
-  },
-  {
-    id: "asset-exhibition-stand",
-    name: "Exhibition stand",
-    description: "Designs for trade show booths",
-    tokenPrice: 9,
-  },
-  {
-    id: "asset-newsletter-template",
-    name: "Newsletter template",
-    description: "Email newsletter templates",
-    tokenPrice: 4,
-  },
-  {
-    id: "asset-landing-page",
-    name: "Landing page",
-    description: "Landing page designs",
-    tokenPrice: 8,
-  },
-  {
-    id: "asset-animated-gif",
-    name: "Animated GIF",
-    description: "Animated graphics for social media",
-    tokenPrice: 3,
-  },
-  {
-    id: "asset-story-template",
-    name: "Story template",
-    description: "Social media story templates",
-    tokenPrice: 2,
-  },
-  {
-    id: "asset-carousel-post",
-    name: "Carousel post",
-    description: "Multi-image carousel posts",
-    tokenPrice: 4,
-  },
-  {
-    id: "asset-reels-template",
-    name: "Reels template",
-    description: "Video reel templates",
+    id: "calc-2",
+    name: "Static KV adaption (PSD, JPEG)",
+    description: "Static KV adaption (PSD, JPEG)",
     tokenPrice: 5,
   },
   {
-    id: "asset-logo-variations",
-    name: "Logo variations",
-    description: "Different logo variations",
-    tokenPrice: 4,
+    id: "calc-3",
+    name: "Static KV adaption (INDD, PDF)",
+    description: "Static KV adaption (INDD, PDF)",
+    tokenPrice: 5,
   },
   {
-    id: "asset-brand-guidelines",
-    name: "Brand guidelines",
-    description: "Comprehensive brand guidelines",
+    id: "calc-4",
+    name: "Master KV animation creation (MP4, AEP)",
+    description: "Master KV animation creation (MP4, AEP)",
     tokenPrice: 10,
   },
   {
-    id: "asset-icon-set",
-    name: "Icon set",
-    description: "Custom icon collection",
+    id: "calc-5",
+    name: "Master KV animation adaption (MP4, AEP)",
+    description: "Master KV animation adaption (MP4, AEP)",
+    tokenPrice: 7,
+  },
+  {
+    id: "calc-6",
+    name: "PPT Files",
+    description: "PPT Files",
+    tokenPrice: 4,
+  },
+  {
+    id: "calc-7",
+    name: "Roundel",
+    description: "Roundel",
+    tokenPrice: 3,
+  },
+  {
+    id: "calc-8",
+    name: "Urgency tag",
+    description: "Urgency tag",
+    tokenPrice: 3,
+  },
+  {
+    id: "calc-9",
+    name: "Video creation",
+    description: "Video creation",
+    tokenPrice: 12,
+  },
+  {
+    id: "calc-10",
+    name: "Video adaptation",
+    description: "Video adaptation",
+    tokenPrice: 8,
+  },
+  {
+    id: "calc-11",
+    name: "Watermarked files",
+    description: "Watermarked files",
+    tokenPrice: 2,
+  },
+  {
+    id: "calc-12",
+    name: "Master KV",
+    description: "Master KV",
+    tokenPrice: 8,
+  },
+  {
+    id: "calc-13",
+    name: "Digital display banner",
+    description: "Digital display banner",
     tokenPrice: 5,
   },
   {
-    id: "asset-illustration-pack",
-    name: "Illustration pack",
-    description: "Custom illustrations",
+    id: "calc-14",
+    name: "Social banners static",
+    description: "Social banners static",
+    tokenPrice: 4,
+  },
+  {
+    id: "calc-15",
+    name: "Social banners animation",
+    description: "Social banners animation",
     tokenPrice: 6,
   },
   {
-    id: "asset-photography-brief",
-    name: "Photography brief",
-    description: "Photography direction and brief",
+    id: "calc-16",
+    name: "Toolkit",
+    description: "Toolkit",
+    tokenPrice: 6,
+  },
+  {
+    id: "calc-17",
+    name: "USP messaging",
+    description: "USP messaging",
+    tokenPrice: 4,
+  },
+  {
+    id: "calc-18",
+    name: "Redacted KVs",
+    description: "Redacted KVs",
+    tokenPrice: 5,
+  },
+  {
+    id: "calc-19",
+    name: "Static KVs",
+    description: "Static KVs",
+    tokenPrice: 5,
+  },
+  {
+    id: "calc-20",
+    name: "Animated KVs",
+    description: "Animated KVs",
     tokenPrice: 7,
   },
+  {
+    id: "calc-21",
+    name: "Roundels",
+    description: "Roundels",
+    tokenPrice: 3,
+  },
+  {
+    id: "calc-22",
+    name: "Urgency Tag",
+    description: "Urgency Tag",
+    tokenPrice: 3,
+  },
+  {
+    id: "calc-23",
+    name: "Digi banners",
+    description: "Digi banners",
+    tokenPrice: 5,
+  },
+  {
+    id: "calc-24",
+    name: "Storyboards",
+    description: "Storyboards",
+    tokenPrice: 6,
+  },
+  {
+    id: "calc-25",
+    name: "Icons",
+    description: "Icons",
+    tokenPrice: 3,
+  },
+  {
+    id: "calc-26",
+    name: "Feature assets localisation",
+    description: "Feature assets localisation",
+    tokenPrice: 7,
+  },
+  {
+    id: "calc-27",
+    name: "Feature assets origination",
+    description: "Feature assets origination",
+    tokenPrice: 10,
+  },
+  {
+    id: "calc-28",
+    name: "Ecosystem KVs",
+    description: "Ecosystem KVs",
+    tokenPrice: 8,
+  },
+  {
+    id: "calc-29",
+    name: "Accessories statics",
+    description: "Accessories statics",
+    tokenPrice: 5,
+  },
+  {
+    id: "calc-30",
+    name: "Accessories animations",
+    description: "Accessories animations",
+    tokenPrice: 7,
+  },
+  {
+    id: "calc-31",
+    name: "Screenfills",
+    description: "Screenfills",
+    tokenPrice: 4,
+  },
 ];
+
+const RECOMMENDED_ASSETS = CALCULATOR_ASSETS_LIST;
+const ADDITIONAL_ASSETS: RecommendedAsset[] = [];
 
 const paperclipIcon = (
   <svg xmlns="http://www.w3.org/2000/svg" width="14" height="16" viewBox="0 0 14 16" fill="none">
@@ -382,8 +438,8 @@ export interface NewBriefFormValues {
 
 export const PROJECT_LEADS = [
   { value: "murray-bray", label: "Murray Gordon" },
-  { value: "john-doe", label: "John Doe" },
-  { value: "jane-smith", label: "Jane Smith" },
+  { value: "john-doe", label: "Henry Bray" },
+  { value: "jane-smith", label: "Holly Hayes" },
 ];
 
 const createBriefFormDefaults = (): NewBriefFormValues => ({
@@ -519,6 +575,7 @@ export default function BriefsPage() {
       resetToOverview?: boolean;
       brief?: NewBriefFormValues;
       submittedBrief?: SubmittedBriefPayload;
+      selectedTemplate?: string;
       calculatorAssets?: Array<{
         id: string;
         title: string;
@@ -566,12 +623,33 @@ export default function BriefsPage() {
         const draftWithAssets: NewBriefFormValues = {
           ...createBriefFormDefaults(),
           assets: convertedAssets,
+          selectedTemplate: state.selectedTemplate || "",
         };
         setNewBriefDraft(draftWithAssets);
         setFromCalculator(true);
       } else {
-        // Reset to defaults if no calculator assets
-        setNewBriefDraft(createBriefFormDefaults());
+        // Create draft with selected template if provided
+        const draftDefaults = createBriefFormDefaults();
+        if (state.selectedTemplate) {
+          draftDefaults.selectedTemplate = state.selectedTemplate;
+          // Add template assets
+          const assetIds = TEMPLATE_ASSETS_MAP[state.selectedTemplate] || [];
+          if (assetIds.length > 0 && state.selectedTemplate !== "other") {
+            const templateAssets: SelectedAsset[] = assetIds.map((assetId) => {
+              const assetData = CALCULATOR_ASSETS_LIST.find((a) => a.id === assetId);
+              if (!assetData) return null;
+              return {
+                ...assetData,
+                assetSpecification: "",
+                deliveryWeek: "",
+                quantity: assetId === "calc-11" ? 0 : 1, // Watermarked files starts at 0
+                isCustom: false,
+              };
+            }).filter((asset) => asset !== null) as SelectedAsset[];
+            draftDefaults.assets = templateAssets;
+          }
+        }
+        setNewBriefDraft(draftDefaults);
         setFromCalculator(false);
       }
       
@@ -964,21 +1042,20 @@ export default function BriefsPage() {
 
 function TemplateSelectionScreen({ onCancel, onCreateBrief }: { onCancel: () => void; onCreateBrief: () => void }) {
   const navigate = useNavigate();
-  const [activeTab, setActiveTab] = useState<"All" | "Popular" | "Recent" | "New">("All");
   const uploadInputRef = useRef<HTMLInputElement | null>(null);
 
-  const templates = ALL_TEMPLATES.filter((template) => {
-    if (activeTab === "All") return template.category === "all" || template.category === "popular";
-    if (activeTab === "Popular") return template.category === "popular";
-    if (activeTab === "Recent") return template.category === "recent";
-    if (activeTab === "New") return template.category === "new";
-    return true;
-  });
+  // Use the new template options
+  const templates = FORM_TEMPLATE_OPTIONS;
 
   const handleTemplateClick = (templateId: string) => {
-    toast.success(`Selected template: ${templateId}`);
-    // Navigate to next step or create brief with template
-    onCancel();
+    // Navigate to form with template pre-selected
+    navigate("/dashboard/briefs", { 
+      state: { 
+        createBrief: true, 
+        showForm: true,
+        selectedTemplate: templateId 
+      } 
+    });
   };
 
   return (
@@ -1040,15 +1117,6 @@ function TemplateSelectionScreen({ onCancel, onCreateBrief }: { onCancel: () => 
           <p className="text-sm leading-[18.62px] text-black">Kickstart your brief with a ready-made template.</p>
         </div>
 
-        {/* Tabs */}
-        <div className="px-6">
-          <TabFilter
-            tabs={["All", "Popular", "Recent", "New"]}
-            activeTab={activeTab}
-            onTabChange={(tab) => setActiveTab(tab as typeof activeTab)}
-          />
-        </div>
-
         {/* Template Cards */}
         <div className="flex flex-col gap-4 px-6 w-full">
           {templates.map((template) => (
@@ -1095,7 +1163,7 @@ function NewBriefForm({
   const [showSaveDraftConfirmation, setShowSaveDraftConfirmation] = useState(false);
   const [previewOpen, setPreviewOpen] = useState(false);
   const [showCustomAssetFields, setShowCustomAssetFields] = useState(false);
-  const [customAssetDraft, setCustomAssetDraft] = useState({ name: "", description: "", deliveryWeek: "", quantity: 1 });
+  const [customAssetDraft, setCustomAssetDraft] = useState({ name: "", description: "", quantity: 1 });
   const [assetsWithDetails, setAssetsWithDetails] = useState<string[]>([]);
   const [assetsToShow, setAssetsToShow] = useState(10);
   const [additionalAssetsLoaded, setAdditionalAssetsLoaded] = useState(0);
@@ -1119,6 +1187,26 @@ function NewBriefForm({
     [formData.selectedTemplate]
   );
 
+  const assetsToDisplay = useMemo(() => {
+    const customAssets = formData.assets.filter((a) => a.isCustom === true);
+    const selectedTemplate = formData.selectedTemplate;
+    const templateAssetIds = selectedTemplate ? TEMPLATE_ASSETS_MAP[selectedTemplate] || [] : [];
+    
+    if (fromCalculator) {
+      const calculatorAssets = formData.assets.filter(
+        (a) => a.isCustom !== true && a.id.startsWith('calc-')
+      );
+      return [...calculatorAssets, ...customAssets];
+    } else if (selectedTemplate === "other") {
+      return [...RECOMMENDED_ASSETS.slice(0, assetsToShow), ...customAssets];
+    } else if (selectedTemplate && templateAssetIds.length > 0) {
+      const templateAssets = CALCULATOR_ASSETS_LIST.filter((a) => templateAssetIds.includes(a.id));
+      return [...templateAssets, ...customAssets];
+    } else {
+      return [...RECOMMENDED_ASSETS.slice(0, assetsToShow), ...customAssets];
+    }
+  }, [formData.assets, formData.selectedTemplate, fromCalculator, assetsToShow]);
+
   const isFormComplete =
     formData.projectTitle.trim() !== "" &&
                          formData.dueDate !== undefined && 
@@ -1141,11 +1229,21 @@ function NewBriefForm({
   const handleAddAsset = (asset: RecommendedAsset) => {
     setFormData((prev) => {
       const existingAsset = prev.assets.find((a) => a.id === asset.id);
+      const isWatermarked = asset.id === "calc-11";
+      
       if (existingAsset) {
-        return {
-          ...prev,
-          assets: prev.assets.map((a) => (a.id === asset.id ? { ...a, quantity: a.quantity + 1 } : a)),
-        };
+        if (isWatermarked) {
+          // Toggle checkbox for watermarked files
+          return {
+            ...prev,
+            assets: prev.assets.map((a) => (a.id === asset.id ? { ...a, quantity: a.quantity === 0 ? 1 : 0 } : a)),
+          };
+        } else {
+          return {
+            ...prev,
+            assets: prev.assets.map((a) => (a.id === asset.id ? { ...a, quantity: a.quantity + 1 } : a)),
+          };
+        }
       }
       return {
         ...prev,
@@ -1155,7 +1253,7 @@ function NewBriefForm({
             ...asset,
             assetSpecification: "",
             deliveryWeek: "",
-            quantity: 1,
+            quantity: isWatermarked ? 1 : 1,
           },
         ],
       };
@@ -1186,7 +1284,7 @@ function NewBriefForm({
           return { ...asset, quantity: newQuantity };
         }
         return asset;
-      }).filter((asset): asset is SelectedAsset => asset !== null);
+      }).filter((asset) => asset !== null) as SelectedAsset[];
       
       // Remove from details if quantity becomes 0
       if (delta < 0) {
@@ -1311,7 +1409,7 @@ function NewBriefForm({
       description: customAssetDraft.description.trim() || "Custom asset",
       tokenPrice: DEFAULT_CUSTOM_ASSET_PRICE,
       assetSpecification: customAssetDraft.description.trim(),
-      deliveryWeek: customAssetDraft.deliveryWeek.trim(),
+      deliveryWeek: "",
       quantity: quantity,
       isCustom: true,
     };
@@ -1320,10 +1418,167 @@ function NewBriefForm({
       ...prev,
       assets: [...prev.assets, newAsset],
     }));
-    setCustomAssetDraft({ name: "", description: "", deliveryWeek: "", quantity: 1 });
+    setCustomAssetDraft({ name: "", description: "", quantity: 1 });
     setShowCustomAssetFields(false);
     setAssetsWithDetails((prev) => [...prev, id]);
   };
+
+  const renderedAssets = useMemo(() => {
+    return assetsToDisplay.map((asset, index) => {
+      const selectedAsset = formData.assets.find((a) => a.id === asset.id);
+      const quantity = selectedAsset?.quantity || 0;
+      const showDetails = assetsWithDetails.includes(asset.id);
+      const isCustom = 'isCustom' in asset && asset.isCustom === true;
+      const isWatermarked = asset.id === "calc-11";
+      const isChecked = isWatermarked && quantity > 0;
+      const totalTokens = quantity > 0 && selectedAsset && !isCustom ? selectedAsset.tokenPrice * (isWatermarked ? 1 : quantity) : 0;
+
+      return (
+        <div key={asset.id}>
+          <div className="flex items-center justify-between px-4 md:px-6 py-2 w-full">
+            <div className="flex flex-col gap-0.5 flex-1 min-w-0 pr-4">
+              <p className="text-sm leading-[18.62px] text-black truncate">{asset.name}</p>
+              {!isCustom && (
+                <p className="text-[16.24px] leading-[14px] text-black">
+                  {asset.tokenPrice} {asset.tokenPrice === 1 ? "token" : "tokens"}
+                </p>
+              )}
+              {isCustom && (
+                <div className="flex items-center gap-1">
+                  <TooltipProvider>
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <HelpCircle size={14} className="text-[#848487] cursor-help" />
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        <p className="max-w-[300px]">
+                          IRIS will review this asset and provide token price for it. You will be informed once this is done.
+                        </p>
+                      </TooltipContent>
+                    </Tooltip>
+                  </TooltipProvider>
+                </div>
+              )}
+              {(quantity > 0 || isWatermarked) && (
+                <button
+                  onClick={() => {
+                    if (isWatermarked && !isChecked) {
+                      handleAddAsset(asset);
+                    }
+                    setAssetsWithDetails((prev) => (prev.includes(asset.id) ? prev.filter((id) => id !== asset.id) : [...prev, asset.id]));
+                  }}
+                  className="text-xs text-[#03B3E2] hover:underline text-left mt-1"
+                >
+                  {showDetails ? "Hide details" : "Add details"}
+                </button>
+              )}
+            </div>
+            <div className="flex flex-col items-end gap-1 shrink-0">
+              <div className="flex items-center gap-2 md:gap-4">
+                {isWatermarked ? (
+                  <button
+                    onClick={() => handleAddAsset(asset)}
+                    className={`w-8 h-8 rounded border-2 flex items-center justify-center transition ${
+                      isChecked
+                        ? "bg-[#03B3E2] border-[#03B3E2]"
+                        : "bg-white border-[#e0e0e0] hover:border-[#03B3E2]"
+                    }`}
+                  >
+                    {isChecked && (
+                      <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                      </svg>
+                    )}
+                  </button>
+                ) : (
+                  <>
+                    {quantity > 0 && (
+                      <>
+                        <button 
+                          onClick={() => {
+                            if (quantity === 1) {
+                              handleRemoveAsset(asset.id);
+                              setAssetsWithDetails((prev) => prev.filter((id) => id !== asset.id));
+                            } else {
+                              handleAssetQuantityChange(asset.id, -1);
+                            }
+                          }}
+                          className="w-8 h-8 rounded-full bg-[#03B3E2] flex items-center justify-center hover:bg-[#e5e5e5] transition"
+                        >
+                          <span className="text-[#fff] text-lg">−</span>
+                        </button>
+                        <div className="flex items-center gap-1">
+                          <StyledInput
+                            type="number"
+                            min="1"
+                            value={quantityInputs[asset.id] !== undefined ? quantityInputs[asset.id] : (quantity > 0 ? quantity.toString() : "")}
+                            onChange={(e) => handleAssetQuantityInput(asset.id, e.target.value)}
+                            onBlur={(e) => handleAssetQuantityBlur(asset.id, e.target.value)}
+                            className="w-12 h-8 text-sm font-bold text-black text-center border-[#e0e0e0] rounded-lg bg-[#f9f9f9] px-2 py-1 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                          />
+                          {isCustom && (
+                            <TooltipProvider>
+                              <Tooltip>
+                                <TooltipTrigger asChild>
+                                  <HelpCircle size={14} className="text-[#848487] cursor-help" />
+                                </TooltipTrigger>
+                                <TooltipContent>
+                                  <p className="max-w-[300px]">
+                                    IRIS will review this asset and provide token price for it. You will be informed once this is done.
+                                  </p>
+                                </TooltipContent>
+                              </Tooltip>
+                            </TooltipProvider>
+                          )}
+                        </div>
+                      </>
+                    )}
+                    {!isCustom && (
+                      <button
+                        onClick={() => handleAddAsset(asset)}
+                        className="w-8 h-8 rounded-full bg-[#f1f1f3] flex items-center justify-center hover:bg-[#e5e5e5] transition"
+                      >
+                        <svg className="w-[17.778px] h-[17.778px]" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 14 14" fill="none">
+                          <path d="M13.0631 6.30331H7.41491V0.655165C7.41491 0.348498 7.16602 0.0996094 6.85936 0.0996094C6.55269 0.0996094 6.3038 0.348498 6.3038 0.655165V6.30331H0.655653C0.348987 6.30331 0.100098 6.5522 0.100098 6.85887C0.100098 7.16554 0.348987 7.41442 0.655653 7.41442H6.3038V13.0626C6.3038 13.3692 6.55269 13.6181 6.85936 13.6181C7.16602 13.6181 7.41491 13.3692 7.41491 13.0626V7.41442H13.0631C13.3697 7.41442 13.6186 7.16554 13.6186 6.85887C13.6186 6.5522 13.3697 6.30331 13.0631 6.30331Z" fill="#03B3E2" stroke="#03B3E2" strokeWidth="0.2"/>
+                        </svg>
+                      </button>
+                    )}
+                  </>
+                )}
+              </div>
+              {quantity > 0 && !isCustom && (
+                <p className="text-[16.24px] leading-[14px] text-black">
+                  {totalTokens} {totalTokens === 1 ? "token" : "tokens"} total
+                </p>
+              )}
+            </div>
+          </div>
+          {showDetails && quantity > 0 && selectedAsset && (
+            <div className="px-4 md:px-6 pb-4 space-y-4 border-t border-[#e0e0e0] mt-2 pt-4">
+              <Field label="Description" helpText="Describe deliverable expectations">
+                <Textarea
+                  value={selectedAsset.assetSpecification}
+                  onChange={(e) => handleAssetFieldChange(asset.id, "assetSpecification", e.target.value)}
+                  className="border-[#e0e0e0] rounded-lg px-4 py-2 min-h-[70px] bg-[#f9f9f9] text-black placeholder:text-[#848487]"
+                  placeholder="Formats, ratios, markets..."
+                />
+              </Field>
+              <Field label="Delivery week" helpText="Which sprint/week should Iris target?">
+                <StyledInput
+                  value={selectedAsset.deliveryWeek}
+                  onChange={(e) => handleAssetFieldChange(asset.id, "deliveryWeek", e.target.value)}
+                  placeholder="Week 32"
+                />
+              </Field>
+            </div>
+          )}
+          {index < assetsToDisplay.length - 1 && (
+            <div className="h-px bg-[#e0e0e0] mt-5 mx-4 md:mx-6" />
+          )}
+        </div>
+      );
+    });
+  }, [assetsToDisplay, formData.assets, assetsWithDetails, quantityInputs, handleAddAsset, handleRemoveAsset, handleAssetQuantityChange, handleAssetQuantityInput, handleAssetQuantityBlur, handleAssetFieldChange]);
 
   const handleSubmit = () => {
     if (!isFormComplete) {
@@ -1349,7 +1604,40 @@ function NewBriefForm({
   };
 
   const handleTemplateSelect = (templateId: string) => {
-    setFormData((prev) => ({ ...prev, selectedTemplate: templateId }));
+    const assetIds = TEMPLATE_ASSETS_MAP[templateId] || [];
+    
+    setFormData((prev) => {
+      // Remove assets that were added by previous template (but keep custom assets)
+      const customAssets = prev.assets.filter((a) => a.isCustom === true);
+      const templateAssets = prev.assets.filter((a) => a.isCustom !== true && TEMPLATE_ASSETS_MAP[prev.selectedTemplate]?.includes(a.id));
+      
+      // If "Other" template, show all assets but don't auto-add them
+      if (templateId === "other") {
+        return { ...prev, selectedTemplate: templateId, assets: customAssets };
+      }
+      
+      // For other templates, add the template assets
+      const newAssets: SelectedAsset[] = assetIds.map((assetId) => {
+        const existingAsset = prev.assets.find((a) => a.id === assetId);
+        const assetData = CALCULATOR_ASSETS_LIST.find((a) => a.id === assetId);
+        
+        if (!assetData) return null;
+        
+        return {
+          ...assetData,
+          assetSpecification: existingAsset?.assetSpecification || "",
+          deliveryWeek: existingAsset?.deliveryWeek || "",
+          quantity: existingAsset?.quantity || (assetId === "calc-11" ? 0 : 1), // Watermarked files starts at 0 (checkbox)
+          isCustom: false,
+        };
+      }).filter((asset) => asset !== null) as SelectedAsset[];
+      
+      return {
+        ...prev,
+        selectedTemplate: templateId,
+        assets: [...customAssets, ...newAssets],
+      };
+    });
   };
 
   const handleChange = (field: string, value: string | Date | undefined) => {
@@ -1421,7 +1709,7 @@ function NewBriefForm({
 
   return (
     <>
-      <div className="flex flex-col lg:flex-row gap-6 w-full max-w-full min-w-0 overflow-x-hidden">
+      <div className="flex flex-col lg:flex-row gap-6 w-full max-w-full min-w-0 overflow-x-hidden pb-24">
         <div className="flex-1 space-y-6 min-w-0 max-w-full">
           <section className="rounded-2xl border border-[#ececec] bg-white/80 p-4 md:p-6 space-y-6 max-w-full min-w-0">
             <div className="flex flex-col gap-2">
@@ -1504,7 +1792,7 @@ function NewBriefForm({
             <div className="flex flex-col gap-2">
               <div className="flex items-center justify-between">
                 <div>
-                  <h3 className="text-[21.6px] font-semibold text-black">Assets</h3>
+                  <h3 className="text-[21.6px] font-semibold text-black">Select deliverables</h3>
                 </div>
               </div>
             </div>
@@ -1567,34 +1855,6 @@ function NewBriefForm({
             </div>
             </div>
 
-            <Field label="AI Assistant">
-              <div className="space-y-3">
-                <Textarea
-                  value={formData.additionalAssetDetails}
-                  onChange={(e) => handleFieldChange("additionalAssetDetails", e.target.value)}
-                  className="border-[#e0e0e0] rounded-lg px-5 py-2.5 min-h-[90px] resize-none bg-[#f9f9f9] text-black placeholder:text-[#848487]"
-                  placeholder="Describe assets and we'll recommend suitable assets"
-                />
-                <button
-                  type="button"
-                  onClick={() => {
-                    // Handle submit logic here - could trigger AI recommendation or similar
-                    if (formData.additionalAssetDetails.trim()) {
-                      toast.success("Your request has been submitted");
-                    }
-                  }}
-                  disabled={!formData.additionalAssetDetails.trim()}
-                  className={`w-full rounded-[28px] px-4 py-2 text-sm font-semibold transition ${
-                    formData.additionalAssetDetails.trim()
-                      ? "bg-[#ffb546] text-black hover:opacity-90"
-                      : "bg-[#f4f4f5] text-[#9c9c9f] cursor-not-allowed"
-                  }`}
-                >
-                  Submit
-                </button>
-              </div>
-            </Field>
-
             {formData.assets.length > 0 && (
               <div className="flex justify-end">
                 <button
@@ -1608,291 +1868,9 @@ function NewBriefForm({
             )}
 
             <div className="flex flex-col gap-5">
-              {(() => {
-                // If coming from calculator, only show calculator assets and custom assets
-                if (fromCalculator) {
-                  const customAssets = formData.assets.filter((a) => a.isCustom);
-                  const calculatorAssets = formData.assets.filter(
-                    (a) => !a.isCustom && a.id.startsWith('calc-')
-                  );
-                  const displayedAssets = [...calculatorAssets, ...customAssets];
-                  return displayedAssets.map((asset, index) => {
-                    const selectedAsset = formData.assets.find((a) => a.id === asset.id);
-                    const quantity = selectedAsset?.quantity || 0;
-                    const showDetails = assetsWithDetails.includes(asset.id);
-                    const isCustom = 'isCustom' in asset && asset.isCustom === true;
-                    const totalTokens = quantity > 0 && selectedAsset && !isCustom ? selectedAsset.tokenPrice * quantity : 0;
-
-                return (
-                  <div key={asset.id}>
-                    <div className="flex items-center justify-between px-4 md:px-6 py-2 w-full">
-                      <div className="flex flex-col gap-0.5 flex-1 min-w-0 pr-4">
-                        <p className="text-sm leading-[18.62px] text-black truncate">{asset.name}</p>
-                        {!isCustom && (
-                          <p className="text-[16.24px] leading-[14px] text-black">
-                            {asset.tokenPrice} {asset.tokenPrice === 1 ? "token" : "tokens"}
-                          </p>
-                        )}
-                        {isCustom && (
-                          <div className="flex items-center gap-1">
-                            <TooltipProvider>
-                              <Tooltip>
-                                <TooltipTrigger asChild>
-                                  <HelpCircle size={14} className="text-[#848487] cursor-help" />
-                                </TooltipTrigger>
-                                <TooltipContent>
-                                  <p className="max-w-[300px]">
-                                    IRIS will review this asset and provide token price for it. You will be informed once this is done.
-                                  </p>
-                                </TooltipContent>
-                              </Tooltip>
-                            </TooltipProvider>
-                          </div>
-                        )}
-                        {quantity > 0 && (
-                          <button
-                            onClick={() => setAssetsWithDetails((prev) => (prev.includes(asset.id) ? prev.filter((id) => id !== asset.id) : [...prev, asset.id]))}
-                            className="text-xs text-[#03B3E2] hover:underline text-left mt-1"
-                          >
-                            {showDetails ? "Hide details" : "Add details"}
-                          </button>
-                        )}
-                      </div>
-                      <div className="flex flex-col items-end gap-1 shrink-0">
-                        <div className="flex items-center gap-2 md:gap-4">
-                          {quantity > 0 && (
-                            <>
-                <button 
-                              onClick={() => {
-                                if (quantity === 1) {
-                                  handleRemoveAsset(asset.id);
-                                  setAssetsWithDetails((prev) => prev.filter((id) => id !== asset.id));
-                                } else {
-                                  handleAssetQuantityChange(asset.id, -1);
-                                }
-                              }}
-                              className="w-8 h-8 rounded-full bg-[#03B3E2] flex items-center justify-center hover:bg-[#e5e5e5] transition"
-                            >
-                              <span className="text-[#fff] text-lg">−</span>
-                </button>
-                            <div className="flex items-center gap-1">
-                              <StyledInput
-                                type="number"
-                                min="1"
-                                value={quantityInputs[asset.id] !== undefined ? quantityInputs[asset.id] : (quantity > 0 ? quantity.toString() : "")}
-                                onChange={(e) => handleAssetQuantityInput(asset.id, e.target.value)}
-                                onBlur={(e) => handleAssetQuantityBlur(asset.id, e.target.value)}
-                                className="w-12 h-8 text-sm font-bold text-black text-center border-[#e0e0e0] rounded-lg bg-[#f9f9f9] px-2 py-1 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
-                              />
-                              {isCustom && (
-                                <TooltipProvider>
-                                  <Tooltip>
-                                    <TooltipTrigger asChild>
-                                      <HelpCircle size={14} className="text-[#848487] cursor-help" />
-                                    </TooltipTrigger>
-                                    <TooltipContent>
-                                      <p className="max-w-[300px]">
-                                        IRIS will review this asset and provide token price for it. You will be informed once this is done.
-                                      </p>
-                                    </TooltipContent>
-                                  </Tooltip>
-                                </TooltipProvider>
-                              )}
-                            </div>
-                          </>
-                        )}
-                        {!isCustom && (
-                <button
-                            onClick={() => handleAddAsset(asset)}
-                            className="w-8 h-8 rounded-full bg-[#f1f1f3] flex items-center justify-center hover:bg-[#e5e5e5] transition"
-                          >
-                            <svg className="w-[17.778px] h-[17.778px]" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 14 14" fill="none">
-                              <path d="M13.0631 6.30331H7.41491V0.655165C7.41491 0.348498 7.16602 0.0996094 6.85936 0.0996094C6.55269 0.0996094 6.3038 0.348498 6.3038 0.655165V6.30331H0.655653C0.348987 6.30331 0.100098 6.5522 0.100098 6.85887C0.100098 7.16554 0.348987 7.41442 0.655653 7.41442H6.3038V13.0626C6.3038 13.3692 6.55269 13.6181 6.85936 13.6181C7.16602 13.6181 7.41491 13.3692 7.41491 13.0626V7.41442H13.0631C13.3697 7.41442 13.6186 7.16554 13.6186 6.85887C13.6186 6.5522 13.3697 6.30331 13.0631 6.30331Z" fill="#03B3E2" stroke="#03B3E2" strokeWidth="0.2"/>
-                            </svg>
-                </button>
-                        )}
-                        </div>
-                        {quantity > 0 && !isCustom && (
-                          <p className="text-[16.24px] leading-[14px] text-black">
-                            {totalTokens} {totalTokens === 1 ? "token" : "tokens"} total
-                          </p>
-                        )}
-                      </div>
+              {renderedAssets}
             </div>
-                    {showDetails && quantity > 0 && selectedAsset && (
-                      <div className="px-4 md:px-6 pb-4 space-y-4 border-t border-[#e0e0e0] mt-2 pt-4">
-                        <Field label="Description" helpText="Describe deliverable expectations">
-                          <Textarea
-                            value={selectedAsset.assetSpecification}
-                            onChange={(e) => handleAssetFieldChange(asset.id, "assetSpecification", e.target.value)}
-                            className="border-[#e0e0e0] rounded-lg px-4 py-2 min-h-[70px] bg-[#f9f9f9] text-black placeholder:text-[#848487]"
-                            placeholder="Formats, ratios, markets..."
-                          />
-                        </Field>
-                        <Field label="Delivery week" helpText="Which sprint/week should Iris target?">
-                          <StyledInput
-                            value={selectedAsset.deliveryWeek}
-                            onChange={(e) => handleAssetFieldChange(asset.id, "deliveryWeek", e.target.value)}
-                            placeholder="Week 32"
-                          />
-                        </Field>
-            </div>
-                    )}
-                    {index < displayedAssets.length - 1 && (
-                      <div className="h-px bg-[#e0e0e0] mt-5 mx-4 md:mx-6" />
-                    )}
-        </div>
-                  );
-                });
-                } else {
-                  // Normal flow: show regular assets, custom assets, and calculator assets
-                  const loadedAdditionalAssets = ADDITIONAL_ASSETS.slice(0, additionalAssetsLoaded);
-                  const customAssets = formData.assets.filter((a) => a.isCustom);
-                  const regularAssets = [...RECOMMENDED_ASSETS, ...loadedAdditionalAssets];
-                  const displayedRegularAssets = regularAssets.slice(0, assetsToShow);
-                  // Include selected assets from Calculator that aren't in the regular assets list
-                  const calculatorAssets = formData.assets.filter(
-                    (a) => !a.isCustom && a.id.startsWith('calc-') && !regularAssets.some((ra) => ra.id === a.id)
-                  );
-                  // Always include all custom assets and calculator assets, regardless of the display limit
-                  const displayedAssets = [...displayedRegularAssets, ...customAssets, ...calculatorAssets];
-                  return displayedAssets.map((asset, index) => {
-                    const selectedAsset = formData.assets.find((a) => a.id === asset.id);
-                    const quantity = selectedAsset?.quantity || 0;
-                    const showDetails = assetsWithDetails.includes(asset.id);
-                    const isCustom = 'isCustom' in asset && asset.isCustom === true;
-                    const totalTokens = quantity > 0 && selectedAsset && !isCustom ? selectedAsset.tokenPrice * quantity : 0;
-
-                    return (
-                      <div key={asset.id}>
-                        <div className="flex items-center justify-between px-4 md:px-6 py-2 w-full">
-                          <div className="flex flex-col gap-0.5 flex-1 min-w-0 pr-4">
-                            <p className="text-sm leading-[18.62px] text-black truncate">{asset.name}</p>
-                            {!isCustom && (
-                              <p className="text-[16.24px] leading-[14px] text-black">
-                                {asset.tokenPrice} {asset.tokenPrice === 1 ? "token" : "tokens"}
-                              </p>
-                            )}
-                            {isCustom && (
-                              <div className="flex items-center gap-1">
-                                <TooltipProvider>
-                                  <Tooltip>
-                                    <TooltipTrigger asChild>
-                                      <HelpCircle size={14} className="text-[#848487] cursor-help" />
-                                    </TooltipTrigger>
-                                    <TooltipContent>
-                                      <p className="max-w-[300px]">
-                                        IRIS will review this asset and provide token price for it. You will be informed once this is done.
-                                      </p>
-                                    </TooltipContent>
-                                  </Tooltip>
-                                </TooltipProvider>
-                              </div>
-                            )}
-                            {quantity > 0 && (
-                              <button
-                                onClick={() => setAssetsWithDetails((prev) => (prev.includes(asset.id) ? prev.filter((id) => id !== asset.id) : [...prev, asset.id]))}
-                                className="text-xs text-[#03B3E2] hover:underline text-left mt-1"
-                              >
-                                {showDetails ? "Hide details" : "Add details"}
-                              </button>
-                            )}
-                          </div>
-                          <div className="flex flex-col items-end gap-1 shrink-0">
-                            <div className="flex items-center gap-2 md:gap-4">
-                              {quantity > 0 && (
-                                <>
-                                  <button 
-                                    onClick={() => {
-                                      if (quantity === 1) {
-                                        handleRemoveAsset(asset.id);
-                                        setAssetsWithDetails((prev) => prev.filter((id) => id !== asset.id));
-                                      } else {
-                                        handleAssetQuantityChange(asset.id, -1);
-                                      }
-                                    }}
-                                    className="w-8 h-8 rounded-full bg-[#03B3E2] flex items-center justify-center hover:bg-[#e5e5e5] transition"
-                                  >
-                                    <span className="text-[#fff] text-lg">−</span>
-                                  </button>
-                                  <div className="flex items-center gap-1">
-                                    <StyledInput
-                                      type="number"
-                                      min="1"
-                                      value={quantityInputs[asset.id] !== undefined ? quantityInputs[asset.id] : (quantity > 0 ? quantity.toString() : "")}
-                                      onChange={(e) => handleAssetQuantityInput(asset.id, e.target.value)}
-                                      onBlur={(e) => handleAssetQuantityBlur(asset.id, e.target.value)}
-                                      className="w-12 h-8 text-sm font-bold text-black text-center border-[#e0e0e0] rounded-lg bg-[#f9f9f9] px-2 py-1 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
-                                    />
-                                    {isCustom && (
-                                      <TooltipProvider>
-                                        <Tooltip>
-                                          <TooltipTrigger asChild>
-                                            <HelpCircle size={14} className="text-[#848487] cursor-help" />
-                                          </TooltipTrigger>
-                                          <TooltipContent>
-                                            <p className="max-w-[300px]">
-                                              IRIS will review this asset and provide token price for it. You will be informed once this is done.
-                                            </p>
-                                          </TooltipContent>
-                                        </Tooltip>
-                                      </TooltipProvider>
-                                    )}
-                                  </div>
-                                </>
-                              )}
-                              {!isCustom && (
-                                <button
-                                  onClick={() => handleAddAsset(asset)}
-                                  className="w-8 h-8 rounded-full bg-[#f1f1f3] flex items-center justify-center hover:bg-[#e5e5e5] transition"
-                                >
-                                  <svg className="w-[17.778px] h-[17.778px]" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 14 14" fill="none">
-                                    <path d="M13.0631 6.30331H7.41491V0.655165C7.41491 0.348498 7.16602 0.0996094 6.85936 0.0996094C6.55269 0.0996094 6.3038 0.348498 6.3038 0.655165V6.30331H0.655653C0.348987 6.30331 0.100098 6.5522 0.100098 6.85887C0.100098 7.16554 0.348987 7.41442 0.655653 7.41442H6.3038V13.0626C6.3038 13.3692 6.55269 13.6181 6.85936 13.6181C7.16602 13.6181 7.41491 13.3692 7.41491 13.0626V7.41442H13.0631C13.3697 7.41442 13.6186 7.16554 13.6186 6.85887C13.6186 6.5522 13.3697 6.30331 13.0631 6.30331Z" fill="#03B3E2" stroke="#03B3E2" strokeWidth="0.2"/>
-                                  </svg>
-                                </button>
-                              )}
-                            </div>
-                            {quantity > 0 && !isCustom && (
-                              <p className="text-[16.24px] leading-[14px] text-black">
-                                {totalTokens} {totalTokens === 1 ? "token" : "tokens"} total
-                              </p>
-                            )}
-                          </div>
-                        </div>
-                        {showDetails && quantity > 0 && selectedAsset && (
-                          <div className="px-4 md:px-6 pb-4 space-y-4 border-t border-[#e0e0e0] mt-2 pt-4">
-                            <Field label="Description" helpText="Describe deliverable expectations">
-                              <Textarea
-                                value={selectedAsset.assetSpecification}
-                                onChange={(e) => handleAssetFieldChange(asset.id, "assetSpecification", e.target.value)}
-                                className="border-[#e0e0e0] rounded-lg px-4 py-2 min-h-[70px] bg-[#f9f9f9] text-black placeholder:text-[#848487]"
-                                placeholder="Formats, ratios, markets..."
-                              />
-                            </Field>
-                            <Field label="Delivery week" helpText="Which sprint/week should Iris target?">
-                              <StyledInput
-                                value={selectedAsset.deliveryWeek}
-                                onChange={(e) => handleAssetFieldChange(asset.id, "deliveryWeek", e.target.value)}
-                                placeholder="Week 32"
-                              />
-                            </Field>
-                          </div>
-                        )}
-                        {index < displayedAssets.length - 1 && (
-                          <div className="h-px bg-[#e0e0e0] mt-5 mx-4 md:mx-6" />
-                        )}
-                      </div>
-                    );
-                  });
-                }
-              })()}
-            </div>
-            {!fromCalculator && (() => {
-              const loadedAdditionalAssets = ADDITIONAL_ASSETS.slice(0, additionalAssetsLoaded);
-              const regularAssets = [...RECOMMENDED_ASSETS, ...loadedAdditionalAssets];
-              // Only check if there are more regular assets to show (custom assets are always shown)
-              return regularAssets.length > assetsToShow;
-            })() && (
+            {formData.selectedTemplate === "other" && RECOMMENDED_ASSETS.length > assetsToShow && (
               <button
                 onClick={() => setAssetsToShow((prev) => prev + 10)}
                 className="w-full rounded-[28px] border border-[#e0e0e0] px-4 py-2 text-sm font-semibold text-[#424242] hover:bg-[#f9f9f9] transition"
@@ -1908,15 +1886,6 @@ function NewBriefForm({
               Add custom requirement/deliverable
             </button>
 
-            {!fromCalculator && additionalAssetsLoaded < ADDITIONAL_ASSETS.length && (
-              <button
-                onClick={() => setAdditionalAssetsLoaded((prev) => Math.min(prev + 10, ADDITIONAL_ASSETS.length))}
-                className="w-full rounded-[28px] border border-[#e0e0e0] px-4 py-2 text-sm font-semibold text-[#424242] hover:bg-[#f9f9f9] transition"
-              >
-                More Assets
-              </button>
-            )}
-
             {showCustomAssetFields && (
               <div className="rounded-xl border border-[#ececec] p-4 space-y-4 bg-white">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -1926,13 +1895,6 @@ function NewBriefForm({
                       onChange={(e) => setCustomAssetDraft((prev) => ({ ...prev, name: e.target.value }))}
                       placeholder="e.g. POS toolkit"
                 />
-              </Field>
-                  <Field label="Delivery week">
-                    <StyledInput
-                      value={customAssetDraft.deliveryWeek}
-                      onChange={(e) => setCustomAssetDraft((prev) => ({ ...prev, deliveryWeek: e.target.value }))}
-                      placeholder="Week 32"
-                    />
               </Field>
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -2072,35 +2034,37 @@ function NewBriefForm({
           )}
         </div>
 
-        {/* Bottom Action Buttons */}
-        <div className="flex flex-col md:flex-row items-center gap-2.5 w-full pt-2">
-          <button
-            onClick={onCancel}
-            className="w-full md:w-auto md:flex-1 md:min-w-0 h-10 px-4 bg-[#03b3e2] text-black hover:opacity-80 rounded-[28px] transition flex items-center justify-center"
-          >
-            <span className="text-sm font-semibold leading-[18.62px] whitespace-nowrap">Cancel</span>
-          </button>
-          <button
-            onClick={handleSaveDraft}
-            className="w-full md:w-auto md:flex-1 md:min-w-0 h-10 px-4 bg-[#ffb546] hover:opacity-90 rounded-[28px] flex items-center justify-center transition"
-          >
-            <span className="text-sm font-semibold leading-[18.62px] text-black whitespace-nowrap">Save draft</span>
-          </button>
-          <button
-            onClick={handleReviewBrief}
-            disabled={!isFormComplete}
-            className={`w-full md:w-auto md:flex-1 md:min-w-0 h-10 px-4 rounded-[28px] flex items-center justify-center transition ${
-              isFormComplete ? "bg-[#ffb546] hover:opacity-90" : "bg-[#f9f9f9] cursor-not-allowed opacity-50"
-            }`}
-          >
-            <span
-              className={`text-sm font-semibold leading-[18.62px] whitespace-nowrap ${
-                isFormComplete ? "text-black" : "text-[#848487]"
+        {/* Bottom Action Buttons - Fixed */}
+        <div className="fixed bottom-0 left-0 lg:left-[240px] right-0 pt-4 pb-2 px-4 md:px-6 z-10 pointer-events-none backdrop-blur-sm">
+          <div className="flex flex-col md:flex-row items-center gap-2.5 w-full max-w-full pointer-events-auto">
+            <button
+              onClick={onCancel}
+              className="w-full md:w-auto md:flex-1 md:min-w-0 h-10 px-4 bg-[#03b3e2] text-black hover:opacity-80 rounded-[28px] transition flex items-center justify-center"
+            >
+              <span className="text-sm font-semibold leading-[18.62px] whitespace-nowrap">Cancel</span>
+            </button>
+            <button
+              onClick={handleSaveDraft}
+              className="w-full md:w-auto md:flex-1 md:min-w-0 h-10 px-4 bg-[#ffb546] hover:opacity-90 rounded-[28px] flex items-center justify-center transition"
+            >
+              <span className="text-sm font-semibold leading-[18.62px] text-black whitespace-nowrap">Save draft</span>
+            </button>
+            <button
+              onClick={handleReviewBrief}
+              disabled={!isFormComplete}
+              className={`w-full md:w-auto md:flex-1 md:min-w-0 h-10 px-4 rounded-[28px] flex items-center justify-center transition ${
+                isFormComplete ? "bg-[#ffb546] hover:opacity-90" : "bg-[#f9f9f9] cursor-not-allowed opacity-50"
               }`}
             >
-              Review brief
-            </span>
-          </button>
+              <span
+                className={`text-sm font-semibold leading-[18.62px] whitespace-nowrap ${
+                  isFormComplete ? "text-black" : "text-[#848487]"
+                }`}
+              >
+                Review brief
+              </span>
+            </button>
+          </div>
         </div>
 
         </div>
@@ -2316,11 +2280,6 @@ function NewBriefForm({
                 </div>
               )}
             </div>
-            <PreviewField
-              label="Additional asset notes"
-              value={formData.additionalAssetDetails || "—"}
-              fullWidth
-            />
           </div>
           <div className="flex flex-col sm:flex-row gap-3 pt-4 border-t border-[#e0e0e0] mt-4">
             <button

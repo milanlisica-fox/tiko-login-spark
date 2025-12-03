@@ -53,25 +53,50 @@ export default function CalculatorPage() {
   const [selectedTaskType, setSelectedTaskType] = useState<string[]>([]);
   const [filtersApplied, setFiltersApplied] = useState(false);
   const [quantityInputs, setQuantityInputs] = useState<Record<string, string>>({});
+  const [showAllAssets, setShowAllAssets] = useState(false);
 
   // nav items centralized via DashboardLayout
   const { activeName } = useActiveNav();
 
-  // Available assets from Figma design
-  const availableAssets: AssetItem[] = [
-    { id: "1", title: "Non Editable Image Files Adapted Under NDA", tokens: 3 },
-    { id: "2", title: "Non Editable Image Files Adapted Non NDA", tokens: 3 },
-    { id: "3", title: "Editable Image Files Adapted Under NDA", tokens: 5 },
-    { id: "4", title: "Editable Image Files Adapted Non NDA", tokens: 10 },
-    { id: "5", title: "PDF Files Adapted Under NDA", tokens: 10 },
-    { id: "6", title: "PDF Files Adapted Non NDA", tokens: 10 },
-    { id: "7", title: "PPT Files Created Under NDA", tokens: 14 },
-    { id: "8", title: "PPT Files Created Non NDA", tokens: 14 },
-    { id: "9", title: "Doc Files Created Under NDA", tokens: 3 },
-    { id: "10", title: "Doc Files Created Non NDA", tokens: 3 },
-    { id: "11", title: "Video File Created Under NDA", tokens: 15 },
-    { id: "12", title: "Video File Created Non NDA", tokens: 3 },
-  ];
+  // Available assets with random token values (memoized to ensure stable values)
+  const availableAssets = useMemo<AssetItem[]>(() => {
+    // Helper function to generate random token value between 3 and 20
+    const getRandomToken = () => Math.floor(Math.random() * 18) + 3;
+    
+    return [
+      { id: "1", title: "Master KV creation (PSD, JPEG, INDD, PDF)", tokens: getRandomToken() },
+      { id: "2", title: "Static KV adaption (PSD, JPEG)", tokens: getRandomToken() },
+      { id: "3", title: "Static KV adaption (INDD, PDF)", tokens: getRandomToken() },
+      { id: "4", title: "Master KV animation creation (MP4, AEP)", tokens: getRandomToken() },
+      { id: "5", title: "Master KV animation adaption (MP4, AEP)", tokens: getRandomToken() },
+      { id: "6", title: "PPT Files", tokens: getRandomToken() },
+      { id: "7", title: "Roundel", tokens: getRandomToken() },
+      { id: "8", title: "Urgency tag", tokens: getRandomToken() },
+      { id: "9", title: "Video creation", tokens: getRandomToken() },
+      { id: "10", title: "Video adaptation", tokens: getRandomToken() },
+      { id: "11", title: "Watermarked files", tokens: getRandomToken() },
+      { id: "12", title: "Master KV", tokens: getRandomToken() },
+      { id: "13", title: "Digital display banner", tokens: getRandomToken() },
+      { id: "14", title: "Social banners static", tokens: getRandomToken() },
+      { id: "15", title: "Social banners animation", tokens: getRandomToken() },
+      { id: "16", title: "Toolkit", tokens: getRandomToken() },
+      { id: "17", title: "USP messaging", tokens: getRandomToken() },
+      { id: "18", title: "Redacted KVs", tokens: getRandomToken() },
+      { id: "19", title: "Static KVs", tokens: getRandomToken() },
+      { id: "20", title: "Animated KVs", tokens: getRandomToken() },
+      { id: "21", title: "Roundels", tokens: getRandomToken() },
+      { id: "22", title: "Urgency Tag", tokens: getRandomToken() },
+      { id: "23", title: "Digi banners", tokens: getRandomToken() },
+      { id: "24", title: "Storyboards", tokens: getRandomToken() },
+      { id: "25", title: "Icons", tokens: getRandomToken() },
+      { id: "26", title: "Feature assets localisation", tokens: getRandomToken() },
+      { id: "27", title: "Feature assets origination", tokens: getRandomToken() },
+      { id: "28", title: "Ecosystem KVs", tokens: getRandomToken() },
+      { id: "29", title: "Accessories statics", tokens: getRandomToken() },
+      { id: "30", title: "Accessories animations", tokens: getRandomToken() },
+      { id: "31", title: "Screenfills", tokens: getRandomToken() },
+    ];
+  }, []);
 
   const handleAddAsset = (asset: AssetItem) => {
     const existingAsset = selectedAssets.find((a) => a.id === asset.id);
@@ -235,16 +260,22 @@ export default function CalculatorPage() {
     return { assetType, taskType, ndaStatus };
   };
 
-  // Filter assets - show every second asset when filters are applied
+  // Filter assets - show every second asset when filters are applied, or limit to 10 initially
   const filteredAssets = useMemo(() => {
+    let assets = availableAssets;
+    
     // If filters are applied, show every second asset (indices 0, 2, 4, 6, etc.)
     if (filtersApplied) {
-      return availableAssets.filter((_, index) => index % 2 === 0);
+      assets = assets.filter((_, index) => index % 2 === 0);
     }
     
-    // Otherwise, show all assets
-    return availableAssets;
-  }, [availableAssets, filtersApplied]);
+    // If not showing all assets, limit to first 10
+    if (!showAllAssets && !filtersApplied) {
+      assets = assets.slice(0, 10);
+    }
+    
+    return assets;
+  }, [availableAssets, filtersApplied, showAllAssets]);
 
   // Get display text for filter bar
   const getAssetTypeDisplay = () => {
@@ -289,6 +320,7 @@ export default function CalculatorPage() {
     setSelectedNDA([]);
     setSelectedTaskType([]);
     setFiltersApplied(false);
+    setShowAllAssets(false);
     toast.success("Filters reset");
   };
 
@@ -437,6 +469,17 @@ export default function CalculatorPage() {
                       </div>
                     );
                   })}
+                {/* Show more button */}
+                {!showAllAssets && !filtersApplied && availableAssets.length > 10 && (
+                  <div className="flex justify-center mt-4">
+                    <button
+                      onClick={() => setShowAllAssets(true)}
+                      className="text-sm font-semibold text-[#03B3E2] hover:text-[#0288b3] transition underline"
+                    >
+                      Show more
+                    </button>
+                  </div>
+                )}
               </div>
             </div>
 
@@ -667,11 +710,13 @@ export default function CalculatorPage() {
                   if (filterCount > 0) {
                     // Apply filters - this will show every second asset
                     setFiltersApplied(true);
+                    setShowAllAssets(false);
                     const filteredCount = Math.ceil(availableAssets.length / 2);
                     toast.success(`Filters applied: showing ${filteredCount} asset(s)`);
                   } else {
                     // Clear filters - show all assets
                     setFiltersApplied(false);
+                    setShowAllAssets(false);
                     toast.success("All filters cleared");
                   }
                 }}
