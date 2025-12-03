@@ -145,14 +145,24 @@ export default function SOWDocument({ sow }: SOWDocumentProps) {
           <div>
             <h3 className="text-base font-semibold text-black mb-6">Client Signature</h3>
             <div className="space-y-4">
-              <div className="border-b-2 border-[#848487] pb-2 min-h-[60px]"></div>
+              <div className="border-b-2 border-[#848487] pb-2 min-h-[60px] flex items-end">
+                {sow.signatures?.client ? (
+                  <p className="text-base text-black font-semibold italic" style={{ fontFamily: 'cursive' }}>
+                    {sow.signatures.client.signature}
+                  </p>
+                ) : null}
+              </div>
               <p className="text-xs text-[#848487]">Signature</p>
               <div className="border-b border-[#e0e0e0] pb-2 mt-4">
-                <p className="text-sm text-black font-medium">{sow.projectLead}</p>
+                <p className="text-sm text-black font-medium">
+                  {sow.signatures?.client?.name || sow.projectLead}
+                </p>
               </div>
               <p className="text-xs text-[#848487]">Name</p>
               <div className="border-b border-[#e0e0e0] pb-2 mt-4">
-                <p className="text-sm text-black">{formatDate(sow.date)}</p>
+                <p className="text-sm text-black">
+                  {sow.signatures?.client?.date || formatDate(sow.date)}
+                </p>
               </div>
               <p className="text-xs text-[#848487]">Date</p>
             </div>
@@ -160,14 +170,24 @@ export default function SOWDocument({ sow }: SOWDocumentProps) {
           <div>
             <h3 className="text-base font-semibold text-black mb-6">Vendor Signature</h3>
             <div className="space-y-4">
-              <div className="border-b-2 border-[#848487] pb-2 min-h-[60px]"></div>
+              <div className="border-b-2 border-[#848487] pb-2 min-h-[60px] flex items-end">
+                {sow.signatures?.vendor ? (
+                  <p className="text-base text-black font-semibold italic" style={{ fontFamily: 'cursive' }}>
+                    {sow.signatures.vendor.signature}
+                  </p>
+                ) : null}
+              </div>
               <p className="text-xs text-[#848487]">Signature</p>
               <div className="border-b border-[#e0e0e0] pb-2 mt-4">
-                <p className="text-sm text-black font-medium">TIKO Team</p>
+                <p className="text-sm text-black font-medium">
+                  {sow.signatures?.vendor?.name || "TIKO Team"}
+                </p>
               </div>
               <p className="text-xs text-[#848487]">Name</p>
               <div className="border-b border-[#e0e0e0] pb-2 mt-4">
-                <p className="text-sm text-black">{formatDate(sow.date)}</p>
+                <p className="text-sm text-black">
+                  {sow.signatures?.vendor?.date || formatDate(sow.date)}
+                </p>
               </div>
               <p className="text-xs text-[#848487]">Date</p>
             </div>

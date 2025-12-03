@@ -216,7 +216,7 @@ export default function ProjectsPage() {
                 <div className="grid grid-cols-[minmax(0,35%)_minmax(0,5%)_minmax(0,20%)_minmax(0,10%)_minmax(0,20%)_minmax(0,10%)] items-center py-[12px] px-[8px] gap-4 text-xs font-semibold uppercase text-[#646464] tracking-wide">
                   <div className="col-span-2 text-center">Projects</div>
                   <div className="text-center">Members</div>
-                  <div className="text-left">Importance</div>
+                  <div className="text-left">RAG</div>
                   <div className="text-center">Progress</div>
                   <div className="text-center">Due date</div>
                 </div>

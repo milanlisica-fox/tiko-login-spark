@@ -122,7 +122,7 @@ const [open, setOpen] = useState(false);
                   <div className="cs-item grid-col-item  flex-1 lg:flex-[3] grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
                     {/* Draft briefs */}
                     <button
-                      onClick={() => navigate("/dashboard/briefs")}
+                      onClick={() => navigate("/dashboard/briefs", { state: { activeTab: "Drafts" } })}
                       className="card-item flex-1 bg-[#f9f9f9] rounded-[12px] p-4 md:p-[20px] flex flex-col gap-[10px] relative overflow-clip hover:bg-[#f0f0f0] transition cursor-pointer text-left"
                     >
                       <p className="text-xs md:text-sm font-bold leading-[18.62px] text-black pr-4">Draft briefs</p>
@@ -136,7 +136,7 @@ const [open, setOpen] = useState(false);
 
                     {/* In review */}
                     <button
-                      onClick={() => navigate("/dashboard/briefs")}
+                      onClick={() => navigate("/dashboard/briefs", { state: { activeTab: "In review" } })}
                       className="card-item flex-1 bg-[#f9f9f9] rounded-[12px] p-4 md:p-[20px] flex flex-col gap-[10px] relative overflow-clip hover:bg-[#f0f0f0] transition cursor-pointer text-left"
                     >
                       <p className="text-xs md:text-sm font-bold leading-[18.62px] text-black pr-4">In review</p>
@@ -443,7 +443,7 @@ const [open, setOpen] = useState(false);
                                   {/* Tokens Spent */}
                                   <div className="border border-[#ececec] rounded-lg p-4 bg-white">
                                     <div className="flex items-center justify-between mb-2">
-                                      <span className="text-sm text-black">Tokens Spent</span>
+                                      <span className="text-sm text-black">Tokens spent on completed projects</span>
                                       <Tooltip>
                                         <TooltipTrigger asChild>
                                           <HelpCircle size={16} className="text-[#646464] cursor-help" />
@@ -460,7 +460,7 @@ const [open, setOpen] = useState(false);
                                   {/* Tokens Committed */}
                                   <div className="border border-[#ececec] rounded-lg p-4 bg-white">
                                     <div className="flex items-center justify-between mb-2">
-                                      <span className="text-sm text-black">Tokens Committed</span>
+                                      <span className="text-sm text-black">Tokens committed to WIP projects</span>
                                       <Tooltip>
                                         <TooltipTrigger asChild>
                                           <HelpCircle size={16} className="text-[#646464] cursor-help" />
@@ -477,7 +477,7 @@ const [open, setOpen] = useState(false);
                                   {/* Tokens Remaining */}
                                   <div className="border border-[#ececec] rounded-lg p-4 bg-white">
                                     <div className="flex items-center justify-between mb-2">
-                                      <span className="text-sm text-black">Tokens Remaining</span>
+                                      <span className="text-sm text-black">Tokens remaining in budget this quarter</span>
                                       <Tooltip>
                                         <TooltipTrigger asChild>
                                           <HelpCircle size={16} className="text-[#646464] cursor-help" />
@@ -494,7 +494,7 @@ const [open, setOpen] = useState(false);
                                   {/* Tokens Pending */}
                                   <div className="border border-[#ececec] rounded-lg p-4 bg-white">
                                     <div className="flex items-center justify-between mb-2">
-                                      <span className="text-sm text-black">Tokens Pending</span>
+                                      <span className="text-sm text-black">Tokens pending for briefs in progress</span>
                                       <Tooltip>
                                         <TooltipTrigger asChild>
                                           <HelpCircle size={16} className="text-[#646464] cursor-help" />

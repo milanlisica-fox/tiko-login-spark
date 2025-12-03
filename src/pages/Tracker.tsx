@@ -3574,7 +3574,7 @@ export default function TrackerPage() {
                                   {/* Tokens spent */}
                                   <div className="border border-[#ececec] rounded-lg p-4 bg-white">
                                     <div className="flex items-center justify-between mb-2">
-                                      <span className="text-sm text-black">Tokens spent</span>
+                                      <span className="text-sm text-black">Tokens spent on completed projects</span>
                                       <Tooltip>
                                         <TooltipTrigger asChild>
                                           <HelpCircle size={16} className="text-[#646464] cursor-help" />
@@ -3591,7 +3591,7 @@ export default function TrackerPage() {
                                   {/* Tokens committed  */}
                                   <div className="border border-[#ececec] rounded-lg p-4 bg-white">
                                     <div className="flex items-center justify-between mb-2">
-                                      <span className="text-sm text-black">Tokens committed </span>
+                                      <span className="text-sm text-black">Tokens committed to WIP projects</span>
                                       <Tooltip>
                                         <TooltipTrigger asChild>
                                           <HelpCircle size={16} className="text-[#646464] cursor-help" />
@@ -3608,7 +3608,7 @@ export default function TrackerPage() {
                                   {/* Tokens remaining */}
                                   <div className="border border-[#ececec] rounded-lg p-4 bg-white">
                                     <div className="flex items-center justify-between mb-2">
-                                      <span className="text-sm text-black">Tokens remaining</span>
+                                      <span className="text-sm text-black">Tokens remaining in budget this quarter</span>
                                       <Tooltip>
                                         <TooltipTrigger asChild>
                                           <HelpCircle size={16} className="text-[#646464] cursor-help" />
@@ -3625,7 +3625,7 @@ export default function TrackerPage() {
                                   {/* Tokens pending */}
                                   <div className="border border-[#ececec] rounded-lg p-4 bg-white">
                                     <div className="flex items-center justify-between mb-2">
-                                      <span className="text-sm text-black">Tokens pending</span>
+                                      <span className="text-sm text-black">Tokens pending for briefs in progress</span>
                                       <Tooltip>
                                         <TooltipTrigger asChild>
                                           <HelpCircle size={16} className="text-[#646464] cursor-help" />
@@ -3850,7 +3850,7 @@ export default function TrackerPage() {
                                 {/* Tokens spent */}
                                 <div className="border border-[#ececec] rounded-lg p-4 bg-white">
                                   <div className="flex items-center justify-between mb-2">
-                                    <span className="text-sm text-black">Tokens spent</span>
+                                    <span className="text-sm text-black">Tokens spent on completed projects</span>
                                     <Tooltip>
                                       <TooltipTrigger asChild>
                                         <HelpCircle size={16} className="text-[#646464] cursor-help" />
@@ -3867,7 +3867,7 @@ export default function TrackerPage() {
                                 {/* Tokens committed  */}
                                 <div className="border border-[#ececec] rounded-lg p-4 bg-white">
                                   <div className="flex items-center justify-between mb-2">
-                                    <span className="text-sm text-black">Tokens committed </span>
+                                    <span className="text-sm text-black">Tokens committed to WIP projects</span>
                                     <Tooltip>
                                       <TooltipTrigger asChild>
                                         <HelpCircle size={16} className="text-[#646464] cursor-help" />
@@ -3884,7 +3884,7 @@ export default function TrackerPage() {
                                 {/* Tokens remaining */}
                                 <div className="border border-[#ececec] rounded-lg p-4 bg-white">
                                   <div className="flex items-center justify-between mb-2">
-                                    <span className="text-sm text-black">Tokens remaining</span>
+                                    <span className="text-sm text-black">Tokens remaining in budget this quarter</span>
                                     <Tooltip>
                                       <TooltipTrigger asChild>
                                         <HelpCircle size={16} className="text-[#646464] cursor-help" />
@@ -3901,7 +3901,7 @@ export default function TrackerPage() {
                                 {/* Tokens pending */}
                                 <div className="border border-[#ececec] rounded-lg p-4 bg-white">
                                   <div className="flex items-center justify-between mb-2">
-                                    <span className="text-sm text-black">Tokens pending</span>
+                                    <span className="text-sm text-black">Tokens pending for briefs in progress</span>
                                     <Tooltip>
                                       <TooltipTrigger asChild>
                                         <HelpCircle size={16} className="text-[#646464] cursor-help" />

@@ -1,6 +1,6 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import { Home, FileText, Folder, BarChart2, LogOut, ArrowRight, User, Bell, Coins, ChevronDown } from "lucide-react";
+import { Home, FileText, Folder, BarChart2, LogOut, ArrowRight, User, Bell, Coins, ChevronDown, Upload } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -61,9 +61,36 @@ export default function UserProfilePage() {
   const [isPhotoDialogOpen, setIsPhotoDialogOpen] = useState(false);
   const [avatarSrc, setAvatarSrc] = useState<string | undefined>(undefined);
   const [tempAvatarSrc, setTempAvatarSrc] = useState<string | undefined>(undefined);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   // nav items centralized via DashboardLayout
   const { activeName } = useActiveNav();
+
+  const handleUploadPhoto = () => {
+    fileInputRef.current?.click();
+  };
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      // Validate file type
+      if (!file.type.startsWith('image/')) {
+        toast.error("Please select an image file");
+        return;
+      }
+      // Validate file size (e.g., max 5MB)
+      if (file.size > 5 * 1024 * 1024) {
+        toast.error("Image size must be less than 5MB");
+        return;
+      }
+      const blobUrl = URL.createObjectURL(file);
+      setTempAvatarSrc(blobUrl);
+    }
+    // Reset input so the same file can be selected again
+    if (fileInputRef.current) {
+      fileInputRef.current.value = '';
+    }
+  };
 
   // Change password functionality removed
 
@@ -154,7 +181,19 @@ export default function UserProfilePage() {
           </div>
         
       {/* Change Photo Dialog */}
-      <Dialog open={isPhotoDialogOpen} onOpenChange={setIsPhotoDialogOpen}>
+      <Dialog 
+        open={isPhotoDialogOpen} 
+        onOpenChange={(open) => {
+          if (!open) {
+            // Clean up blob URL if a new one was created but not saved
+            if (tempAvatarSrc && tempAvatarSrc.startsWith("blob:") && tempAvatarSrc !== avatarSrc) {
+              URL.revokeObjectURL(tempAvatarSrc);
+            }
+            setTempAvatarSrc(avatarSrc);
+          }
+          setIsPhotoDialogOpen(open);
+        }}
+      >
         <DialogContent className="bg-white p-[40px] rounded-[26px] shadow-[0px_13px_61px_0px_rgba(169,169,169,0.37)] max-w-[600px] border-0 backdrop-blur [&>button]:hidden">
           <style>{`
             [data-radix-dialog-overlay] {
@@ -202,10 +241,34 @@ export default function UserProfilePage() {
                 })}
               </div>
 
+              {/* Upload Photo Button */}
+              <div className="flex justify-center items-center">
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  accept="image/*"
+                  onChange={handleFileChange}
+                  className="hidden"
+                />
+                <Button
+                  onClick={handleUploadPhoto}
+                  className="h-[32px] bg-[#f1f1f3] hover:bg-[#e5e5e5] backdrop-blur-[6px] rounded-[28px] px-[24px] py-[18px]"
+                >
+                  <Upload size={16} className="mr-2 text-black" />
+                  <span className="text-[13px] font-semibold leading-[18.62px] text-black">
+                    Upload photo
+                  </span>
+                </Button>
+              </div>
+
               {/* Action Buttons */}
               <div className="flex gap-[10px] items-center">
                 <Button
                   onClick={() => {
+                    // Clean up blob URL if a new one was created but not saved
+                    if (tempAvatarSrc && tempAvatarSrc.startsWith("blob:") && tempAvatarSrc !== avatarSrc) {
+                      URL.revokeObjectURL(tempAvatarSrc);
+                    }
                     setTempAvatarSrc(avatarSrc);
                     setIsPhotoDialogOpen(false);
                   }}
@@ -218,22 +281,27 @@ export default function UserProfilePage() {
                 <Button
                   onClick={() => {
                     setAvatarSrc((prev) => {
+                      // Clean up previous blob URL if it exists and is different
                       if (prev && prev.startsWith("blob:") && prev !== tempAvatarSrc) {
                         URL.revokeObjectURL(prev);
                       }
                       return tempAvatarSrc;
                     });
-                    toast.success("Profile picture saved");
+                    if (tempAvatarSrc === undefined) {
+                      toast.success("Profile picture removed");
+                    } else {
+                      toast.success("Profile picture saved");
+                    }
                     setIsPhotoDialogOpen(false);
                   }}
                   className={`flex-1 h-[32px] backdrop-blur-[6px] rounded-[28px] px-[24px] py-[18px] ${
-                    tempAvatarSrc && tempAvatarSrc !== avatarSrc
+                    tempAvatarSrc !== avatarSrc
                       ? 'bg-yellow-500 hover:bg-yellow-600'
                       : 'bg-[#f9f9f9] hover:bg-[#e5e5e5]'
                   }`}
                 >
                   <span className={`text-[14px] font-semibold leading-[18.62px] ${
-                    tempAvatarSrc && tempAvatarSrc !== avatarSrc
+                    tempAvatarSrc !== avatarSrc
                       ? 'text-black'
                       : 'text-[#848487]'
                   }`}>

@@ -35,6 +35,18 @@ export interface SOW {
   date: string;
   status: "ready_to_sign" | "signed";
   icon?: React.ReactNode;
+  signatures?: {
+    client?: {
+      signature: string;
+      name: string;
+      date: string;
+    };
+    vendor?: {
+      signature: string;
+      name: string;
+      date: string;
+    };
+  };
 }
 
 // Mock comments for each SOW
@@ -209,6 +221,18 @@ export const SIGNED_SOWS: SOW[] = [
         <path d="M23.8229 40H5.80935C2.59694 40 0 37.4332 0 34.2582V31.8843C0 30.5935 0.795591 29.4362 2.0115 28.9614L14.9212 22.908C17.5932 21.8546 17.5932 18.1306 14.9362 17.0623L1.99648 10.8902C0.795576 10.4154 0 9.25816 0 7.96736V5.74184C0 2.56677 2.59694 0 5.80935 0H23.8229C25.0838 0 26.3147 0.400603 27.3205 1.15728L42.692 15.4154C45.7693 17.7151 45.7693 22.27 42.692 24.5697L27.3205 38.8279C26.3147 39.5846 25.0838 39.9852 23.8229 39.9852V40Z" fill="#03B3E2" />
       </svg>
     ),
+    signatures: {
+      client: {
+        signature: "Murray Gordon",
+        name: "Murray Gordon",
+        date: "27 August 2024",
+      },
+      vendor: {
+        signature: "Sarah Chen",
+        name: "Sarah Chen",
+        date: "27 August 2024",
+      },
+    },
   },
   {
     id: "5",
@@ -221,6 +245,18 @@ export const SIGNED_SOWS: SOW[] = [
         <path d="M23.8229 40H5.80935C2.59694 40 0 37.4332 0 34.2582V31.8843C0 30.5935 0.795591 29.4362 2.0115 28.9614L14.9212 22.908C17.5932 21.8546 17.5932 18.1306 14.9362 17.0623L1.99648 10.8902C0.795576 10.4154 0 9.25816 0 7.96736V5.74184C0 2.56677 2.59694 0 5.80935 0H23.8229C25.0838 0 26.3147 0.400603 27.3205 1.15728L42.692 15.4154C45.7693 17.7151 45.7693 22.27 42.692 24.5697L27.3205 38.8279C26.3147 39.5846 25.0838 39.9852 23.8229 39.9852V40Z" fill="#03B3E2" />
       </svg>
     ),
+    signatures: {
+      client: {
+        signature: "John Doe",
+        name: "John Doe",
+        date: "15 September 2024",
+      },
+      vendor: {
+        signature: "Michael Rodriguez",
+        name: "Michael Rodriguez",
+        date: "15 September 2024",
+      },
+    },
   },
 ];
 

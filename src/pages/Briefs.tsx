@@ -52,8 +52,8 @@ const arrowRightIcon = BRIEFS_ASSETS.arrowRightIcon;
 export const FORM_TEMPLATE_OPTIONS: { id: string; title: string; icon: string }[] = [
   { id: "promotional-campaign", title: "Promotional campaign", icon: iconBAU },
   { id: "bau-campaign", title: "BAU campaign", icon: iconBAU },
-  { id: "flagship-campaign", title: "Flagship campaign", icon: iconFeatureAsset },
-  { id: "other", title: "Other", icon: iconToolkit },
+  { id: "flagship-campaign", title: "Flagship toolkit", icon: iconFeatureAsset },
+  { id: "other", title: "Build your own", icon: iconToolkit },
 ];
 
 // Template to asset mapping
@@ -570,6 +570,8 @@ export default function BriefsPage() {
   );
 
   // Check if we should show the form directly from navigation state or reset to overview
+  const [initialActiveTab, setInitialActiveTab] = useState<"All" | "Drafts" | "In review" | undefined>(undefined);
+
   useEffect(() => {
     const state = location.state as {
       createBrief?: boolean;
@@ -578,6 +580,7 @@ export default function BriefsPage() {
       brief?: NewBriefFormValues;
       submittedBrief?: SubmittedBriefPayload;
       selectedTemplate?: string;
+      activeTab?: "All" | "Drafts" | "In review";
       calculatorAssets?: Array<{
         id: string;
         title: string;
@@ -587,10 +590,17 @@ export default function BriefsPage() {
     } | null;
 
     if (!state) {
+      setInitialActiveTab(undefined);
       return;
     }
 
     let shouldReplace = false;
+
+    // Handle activeTab from navigation state
+    if (state.activeTab) {
+      setInitialActiveTab(state.activeTab);
+      shouldReplace = true;
+    }
 
     if (state.resetToOverview) {
       setIsCreatingBrief(false);
@@ -1034,7 +1044,7 @@ export default function BriefsPage() {
               </div>
 
               {/* All briefs */}
-              <AllBriefsSection briefs={briefs} />
+              <AllBriefsSection briefs={briefs} initialTab={initialActiveTab} />
             </div>
           )}
       </div>
@@ -2028,65 +2038,67 @@ function NewBriefForm({
           </div>
         </section>
 
-        {/* Token Estimate */}
-        <div className="flex items-center gap-2 pt-4 pb-2">
-          <div className="flex gap-4 items-center pb-2">
-            <span className="h-10 w-10 flex items-center justify-center">
-              <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 20 20" fill="none">
-                <path d="M10.0016 16.6012C13.3865 16.6012 16.1306 15.5303 16.1306 14.2093C16.1306 12.8882 13.3865 11.8173 10.0016 11.8173C6.61662 11.8173 3.87256 12.8882 3.87256 14.2093C3.87256 15.5303 6.61662 16.6012 10.0016 16.6012Z" fill="#03B3E2" />
-                <path d="M10.0016 7.54461C13.387 7.54461 16.1306 8.61587 16.1306 9.93653C16.1306 11.2572 13.387 12.3284 10.0016 12.3284C6.6161 12.3284 3.87256 11.2572 3.87256 9.93653C3.87256 8.61587 6.6161 7.54461 10.0016 7.54461Z" fill="#03B3E2" />
-                <path d="M10.0018 8.05164C13.3867 8.05164 16.1308 6.98073 16.1308 5.65972C16.1308 4.33871 13.3867 3.26782 10.0018 3.26782C6.61682 3.26782 3.87276 4.33871 3.87276 5.65972C3.87276 6.98073 6.61682 8.05164 10.0018 8.05164Z" fill="#03B3E2" />
-              </svg>
-            </span>
-            <span className="text-[26px] leading-[37.24px] text-black font-medium">{tokenEstimate}</span>
-            <span className="text-[26px] leading-[37.24px] text-[#848487]">Tokens estimate</span>
-          </div>
-          {hasCustomAssets && (
-            <TooltipProvider>
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <HelpCircle size={16} className="text-[#848487] cursor-help" />
-                </TooltipTrigger>
-                <TooltipContent>
-                  <p className="max-w-[300px]">
-                    Your list of assets contains one or more custom assets. IRIS will review it and set the token price. You will be informed once this is done.
-                  </p>
-                </TooltipContent>
-              </Tooltip>
-            </TooltipProvider>
-          )}
-        </div>
-
         {/* Bottom Action Buttons - Fixed */}
         <div className="fixed bottom-0 left-0 lg:left-[240px] right-0 pt-4 pb-2 px-4 md:px-6 z-10 pointer-events-none backdrop-blur-sm">
-          <div className="flex flex-col md:flex-row items-center gap-2.5 w-full max-w-full pointer-events-auto">
-            <button
-              onClick={onCancel}
-              className="w-full md:w-auto md:flex-1 md:min-w-0 h-10 px-4 bg-[#03b3e2] text-black hover:opacity-80 rounded-[28px] transition flex items-center justify-center"
-            >
-              <span className="text-sm font-semibold leading-[18.62px] whitespace-nowrap">Cancel</span>
-            </button>
-            <button
-              onClick={handleSaveDraft}
-              className="w-full md:w-auto md:flex-1 md:min-w-0 h-10 px-4 bg-[#ffb546] hover:opacity-90 rounded-[28px] flex items-center justify-center transition"
-            >
-              <span className="text-sm font-semibold leading-[18.62px] text-black whitespace-nowrap">Save draft</span>
-            </button>
-            <button
-              onClick={handleReviewBrief}
-              disabled={!isFormComplete}
-              className={`w-full md:w-auto md:flex-1 md:min-w-0 h-10 px-4 rounded-[28px] flex items-center justify-center transition ${
-                isFormComplete ? "bg-[#ffb546] hover:opacity-90" : "bg-[#f9f9f9] cursor-not-allowed opacity-50"
-              }`}
-            >
-              <span
-                className={`text-sm font-semibold leading-[18.62px] whitespace-nowrap ${
-                  isFormComplete ? "text-black" : "text-[#848487]"
+          <div className="flex flex-col gap-2.5 w-full max-w-full pointer-events-auto">
+            {/* Token Estimate */}
+            <div className="flex items-center gap-2 justify-end pb-2">
+              <div className="flex gap-4 items-center">
+                <span className="h-10 w-10 flex items-center justify-center">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 20 20" fill="none">
+                    <path d="M10.0016 16.6012C13.3865 16.6012 16.1306 15.5303 16.1306 14.2093C16.1306 12.8882 13.3865 11.8173 10.0016 11.8173C6.61662 11.8173 3.87256 12.8882 3.87256 14.2093C3.87256 15.5303 6.61662 16.6012 10.0016 16.6012Z" fill="#03B3E2" />
+                    <path d="M10.0016 7.54461C13.387 7.54461 16.1306 8.61587 16.1306 9.93653C16.1306 11.2572 13.387 12.3284 10.0016 12.3284C6.6161 12.3284 3.87256 11.2572 3.87256 9.93653C3.87256 8.61587 6.6161 7.54461 10.0016 7.54461Z" fill="#03B3E2" />
+                    <path d="M10.0018 8.05164C13.3867 8.05164 16.1308 6.98073 16.1308 5.65972C16.1308 4.33871 13.3867 3.26782 10.0018 3.26782C6.61682 3.26782 3.87276 4.33871 3.87276 5.65972C3.87276 6.98073 6.61682 8.05164 10.0018 8.05164Z" fill="#03B3E2" />
+                  </svg>
+                </span>
+                <span className="text-[26px] leading-[37.24px] text-black font-medium">£{tokenEstimate}</span>
+                <span className="text-[26px] leading-[37.24px] text-[#848487]">Tokens estimate</span>
+              </div>
+              {hasCustomAssets && (
+                <TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <HelpCircle size={16} className="text-[#848487] cursor-help" />
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p className="max-w-[300px]">
+                        Your list of assets contains one or more custom assets. IRIS will review it and set the token price. You will be informed once this is done.
+                      </p>
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
+              )}
+            </div>
+            {/* Action Buttons */}
+            <div className="flex flex-col md:flex-row items-center gap-2.5 w-full max-w-full">
+              <button
+                onClick={onCancel}
+                className="w-full md:w-auto md:flex-1 md:min-w-0 h-10 px-4 bg-[#03b3e2] text-black hover:opacity-80 rounded-[28px] transition flex items-center justify-center"
+              >
+                <span className="text-sm font-semibold leading-[18.62px] whitespace-nowrap">Cancel</span>
+              </button>
+              <button
+                onClick={handleSaveDraft}
+                className="w-full md:w-auto md:flex-1 md:min-w-0 h-10 px-4 bg-[#ffb546] hover:opacity-90 rounded-[28px] flex items-center justify-center transition"
+              >
+                <span className="text-sm font-semibold leading-[18.62px] text-black whitespace-nowrap">Save draft</span>
+              </button>
+              <button
+                onClick={handleReviewBrief}
+                disabled={!isFormComplete}
+                className={`w-full md:w-auto md:flex-1 md:min-w-0 h-10 px-4 rounded-[28px] flex items-center justify-center transition ${
+                  isFormComplete ? "bg-[#ffb546] hover:opacity-90" : "bg-[#f9f9f9] cursor-not-allowed opacity-50"
                 }`}
               >
-                Review brief
-              </span>
-            </button>
+                <span
+                  className={`text-sm font-semibold leading-[18.62px] whitespace-nowrap ${
+                    isFormComplete ? "text-black" : "text-[#848487]"
+                  }`}
+                >
+                  Review brief
+                </span>
+              </button>
+            </div>
           </div>
         </div>
 
@@ -3172,9 +3184,22 @@ function AIResponseScreen({
   );
 }
 
-function AllBriefsSection({ briefs: allBriefs }: { briefs: BriefSummary[] }) {
+function AllBriefsSection({ 
+  briefs: allBriefs, 
+  initialTab 
+}: { 
+  briefs: BriefSummary[];
+  initialTab?: "All" | "Drafts" | "In review";
+}) {
   const navigate = useNavigate();
-  const [activeTab, setActiveTab] = useState<"All" | "Drafts" | "In review">("All");
+  const [activeTab, setActiveTab] = useState<"All" | "Drafts" | "In review">(initialTab || "All");
+
+  // Update activeTab when initialTab changes (e.g., from navigation state)
+  useEffect(() => {
+    if (initialTab) {
+      setActiveTab(initialTab);
+    }
+  }, [initialTab]);
 
   const filtered = allBriefs.filter((b) =>
     activeTab === "All" ? true : activeTab === "Drafts" ? b.status === "Draft" : b.status === "In review"
