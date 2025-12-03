@@ -15,6 +15,7 @@ import NotFound from "./pages/NotFound";
 import BriefReview from "./pages/BriefReview";
 import BriefSingle from "./pages/BriefSingle";
 import SOW from "./pages/SOW";
+import TokenTransactions from "./pages/TokenTransactions";
 
 const queryClient = new QueryClient();
 
@@ -40,6 +41,7 @@ const AppRoutes = () => (
           <Route path="/dashboard/calculator" element={<Calculator />} />
           <Route path="/dashboard/profile" element={<UserProfile />} />
           <Route path="/dashboard/sow" element={<SOW />} />
+          <Route path="/dashboard/token-transactions" element={<TokenTransactions />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>

@@ -88,26 +88,9 @@ export default function TrackerPage() {
   const [showAdminModal, setShowAdminModal] = useState(false);
   const [adminQuestion, setAdminQuestion] = useState("");
   const [selectedYear, setSelectedYear] = useState<string>("2025");
-  const [selectedView, setSelectedView] = useState<"marcomms-manager" | "marketing-lead" | "head-of-marketing">("head-of-marketing");
 
   // nav items centralized via DashboardLayout
   const { activeName } = useActiveNav();
-
-  // View definitions with allowed tabs
-  const viewConfig: Record<string, { label: string; tabs: string[] }> = {
-    "marcomms-manager": {
-      label: "Marcomms Manager",
-      tabs: ["budget", "project-performance", "leaderboard"],
-    },
-    "marketing-lead": {
-      label: "Marketing Lead",
-      tabs: ["budget", "brief-quality", "project-performance", "predictive-analytics"],
-    },
-    "head-of-marketing": {
-      label: "Head of Marketing",
-      tabs: ["budget", "leaderboard", "brief-quality", "project-performance", "predictive-analytics"],
-    },
-  };
 
   // Tab labels mapping
   const tabLabels: Record<string, string> = {
@@ -126,17 +109,6 @@ export default function TrackerPage() {
     budget: "#0177c7",
     "predictive-analytics": "#ff4337",
   };
-
-  // Get allowed tabs for current view
-  const allowedTabs = viewConfig[selectedView].tabs;
-  
-  // Check if current tab is allowed, if not switch to first allowed tab
-  useEffect(() => {
-    const currentAllowedTabs = viewConfig[selectedView].tabs;
-    if (!currentAllowedTabs.includes(activeTab)) {
-      navigate(`/dashboard/tracker?tab=${currentAllowedTabs[0]}`, { replace: true });
-    }
-  }, [selectedView, activeTab, navigate]);
 
   // Handle tab change with scroll to top
   const handleTabChange = (value: string) => {
@@ -922,92 +894,39 @@ export default function TrackerPage() {
             </Button> */}
           </div>
 
-          {/* View Selector */}
-          <div className="flex flex-col gap-2">
-            <p className="text-sm text-[#646464] font-medium">Select view:</p>
-            <div className="flex flex-wrap gap-2">
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => setSelectedView("marcomms-manager")}
-                className={`h-9 px-4 text-sm border ${
-                  selectedView === "marcomms-manager"
-                    ? "bg-[#0177c7] text-white border-[#0177c7] hover:bg-[#0177c7] hover:text-white"
-                    : "bg-white text-black border-[#ececec] hover:bg-[#f9f9f9]"
-                }`}
-              >
-                Marcomms Manager
-              </Button>
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => setSelectedView("marketing-lead")}
-                className={`h-9 px-4 text-sm border ${
-                  selectedView === "marketing-lead"
-                    ? "bg-[#0177c7] text-white border-[#0177c7] hover:bg-[#0177c7] hover:text-white"
-                    : "bg-white text-black border-[#ececec] hover:bg-[#f9f9f9]"
-                }`}
-              >
-                Marketing Lead
-              </Button>
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => setSelectedView("head-of-marketing")}
-                className={`h-9 px-4 text-sm border ${
-                  selectedView === "head-of-marketing"
-                    ? "bg-[#0177c7] text-white border-[#0177c7] hover:bg-[#0177c7] hover:text-white"
-                    : "bg-white text-black border-[#ececec] hover:bg-[#f9f9f9]"
-                }`}
-              >
-                Head of Marketing
-              </Button>
-            </div>
-          </div>
-
             {/* Tabs - Desktop */}
             <Tabs value={activeTab} onValueChange={handleTabChange} className="w-full hidden md:block">
               <TabsList className="inline-flex h-12 md:h-14 items-center justify-start rounded-md bg-transparent p-0 text-muted-foreground border-b-2 border-[#ececec] w-full">
-              {allowedTabs.includes("budget") && (
                 <TabsTrigger 
                   value="budget" 
                     className="flex-1 inline-flex items-center justify-center whitespace-nowrap rounded-none px-2 md:px-3 lg:px-4 py-2 md:py-3 text-xs md:text-sm lg:text-base font-medium md:font-semibold ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:bg-transparent data-[state=active]:text-[#0177c7] data-[state=active]:shadow-none border-b-[3px] border-transparent data-[state=active]:border-[#0177c7]"
                 >
                   Budget
                 </TabsTrigger>
-              )}
-              {allowedTabs.includes("leaderboard") && (
                 <TabsTrigger 
                   value="leaderboard" 
                     className="flex-1 inline-flex items-center justify-center whitespace-nowrap rounded-none px-2 md:px-3 lg:px-4 py-2 md:py-3 text-xs md:text-sm lg:text-base font-medium md:font-semibold ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:bg-transparent data-[state=active]:text-[#03b3e2] data-[state=active]:shadow-none border-b-[3px] border-transparent data-[state=active]:border-[#03b3e2]"
                 >
                   Leaderboard
                 </TabsTrigger>
-              )}
-              {allowedTabs.includes("brief-quality") && (
                 <TabsTrigger 
                   value="brief-quality" 
                     className="flex-1 inline-flex items-center justify-center whitespace-nowrap rounded-none px-2 md:px-3 lg:px-4 py-2 md:py-3 text-xs md:text-sm lg:text-base font-medium md:font-semibold ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:bg-transparent data-[state=active]:text-[#8092dc] data-[state=active]:shadow-none border-b-[3px] border-transparent data-[state=active]:border-[#8092dc]"
                 >
                   Brief quality
                 </TabsTrigger>
-              )}
-              {allowedTabs.includes("project-performance") && (
                 <TabsTrigger 
                   value="project-performance" 
                     className="flex-1 inline-flex items-center justify-center whitespace-nowrap rounded-none px-2 md:px-3 lg:px-4 py-2 md:py-3 text-xs md:text-sm lg:text-base font-medium md:font-semibold ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:bg-transparent data-[state=active]:text-[#ffb546] data-[state=active]:shadow-none border-b-[3px] border-transparent data-[state=active]:border-[#ffb546]"
                 >
                   Project performance
                 </TabsTrigger>
-              )}
-              {allowedTabs.includes("predictive-analytics") && (
                 <TabsTrigger 
                   value="predictive-analytics" 
                     className="flex-1 inline-flex items-center justify-center whitespace-nowrap rounded-none px-2 md:px-3 lg:px-4 py-2 md:py-3 text-xs md:text-sm lg:text-base font-medium md:font-semibold ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:bg-transparent data-[state=active]:text-[#ff4337] data-[state=active]:shadow-none border-b-[3px] border-transparent data-[state=active]:border-[#ff4337]"
                 >
                   Predictive analytics & insights
                 </TabsTrigger>
-              )}
             </TabsList>
             </Tabs>
 
@@ -1020,31 +939,21 @@ export default function TrackerPage() {
                   </SelectValue>
                 </SelectTrigger>
                 <SelectContent className="bg-[#f9f9f9]">
-                  {allowedTabs.includes("budget") && (
-                    <SelectItem value="budget" className="text-black [&>span:last-child]:text-center [&>span:last-child]:w-full">
-                      Budget
-                    </SelectItem>
-                  )}
-                  {allowedTabs.includes("leaderboard") && (
-                    <SelectItem value="leaderboard" className="text-black [&>span:last-child]:text-center [&>span:last-child]:w-full">
-                      Leaderboard
-                    </SelectItem>
-                  )}
-                  {allowedTabs.includes("brief-quality") && (
-                    <SelectItem value="brief-quality" className="text-black [&>span:last-child]:text-center [&>span:last-child]:w-full">
-                      Brief quality
-                    </SelectItem>
-                  )}
-                  {allowedTabs.includes("project-performance") && (
-                    <SelectItem value="project-performance" className="text-black [&>span:last-child]:text-center [&>span:last-child]:w-full">
-                      Project performance
-                    </SelectItem>
-                  )}
-                  {allowedTabs.includes("predictive-analytics") && (
-                    <SelectItem value="predictive-analytics" className="text-black [&>span:last-child]:text-center [&>span:last-child]:w-full">
-                      Predictive analytics & insights
-                    </SelectItem>
-                  )}
+                  <SelectItem value="budget" className="text-black [&>span:last-child]:text-center [&>span:last-child]:w-full">
+                    Budget
+                  </SelectItem>
+                  <SelectItem value="leaderboard" className="text-black [&>span:last-child]:text-center [&>span:last-child]:w-full">
+                    Leaderboard
+                  </SelectItem>
+                  <SelectItem value="brief-quality" className="text-black [&>span:last-child]:text-center [&>span:last-child]:w-full">
+                    Brief quality
+                  </SelectItem>
+                  <SelectItem value="project-performance" className="text-black [&>span:last-child]:text-center [&>span:last-child]:w-full">
+                    Project performance
+                  </SelectItem>
+                  <SelectItem value="predictive-analytics" className="text-black [&>span:last-child]:text-center [&>span:last-child]:w-full">
+                    Predictive analytics & insights
+                  </SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -3734,6 +3643,17 @@ export default function TrackerPage() {
                             </>
                           );
                         })()}
+                        
+                        {/* View Token Transactions Button */}
+                        <div className="pt-4 border-t border-[#ececec]">
+                          <Button
+                            variant="outline"
+                            onClick={() => navigate("/dashboard/token-transactions")}
+                            className="w-full border-[#e0e0e0] bg-white text-black hover:bg-[#f5f5f5]"
+                          >
+                            View token transactions
+                          </Button>
+                        </div>
                       </CardContent>
                     </Card>
 
