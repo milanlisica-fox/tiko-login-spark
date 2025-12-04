@@ -30,7 +30,7 @@ const Login = () => {
       return;
     }
 
-    if (password !== "admin123") {
+    if (password !== "admin1239") {
       setErrorMessage("Password is incorect");
       setPassword("");
       return;
