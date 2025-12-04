@@ -1,6 +1,6 @@
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Home, FileText, Folder, BarChart2, LogOut, Bell, ChevronDown, ArrowRight, Coins } from "lucide-react";
+import { Home, FileText, Folder, BarChart2, LogOut, Bell, ChevronDown, ArrowRight, Coins, ArrowUpDown, ArrowUp, ArrowDown } from "lucide-react";
 import { toast } from "sonner";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
@@ -16,6 +16,11 @@ import { Icons } from "@/constants/icons";
 const logoImage = BRAND.logo;
 const logoDot = BRAND.logoDot;
 
+interface NotificationAction {
+  id: number;
+  message: string;
+}
+
 interface Project {
   id: number;
   name: string;
@@ -24,17 +29,52 @@ interface Project {
   priority: "High" | "Medium" | "Low";
   owners: string[];
   notifications?: number;
+  notificationActions?: NotificationAction[];
+  hasProjectNotification?: boolean;
   dueDate?: string;
+}
+
+type SortField = "name" | "rag" | "progress" | "dueDate" | null;
+type SortDirection = "asc" | "desc" | null;
+
+// Helper function to get RAG color (red, amber, green)
+function getRAGColor(priority: "High" | "Medium" | "Low"): string {
+  switch (priority) {
+    case "High":
+      return "#FF4337"; // red
+    case "Medium":
+      return "#FFB546"; // amber
+    case "Low":
+      return "#00C3B1"; // green
+    default:
+      return "#00C3B1";
+  }
+}
+
+// Helper function to get RAG sort value (for sorting: High=3, Medium=2, Low=1)
+function getRAGSortValue(priority: "High" | "Medium" | "Low"): number {
+  switch (priority) {
+    case "High":
+      return 3;
+    case "Medium":
+      return 2;
+    case "Low":
+      return 1;
+    default:
+      return 1;
+  }
 }
 
 export default function ProjectsPage() {
   const navigate = useNavigate();
+  const [sortField, setSortField] = useState<SortField>(null);
+  const [sortDirection, setSortDirection] = useState<SortDirection>(null);
 
   // nav items centralized via DashboardLayout
   const { activeName } = useActiveNav();
 
   // Mock project data based on Figma design
-  const projects: Project[] = [
+  const projectsData: Project[] = [
     {
       id: 1,
       name: "Fold Toolkit Q3 2025",
@@ -43,6 +83,7 @@ export default function ProjectsPage() {
       priority: "High",
       owners: ["AB", "CD"],
       dueDate: "Dec 12, 2025",
+      hasProjectNotification: true,
     },
     {
       id: 2,
@@ -52,6 +93,10 @@ export default function ProjectsPage() {
       priority: "High",
       owners: ["EF", "GH"],
       notifications: 2,
+      notificationActions: [
+        { id: 1, message: "Assets ready for client review" },
+        { id: 2, message: "Assets uploaded to SMC" },
+      ],
       dueDate: "Jan 05, 2026",
     },
     {
@@ -71,6 +116,7 @@ export default function ProjectsPage() {
       priority: "High",
       owners: ["OP", "QR", "ST"],
       dueDate: "Jan 15, 2026",
+      hasProjectNotification: true,
     },
     {
       id: 5,
@@ -89,6 +135,9 @@ export default function ProjectsPage() {
       priority: "Low",
       owners: ["YZ", "AA", "BB"],
       notifications: 1,
+      notificationActions: [
+        { id: 1, message: "Assets ready for client review" },
+      ],
       dueDate: "Dec 29, 2025",
     },
     {
@@ -108,6 +157,11 @@ export default function ProjectsPage() {
       priority: "High",
       owners: ["EE", "FF"],
       notifications: 3,
+      notificationActions: [
+        { id: 1, message: "Assets ready for client review" },
+        { id: 2, message: "Assets uploaded to SMC" },
+        { id: 3, message: "Review feedback received" },
+      ],
       dueDate: "Dec 15, 2025",
     },
     {
@@ -127,6 +181,7 @@ export default function ProjectsPage() {
       priority: "High",
       owners: ["HH", "II"],
       dueDate: "Jan 08, 2026",
+      hasProjectNotification: true,
     },
     {
       id: 11,
@@ -148,13 +203,73 @@ export default function ProjectsPage() {
     },
   ];
 
+  // Handle sorting
+  const handleSort = (field: SortField) => {
+    if (sortField === field) {
+      // Toggle direction if same field
+      setSortDirection(sortDirection === "asc" ? "desc" : "asc");
+    } else {
+      setSortField(field);
+      setSortDirection("asc");
+    }
+  };
+
+  // Sort projects
+  const projects = useMemo(() => {
+    if (!sortField || !sortDirection) return projectsData;
+
+    const sorted = [...projectsData].sort((a, b) => {
+      let aValue: any;
+      let bValue: any;
+
+      switch (sortField) {
+        case "name":
+          aValue = a.name.toLowerCase();
+          bValue = b.name.toLowerCase();
+          break;
+        case "rag":
+          aValue = getRAGSortValue(a.priority);
+          bValue = getRAGSortValue(b.priority);
+          break;
+        case "progress":
+          aValue = a.progress;
+          bValue = b.progress;
+          break;
+        case "dueDate":
+          aValue = new Date(a.dueDate || "").getTime();
+          bValue = new Date(b.dueDate || "").getTime();
+          break;
+        default:
+          return 0;
+      }
+
+      if (aValue < bValue) return sortDirection === "asc" ? -1 : 1;
+      if (aValue > bValue) return sortDirection === "asc" ? 1 : -1;
+      return 0;
+    });
+
+    return sorted;
+  }, [projectsData, sortField, sortDirection]);
+
   // Calculate stats
   const stats = useMemo(() => {
-    const complete = projects.filter((p) => p.progress === 100).length;
-    const inProgress = projects.filter((p) => p.progress > 0 && p.progress < 100).length;
-    const forReview = projects.filter((p) => p.priority === "High" && p.progress < 50).length;
+    const complete = projectsData.filter((p) => p.progress === 100).length;
+    const inProgress = projectsData.filter((p) => p.progress > 0 && p.progress < 100).length;
+    const forReview = projectsData.filter((p) => p.priority === "High" && p.progress < 50).length;
     return { complete, inProgress, forReview };
-  }, [projects]);
+  }, [projectsData]);
+
+  // Get sort icon for column headers
+  const getSortIcon = (field: SortField) => {
+    if (sortField !== field) {
+      return <ArrowUpDown size={14} className="text-[#646464]" />;
+    }
+    return sortDirection === "asc" ? (
+      <ArrowUp size={14} className="text-black" />
+    ) : (
+      <ArrowDown size={14} className="text-black" />
+    );
+  };
 
   const topbarRight = <DashboardTopbarRight />;
 
@@ -211,27 +326,85 @@ export default function ProjectsPage() {
           </div>
 
           <div className="bg-white rounded-xl overflow-hidden">
-            <div className="overflow-x-auto">
-              <div className="w-full p-[16px] space-y-0">
-                <div className="grid grid-cols-[minmax(0,35%)_minmax(0,5%)_minmax(0,20%)_minmax(0,10%)_minmax(0,20%)_minmax(0,10%)] items-center py-[12px] px-[8px] gap-4 text-xs font-semibold uppercase text-[#646464] tracking-wide">
-                  <div className="col-span-2 text-center">Projects</div>
+            <div className="overflow-x-auto -mx-4 md:mx-0">
+              <div className="min-w-[800px] p-[16px] space-y-0">
+                <div className="grid grid-cols-[minmax(200px,35%)_minmax(40px,5%)_minmax(120px,20%)_minmax(60px,10%)_minmax(140px,20%)_minmax(100px,10%)] items-center py-[12px] px-[8px] gap-4 text-xs font-semibold uppercase text-[#646464] tracking-wide">
+                  <div className="col-span-2 text-center">
+                    <button
+                      onClick={() => handleSort("name")}
+                      className="flex items-center justify-center gap-1 hover:text-black transition-colors"
+                    >
+                      Projects
+                      {getSortIcon("name")}
+                    </button>
+                  </div>
                   <div className="text-center">Members</div>
-                  <div className="text-left">RAG</div>
-                  <div className="text-center">Progress</div>
-                  <div className="text-center">Due date</div>
+                  <div className="text-center">
+                    <button
+                      onClick={() => handleSort("rag")}
+                      className="flex items-center justify-center gap-1 hover:text-black transition-colors mx-auto"
+                    >
+                      RAG
+                      {getSortIcon("rag")}
+                    </button>
+                  </div>
+                  <div className="text-center">
+                    <button
+                      onClick={() => handleSort("progress")}
+                      className="flex items-center justify-center gap-1 hover:text-black transition-colors mx-auto"
+                    >
+                      Progress
+                      {getSortIcon("progress")}
+                    </button>
+                  </div>
+                  <div className="text-center">
+                    <button
+                      onClick={() => handleSort("dueDate")}
+                      className="flex items-center justify-center gap-1 hover:text-black transition-colors mx-auto"
+                    >
+                      Due date
+                      {getSortIcon("dueDate")}
+                    </button>
+                  </div>
                 </div>
                 {projects.map((project, index) => (
                   <div key={project.id}>
-                    <div className="grid grid-cols-[minmax(0,35%)_minmax(0,5%)_minmax(0,20%)_minmax(0,10%)_minmax(0,20%)_minmax(0,10%)] items-center py-[12px] px-[8px] gap-4">
-                      <div className="flex flex-col gap-[4px]">
-                        <p className={`text-sm leading-[19px] text-black ${project.notifications ? "font-bold" : "font-normal"}`}>{project.name}</p>
-                        <p className="text-xs leading-[16px] text-[#646464]">{project.team}</p>
+                    <div className="grid grid-cols-[minmax(200px,35%)_minmax(40px,5%)_minmax(120px,20%)_minmax(60px,10%)_minmax(140px,20%)_minmax(100px,10%)] items-center py-[12px] px-[8px] gap-4">
+                      <div className="flex items-center gap-2">
+                        <div className="flex flex-col gap-[4px]">
+                          <p className={`text-sm leading-[19px] text-black ${project.notifications ? "font-bold" : "font-normal"}`}>{project.name}</p>
+                          <p className="text-xs leading-[16px] text-[#646464]">{project.team}</p>
+                        </div>
+                        {project.hasProjectNotification && (
+                          <div className="relative flex-shrink-0">
+                            <Bell size={16} className="text-[#848487]" />
+                            <div className="absolute -left-1 -top-1 min-w-[16px] h-4 bg-[#ff4337] border-2 border-white rounded-full flex items-center justify-center px-0.5">
+                              <span className="text-[9px] font-bold leading-[12px] text-white">1</span>
+                            </div>
+                          </div>
+                        )}
                       </div>
                       <div className="flex items-center justify-center">
-                        {project.notifications && project.notifications > 0 && (
-                          <div className="w-8 h-8 rounded-full bg-amber-100 flex items-center justify-center text-xs font-semibold text-amber-600">
-                            {project.notifications}
-                          </div>
+                        {project.notifications && project.notifications > 0 && project.notificationActions && (
+                          <Popover>
+                            <PopoverTrigger asChild>
+                              <button className="w-8 h-8 rounded-full bg-amber-100 flex items-center justify-center text-xs font-semibold text-amber-600 hover:bg-amber-200 transition-colors cursor-pointer">
+                                {project.notifications}
+                              </button>
+                            </PopoverTrigger>
+                            <PopoverContent align="start" sideOffset={8} className="w-80 p-0 bg-white border border-[#e0e0e0] shadow-lg">
+                              <div className="p-4 border-b border-[#e0e0e0]">
+                                <h3 className="text-base font-bold leading-[21.28px] text-black">Actions required</h3>
+                              </div>
+                              <div className="max-h-96 overflow-y-auto">
+                                {project.notificationActions.map((action) => (
+                                  <div key={action.id} className="p-4 border-b border-[#f1f1f3] hover:bg-[#f9f9f9] transition">
+                                    <p className="text-sm leading-[18.62px] text-black">{action.message}</p>
+                                  </div>
+                                ))}
+                              </div>
+                            </PopoverContent>
+                          </Popover>
                         )}
                       </div>
                       <div className="flex items-center justify-center gap-2">
@@ -247,9 +420,8 @@ export default function ProjectsPage() {
                           })}
                         </div>
                       </div>
-                      <div className="flex items-center justify-start gap-2">
-                        <div className="w-2 h-2 rounded-full" style={{ backgroundColor: getPriorityColor(project.priority) }} />
-                        <span className="text-xs font-normal" style={{ color: getPriorityColor(project.priority) }}>{project.priority}</span>
+                      <div className="flex items-center justify-center">
+                        <div className="w-2 h-2 rounded-full" style={{ backgroundColor: getRAGColor(project.priority) }} />
                       </div>
                       <div className="flex items-center gap-2">
                         <div className="flex flex-col w-full items-center">

@@ -348,14 +348,14 @@ export default function CalculatorPage() {
           <div className="flex flex-col lg:flex-row gap-8">
             {/* Left Panel - Asset List */}
             <div className="flex-1 lg:max-w-[1220px]">
-              <h1 className="h1-heading text-xl md:text-[28px] font-bold leading-[37.24px] text-black mb-6 md:mb-10 md:text-center lg:text-left">
+              <h1 className="h1-heading text-xl md:text-[28px] font-bold leading-[37.24px] text-black mb-6 md:mb-10 md:text-center lg:text-left animate-fade-in">
                 Build your asset list
               </h1>
               {/* Filter Bar */}
               <div className="flex items-center gap-2 mb-6">
                 <button
                   onClick={() => setIsFilterOpen(true)}
-                  className="bg-[#f1f1f3] rounded-[54px] px-4 md:px-6 py-2 flex items-center gap-2 md:gap-4 lg:gap-6 hover:bg-[#e5e5e5] transition flex-1"
+                  className="bg-[#f1f1f3] rounded-[54px] px-4 md:px-6 py-2 flex items-center gap-2 md:gap-4 lg:gap-6 hover:bg-[#e5e5e5] hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 flex-1"
                 >
                   <div className="flex flex-col gap-1 flex-1 min-w-0">
                     <p className="text-sm font-bold leading-[18.62px] text-black truncate">Asset</p>
@@ -382,20 +382,20 @@ export default function CalculatorPage() {
                 {hasActiveFilters && (
                   <button
                     onClick={handleResetFilters}
-                    className="bg-[#ffb546] rounded-[54px] px-4 md:px-6 py-2 flex items-center gap-2 hover:opacity-90 transition whitespace-nowrap"
+                    className="bg-[#ffb546] rounded-[54px] px-4 md:px-6 py-2 flex items-center gap-2 hover:opacity-90 hover:scale-[1.05] active:scale-[0.95] transition-all duration-200 whitespace-nowrap animate-scale-in"
                   >
                     <span className="text-sm font-semibold leading-[18.62px] text-black">Reset filters</span>
-                    <X size={16} className="text-black" />
+                    <X size={16} className="text-black transition-transform duration-200 hover:rotate-90" />
                   </button>
                 )}
               </div>
 
               {selectedAssets.length > 0 && (
-                <div className="flex justify-end mb-2">
+                <div className="flex justify-end mb-2 animate-fade-in">
                   <button
                     type="button"
                     onClick={handleClearAllAssets}
-                    className="text-sm font-semibold text-[#848487] hover:text-black transition underline"
+                    className="text-sm font-semibold text-[#848487] hover:text-black hover:scale-105 active:scale-95 transition-all duration-200 underline"
                   >
                     Clear all
                   </button>
@@ -408,8 +408,12 @@ export default function CalculatorPage() {
                     const quantity = selectedAsset?.quantity || 0;
 
                     return (
-                      <div key={asset.id} className="w-full">
-                        <div className="flex items-center justify-between px-4 md:px-6 py-2 w-full">
+                      <div 
+                        key={asset.id} 
+                        className="w-full animate-fade-in"
+                        style={{ animationDelay: `${index * 0.05}s` }}
+                      >
+                        <div className="flex items-center justify-between px-4 md:px-6 py-2 w-full transition-all duration-200 hover:bg-[#f9f9f9] rounded-lg">
                           <div className="flex flex-col gap-0.5 flex-1 min-w-0 pr-4">
                             <p className="text-sm leading-[18.62px] text-black truncate">
                               {asset.title}
@@ -439,7 +443,7 @@ export default function CalculatorPage() {
                                       });
                                     }
                                   }}
-                                  className="next w-8 h-8 rounded-full bg-[#03B3E2] flex items-center justify-center hover:bg-[#e5e5e5] transition"
+                                  className="next w-8 h-8 rounded-full bg-[#03B3E2] flex items-center justify-center hover:bg-[#0288b3] active:scale-95 transition-all duration-200 hover:scale-105"
                                 >
                                   <span className="text-[#fff] text-lg">−</span>
                                 </button>
@@ -449,16 +453,16 @@ export default function CalculatorPage() {
                                   value={quantityInputs[asset.id] !== undefined ? quantityInputs[asset.id] : (quantity > 0 ? quantity.toString() : "")}
                                   onChange={(e) => handleAssetQuantityInput(asset.id, e.target.value)}
                                   onBlur={(e) => handleAssetQuantityBlur(asset.id, e.target.value)}
-                                  className="w-12 h-8 text-sm font-bold text-black text-center border-[#e0e0e0] rounded-lg bg-[#f9f9f9] px-2 py-1 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                                  className="w-12 h-8 text-sm font-bold text-black text-center border-[#e0e0e0] rounded-lg bg-[#f9f9f9] px-2 py-1 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none transition-all duration-200 focus:scale-105 focus:border-[#03B3E2] focus:ring-2 focus:ring-[#03B3E2]/20"
                                 />
                               </>
                             )}
                             <button
                               onClick={() => handleAddAsset(asset)}
-                              className="plus w-8 h-8 rounded-full bg-[#f1f1f3] flex items-center justify-center hover:bg-[#e5e5e5] transition"
+                              className="plus w-8 h-8 rounded-full bg-[#f1f1f3] flex items-center justify-center hover:bg-[#03B3E2] hover:[&_svg_path]:fill-white hover:[&_svg_path]:stroke-white active:scale-95 transition-all duration-200 hover:scale-105 group"
                             >
-                              <svg className="plusicon w-[17.778px] h-[17.778px]" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 14 14" fill="none">
-                                <path d="M13.0631 6.30331H7.41491V0.655165C7.41491 0.348498 7.16602 0.0996094 6.85936 0.0996094C6.55269 0.0996094 6.3038 0.348498 6.3038 0.655165V6.30331H0.655653C0.348987 6.30331 0.100098 6.5522 0.100098 6.85887C0.100098 7.16554 0.348987 7.41442 0.655653 7.41442H6.3038V13.0626C6.3038 13.3692 6.55269 13.6181 6.85936 13.6181C7.16602 13.6181 7.41491 13.3692 7.41491 13.0626V7.41442H13.0631C13.3697 7.41442 13.6186 7.16554 13.6186 6.85887C13.6186 6.5522 13.3697 6.30331 13.0631 6.30331Z" fill="#03B3E2" stroke="#03B3E2" stroke-width="0.2"/>
+                              <svg className="plusicon w-[17.778px] h-[17.778px] transition-transform duration-200 group-hover:rotate-90" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 14 14" fill="none">
+                                <path d="M13.0631 6.30331H7.41491V0.655165C7.41491 0.348498 7.16602 0.0996094 6.85936 0.0996094C6.55269 0.0996094 6.3038 0.348498 6.3038 0.655165V6.30331H0.655653C0.348987 6.30331 0.100098 6.5522 0.100098 6.85887C0.100098 7.16554 0.348987 7.41442 0.655653 7.41442H6.3038V13.0626C6.3038 13.3692 6.55269 13.6181 6.85936 13.6181C7.16602 13.6181 7.41491 13.3692 7.41491 13.0626V7.41442H13.0631C13.3697 7.41442 13.6186 7.16554 13.6186 6.85887C13.6186 6.5522 13.3697 6.30331 13.0631 6.30331Z" fill="#03B3E2" stroke="#03B3E2" strokeWidth="0.2"/>
                               </svg>
                             </button>
                           </div>
@@ -471,10 +475,10 @@ export default function CalculatorPage() {
                   })}
                 {/* Show more button */}
                 {!showAllAssets && !filtersApplied && availableAssets.length > 10 && (
-                  <div className="flex justify-center mt-4">
+                  <div className="flex justify-center mt-4 animate-fade-in">
                     <button
                       onClick={() => setShowAllAssets(true)}
-                      className="text-sm font-semibold text-[#03B3E2] hover:text-[#0288b3] transition underline"
+                      className="text-sm font-semibold text-[#03B3E2] hover:text-[#0288b3] hover:scale-105 active:scale-95 transition-all duration-200 underline"
                     >
                       Show more
                     </button>
@@ -488,7 +492,7 @@ export default function CalculatorPage() {
 
             {/* Right Panel - Summary */}
             <div className="w-full lg:w-[400px] shrink-0 relative overflow-hidden">
-              <h2 className="text-xl md:text-[28px] font-bold leading-[37.24px] text-black mb-6 md:mb-10">
+              <h2 className="text-xl md:text-[28px] font-bold leading-[37.24px] text-black mb-6 md:mb-10 animate-fade-in">
                 Summary
               </h2>
 
@@ -509,20 +513,24 @@ export default function CalculatorPage() {
                 {/* Asset List */}
                 <div className="min-h-[126px]">
                   {selectedAssets.length === 0 ? (
-                    <p className="text-base leading-normal text-[#848487]">
+                    <p className="text-base leading-normal text-[#848487] animate-fade-in">
                       No assets added yet
                     </p>
                   ) : (
                     <div className="flex flex-col gap-4">
-                      {selectedAssets.map((asset) => (
-                        <div key={asset.id} className="flex items-center justify-between">
-                          <p className="text-sm leading-[18.62px] text-black flex-1">
+                      {selectedAssets.map((asset, index) => (
+                        <div 
+                          key={asset.id} 
+                          className="flex items-center justify-between animate-slide-in-right transition-all duration-200 hover:translate-x-1"
+                          style={{ animationDelay: `${index * 0.05}s` }}
+                        >
+                          <p className="text-sm leading-[18.62px] text-black flex-1 transition-all duration-200">
                             {availableAssets.find((a) => a.id === asset.id)?.title || ""}
                           </p>
-                          <p className="text-sm leading-[18.62px] text-black w-[65px]">
+                          <p className="text-sm leading-[18.62px] text-black w-[65px] font-semibold transition-all duration-200">
                             {asset.quantity}
                           </p>
-                          <p className="text-sm leading-[18.62px] text-black text-right w-[70px]">
+                          <p className="text-sm leading-[18.62px] text-black text-right w-[70px] font-semibold transition-all duration-200">
                             {asset.tokens * asset.quantity}
                           </p>
                         </div>
@@ -534,13 +542,13 @@ export default function CalculatorPage() {
                 {/* Total */}
                 {selectedAssets.length > 0 && (
                   <>
-                    <div className="h-px bg-[#e0e0e0]" />
-                    <div className="flex items-center justify-between">
+                    <div className="h-px bg-[#e0e0e0] animate-fade-in" />
+                    <div className="flex items-center justify-between animate-scale-in">
                       <p className="text-sm font-bold leading-[18.62px] text-black">
                         Total
                       </p>
-                      <p className="text-sm font-bold leading-[18.62px] text-black">
-                        {totalTokens} tokens
+                      <p className="text-sm font-bold leading-[18.62px] text-black transition-all duration-300">
+                        <span className="inline-block animate-pulse-subtle">{totalTokens}</span> tokens
                       </p>
                     </div>
                   </>
@@ -550,12 +558,12 @@ export default function CalculatorPage() {
               {/* Create Brief Button */}
               <button
                 onClick={handleCreateBrief}
-                className="mt-8 md:-mt-[30px] lg:mt-8 w-full h-10 backdrop-blur-[6px] backdrop-filter bg-[#ffb546] px-[24px] rounded-[28px] flex items-center justify-center gap-[10px] hover:opacity-90 transition relative z-10"
+                className="group mt-8 md:-mt-[30px] lg:mt-8 w-full h-10 backdrop-blur-[6px] backdrop-filter bg-[#ffb546] px-[24px] rounded-[28px] flex items-center justify-center gap-[10px] hover:opacity-90 hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 relative z-10 shadow-lg hover:shadow-xl"
               >
-                <span className="text-[16px] font-semibold leading-[23.94px] text-black whitespace-nowrap">
+                <span className="text-[16px] font-semibold leading-[23.94px] text-black whitespace-nowrap transition-all duration-200">
                   Create brief
                 </span>
-                <svg className="h-[14px] w-[15.567px]" width="45" height="40" viewBox="0 0 45 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <svg className="h-[14px] w-[15.567px] transition-transform duration-200 group-hover:translate-x-1" width="45" height="40" viewBox="0 0 45 40" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M23.8229 40H5.80935C2.59694 40 0 37.4332 0 34.2582V31.8843C0 30.5935 0.795591 29.4362 2.0115 28.9614L14.9212 22.908C17.5932 21.8546 17.5932 18.1306 14.9362 17.0623L1.99648 10.8902C0.795576 10.4154 0 9.25816 0 7.96736V5.74184C0 2.56677 2.59694 0 5.80935 0H23.8229C25.0838 0 26.3147 0.400603 27.3205 1.15728L42.692 15.4154C45.7693 17.7151 45.7693 22.27 42.692 24.5697L27.3205 38.8279C26.3147 39.5846 25.0838 39.9852 23.8229 39.9852V40Z" fill="#000"></path>
                     </svg>
               </button>
@@ -608,10 +616,10 @@ export default function CalculatorPage() {
                         setSelectedAssetType([...selectedAssetType, type]);
                       }
                     }}
-                    className={`px-[16px] py-[6px] rounded-[85px] text-[12px] leading-[15.96px] transition border ${
+                    className={`px-[16px] py-[6px] rounded-[85px] text-[12px] leading-[15.96px] transition-all duration-200 border ${
                       selectedAssetType.includes(type)
-                        ? "bg-[#03B3E2] text-white border-[#03B3E2]"
-                        : "bg-white text-black border-[#e0e0e0] hover:bg-[#f9f9f9]"
+                        ? "bg-[#03B3E2] text-white border-[#03B3E2] scale-105"
+                        : "bg-white text-black border-[#e0e0e0] hover:bg-[#f9f9f9] hover:scale-105 active:scale-95"
                     }`}
                   >
                     {type}
@@ -636,10 +644,10 @@ export default function CalculatorPage() {
                         setSelectedNDA([...selectedNDA, nda]);
                       }
                     }}
-                    className={`px-[16px] py-[6px] rounded-[85px] text-[12px] leading-[15.96px] transition border ${
+                    className={`px-[16px] py-[6px] rounded-[85px] text-[12px] leading-[15.96px] transition-all duration-200 border ${
                       selectedNDA.includes(nda)
-                        ? "bg-[#03B3E2] text-white border-[#03B3E2]"
-                        : "bg-white text-black border-[#e0e0e0] hover:bg-[#f9f9f9]"
+                        ? "bg-[#03B3E2] text-white border-[#03B3E2] scale-105"
+                        : "bg-white text-black border-[#e0e0e0] hover:bg-[#f9f9f9] hover:scale-105 active:scale-95"
                     }`}
                     >
                     {nda}
@@ -664,10 +672,10 @@ export default function CalculatorPage() {
                         setSelectedTaskType([...selectedTaskType, task]);
                       }
                     }}
-                    className={`px-[16px] py-[6px] rounded-[85px] text-[12px] leading-[15.96px] transition border ${
+                    className={`px-[16px] py-[6px] rounded-[85px] text-[12px] leading-[15.96px] transition-all duration-200 border ${
                       selectedTaskType.includes(task)
-                        ? "bg-[#03B3E2] text-white border-[#03B3E2]"
-                        : "bg-white text-black border-[#e0e0e0] hover:bg-[#f9f9f9]"
+                        ? "bg-[#03B3E2] text-white border-[#03B3E2] scale-105"
+                        : "bg-white text-black border-[#e0e0e0] hover:bg-[#f9f9f9] hover:scale-105 active:scale-95"
                     }`}
                   >
                     {task}
@@ -696,7 +704,7 @@ export default function CalculatorPage() {
                   // Reset filters applied state when cancelled
                   setFiltersApplied(false);
                 }}
-                className="flex-1 h-[32px] bg-gray-200 hover:bg-gray-300 backdrop-blur-[6px] rounded-[28px] px-6 py-[18px]"
+                className="flex-1 h-[32px] bg-gray-200 hover:bg-gray-300 backdrop-blur-[6px] rounded-[28px] px-6 py-[18px] hover:scale-[1.02] active:scale-[0.98] transition-all duration-200"
               >
                 <span className="text-[13px] font-semibold leading-[18.62px] text-black">
                   Cancel
@@ -720,7 +728,7 @@ export default function CalculatorPage() {
                     toast.success("All filters cleared");
                   }
                 }}
-                className="flex-1 h-[32px] bg-[#ffb546] hover:opacity-90 backdrop-blur-[6px] rounded-[28px] px-6 py-[18px]"
+                className="flex-1 h-[32px] bg-[#ffb546] hover:opacity-90 backdrop-blur-[6px] rounded-[28px] px-6 py-[18px] hover:scale-[1.02] active:scale-[0.98] transition-all duration-200"
               >
                 <span className="text-[13px] font-semibold leading-[18.62px] text-black whitespace-nowrap">
                   Apply filters

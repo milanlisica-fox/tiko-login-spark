@@ -194,7 +194,7 @@ export default function UserProfilePage() {
           setIsPhotoDialogOpen(open);
         }}
       >
-        <DialogContent className="bg-white p-[40px] rounded-[26px] shadow-[0px_13px_61px_0px_rgba(169,169,169,0.37)] max-w-[600px] border-0 backdrop-blur [&>button]:hidden">
+        <DialogContent className="bg-white p-4 sm:p-[40px] rounded-[26px] shadow-[0px_13px_61px_0px_rgba(169,169,169,0.37)] max-w-[600px] w-[calc(100vw-32px)] sm:w-full border-0 backdrop-blur [&>button]:hidden">
           <style>{`
             [data-radix-dialog-overlay] {
               backdrop-filter: blur(4px);
@@ -204,22 +204,22 @@ export default function UserProfilePage() {
           {/* Close button */}
           <button
             onClick={() => setIsPhotoDialogOpen(false)}
-            className="absolute right-[20px] top-[20px] p-[16px] rounded-[8px] hover:bg-gray-100 transition cursor-pointer z-10"
+            className="absolute right-[12px] top-[12px] sm:right-[20px] sm:top-[20px] p-[12px] sm:p-[16px] rounded-[8px] hover:bg-gray-100 transition cursor-pointer z-10"
           >
-            <div className="overflow-clip relative shrink-0 size-[24px]">
+            <div className="overflow-clip relative shrink-0 size-[20px] sm:size-[24px]">
               <img src={closeIcon} alt="Close" className="block max-w-none size-full" />
             </div>
           </button>
 
-          <div className="flex flex-col gap-[40px]">
+          <div className="flex flex-col gap-6 sm:gap-[40px]">
             {/* Title */}
-            <h2 className="text-[28px] font-bold leading-[37.24px] text-black">
+            <h2 className="text-[22px] sm:text-[28px] font-bold leading-[29.26px] sm:leading-[37.24px] text-black">
               Change your profile avatar
             </h2>
 
-            <div className="flex flex-col gap-[40px]">
+            <div className="flex flex-col gap-6 sm:gap-[40px]">
               {/* Avatar Selection Grid */}
-              <div className="grid grid-cols-6 gap-[16px]">
+              <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-3 sm:gap-[16px]">
                 {Array.from({ length: 24 }).map((_, index) => {
                   const seed = `avatar_${index}`;
                   const avatarUrl = `https://api.dicebear.com/7.x/personas/png?seed=${seed}&size=64`;
@@ -229,13 +229,13 @@ export default function UserProfilePage() {
                     <button
                       key={index}
                       onClick={() => setTempAvatarSrc(avatarUrl)}
-                      className={`relative rounded-full overflow-hidden transition-all ${
+                      className={`relative rounded-full overflow-hidden transition-all w-full aspect-square ${
                         isSelected 
-                          ? 'ring-4 ring-blue-500 ring-offset-2' 
-                          : 'hover:ring-2 hover:ring-gray-300'
+                          ? 'ring-2 sm:ring-4 ring-blue-500 ring-offset-1 sm:ring-offset-2' 
+                          : 'hover:ring-1 sm:hover:ring-2 hover:ring-gray-300'
                       }`}
                     >
-                      <HBAvatar size={64} src={avatarUrl} className="rounded-full" />
+                      <HBAvatar size={64} src={avatarUrl} className="rounded-full w-full h-full" />
                     </button>
                   );
                 })}

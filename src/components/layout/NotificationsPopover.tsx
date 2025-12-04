@@ -15,7 +15,7 @@ export default function NotificationsPopover() {
       </PopoverTrigger>
       <PopoverContent align="end" sideOffset={10} className="w-80 p-0 bg-white border border-[#e0e0e0] shadow-lg">
         <div className="p-4 border-b border-[#e0e0e0]">
-          <h3 className="text-base font-bold leading-[21.28px] text-black">Notifications</h3>
+          <h3 className="text-base font-bold leading-[21.28px] text-black">All notifications</h3>
         </div>
         <div className="max-h-96 overflow-y-auto">
           <div className="p-4 border-b border-[#f1f1f3] hover:bg-[#f9f9f9] cursor-pointer transition">
