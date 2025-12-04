@@ -1721,7 +1721,7 @@ function NewBriefForm({
 
   return (
     <>
-      <div className="flex flex-col lg:flex-row gap-6 w-full max-w-full min-w-0 overflow-x-hidden pb-24">
+      <div className="flex flex-col lg:flex-row gap-6 w-full max-w-full min-w-0 overflow-x-hidden pb-56 md:pb-24">
         <div className="flex-1 space-y-6 min-w-0 max-w-full">
           <section className="rounded-2xl border border-[#ececec] bg-white/80 p-4 md:p-6 space-y-6 max-w-full min-w-0">
             <div className="flex flex-col gap-2">
@@ -2043,16 +2043,16 @@ function NewBriefForm({
           <div className="flex flex-col gap-2.5 w-full max-w-full pointer-events-auto">
             {/* Token Estimate */}
             <div className="flex items-center gap-2 justify-end pb-2">
-              <div className="flex gap-4 items-center">
-                <span className="h-10 w-10 flex items-center justify-center">
+              <div className="flex gap-2 md:gap-4 items-center">
+                <span className="h-8 w-8 md:h-10 md:w-10 flex items-center justify-center shrink-0">
                   <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 20 20" fill="none">
                     <path d="M10.0016 16.6012C13.3865 16.6012 16.1306 15.5303 16.1306 14.2093C16.1306 12.8882 13.3865 11.8173 10.0016 11.8173C6.61662 11.8173 3.87256 12.8882 3.87256 14.2093C3.87256 15.5303 6.61662 16.6012 10.0016 16.6012Z" fill="#03B3E2" />
                     <path d="M10.0016 7.54461C13.387 7.54461 16.1306 8.61587 16.1306 9.93653C16.1306 11.2572 13.387 12.3284 10.0016 12.3284C6.6161 12.3284 3.87256 11.2572 3.87256 9.93653C3.87256 8.61587 6.6161 7.54461 10.0016 7.54461Z" fill="#03B3E2" />
                     <path d="M10.0018 8.05164C13.3867 8.05164 16.1308 6.98073 16.1308 5.65972C16.1308 4.33871 13.3867 3.26782 10.0018 3.26782C6.61682 3.26782 3.87276 4.33871 3.87276 5.65972C3.87276 6.98073 6.61682 8.05164 10.0018 8.05164Z" fill="#03B3E2" />
                   </svg>
                 </span>
-                <span className="text-[26px] leading-[37.24px] text-black font-medium">£{tokenEstimate}</span>
-                <span className="text-[26px] leading-[37.24px] text-[#848487]">Tokens estimate</span>
+                <span className="text-lg md:text-[26px] leading-[25px] md:leading-[37.24px] text-black font-medium">£{tokenEstimate}</span>
+                <span className="text-sm md:text-[26px] leading-[18px] md:leading-[37.24px] text-[#848487]">Tokens estimate</span>
               </div>
               {hasCustomAssets && (
                 <TooltipProvider>
@@ -2102,124 +2102,6 @@ function NewBriefForm({
           </div>
         </div>
 
-        </div>
-
-        {/* White Document - Shown on mobile and tablet/iPad */}
-        <div className="flex lg:hidden flex-col gap-2.5 pb-5 w-full max-w-4xl mt-5">
-          <div
-            className={`bg-white rounded-xl min-h-[600px] w-full ${
-              hasFormProgress
-                ? "p-6 flex items-start justify-start"
-                : "hidden"
-            }`}
-          >
-            {hasFormProgress && (
-              <div className="w-full">
-                {renderPreviewPanel()}
-              </div>
-            )}
-          </div>
-
-          {/* Separator */}
-          <div className="h-[9px] relative w-full shrink-0">
-            <div className="absolute h-px left-0 top-[4px] w-full bg-[#e0e0e0]" />
-          </div>
-
-          {/* Action Buttons - Discard, Save draft, Review brief */}
-          <div className="flex flex-col md:flex-row items-center gap-2.5 w-full min-w-0">
-            <button
-              onClick={onNext}
-              disabled={!isFormComplete}
-              className={`w-full md:flex-1 md:min-w-0 h-8 md:h-10 px-2 md:px-4 rounded-[28px] flex items-center justify-center transition ${
-                isFormComplete
-                  ? "bg-[#ffb546] hover:opacity-90 cursor-pointer"
-                  : "bg-[#f9f9f9] cursor-not-allowed opacity-50"
-              }`}
-            >
-              <span
-                className={`text-[13px] md:text-sm font-semibold leading-[18.62px] ${
-                  isFormComplete ? "text-black" : "text-[#848487]"
-                }`}
-              >
-                Next
-              </span>
-            </button>
-            <button
-              onClick={onCancel}
-              className="w-full md:flex-1 md:min-w-0 h-8 px-2 md:px-4 bg-[#03b3e2] text-black hover:opacity-80 rounded-[28px] transition flex items-center justify-center"
-            >
-              <span className="text-[13px] font-semibold leading-[18.62px] whitespace-nowrap">Discard</span>
-            </button>
-            <button
-              onClick={handleSaveDraft}
-              className="w-full md:flex-1 md:min-w-0 h-8 px-2 md:px-4 bg-[#ffb546] hover:opacity-90 rounded-[28px] flex items-center justify-center transition"
-            >
-              <span className="text-[13px] font-semibold leading-[18.62px] text-black whitespace-nowrap">Save draft</span>
-            </button>
-            <button
-              onClick={handleReviewBrief}
-              disabled={!isFormComplete}
-              className={`w-full md:flex-1 md:min-w-0 h-8 px-2 md:px-4 rounded-[28px] flex items-center justify-center transition ${
-                isFormComplete ? "bg-[#ffb546] hover:opacity-90" : "bg-[#f9f9f9] cursor-not-allowed opacity-50"
-              }`}
-            >
-              <span
-                className={`text-[13px] font-semibold leading-[18.62px] whitespace-nowrap ${
-                  isFormComplete ? "text-black" : "text-[#848487]"
-                }`}
-              >
-                Review brief
-              </span>
-            </button>
-            <div className="pt-2 border-t border-dashed border-[#ececec]">
-              <div className="flex items-center gap-2">
-                <TokenEstimate value={tokenEstimate} />
-                {hasCustomAssets && (
-                  <TooltipProvider>
-                    <Tooltip>
-                      <TooltipTrigger asChild>
-                        <HelpCircle size={16} className="text-[#848487] cursor-help" />
-                      </TooltipTrigger>
-                      <TooltipContent>
-                        <p className="max-w-[300px]">
-                          Your list of assets contains one or more custom assets. IRIS needs to review this asset and provide token price. You will be informed once the token price is set for you custom assets.
-                        </p>
-                      </TooltipContent>
-                    </Tooltip>
-                  </TooltipProvider>
-                )}
-              </div>
-            </div>
-          </div>
-          <div className="rounded-2xl border border-[#ececec] bg-white/80 p-4 space-y-2">
-            <p className="text-sm font-semibold text-black">Need a break?</p>
-            <p className="text-xs text-[#6b6b6f]">Save a draft and finish later. Iris will keep everything in sync.</p>
-            <button 
-              onClick={handleSaveDraft}
-              className="w-full rounded-[28px] border border-[#ffb546] text-black py-2 text-sm font-semibold hover:bg-[#fff4e0] transition"
-            >
-              Save draft
-            </button>
-          </div>
-          <div className="rounded-2xl border border-[#ececec] bg-white/80 p-4 space-y-3">
-            <div className="flex flex-col gap-2">
-            <button
-                onClick={handleSubmit}
-              disabled={!isFormComplete}
-                className={`w-full rounded-[28px] py-2 text-sm font-semibold transition ${
-                  isFormComplete ? "bg-[#ffb546] text-black hover:opacity-90" : "bg-[#f4f4f5] text-[#9c9c9f] cursor-not-allowed"
-                }`}
-              >
-                Submit brief
-              </button>
-              <button
-                onClick={onCancel}
-                className="w-full rounded-[28px] border border-[#ececec] text-[#424242] py-2 text-sm font-semibold hover:bg-[#f9f9f9] transition"
-              >
-                Cancel brief
-            </button>
-            </div>
-          </div>
         </div>
       </div>
 
