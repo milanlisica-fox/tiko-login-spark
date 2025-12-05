@@ -57,7 +57,8 @@ export default function CalculatorPage() {
   const [showAllAssets, setShowAllAssets] = useState(false);
   const [previousTotal, setPreviousTotal] = useState(0);
   const [showCoinAnimation, setShowCoinAnimation] = useState(false);
-  const [displayTotal, setDisplayTotal] = useState(0);
+  const [displayTokens, setDisplayTokens] = useState(0);
+  const [displayPounds, setDisplayPounds] = useState(0);
   const coinAnimationTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   // nav items centralized via DashboardLayout
@@ -209,27 +210,34 @@ export default function CalculatorPage() {
   // Handle coin animation when total changes
   useEffect(() => {
     if (totalTokens !== previousTotal) {
+      const totalPounds = totalTokens * 5;
+      
       if (previousTotal > 0 && totalTokens > previousTotal) {
         // Asset added or quantity increased - show coin animation
         setShowCoinAnimation(true);
-        setDisplayTotal(previousTotal);
+        setDisplayTokens(previousTotal);
+        setDisplayPounds(previousTotal * 5);
         
-        // Animate number from previous to new total
+        // Animate numbers from previous to new total
         const duration = 500; // 500ms animation
         const steps = 30;
         const stepDuration = duration / steps;
-        const increment = (totalTokens - previousTotal) / steps;
+        const tokenIncrement = (totalTokens - previousTotal) / steps;
+        const poundIncrement = (totalPounds - previousTotal * 5) / steps;
         let currentStep = 0;
         
-        const animateNumber = () => {
+        const animateNumbers = () => {
           currentStep++;
-          const newValue = Math.round(previousTotal + increment * currentStep);
-          setDisplayTotal(newValue);
+          const newTokenValue = Math.round(previousTotal + tokenIncrement * currentStep);
+          const newPoundValue = Math.round(previousTotal * 5 + poundIncrement * currentStep);
+          setDisplayTokens(newTokenValue);
+          setDisplayPounds(newPoundValue);
           
           if (currentStep < steps) {
-            setTimeout(animateNumber, stepDuration);
+            setTimeout(animateNumbers, stepDuration);
           } else {
-            setDisplayTotal(totalTokens);
+            setDisplayTokens(totalTokens);
+            setDisplayPounds(totalPounds);
             // Hide coin after number animation completes
             if (coinAnimationTimeoutRef.current) {
               clearTimeout(coinAnimationTimeoutRef.current);
@@ -241,10 +249,11 @@ export default function CalculatorPage() {
         };
         
         // Start number animation after coin slides in (300ms)
-        setTimeout(animateNumber, 300);
+        setTimeout(animateNumbers, 300);
       } else {
-        // Asset removed, quantity decreased, or initial state - just update number, no coin
-        setDisplayTotal(totalTokens);
+        // Asset removed, quantity decreased, or initial state - just update numbers, no coin
+        setDisplayTokens(totalTokens);
+        setDisplayPounds(totalPounds);
         setShowCoinAnimation(false);
       }
     }
@@ -604,7 +613,7 @@ export default function CalculatorPage() {
                     <div className="h-px bg-[#e0e0e0]" />
                     <div className="flex items-center justify-between">
                       <p className="text-sm font-bold leading-[18.62px] text-black">
-                        Total
+                        Total tokens
                       </p>
                       <div className="relative flex items-center gap-2">
                         {showCoinAnimation && (
@@ -617,7 +626,8 @@ export default function CalculatorPage() {
                           <Tooltip>
                             <TooltipTrigger asChild>
                               <p className="text-sm font-bold leading-[18.62px] text-black transition-all duration-300 cursor-help">
-                                <span className="inline-block">£{displayTotal * 5}</span>
+                                <span className="inline-block tabular-nums">{displayTokens}</span>
+                                <span className="inline-block tabular-nums text-[#848487] ml-1">(£{displayPounds})</span>
                               </p>
                             </TooltipTrigger>
                             <TooltipContent>

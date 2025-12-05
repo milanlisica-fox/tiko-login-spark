@@ -1443,33 +1443,41 @@ function NewBriefForm({
 
   const [previousTotal, setPreviousTotal] = useState(0);
   const [showCoinAnimation, setShowCoinAnimation] = useState(false);
-  const [displayTotal, setDisplayTotal] = useState(0);
+  const [displayTokens, setDisplayTokens] = useState(0);
+  const [displayPounds, setDisplayPounds] = useState(0);
   const coinAnimationTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   // Handle coin animation when total changes
   useEffect(() => {
     if (tokenEstimate !== previousTotal) {
+      const totalPounds = tokenEstimate * 5;
+      
       if (previousTotal > 0 && tokenEstimate > previousTotal) {
         // Asset added or quantity increased - show coin animation
         setShowCoinAnimation(true);
-        setDisplayTotal(previousTotal);
+        setDisplayTokens(previousTotal);
+        setDisplayPounds(previousTotal * 5);
         
-        // Animate number from previous to new total
+        // Animate numbers from previous to new total
         const duration = 500; // 500ms animation
         const steps = 30;
         const stepDuration = duration / steps;
-        const increment = (tokenEstimate - previousTotal) / steps;
+        const tokenIncrement = (tokenEstimate - previousTotal) / steps;
+        const poundIncrement = (totalPounds - previousTotal * 5) / steps;
         let currentStep = 0;
         
-        const animateNumber = () => {
+        const animateNumbers = () => {
           currentStep++;
-          const newValue = Math.round(previousTotal + increment * currentStep);
-          setDisplayTotal(newValue);
+          const newTokenValue = Math.round(previousTotal + tokenIncrement * currentStep);
+          const newPoundValue = Math.round(previousTotal * 5 + poundIncrement * currentStep);
+          setDisplayTokens(newTokenValue);
+          setDisplayPounds(newPoundValue);
           
           if (currentStep < steps) {
-            setTimeout(animateNumber, stepDuration);
+            setTimeout(animateNumbers, stepDuration);
           } else {
-            setDisplayTotal(tokenEstimate);
+            setDisplayTokens(tokenEstimate);
+            setDisplayPounds(totalPounds);
             // Hide coin after number animation completes
             if (coinAnimationTimeoutRef.current) {
               clearTimeout(coinAnimationTimeoutRef.current);
@@ -1481,10 +1489,11 @@ function NewBriefForm({
         };
         
         // Start number animation after coin slides in (300ms)
-        setTimeout(animateNumber, 300);
+        setTimeout(animateNumbers, 300);
       } else {
-        // Asset removed, quantity decreased, or initial state - just update number, no coin
-        setDisplayTotal(tokenEstimate);
+        // Asset removed, quantity decreased, or initial state - just update numbers, no coin
+        setDisplayTokens(tokenEstimate);
+        setDisplayPounds(totalPounds);
         setShowCoinAnimation(false);
       }
     }
@@ -2387,8 +2396,9 @@ function NewBriefForm({
                   <TooltipProvider>
                     <Tooltip>
                       <TooltipTrigger asChild>
-                        <span className="text-lg md:text-[26px] leading-[25px] md:leading-[37.24px] text-black font-medium cursor-help transition-all duration-300">
-                          £{displayTotal * 5}
+                        <span className="text-lg md:text-[26px] leading-[25px] md:leading-[37.24px] text-black font-medium cursor-help transition-all duration-300 tabular-nums">
+                          {displayTokens}
+                          <span className="text-[#848487] ml-1">(£{displayPounds})</span>
                         </span>
                       </TooltipTrigger>
                       <TooltipContent>
@@ -2397,7 +2407,7 @@ function NewBriefForm({
                     </Tooltip>
                   </TooltipProvider>
                 </div>
-                <span className="text-sm md:text-[26px] leading-[18px] md:leading-[37.24px] text-[#848487]">Tokens estimate</span>
+                <span className="text-sm md:text-[26px] leading-[18px] md:leading-[37.24px] text-[#848487]">Total tokens</span>
               </div>
               {hasCustomAssets && (
                 <TooltipProvider>
