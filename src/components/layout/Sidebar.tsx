@@ -1,6 +1,6 @@
 import React from "react";
 import Logo from "./Logo";
-import { LogOut, Settings, LucideIcon } from "lucide-react";
+import { LogOut, LucideIcon } from "lucide-react";
 import { useLogout } from "@/hooks/useAuth";
 
 type NavItem = { name: string; icon: LucideIcon; path: string };
@@ -50,14 +50,7 @@ export default function Sidebar({
           })}
         </nav>
       </div>
-      <div className="px-4 pb-8 flex flex-col gap-2">
-        <button
-          onClick={() => onNavigate("/dashboard/client-configuration")}
-          className="w-full flex items-center gap-2 px-4 py-4 rounded-lg transition hover:bg-white/50"
-        >
-          <Settings size={20} className="text-black" />
-          <span className="text-sm font-normal text-black">Client configuration</span>
-        </button>
+      <div className="px-4 pb-8">
         <button
           onClick={logout}
           className="w-full flex items-center gap-2 px-4 py-4 rounded-lg transition hover:bg-white/50"

@@ -1,6 +1,6 @@
 import React from "react";
 import Logo from "./Logo";
-import { LogOut, Settings, LucideIcon } from "lucide-react";
+import { LogOut, LucideIcon } from "lucide-react";
 import { useLogout } from "@/hooks/useAuth";
 import { Icons } from "@/constants/icons";
 
@@ -67,16 +67,6 @@ export default function MobileSidebar({
         >
           <Icons.help size={20} className="text-black" />
           <span className="text-base font-normal text-black">Help</span>
-        </button>
-        <button
-          onClick={() => {
-            onCloseSidebar();
-            onNavigate("/dashboard/client-configuration");
-          }}
-          className="w-full flex items-center gap-3 px-4 py-4 rounded-lg transition hover:bg-white/50"
-        >
-          <Settings size={20} className="text-black" />
-          <span className="text-base font-normal text-black">Client configuration</span>
         </button>
         <button
           onClick={logout}
