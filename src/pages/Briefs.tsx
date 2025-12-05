@@ -2040,7 +2040,7 @@ function NewBriefForm({
               <p className="text-sm text-[#424242]">Start your brief by filling out these required fields.</p>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 min-w-0">
-            <Field label="Project title*">
+            <Field label="Project title*" helpText="Enter a descriptive name that clearly identifies your project and campaign">
               <StyledInput
                 value={formData.projectTitle}
                   onChange={(e) => handleFieldChange("projectTitle", e.target.value)}
@@ -2050,6 +2050,7 @@ function NewBriefForm({
             </Field>
             <DateField
                 label="Delivery date*"
+                helpText="Select the target completion date for this project"
               value={formData.dueDate}
                 onChange={(date) => handleFieldChange("dueDate", date)}
               />
@@ -2350,7 +2351,7 @@ function NewBriefForm({
         </section>
 
         {/* Bottom Action Buttons - Fixed */}
-        <div className="fixed bottom-0 left-0 lg:left-[240px] right-0 pt-4 pb-2 px-4 md:px-6 z-10 pointer-events-none backdrop-blur-sm">
+        <div className="fixed bottom-0 left-0 lg:left-[240px] right-0 pt-4 pb-2 px-4 md:px-6 z-10 pointer-events-none bg-white shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.1)]">
           <div className="flex flex-col gap-2.5 w-full max-w-full pointer-events-auto">
             {/* Token Estimate */}
             <div className="flex items-center gap-2 justify-end pb-2">
@@ -2420,12 +2421,12 @@ function NewBriefForm({
                       onClick={handleReviewBrief}
                       disabled={!isFormComplete}
                       className={`w-full md:w-auto md:flex-1 md:min-w-0 h-10 px-4 rounded-[28px] flex items-center justify-center transition ${
-                        isFormComplete ? "bg-[#ffb546] hover:opacity-90" : "bg-[#f9f9f9] cursor-not-allowed opacity-50"
+                        isFormComplete ? "bg-[#ffb546] hover:opacity-90" : "bg-[#f9f9f9] cursor-not-allowed opacity-50 border border-[#e0e0e0]"
                       }`}
                     >
                       <span
                         className={`text-sm font-semibold leading-[18.62px] whitespace-nowrap ${
-                          isFormComplete ? "text-black" : "text-[#848487]"
+                          isFormComplete ? "text-black" : "text-black"
                         }`}
                       >
                         Review brief
@@ -2435,7 +2436,7 @@ function NewBriefForm({
                   {!isFormComplete && (
                     <TooltipContent>
                       <p className="max-w-[250px]">
-                      Please fill in the Project Title, Delivery Date and Project Lead so we can review your brief. And don’t forget to add the assets as well.
+                      Please fill in the Project Title, Delivery Date and Project Lead so we can review your brief. And don't forget to add the assets as well.
                       </p>
                     </TooltipContent>
                   )}
