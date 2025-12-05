@@ -15,14 +15,14 @@ export default function SuccessDialog({
   open,
   onOpenChange,
   onConfirm,
-  title = "Brief successfully submitted!",
+  title = "Brief successfully submitted with the score of 100%!",
   description,
   confirmText = "View all briefs",
 }: SuccessDialogProps) {
   // Default description based on title
   const defaultDescription = title === "Brief successfully drafted!"
     ? "Your brief status has been updated to Draft."
-    : "Your brief status has been updated to Review. We will get back to you soon.";
+    : "Your brief status has been updated to In review. We will get back to you soon.";
   
   const finalDescription = description ?? defaultDescription;
   return (

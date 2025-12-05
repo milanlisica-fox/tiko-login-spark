@@ -53,7 +53,6 @@ export const FORM_TEMPLATE_OPTIONS: { id: string; title: string; icon: string }[
   { id: "promotional-campaign", title: "Promotional campaign", icon: iconPOS },
   { id: "bau-campaign", title: "BAU campaign", icon: iconBAU },
   { id: "flagship-campaign", title: "Flagship toolkit", icon: iconFeatureAsset },
-  { id: "other", title: "Build your own", icon: iconToolkit },
 ];
 
 // Template to asset mapping
@@ -1434,6 +1433,7 @@ function NewBriefForm({
   const [additionalAssetsLoaded, setAdditionalAssetsLoaded] = useState(0);
   const [pendingDraftPayload, setPendingDraftPayload] = useState<SubmittedBriefPayload | null>(null);
   const [quantityInputs, setQuantityInputs] = useState<Record<string, string>>({});
+  const [deliverableSelectionMode, setDeliverableSelectionMode] = useState<"template" | "build-your-own">("template");
   const tokenEstimate = useMemo(
     () => formData.assets
       .filter((asset) => !asset.isCustom)
@@ -1521,7 +1521,7 @@ function NewBriefForm({
         (a) => a.isCustom !== true && a.id.startsWith('calc-')
       );
       return [...calculatorAssets, ...customAssets];
-    } else if (selectedTemplate === "other") {
+    } else if (deliverableSelectionMode === "build-your-own" || selectedTemplate === "other") {
       return [...RECOMMENDED_ASSETS.slice(0, assetsToShow), ...customAssets];
     } else if (selectedTemplate && templateAssetIds.length > 0) {
       const templateAssets = CALCULATOR_ASSETS_LIST.filter((a) => templateAssetIds.includes(a.id));
@@ -1529,12 +1529,13 @@ function NewBriefForm({
     } else {
       return [...RECOMMENDED_ASSETS.slice(0, assetsToShow), ...customAssets];
     }
-  }, [formData.assets, formData.selectedTemplate, fromCalculator, assetsToShow]);
+  }, [formData.assets, formData.selectedTemplate, fromCalculator, assetsToShow, deliverableSelectionMode]);
 
   const isFormComplete =
     formData.projectTitle.trim() !== "" &&
     formData.dueDate !== undefined && 
-    formData.projectLead.length > 0;
+    formData.projectLead.length > 0 &&
+    (formData.assets.length > 0 || (formData.selectedTemplate && formData.selectedTemplate !== ""));
 
   const handleFieldChange = (field: keyof NewBriefFormValues, value: unknown) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
@@ -2044,7 +2045,7 @@ function NewBriefForm({
               <StyledInput
                 value={formData.projectTitle}
                   onChange={(e) => handleFieldChange("projectTitle", e.target.value)}
-                placeholder="Please write it in the following format: Project name - Campaign name - Year"
+                placeholder="Project name - Campaign name - Year"
                 variant="brief"
               />
             </Field>
@@ -2121,89 +2122,100 @@ function NewBriefForm({
               </div>
             </div>
 
-            {/* Explanatory block for asset selection methods */}
-            <div className="rounded-lg border border-[#e0e0e0] bg-[#f9f9f9] p-4 space-y-3">
-              <p className="text-sm font-semibold text-black">
-                You can add assets to your brief in two ways:
-              </p>
-              <ol className="space-y-2.5 list-none pl-0">
-                <li className="flex gap-3">
-                  <span className="flex-shrink-0 w-5 h-5 rounded-full bg-[#03B3E2] text-white text-xs font-semibold flex items-center justify-center mt-0.5">1</span>
-                  <div className="flex-1">
-                    <span className="text-sm font-medium text-black">Select a template</span>
-                    <span className="text-sm text-[#424242]"> - Choose from predefined templates that contain a bundle of assets.</span>
-                  </div>
-                </li>
-                <li className="flex gap-3">
-                  <span className="flex-shrink-0 w-5 h-5 rounded-full bg-[#03B3E2] text-white text-xs font-semibold flex items-center justify-center mt-0.5">2</span>
-                  <div className="flex-1">
-                    <span className="text-sm font-medium text-black">Build your own</span>
-                    <span className="text-sm text-[#424242]"> - Browse the list of recommended assets or add custom assets as needed.</span>
-                  </div>
-                </li>
-              </ol>
-            </div>
-
-            <div className="flex flex-col gap-2 border border-[#ececec] rounded-xl p-4 min-w-0">
-              <h4 className="text-base font-semibold text-black">Select template</h4>
-              <p className="text-sm text-[#424242]">Each template contains bundle of suitable assets.</p>
-              <div className="overflow-x-auto pb-2 mt-2 -mx-4 px-4">
-              <div className="flex gap-3 min-w-max">
-                {FORM_TEMPLATE_OPTIONS.map((template) => (
-            <button
-                    key={template.id}
-                    onClick={() => handleTemplateSelect(template.id)}
-                    className={`min-w-[180px] rounded-xl border px-4 py-3 text-left transition hover:bg-[#f9f9f9] ${
-                      formData.selectedTemplate === template.id ? "border-[#ffb546] bg-[#fff8ec]" : "border-[#e0e0e0]"
-                    }`}
-                  >
-                    <div className="flex items-center justify-between gap-2">
-                      <div>
-                        <p className="text-sm font-semibold text-black">{template.title}</p>
-                        <p className="text-xs text-[#6b6b6f]">Tap to use</p>
-          </div>
-                      <div className="h-8 w-8 rounded-full bg-[#f4f4f5] flex items-center justify-center">
-                        <div className="template-icon" dangerouslySetInnerHTML={{ __html: template.icon }} />
-      </div>
-          </div>
-                  </button>
-                ))}
-              </div>
-            </div>
-            </div>
-
-            {formData.assets.length > 0 && (
-              <div className="flex justify-end">
-                <button
-                  type="button"
-                  onClick={handleClearAllAssets}
-                  className="text-sm font-semibold text-[#848487] hover:text-black transition underline"
-                >
-                  Clear all
-                </button>
-              </div>
-            )}
-
-            <div className="flex flex-col gap-5">
-              {renderedAssets}
-                          </div>
-            {formData.selectedTemplate === "other" && RECOMMENDED_ASSETS.length > assetsToShow && (
+            {/* Two selection cards */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <button
-                onClick={() => setAssetsToShow((prev) => prev + 10)}
-                className="w-full rounded-[28px] border border-[#e0e0e0] px-4 py-2 text-sm font-semibold text-[#424242] hover:bg-[#f9f9f9] transition"
+                onClick={() => setDeliverableSelectionMode("template")}
+                className={`rounded-xl border-2 p-4 text-left transition ${
+                  deliverableSelectionMode === "template"
+                    ? "border-[#ffb546] bg-[#fff8ec]"
+                    : "border-[#e0e0e0] bg-white hover:bg-[#f9f9f9]"
+                }`}
               >
-                More Assets
+                <h4 className="text-base font-semibold text-black mb-1">Select template</h4>
+                <p className="text-sm text-[#424242]">Choose from predefined templates that contain a bundle of assets.</p>
               </button>
+              <button
+                onClick={() => {
+                  setDeliverableSelectionMode("build-your-own");
+                  if (formData.selectedTemplate && formData.selectedTemplate !== "other") {
+                    handleTemplateSelect("other");
+                  }
+                }}
+                className={`rounded-xl border-2 p-4 text-left transition ${
+                  deliverableSelectionMode === "build-your-own"
+                    ? "border-[#ffb546] bg-[#fff8ec]"
+                    : "border-[#e0e0e0] bg-white hover:bg-[#f9f9f9]"
+                }`}
+              >
+                <h4 className="text-base font-semibold text-black mb-1">Build your own</h4>
+                <p className="text-sm text-[#424242]">Browse the list of recommended assets or add custom assets as needed.</p>
+              </button>
+            </div>
+
+            {/* Show templates when "Select template" is active */}
+            {deliverableSelectionMode === "template" && (
+              <div className="flex flex-col gap-2 border border-[#ececec] rounded-xl p-4 min-w-0">
+                <div className="overflow-x-auto pb-2 mt-2 -mx-4 px-4">
+                  <div className="flex gap-3 min-w-max">
+                    {FORM_TEMPLATE_OPTIONS.map((template) => (
+                      <button
+                        key={template.id}
+                        onClick={() => handleTemplateSelect(template.id)}
+                        className={`min-w-[180px] rounded-xl border px-4 py-3 text-left transition hover:bg-[#f9f9f9] ${
+                          formData.selectedTemplate === template.id ? "border-[#ffb546] bg-[#fff8ec]" : "border-[#e0e0e0]"
+                        }`}
+                      >
+                        <div className="flex items-center justify-between gap-2">
+                          <div>
+                            <p className="text-sm font-semibold text-black">{template.title}</p>
+                            <p className="text-xs text-[#6b6b6f]">Tap to use</p>
+                          </div>
+                          <div className="h-8 w-8 rounded-full bg-[#f4f4f5] flex items-center justify-center">
+                            <div className="template-icon" dangerouslySetInnerHTML={{ __html: template.icon }} />
+                          </div>
+                        </div>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              </div>
             )}
 
-            <button
-              onClick={() => setShowCustomAssetFields((prev) => !prev)}
-              className="w-full rounded-[28px] border border-dashed border-[#cfcfcf] px-4 py-2 text-sm font-semibold text-[#424242] hover:border-[#a5a5a8] transition"
-            >
-              Add custom requirement/deliverable
-            </button>
+            {/* Show assets only when a template is selected (in template mode) or when build-your-own mode is active */}
+            {(deliverableSelectionMode === "build-your-own" || (deliverableSelectionMode === "template" && formData.selectedTemplate && formData.selectedTemplate !== "")) && (
+              <>
+                {formData.assets.length > 0 && (
+                  <div className="flex justify-end">
+                    <button
+                      type="button"
+                      onClick={handleClearAllAssets}
+                      className="text-sm font-semibold text-[#848487] hover:text-black transition underline"
+                    >
+                      Clear all
+                    </button>
+                  </div>
+                )}
 
-            {showCustomAssetFields && (
+                <div className="flex flex-col gap-5">
+                  {renderedAssets}
+                </div>
+                {deliverableSelectionMode === "build-your-own" && RECOMMENDED_ASSETS.length > assetsToShow && (
+                  <button
+                    onClick={() => setAssetsToShow((prev) => prev + 10)}
+                    className="w-full rounded-[28px] border border-[#e0e0e0] px-4 py-2 text-sm font-semibold text-[#424242] hover:bg-[#f9f9f9] transition"
+                  >
+                    More Assets
+                  </button>
+                )}
+                <button
+                  onClick={() => setShowCustomAssetFields((prev) => !prev)}
+                  className="w-full rounded-[28px] border border-dashed border-[#cfcfcf] px-4 py-2 text-sm font-semibold text-[#424242] hover:border-[#a5a5a8] transition"
+                >
+                  Add custom requirement/deliverable
+                </button>
+
+                {showCustomAssetFields && (
               <div className="rounded-xl border border-[#ececec] p-4 space-y-4 bg-white">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <Field label="Deliverable name">
@@ -2257,6 +2269,8 @@ function NewBriefForm({
                   </button>
             </div>
           </div>
+                )}
+              </>
             )}
 
         </section>
@@ -2436,7 +2450,7 @@ function NewBriefForm({
                   {!isFormComplete && (
                     <TooltipContent>
                       <p className="max-w-[250px]">
-                      Please fill in the Project Title, Delivery Date and Project Lead so we can review your brief. And don't forget to add the assets as well.
+                      Please fill in the Project Title, Delivery Date and Project Lead, and add at least one asset so you can review your brief.
                       </p>
                     </TooltipContent>
                   )}
@@ -3499,10 +3513,10 @@ function AllBriefsSection({
                 right={
                   isSOWReady ? (
                     <div className="flex items-center gap-1.5">
-                      <span className="text-xs font-semibold text-[#03B3E2] whitespace-nowrap">Ready to sign</span>
+                      <span className="text-xs font-semibold text-[#03B3E2] whitespace-nowrap animate-bounce">Ready to sign</span>
                       <ArrowRight 
                         size={14} 
-                        className="text-[#03B3E2] animate-pulse" 
+                        className="text-[#03B3E2] animate-bounce" 
                       />
                     </div>
                   ) : isDraft ? (
