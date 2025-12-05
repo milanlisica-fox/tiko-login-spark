@@ -5,7 +5,7 @@ import { toast } from "sonner";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
-import { format } from "date-fns";
+import { format, parse } from "date-fns";
 import { triggerSuccessConfetti } from "@/lib/animations";
 import DashboardLayout from "@/components/layout/DashboardLayout";
 import DashboardTopbarRight from "@/components/layout/DashboardTopbarRight";
@@ -50,7 +50,7 @@ const iconSocialContent = TEMPLATE_ICONS.pos;
 const arrowRightIcon = BRIEFS_ASSETS.arrowRightIcon;
 
 export const FORM_TEMPLATE_OPTIONS: { id: string; title: string; icon: string }[] = [
-  { id: "promotional-campaign", title: "Promotional campaign", icon: iconBAU },
+  { id: "promotional-campaign", title: "Promotional campaign", icon: iconPOS },
   { id: "bau-campaign", title: "BAU campaign", icon: iconBAU },
   { id: "flagship-campaign", title: "Flagship toolkit", icon: iconFeatureAsset },
   { id: "other", title: "Build your own", icon: iconToolkit },
@@ -385,7 +385,21 @@ const BriefLoadingGraphic = () => (
 );
 
 type BriefStatus = "Draft" | "In review" | "SOW ready to sign";
-type BriefBadge = "Creation" | "Adaptation" | "Resize" | "default";
+type BriefBadge = "Promotional campaign" | "BAU campaign" | "Flagship toolkit" | "default";
+
+// Helper function to map template ID to badge name
+const getBadgeFromTemplate = (templateId: string): BriefBadge => {
+  switch (templateId) {
+    case "promotional-campaign":
+      return "Promotional campaign";
+    case "bau-campaign":
+      return "BAU campaign";
+    case "flagship-campaign":
+      return "Flagship toolkit";
+    default:
+      return "default";
+  }
+};
 
 export type SubmittedBriefPayload = {
   title: string;
@@ -460,12 +474,98 @@ const createBriefFormDefaults = (): NewBriefFormValues => ({
 });
 
 const initialBriefs: BriefSummary[] = [
+  // "To action on" briefs - these should appear first
+  {
+    id: "brief-action-1",
+    title: "W Summer Festival 2025",
+    description: " Develop visual guide for  the Summer Campaign Festival 2025. Create full set of campaign visuals, formats, and variations, for digital, print media.",
+    badge: "Promotional campaign",
+    date: "12 Dec",
+    comments: 12,
+    avatars: 3,
+    status: "Draft",
+    icon: (
+      <div className="relative">
+        <svg width="14" height="12" viewBox="0 0 14 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M7.14686 12H1.7428C0.779082 12 0 11.23 0 10.2774V9.56528C0 9.17804 0.238677 8.83086 0.603451 8.68843L4.47636 6.8724C5.27796 6.55638 5.27795 5.43917 4.48085 5.11869L0.598943 3.26706C0.238673 3.12463 0 2.77745 0 2.39021V1.72255C0 0.770031 0.779082 0 1.7428 0H7.14686C7.52514 0 7.89441 0.120181 8.19614 0.347184L12.8076 4.62463C13.7308 5.31454 13.7308 6.68101 12.8076 7.37092L8.19614 11.6484C7.89441 11.8754 7.52514 11.9955 7.14686 11.9955V12Z" fill="#03B3E2"/>
+        </svg>
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg" className="absolute -top-1 -right-1">
+          <rect x="1" y="1" width="10" height="10" rx="5" fill="#FF4337"/>
+          <rect x="1" y="1" width="10" height="10" rx="5" stroke="#F9F9F9" strokeWidth="2"/>
+        </svg>
+      </div>
+    ),
+  },
+  {
+    id: "brief-action-2",
+    title: "Fold Toolkit Q3 2025",
+    description: "Visual guide for the Fold Toolkit Q3 2025. Create full set of campaign visuals, formats, and variations for digital and print media, ensuring consistent visual identity across all touchpoints.",
+    badge: "Flagship toolkit",
+    date: "15 Dec",
+    comments: 12,
+    avatars: 3,
+    status: "Draft",
+    icon: (
+      <div className="relative">
+        <svg width="16" height="10" viewBox="0 0 16 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M7.80101 10C10.9954 10 13.7962 8.32168 15.373 5.7988C15.6784 5.31037 15.6784 4.69046 15.373 4.2012C13.7962 1.67832 10.9954 0 7.80101 0C4.60663 0 1.80583 1.67832 0.229031 4.2012C-0.0763438 4.68963 -0.0763438 5.30954 0.229031 5.7988C1.80583 8.32168 4.60663 10 7.80101 10Z" fill="#E5E5E5"/>
+        </svg>
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg" className="absolute -top-1 -right-1">
+          <rect x="1" y="1" width="10" height="10" rx="5" fill="#FF4337"/>
+          <rect x="1" y="1" width="10" height="10" rx="5" stroke="#F9F9F9" strokeWidth="2"/>
+        </svg>
+      </div>
+    ),
+  },
+  {
+    id: "brief-action-3",
+    title: "Buds3 Campaign Toolkit",
+    description: "Develop visual guide for Buds 3 Campaign. Create full set of assets and design templates to support marketing rollout across multiple channels.",
+    badge: "Flagship toolkit",
+    date: "18 Dec",
+    comments: 12,
+    avatars: 3,
+    status: "Draft",
+    icon: (
+      <div className="relative">
+        <svg width="14" height="12" viewBox="0 0 14 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M7.14686 12H1.7428C0.779082 12 0 11.23 0 10.2774V9.56528C0 9.17804 0.238677 8.83086 0.603451 8.68843L4.47636 6.8724C5.27796 6.55638 5.27795 5.43917 4.48085 5.11869L0.598943 3.26706C0.238673 3.12463 0 2.77745 0 2.39021V1.72255C0 0.770031 0.779082 0 1.7428 0H7.14686C7.52514 0 7.89441 0.120181 8.19614 0.347184L12.8076 4.62463C13.7308 5.31454 13.7308 6.68101 12.8076 7.37092L8.19614 11.6484C7.89441 11.8754 7.52514 11.9955 7.14686 11.9955V12Z" fill="#03B3E2"/>
+        </svg>
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg" className="absolute -top-1 -right-1">
+          <rect x="1" y="1" width="10" height="10" rx="5" fill="#FF4337"/>
+          <rect x="1" y="1" width="10" height="10" rx="5" stroke="#F9F9F9" strokeWidth="2"/>
+        </svg>
+      </div>
+    ),
+  },
+  {
+    id: "brief-action-4",
+    title: "Adapt AI Toolkit Q3 2025",
+    description: "Adapt all AI master campaign assets into formats optimized for print and add localized variations for different markets, ensuring visual consistency and high production quality across all deliverables.",
+    badge: "BAU campaign",
+    date: "20 Dec",
+    comments: 12,
+    avatars: 3,
+    status: "Draft",
+    icon: (
+      <div className="relative">
+        <svg width="14" height="12" viewBox="0 0 14 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M7.14686 12H1.7428C0.779082 12 0 11.23 0 10.2774V9.56528C0 9.17804 0.238677 8.83086 0.603451 8.68843L4.47636 6.8724C5.27796 6.55638 5.27795 5.43917 4.48085 5.11869L0.598943 3.26706C0.238673 3.12463 0 2.77745 0 2.39021V1.72255C0 0.770031 0.779082 0 1.7428 0H7.14686C7.52514 0 7.89441 0.120181 8.19614 0.347184L12.8076 4.62463C13.7308 5.31454 13.7308 6.68101 12.8076 7.37092L8.19614 11.6484C7.89441 11.8754 7.52514 11.9955 7.14686 11.9955V12Z" fill="#03B3E2"/>
+        </svg>
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg" className="absolute -top-1 -right-1">
+          <rect x="1" y="1" width="10" height="10" rx="5" fill="#FF4337"/>
+          <rect x="1" y="1" width="10" height="10" rx="5" stroke="#F9F9F9" strokeWidth="2"/>
+        </svg>
+      </div>
+    ),
+  },
+  // Original briefs
   {
     id: "brief-1",
     title: "W Summer Festival 2025",
     description:
       "Develop visual guide for  the Summer Campaign Festival 2025. Create full set of campaign visuals, formats, and variations, for digital, print media.",
-    badge: "Creation",
+    badge: "Promotional campaign",
     date: "15 Dec",
     comments: 23,
     avatars: 2,
@@ -481,7 +581,7 @@ const initialBriefs: BriefSummary[] = [
     title: "Watch Radio Campaign Q4 2025",
     description:
       "Develop visual guide for  the Summer Campaign Festival 2025. Create full set of campaign visuals, formats, and variations, for digital, print media.",
-    badge: "Adaptation",
+    badge: "BAU campaign",
     date: "18 Dec",
     comments: 4,
     avatars: 3,
@@ -497,7 +597,7 @@ const initialBriefs: BriefSummary[] = [
     title: "W Summer Festival 2025",
     description:
       "Develop visual guide for  the Summer Campaign Festival 2025. Create full set of campaign visuals, formats, and variations, for digital, print media.",
-    badge: "Creation",
+    badge: "Promotional campaign",
     date: "22 Dec",
     comments: 4,
     avatars: 3,
@@ -513,10 +613,235 @@ const initialBriefs: BriefSummary[] = [
     title: "Fold Toolkit Q3 2025",
     description:
       "Develop visual guide for  the Summer Campaign Festival 2025. Create full set of campaign visuals, formats, and variations, for digital, print media.",
-    badge: "Creation",
+    badge: "Flagship toolkit",
     date: "14 Dec",
     comments: 0,
     avatars: 3,
+    status: "Draft",
+    icon: (
+      <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M3.58249 0H7.87085C9.84785 0 11.4533 1.60548 11.4533 3.58249V8.41751C11.4533 10.3945 9.84785 12 7.87085 12H3.58249C1.60549 12 0 10.3945 0 8.41751V3.58249C0 1.60548 1.60549 0 3.58249 0Z" fill="#FFB546" />
+      </svg>
+    ),
+  },
+  {
+    id: "brief-5",
+    title: "Galaxy S25 Launch Campaign",
+    description: "Create comprehensive marketing assets for the Galaxy S25 launch event. Include print materials, digital banners, and social media content.",
+    badge: "Promotional campaign",
+    date: "16 Dec",
+    comments: 8,
+    avatars: 2,
+    status: "Draft",
+    icon: (
+      <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M3.58249 0H7.87085C9.84785 0 11.4533 1.60548 11.4533 3.58249V8.41751C11.4533 10.3945 9.84785 12 7.87085 12H3.58249C1.60549 12 0 10.3945 0 8.41751V3.58249C0 1.60548 1.60549 0 3.58249 0Z" fill="#FFB546" />
+      </svg>
+    ),
+  },
+  {
+    id: "brief-6",
+    title: "Holiday Season BAU Assets",
+    description: "Develop standard BAU assets for holiday season promotions across all retail channels and digital platforms.",
+    badge: "BAU campaign",
+    date: "17 Dec",
+    comments: 5,
+    avatars: 3,
+    status: "In review",
+    icon: (
+      <svg width="16" height="10" viewBox="0 0 16 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M7.80101 10C10.9954 10 13.7962 8.32168 15.373 5.7988C15.6784 5.31037 15.6784 4.69046 15.373 4.2012C13.7962 1.67832 10.9954 0 7.80101 0C4.60663 0 1.80583 1.67832 0.229031 4.2012C-0.0763438 4.68963 -0.0763438 5.30954 0.229031 5.7988C1.80583 8.32168 4.60663 10 7.80101 10Z" fill="#E5E5E5" />
+      </svg>
+    ),
+  },
+  {
+    id: "brief-7",
+    title: "Smart TV Ecosystem Toolkit",
+    description: "Create flagship toolkit for Smart TV ecosystem launch. Include master assets, adaptations, and localized variations.",
+    badge: "Flagship toolkit",
+    date: "19 Dec",
+    comments: 15,
+    avatars: 2,
+    status: "Draft",
+    icon: (
+      <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M3.58249 0H7.87085C9.84785 0 11.4533 1.60548 11.4533 3.58249V8.41751C11.4533 10.3945 9.84785 12 7.87085 12H3.58249C1.60549 12 0 10.3945 0 8.41751V3.58249C0 1.60548 1.60549 0 3.58249 0Z" fill="#FFB546" />
+      </svg>
+    ),
+  },
+  {
+    id: "brief-8",
+    title: "Q1 2026 Product Launch",
+    description: "Develop promotional campaign materials for Q1 2026 product launch across multiple markets and channels.",
+    badge: "Promotional campaign",
+    date: "21 Dec",
+    comments: 12,
+    avatars: 3,
+    status: "Draft",
+    icon: (
+      <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M3.58249 0H7.87085C9.84785 0 11.4533 1.60548 11.4533 3.58249V8.41751C11.4533 10.3945 9.84785 12 7.87085 12H3.58249C1.60549 12 0 10.3945 0 8.41751V3.58249C0 1.60548 1.60549 0 3.58249 0Z" fill="#FFB546" />
+      </svg>
+    ),
+  },
+  {
+    id: "brief-9",
+    title: "Wearables Campaign Adaptation",
+    description: "Adapt existing wearables campaign assets for new markets and formats. Ensure brand consistency across all adaptations.",
+    badge: "BAU campaign",
+    date: "23 Dec",
+    comments: 7,
+    avatars: 2,
+    status: "In review",
+    icon: (
+      <svg width="16" height="10" viewBox="0 0 16 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M7.80101 10C10.9954 10 13.7962 8.32168 15.373 5.7988C15.6784 5.31037 15.6784 4.69046 15.373 4.2012C13.7962 1.67832 10.9954 0 7.80101 0C4.60663 0 1.80583 1.67832 0.229031 4.2012C-0.0763438 4.68963 -0.0763438 5.30954 0.229031 5.7988C1.80583 8.32168 4.60663 10 7.80101 10Z" fill="#E5E5E5" />
+      </svg>
+    ),
+  },
+  {
+    id: "brief-10",
+    title: "Enterprise Solutions Toolkit",
+    description: "Create comprehensive toolkit for enterprise solutions launch. Include B2B focused assets and marketing materials.",
+    badge: "Flagship toolkit",
+    date: "25 Dec",
+    comments: 9,
+    avatars: 3,
+    status: "Draft",
+    icon: (
+      <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M3.58249 0H7.87085C9.84785 0 11.4533 1.60548 11.4533 3.58249V8.41751C11.4533 10.3945 9.84785 12 7.87085 12H3.58249C1.60549 12 0 10.3945 0 8.41751V3.58249C0 1.60548 1.60549 0 3.58249 0Z" fill="#FFB546" />
+      </svg>
+    ),
+  },
+  {
+    id: "brief-11",
+    title: "Spring Collection Campaign",
+    description: "Develop visual assets for spring collection launch. Create seasonal campaign materials for digital and retail channels.",
+    badge: "Promotional campaign",
+    date: "27 Dec",
+    comments: 11,
+    avatars: 2,
+    status: "Draft",
+    icon: (
+      <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M3.58249 0H7.87085C9.84785 0 11.4533 1.60548 11.4533 3.58249V8.41751C11.4533 10.3945 9.84785 12 7.87085 12H3.58249C1.60549 12 0 10.3945 0 8.41751V3.58249C0 1.60548 1.60549 0 3.58249 0Z" fill="#FFB546" />
+      </svg>
+    ),
+  },
+  {
+    id: "brief-12",
+    title: "Mobile App Promotion BAU",
+    description: "Create BAU assets for mobile app promotion campaigns. Standard formats for app store listings and social media.",
+    badge: "BAU campaign",
+    date: "28 Dec",
+    comments: 6,
+    avatars: 3,
+    status: "In review",
+    icon: (
+      <svg width="16" height="10" viewBox="0 0 16 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M7.80101 10C10.9954 10 13.7962 8.32168 15.373 5.7988C15.6784 5.31037 15.6784 4.69046 15.373 4.2012C13.7962 1.67832 10.9954 0 7.80101 0C4.60663 0 1.80583 1.67832 0.229031 4.2012C-0.0763438 4.68963 -0.0763438 5.30954 0.229031 5.7988C1.80583 8.32168 4.60663 10 7.80101 10Z" fill="#E5E5E5" />
+      </svg>
+    ),
+  },
+  {
+    id: "brief-13",
+    title: "Gaming Accessories Toolkit",
+    description: "Develop flagship toolkit for gaming accessories line. Include product visuals, packaging designs, and marketing assets.",
+    badge: "Flagship toolkit",
+    date: "30 Dec",
+    comments: 14,
+    avatars: 2,
+    status: "Draft",
+    icon: (
+      <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M3.58249 0H7.87085C9.84785 0 11.4533 1.60548 11.4533 3.58249V8.41751C11.4533 10.3945 9.84785 12 7.87085 12H3.58249C1.60549 12 0 10.3945 0 8.41751V3.58249C0 1.60548 1.60549 0 3.58249 0Z" fill="#FFB546" />
+      </svg>
+    ),
+  },
+  {
+    id: "brief-14",
+    title: "Back to School Campaign",
+    description: "Create promotional campaign for back to school season. Develop student-focused marketing materials and digital assets.",
+    badge: "Promotional campaign",
+    date: "2 Jan",
+    comments: 10,
+    avatars: 3,
+    status: "Draft",
+    icon: (
+      <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M3.58249 0H7.87085C9.84785 0 11.4533 1.60548 11.4533 3.58249V8.41751C11.4533 10.3945 9.84785 12 7.87085 12H3.58249C1.60549 12 0 10.3945 0 8.41751V3.58249C0 1.60548 1.60549 0 3.58249 0Z" fill="#FFB546" />
+      </svg>
+    ),
+  },
+  {
+    id: "brief-15",
+    title: "Sustainability Initiative BAU",
+    description: "Develop BAU assets for sustainability initiative. Create consistent messaging across all channels and markets.",
+    badge: "BAU campaign",
+    date: "4 Jan",
+    comments: 8,
+    avatars: 2,
+    status: "In review",
+    icon: (
+      <svg width="16" height="10" viewBox="0 0 16 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M7.80101 10C10.9954 10 13.7962 8.32168 15.373 5.7988C15.6784 5.31037 15.6784 4.69046 15.373 4.2012C13.7962 1.67832 10.9954 0 7.80101 0C4.60663 0 1.80583 1.67832 0.229031 4.2012C-0.0763438 4.68963 -0.0763438 5.30954 0.229031 5.7988C1.80583 8.32168 4.60663 10 7.80101 10Z" fill="#E5E5E5" />
+      </svg>
+    ),
+  },
+  {
+    id: "brief-16",
+    title: "Premium Audio Toolkit",
+    description: "Create flagship toolkit for premium audio products launch. Include high-end visuals and marketing materials.",
+    badge: "Flagship toolkit",
+    date: "6 Jan",
+    comments: 13,
+    avatars: 3,
+    status: "Draft",
+    icon: (
+      <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M3.58249 0H7.87085C9.84785 0 11.4533 1.60548 11.4533 3.58249V8.41751C11.4533 10.3945 9.84785 12 7.87085 12H3.58249C1.60549 12 0 10.3945 0 8.41751V3.58249C0 1.60548 1.60549 0 3.58249 0Z" fill="#FFB546" />
+      </svg>
+    ),
+  },
+  {
+    id: "brief-17",
+    title: "Holiday Gift Guide Campaign",
+    description: "Develop promotional campaign for holiday gift guide. Create gift-focused marketing assets and seasonal visuals.",
+    badge: "Promotional campaign",
+    date: "8 Jan",
+    comments: 9,
+    avatars: 2,
+    status: "Draft",
+    icon: (
+      <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M3.58249 0H7.87085C9.84785 0 11.4533 1.60548 11.4533 3.58249V8.41751C11.4533 10.3945 9.84785 12 7.87085 12H3.58249C1.60549 12 0 10.3945 0 8.41751V3.58249C0 1.60548 1.60549 0 3.58249 0Z" fill="#FFB546" />
+      </svg>
+    ),
+  },
+  {
+    id: "brief-18",
+    title: "Smart Home Integration BAU",
+    description: "Create BAU assets for smart home integration products. Standard formats for retail and digital channels.",
+    badge: "BAU campaign",
+    date: "10 Jan",
+    comments: 7,
+    avatars: 3,
+    status: "In review",
+    icon: (
+      <svg width="16" height="10" viewBox="0 0 16 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M7.80101 10C10.9954 10 13.7962 8.32168 15.373 5.7988C15.6784 5.31037 15.6784 4.69046 15.373 4.2012C13.7962 1.67832 10.9954 0 7.80101 0C4.60663 0 1.80583 1.67832 0.229031 4.2012C-0.0763438 4.68963 -0.0763438 5.30954 0.229031 5.7988C1.80583 8.32168 4.60663 10 7.80101 10Z" fill="#E5E5E5" />
+      </svg>
+    ),
+  },
+  {
+    id: "brief-19",
+    title: "Professional Display Toolkit",
+    description: "Develop flagship toolkit for professional display solutions. Include B2B focused assets and technical marketing materials.",
+    badge: "Flagship toolkit",
+    date: "12 Jan",
+    comments: 16,
+    avatars: 2,
     status: "Draft",
     icon: (
       <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -554,7 +879,7 @@ export default function BriefsPage() {
         id: `brief-${Date.now()}`,
         title: data.projectTitle.trim(),
         description: data.objective.trim() || "No objective provided.",
-        badge: "Creation",
+        badge: getBadgeFromTemplate(data.selectedTemplate),
         date: dueDateLabel,
         comments: 0,
         avatars: 1,
@@ -570,7 +895,7 @@ export default function BriefsPage() {
   );
 
   // Check if we should show the form directly from navigation state or reset to overview
-  const [initialActiveTab, setInitialActiveTab] = useState<"All" | "Drafts" | "In review" | undefined>(undefined);
+  const [initialActiveTab, setInitialActiveTab] = useState<"All" | "Drafts" | "In review" | "SOW ready to sign" | undefined>(undefined);
 
   useEffect(() => {
     const state = location.state as {
@@ -580,7 +905,7 @@ export default function BriefsPage() {
       brief?: NewBriefFormValues;
       submittedBrief?: SubmittedBriefPayload;
       selectedTemplate?: string;
-      activeTab?: "All" | "Drafts" | "In review";
+      activeTab?: "All" | "Drafts" | "In review" | "SOW ready to sign";
       calculatorAssets?: Array<{
         id: string;
         title: string;
@@ -697,7 +1022,7 @@ export default function BriefsPage() {
         id: `brief-${Date.now()}`,
         title: title.trim() || "Untitled brief",
         description: objective.trim() || "No objective provided.",
-        badge: "Creation",
+        badge: "default",
         date: formattedDate,
         comments: 0,
         avatars: 3,
@@ -844,17 +1169,18 @@ export default function BriefsPage() {
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5">
                 {[
                   { 
-                    title: "In Draft",
+                    title: "In draft",
                     titleBold: true,
                     value: draftBriefCount,
                     icon: (
                       <svg width="40" height="44" viewBox="0 0 40 44" fill="none" xmlns="http://www.w3.org/2000/svg" className="absolute right-5 top-5">
                         <path d="M33.3775 0H6.62252C2.96358 0 0 2.96358 0 6.62252V36.7881C0 40.447 2.96358 43.4106 6.62252 43.4106H33.3775C37.0364 43.4106 40 40.447 40 36.7881V6.62252C40 2.96358 37.0364 0 33.3775 0ZM29.8758 34.3295H10.1159C8.75829 34.3295 7.66556 33.2285 7.66556 31.8791C7.66556 30.5215 8.76656 29.4288 10.1159 29.4288H29.8758C31.2334 29.4288 32.3262 30.5298 32.3262 31.8791C32.3262 33.2368 31.2252 34.3295 29.8758 34.3295ZM29.8758 24.1557H10.1159C8.75829 24.1557 7.66556 23.0547 7.66556 21.7053C7.66556 20.3477 8.76656 19.255 10.1159 19.255H29.8758C31.2334 19.255 32.3262 20.356 32.3262 21.7053C32.3262 23.0629 31.2252 24.1557 29.8758 24.1557ZM29.8758 13.9818H10.1159C8.75829 13.9818 7.66556 12.8808 7.66556 11.5315C7.66556 10.1739 8.76656 9.08115 10.1159 9.08115H29.8758C31.2334 9.08115 32.3262 10.1822 32.3262 11.5315C32.3262 12.8891 31.2252 13.9818 29.8758 13.9818Z" fill="#FFB546"/>
                       </svg>
-                    )
+                    ),
+                    onClick: () => setInitialActiveTab("Drafts")
                   },
                   { 
-                    title: "In Review",
+                    title: "In review",
                     titleBold: true,
                     value: inReviewBriefCount,
                     icon: (
@@ -862,10 +1188,11 @@ export default function BriefsPage() {
                       <path d="M4.125 16.6961C3.95833 16.247 3.95833 15.753 4.125 15.3039C5.74832 11.3673 8.50381 8.00137 12.0421 5.63288C15.5805 3.26439 19.7423 2 24 2C28.2577 2 32.4195 3.26439 35.9579 5.63288C39.4962 8.00137 42.2517 11.3673 43.875 15.3039C44.0417 15.753 44.0417 16.247 43.875 16.6961C42.2517 20.6327 39.4962 23.9986 35.9579 26.3671C32.4195 28.7356 28.2577 30 24 30C19.7423 30 15.5805 28.7356 12.0421 26.3671C8.50381 23.9986 5.74832 20.6327 4.125 16.6961Z" stroke="#0177C7" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round"/>
                       <path d="M24 22.0005C27.3135 22.0005 29.9997 19.314 29.9997 16C29.9997 12.686 27.3135 9.99947 24 9.99947C20.6865 9.99947 18.0003 12.686 18.0003 16C18.0003 19.314 20.6865 22.0005 24 22.0005Z" stroke="#0177C7" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round"/>
                       </svg>
-                    )
+                    ),
+                    onClick: () => setInitialActiveTab("In review")
                   },
                   { 
-                    title: "Ready to sign-off",
+                    title: "SOW ready to sign",
                     titleBold: true,
                     value: sowReadyBriefCount,
                     icon: (
@@ -875,176 +1202,102 @@ export default function BriefsPage() {
                     )
                   },
                 ].map((card) => {
-                  const isSOWCard = card.title === "Ready to sign-off";
+                  const isSOWCard = card.title === "SOW ready to sign";
+                  const isDraftCard = card.title === "In draft";
+                  const isReviewCard = card.title === "In review";
+                  
+                  // Determine border color based on card type
+                  let borderClass = "";
+                  if (isSOWCard) {
+                    borderClass = "border-[3px] border-[#03B3E2] rounded-xl";
+                  } else if (isDraftCard) {
+                    borderClass = "border-[3px] border-[#FFB546] rounded-xl";
+                  } else if (isReviewCard) {
+                    borderClass = "border-[3px] border-[#E5E5E5] rounded-xl";
+                  }
                   
                   if (isSOWCard) {
                     return (
                       <button
                         key={card.title}
                         onClick={() => navigate("/dashboard/sow")}
-                        className="card-brief cb2 relative overflow-hidden hover:opacity-90 transition cursor-pointer w-full text-left"
+                        className={`card-brief cb2 relative overflow-hidden hover:opacity-90 transition cursor-pointer w-full text-left ${borderClass}`}
                       >
-                        <StatCard title={card.title} value={card.value} className="rounded-xl p-6" titleBold={card.titleBold} />
+                        <StatCard title={card.title} value={card.value} className="rounded-xl p-6 border-0" titleBold={card.titleBold} />
                         {card.icon}
                       </button>
                     );
                   }
                   
+                  if (card.onClick) {
                   return (
-                    <div key={card.title} className="relative overflow-hidden">
-                      <StatCard title={card.title} value={card.value} className="rounded-xl p-6" titleBold={card.titleBold} />
-                      {card.icon}
-                    </div>
-                  );
-                })}
-              </div>
-
-              {/* To action on */}
-              <div className="space-y-4">
-                <h2 className="text-base font-semibold leading-[21.28px] text-black">To action on</h2>
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                  {[
-                    {
-                      title: "W Summer Festival 2025",
-                      content: " Develop visual guide for  the Summer Campaign Festival 2025. Create full set of campaign visuals, formats, and variations, for digital, print media.",
-                      badgeIcon: (
-                        <svg width="14" height="12" viewBox="0 0 14 12" fill="none" xmlns="http://www.w3.org/2000/svg">
-                          <path d="M7.14686 12H1.7428C0.779082 12 0 11.23 0 10.2774V9.56528C0 9.17804 0.238677 8.83086 0.603451 8.68843L4.47636 6.8724C5.27796 6.55638 5.27795 5.43917 4.48085 5.11869L0.598943 3.26706C0.238673 3.12463 0 2.77745 0 2.39021V1.72255C0 0.770031 0.779082 0 1.7428 0H7.14686C7.52514 0 7.89441 0.120181 8.19614 0.347184L12.8076 4.62463C13.7308 5.31454 13.7308 6.68101 12.8076 7.37092L8.19614 11.6484C7.89441 11.8754 7.52514 11.9955 7.14686 11.9955V12Z" fill="#03B3E2"/>
-                        </svg>
-                      ),
-                      notificationBadge: (
-                        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg" className="absolute -top-1 -right-1">
-                          <rect x="1" y="1" width="10" height="10" rx="5" fill="#FF4337"/>
-                          <rect x="1" y="1" width="10" height="10" rx="5" stroke="#F9F9F9" strokeWidth="2"/>
-                        </svg>
-                      ),
-                      statusBadge: (
-                        <span className="text-xs py-[2px] px-2 rounded-[12px]" style={{ width: '61px', height: '20px', backgroundColor: '#0177C70D', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                          <span style={{ fontSize: '12px', lineHeight: '15.96px', fontWeight: 400, color: '#0177C7', width: '45px', height: '16px' }}>Creation</span>
-                        </span>
-                      ),
-                    },
-                    {
-                      title: "Fold Toolkit Q3 2025",
-                      content: "Visual guide for the Fold Toolkit Q3 2025. Create full set of campaign visuals, formats, and variations for digital and print media, ensuring consistent visual identity across all touchpoints.",
-                      badgeIcon: (
-                        <svg width="16" height="10" viewBox="0 0 16 10" fill="none" xmlns="http://www.w3.org/2000/svg">
-                          <path d="M7.80101 10C10.9954 10 13.7962 8.32168 15.373 5.7988C15.6784 5.31037 15.6784 4.69046 15.373 4.2012C13.7962 1.67832 10.9954 0 7.80101 0C4.60663 0 1.80583 1.67832 0.229031 4.2012C-0.0763438 4.68963 -0.0763438 5.30954 0.229031 5.7988C1.80583 8.32168 4.60663 10 7.80101 10Z" fill="#E5E5E5"/>
-                        </svg>
-                      ),
-                      notificationBadge: (
-                        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg" className="absolute -top-1 -right-1">
-                          <rect x="1" y="1" width="10" height="10" rx="5" fill="#FF4337"/>
-                          <rect x="1" y="1" width="10" height="10" rx="5" stroke="#F9F9F9" strokeWidth="2"/>
-                        </svg>
-                      ),
-                      statusBadge: (
-                        <span className="text-xs py-[2px] px-2 rounded-[12px]" style={{ width: '50px', height: '20px', backgroundColor: '#00C3B10F', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                          <span style={{ fontSize: '12px', lineHeight: '15.96px', fontWeight: 400, color: '#00C3B1', width: '34px', height: '16px' }}>Resize</span>
-                        </span>
-                      ),
-                    },
-                    {
-                      title: "Buds3 Campaign Toolkit",
-                      content: "Develop visual guide for Buds 3 Campaign. Create full set of assets and design templates to support marketing rollout across multiple channels.",
-                      badgeIcon: (
-                        <svg width="14" height="12" viewBox="0 0 14 12" fill="none" xmlns="http://www.w3.org/2000/svg">
-                          <path d="M7.14686 12H1.7428C0.779082 12 0 11.23 0 10.2774V9.56528C0 9.17804 0.238677 8.83086 0.603451 8.68843L4.47636 6.8724C5.27796 6.55638 5.27795 5.43917 4.48085 5.11869L0.598943 3.26706C0.238673 3.12463 0 2.77745 0 2.39021V1.72255C0 0.770031 0.779082 0 1.7428 0H7.14686C7.52514 0 7.89441 0.120181 8.19614 0.347184L12.8076 4.62463C13.7308 5.31454 13.7308 6.68101 12.8076 7.37092L8.19614 11.6484C7.89441 11.8754 7.52514 11.9955 7.14686 11.9955V12Z" fill="#03B3E2"/>
-                        </svg>
-                      ),
-                      notificationBadge: (
-                        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg" className="absolute -top-1 -right-1">
-                          <rect x="1" y="1" width="10" height="10" rx="5" fill="#FF4337"/>
-                          <rect x="1" y="1" width="10" height="10" rx="5" stroke="#F9F9F9" strokeWidth="2"/>
-                        </svg>
-                      ),
-                      statusBadge: (
-                        <span className="text-xs py-[2px] px-2 rounded-[12px]" style={{ width: '50px', height: '20px', backgroundColor: '#00C3B10F', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                          <span style={{ fontSize: '12px', lineHeight: '15.96px', fontWeight: 400, color: '#00C3B1', width: '34px', height: '16px' }}>Resize</span>
-                        </span>
-                      ),
-                    },
-                    {
-                      title: "Adapt AI Toolkit Q3 2025",
-                      content: "Adapt all AI master campaign assets into formats optimized for print and add localized variations for different markets, ensuring visual consistency and high production quality across all deliverables."                      ,
-                      badgeIcon: (
-                        <svg width="14" height="12" viewBox="0 0 14 12" fill="none" xmlns="http://www.w3.org/2000/svg">
-                          <path d="M7.14686 12H1.7428C0.779082 12 0 11.23 0 10.2774V9.56528C0 9.17804 0.238677 8.83086 0.603451 8.68843L4.47636 6.8724C5.27796 6.55638 5.27795 5.43917 4.48085 5.11869L0.598943 3.26706C0.238673 3.12463 0 2.77745 0 2.39021V1.72255C0 0.770031 0.779082 0 1.7428 0H7.14686C7.52514 0 7.89441 0.120181 8.19614 0.347184L12.8076 4.62463C13.7308 5.31454 13.7308 6.68101 12.8076 7.37092L8.19614 11.6484C7.89441 11.8754 7.52514 11.9955 7.14686 11.9955V12Z" fill="#03B3E2"/>
-                        </svg>
-                      ),
-                      notificationBadge: (
-                        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg" className="absolute -top-1 -right-1">
-                          <rect x="1" y="1" width="10" height="10" rx="5" fill="#FF4337"/>
-                          <rect x="1" y="1" width="10" height="10" rx="5" stroke="#F9F9F9" strokeWidth="2"/>
-                        </svg>
-                      ),
-                      statusBadge: (
-                        <span className="text-xs py-[2px] px-2 rounded-[12px]" style={{ width: '75px', height: '20px', backgroundColor: '#8092DC0D', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                          <span style={{ fontSize: '12px', lineHeight: '15.96px', fontWeight: 400, color: '#8092DC', width: '59px', height: '16px' }}>Adaptation</span>
-                        </span>
-                      ),
-                    },
-                  ].map((card, i) => {
-                    const dates = ["12 Dec", "15 Dec", "18 Dec", "20 Dec"];
-                    const briefIds = ["brief-1", "brief-2", "brief-3", "brief-4"];
-                    return (
                       <button
-                        key={i}
-                        onClick={() => navigate(`/dashboard/briefs/${briefIds[i]}`)}
-                        className="text-left w-full"
+                        key={card.title}
+                        onClick={card.onClick}
+                        className={`card-brief cb2 relative overflow-hidden hover:opacity-90 transition cursor-pointer w-full text-left ${borderClass}`}
                       >
-                        <BriefCard
-                          title={card.title}
-                          description={card.content}
-                          right={
-                            <div className="relative">
-                              {card.badgeIcon}
-                              {card.notificationBadge}
-                            </div>
-                          }
-                          meta={
-                            <div className="flex items-center justify-between">
-                              {card.statusBadge}
-                              <div className="flex -space-x-2">
-                                {[0,1,2].map((a) => {
-                                  const seed = `avatar_${i}_${a}`;
-                                  return (
-                                    <Avatar key={a} className="w-6 h-6 border-2 border-white">
-                                      <AvatarImage 
-                                        src={`https://api.dicebear.com/7.x/personas/png?seed=${seed}&size=64`} 
-                                        alt={`Avatar ${a + 1}`}
-                                      />
-                                      <AvatarFallback className="text-xs bg-gradient-to-br from-blue-200 to-blue-300">
-                                        {String.fromCharCode(65 + a)}
-                                      </AvatarFallback>
-                                    </Avatar>
-                                  );
-                                })}
-                              </div>
-                            </div>
-                          }
-                          className="h-full hover:opacity-90 transition cursor-pointer"
-                        >
-                          <div className="h-px bg-[#ececec]" />
-                          <div className="flex items-center justify-between text-xs text-[#848487]">
-                            <div className="flex items-center gap-1">
-                              <span>💬</span>
-                              <span>12</span>
-                            </div>
-                            <div className="flex items-center gap-1">
-                              <CalendarIcon size={14} className="text-[#848487]" />
-                              <span>{dates[i]}</span>
-                            </div>
-                          </div>
-                        </BriefCard>
+                      <StatCard title={card.title} value={card.value} className="rounded-xl p-6 border-0" titleBold={card.titleBold} />
+                      {card.icon}
                       </button>
                     );
-                  })}
-                </div>
+                  }
+                  
+                    return (
+                    <div key={card.title} className={`relative overflow-hidden ${borderClass}`}>
+                      <StatCard title={card.title} value={card.value} className="rounded-xl p-6 border-0" titleBold={card.titleBold} />
+                      {card.icon}
+                            </div>
+                                  );
+                                })}
               </div>
 
               {/* All briefs */}
-              <AllBriefsSection briefs={briefs} initialTab={initialActiveTab} />
+              <AllBriefsSection 
+                briefs={briefs} 
+                initialTab={initialActiveTab}
+                onTabChange={(tab) => setInitialActiveTab(tab)}
+                onOpenDraftForm={(brief) => {
+                  // Convert BriefSummary to NewBriefFormValues
+                  let parsedDate: Date | undefined = undefined;
+                  if (brief.date) {
+                    try {
+                      // Parse date format like "15 Dec" - need to add current year
+                      const currentYear = new Date().getFullYear();
+                      const dateWithYear = `${brief.date} ${currentYear}`;
+                      parsedDate = parse(dateWithYear, "d MMM yyyy", new Date());
+                      // If parsing fails or date is invalid, set to undefined
+                      if (isNaN(parsedDate.getTime())) {
+                        parsedDate = undefined;
+                      }
+                    } catch (e) {
+                      parsedDate = undefined;
+                    }
+                  }
+                  
+                  const formValues: NewBriefFormValues = {
+                    projectTitle: brief.title,
+                    dueDate: parsedDate,
+                    projectLead: brief.projectLead 
+                      ? PROJECT_LEADS.filter(lead => brief.projectLead?.includes(lead.label)).map(lead => lead.value)
+                      : [],
+                    objective: brief.description,
+                    workType: [],
+                    channels: [],
+                    expectedOutputs: [],
+                    briefSummary: "",
+                    assets: [],
+                    selectedTemplate: brief.badge === "Promotional campaign" ? "promotional-campaign" :
+                                   brief.badge === "BAU campaign" ? "bau-campaign" :
+                                   brief.badge === "Flagship toolkit" ? "flagship-campaign" : "other",
+                    additionalAssetDetails: "",
+                    watermarkFiles: false,
+                    attachedDocuments: [],
+                  };
+                  setNewBriefDraft(formValues);
+                  setIsCreatingBrief(true);
+                  setBriefView("form");
+                }}
+              />
             </div>
           )}
       </div>
@@ -1181,13 +1434,72 @@ function NewBriefForm({
   const [additionalAssetsLoaded, setAdditionalAssetsLoaded] = useState(0);
   const [pendingDraftPayload, setPendingDraftPayload] = useState<SubmittedBriefPayload | null>(null);
   const [quantityInputs, setQuantityInputs] = useState<Record<string, string>>({});
-
   const tokenEstimate = useMemo(
     () => formData.assets
       .filter((asset) => !asset.isCustom)
       .reduce((total, asset) => total + asset.tokenPrice * asset.quantity, 0),
     [formData.assets]
   );
+
+  const [previousTotal, setPreviousTotal] = useState(0);
+  const [showCoinAnimation, setShowCoinAnimation] = useState(false);
+  const [displayTotal, setDisplayTotal] = useState(0);
+  const coinAnimationTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  // Handle coin animation when total changes
+  useEffect(() => {
+    if (tokenEstimate !== previousTotal) {
+      if (previousTotal > 0 && tokenEstimate > previousTotal) {
+        // Asset added or quantity increased - show coin animation
+        setShowCoinAnimation(true);
+        setDisplayTotal(previousTotal);
+        
+        // Animate number from previous to new total
+        const duration = 500; // 500ms animation
+        const steps = 30;
+        const stepDuration = duration / steps;
+        const increment = (tokenEstimate - previousTotal) / steps;
+        let currentStep = 0;
+        
+        const animateNumber = () => {
+          currentStep++;
+          const newValue = Math.round(previousTotal + increment * currentStep);
+          setDisplayTotal(newValue);
+          
+          if (currentStep < steps) {
+            setTimeout(animateNumber, stepDuration);
+          } else {
+            setDisplayTotal(tokenEstimate);
+            // Hide coin after number animation completes
+            if (coinAnimationTimeoutRef.current) {
+              clearTimeout(coinAnimationTimeoutRef.current);
+            }
+            coinAnimationTimeoutRef.current = setTimeout(() => {
+              setShowCoinAnimation(false);
+            }, 200);
+          }
+        };
+        
+        // Start number animation after coin slides in (300ms)
+        setTimeout(animateNumber, 300);
+      } else {
+        // Asset removed, quantity decreased, or initial state - just update number, no coin
+        setDisplayTotal(tokenEstimate);
+        setShowCoinAnimation(false);
+      }
+    }
+    
+    // Update previous total after handling animation
+    if (tokenEstimate !== previousTotal) {
+      setPreviousTotal(tokenEstimate);
+    }
+    
+    return () => {
+      if (coinAnimationTimeoutRef.current) {
+        clearTimeout(coinAnimationTimeoutRef.current);
+      }
+    };
+  }, [tokenEstimate, previousTotal]);
 
   const hasCustomAssets = useMemo(
     () => formData.assets.some((asset) => asset.isCustom),
@@ -1738,7 +2050,7 @@ function NewBriefForm({
               />
             </Field>
             <DateField
-                label="Due date"
+                label="Delivery date"
               value={formData.dueDate}
                 onChange={(date) => handleFieldChange("dueDate", date)}
               />
@@ -1825,7 +2137,7 @@ function NewBriefForm({
                 <li className="flex gap-3">
                   <span className="flex-shrink-0 w-5 h-5 rounded-full bg-[#03B3E2] text-white text-xs font-semibold flex items-center justify-center mt-0.5">2</span>
                   <div className="flex-1">
-                    <span className="text-sm font-medium text-black">Choose assets individually</span>
+                    <span className="text-sm font-medium text-black">Build your own</span>
                     <span className="text-sm text-[#424242]"> - Browse the list of recommended assets or add custom assets as needed.</span>
                   </div>
                 </li>
@@ -2051,7 +2363,26 @@ function NewBriefForm({
                     <path d="M10.0018 8.05164C13.3867 8.05164 16.1308 6.98073 16.1308 5.65972C16.1308 4.33871 13.3867 3.26782 10.0018 3.26782C6.61682 3.26782 3.87276 4.33871 3.87276 5.65972C3.87276 6.98073 6.61682 8.05164 10.0018 8.05164Z" fill="#03B3E2" />
                   </svg>
                 </span>
-                <span className="text-lg md:text-[26px] leading-[25px] md:leading-[37.24px] text-black font-medium">£{tokenEstimate}</span>
+                <div className="relative flex items-center gap-2">
+                  {showCoinAnimation && (
+                    <Coins 
+                      size={16} 
+                      className="text-[#ffb546] animate-slide-in-coin"
+                    />
+                  )}
+                  <TooltipProvider>
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <span className="text-lg md:text-[26px] leading-[25px] md:leading-[37.24px] text-black font-medium cursor-help transition-all duration-300">
+                          £{displayTotal * 5}
+                        </span>
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        <p>Each token is worth 5 pounds</p>
+                      </TooltipContent>
+                    </Tooltip>
+                  </TooltipProvider>
+                </div>
                 <span className="text-sm md:text-[26px] leading-[18px] md:leading-[37.24px] text-[#848487]">Tokens estimate</span>
               </div>
               {hasCustomAssets && (
@@ -2123,7 +2454,7 @@ function NewBriefForm({
           <div className="space-y-6 pr-1">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <PreviewField label="Project title" value={formData.projectTitle || "—"} />
-              <PreviewField label="Due date" value={formData.dueDate ? format(formData.dueDate, "PPP") : "—"} />
+              <PreviewField label="Delivery date" value={formData.dueDate ? format(formData.dueDate, "PPP") : "—"} />
               <PreviewField
                 label="Project lead"
                 value={
@@ -3068,13 +3399,20 @@ function AIResponseScreen({
 
 function AllBriefsSection({ 
   briefs: allBriefs, 
-  initialTab 
+  initialTab,
+  onTabChange,
+  onOpenDraftForm
 }: { 
   briefs: BriefSummary[];
-  initialTab?: "All" | "Drafts" | "In review";
+  initialTab?: "All" | "Drafts" | "In review" | "SOW ready to sign";
+  onTabChange?: (tab: "All" | "Drafts" | "In review" | "SOW ready to sign") => void;
+  onOpenDraftForm?: (brief: BriefSummary) => void;
 }) {
   const navigate = useNavigate();
-  const [activeTab, setActiveTab] = useState<"All" | "Drafts" | "In review">(initialTab || "All");
+  const [activeTab, setActiveTab] = useState<"All" | "Drafts" | "In review" | "SOW ready to sign">(initialTab || "All");
+
+  // Avatar names for tooltips
+  const avatarNames = ["Murray Gordon", "Henry Bray", "Holly Hayes"];
 
   // Update activeTab when initialTab changes (e.g., from navigation state)
   useEffect(() => {
@@ -3083,42 +3421,138 @@ function AllBriefsSection({
     }
   }, [initialTab]);
 
-  const filtered = allBriefs.filter((b) =>
-    activeTab === "All" ? true : activeTab === "Drafts" ? b.status === "Draft" : b.status === "In review"
-  );
+  // Get SOW titles for filtering
+  const sowTitles = READY_TO_SIGN_SOWS.map(sow => sow.title);
+
+  const filtered = allBriefs.filter((b) => {
+    if (activeTab === "All") return true;
+    if (activeTab === "Drafts") {
+      // Exclude SOW ready to sign briefs from drafts filter
+      return b.status === "Draft" && !sowTitles.includes(b.title);
+    }
+    if (activeTab === "In review") return b.status === "In review";
+    if (activeTab === "SOW ready to sign") return sowTitles.includes(b.title);
+    return true;
+  });
 
   return (
     <div className="space-y-4">
       <h2 className="text-base font-semibold leading-[21.28px] text-black">All briefs</h2>
       <TabFilter
-        tabs={["All", "Drafts", "In review"]}
+        tabs={["All", "Drafts", "In review", "SOW ready to sign"]}
         activeTab={activeTab}
-        onTabChange={(tab) => setActiveTab(tab as typeof activeTab)}
+        onTabChange={(tab) => {
+          const tabValue = tab as typeof activeTab;
+          setActiveTab(tabValue);
+          if (onTabChange) {
+            onTabChange(tabValue);
+          }
+        }}
         variant="compact"
       />
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {filtered.map((b) => {
+          const isDraft = b.status === "Draft";
+          const isSOWReady = sowTitles.includes(b.title);
+          
           return (
-            <button
+            <div
               key={b.id}
-              onClick={() => navigate(`/dashboard/briefs/${b.id}`)}
-              className="text-left w-full"
+              className={`text-left w-full ${isDraft || isSOWReady ? "cursor-pointer" : ""}`}
+              onClick={() => {
+                if (isSOWReady) {
+                  // Find the matching SOW and navigate to SOW page
+                  const matchingSOW = READY_TO_SIGN_SOWS.find(sow => sow.title === b.title);
+                  if (matchingSOW) {
+                    navigate("/dashboard/sow", { state: { sowId: matchingSOW.id } });
+                  }
+                } else if (isDraft && onOpenDraftForm) {
+                  onOpenDraftForm(b);
+                } else if (!isDraft && !isSOWReady) {
+                  navigate(`/dashboard/briefs/${b.id}`);
+                }
+              }}
             >
               <BriefCard
                 title={b.title}
                 description={b.description}
-                right={b.icon}
+                className={
+                  isSOWReady
+                    ? "border-[3px] border-[#03B3E2] shadow-[0_0_0_1px_rgba(3,179,226,0.2),0_0_8px_rgba(3,179,226,0.3)] hover:opacity-90 transition cursor-pointer"
+                    : isDraft 
+                    ? "border-[3px] border-[#FFB546] shadow-[0_0_0_1px_rgba(255,181,70,0.2),0_0_8px_rgba(255,181,70,0.3)]" 
+                    : "hover:opacity-90 transition cursor-pointer"
+                }
+                right={
+                  isSOWReady ? (
+                    <div className="flex items-center gap-1.5">
+                      <span className="text-xs font-semibold text-[#03B3E2] whitespace-nowrap">Ready to sign</span>
+                      <ArrowRight 
+                        size={14} 
+                        className="text-[#03B3E2] animate-pulse" 
+                      />
+                    </div>
+                  ) : isDraft ? (
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        if (onOpenDraftForm) {
+                          onOpenDraftForm(b);
+                        }
+                      }}
+                      className="text-xs font-semibold text-[#FFB546] hover:opacity-80 transition whitespace-nowrap"
+                    >
+                      Complete brief
+                    </button>
+                  ) : undefined
+                }
                 meta={
                   <div className="flex items-center justify-between">
                     <Badge
                       label={b.badge}
-                      intent={b.badge === "Creation" ? "creation" : b.badge === "Adaptation" ? "adaptation" : b.badge === "Resize" ? "resize" : "default"}
-                      width={b.badge === "Creation" ? "creation" : b.badge === "Adaptation" ? "adaptation" : b.badge === "Resize" ? "resize" : "auto"}
+                      intent={
+                        b.badge === "Promotional campaign" ? "creation" :
+                        b.badge === "BAU campaign" ? "adaptation" :
+                        b.badge === "Flagship toolkit" ? "creation" :
+                        "default"
+                      }
+                      width={
+                        b.badge === "Promotional campaign" ? "creation" :
+                        b.badge === "BAU campaign" ? "adaptation" :
+                        b.badge === "Flagship toolkit" ? "creation" :
+                        "auto"
+                      }
                     />
-                    <AvatarStack count={b.avatars} seedPrefix={`brief_${b.id}_avatar`} />
+                    <TooltipProvider>
+                      <div className="flex -space-x-2">
+                        {Array.from({ length: b.avatars }).map((_, index) => {
+                          const seed = `brief_${b.id}_avatar_${index}`;
+                          const name = avatarNames[index % avatarNames.length];
+                          return (
+                            <Tooltip key={index}>
+                              <TooltipTrigger asChild>
+                                <div>
+                                  <Avatar className="w-6 h-6 border-2 border-white">
+                                    <AvatarImage 
+                                      src={`https://api.dicebear.com/7.x/personas/png?seed=${seed}&size=64`} 
+                                      alt={name}
+                                    />
+                                    <AvatarFallback className="text-xs bg-gradient-to-br from-blue-200 to-blue-300">
+                                      {String.fromCharCode(65 + index)}
+                                    </AvatarFallback>
+                                  </Avatar>
+                                </div>
+                              </TooltipTrigger>
+                              <TooltipContent>
+                                <p>{name}</p>
+                              </TooltipContent>
+                            </Tooltip>
+                          );
+                        })}
+                      </div>
+                    </TooltipProvider>
                   </div>
                 }
-                className="hover:opacity-90 transition cursor-pointer"
               >
                 <div className="h-px bg-[#ececec]" />
                 {b.projectLead && (
@@ -3138,7 +3572,7 @@ function AllBriefsSection({
                   </div>
                 </div>
               </BriefCard>
-            </button>
+            </div>
           );
         })}
       </div>

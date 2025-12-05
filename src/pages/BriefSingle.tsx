@@ -214,7 +214,7 @@ export default function BriefSinglePage() {
                     className="bg-[#f9f9f9] cursor-default"
                   />
                 </Field>
-                <Field label="Due date" helpText="When is this project due?">
+                <Field label="Delivery date" helpText="When is this project due?">
                   <div className="flex items-center gap-2 border border-[#e0e0e0] rounded-[85px] px-5 py-2.5 h-auto bg-[#f9f9f9] text-black">
                     <CalendarIcon size={16} className="text-[#848487]" />
                     <span>{formattedDueDate}</span>

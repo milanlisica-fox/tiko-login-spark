@@ -362,7 +362,7 @@ export default function ProjectsPage() {
                       onClick={() => handleSort("dueDate")}
                       className="flex items-center justify-center gap-1 hover:text-black transition-colors mx-auto"
                     >
-                      Due date
+                      Delivery date
                       {getSortIcon("dueDate")}
                     </button>
                   </div>
@@ -372,40 +372,74 @@ export default function ProjectsPage() {
                     <div className="grid grid-cols-[minmax(200px,35%)_minmax(40px,5%)_minmax(120px,20%)_minmax(60px,10%)_minmax(140px,20%)_minmax(100px,10%)] items-center py-[12px] px-[8px] gap-4">
                       <div className="flex items-center gap-2">
                         <div className="flex flex-col gap-[4px]">
-                          <p className={`text-sm leading-[19px] text-black ${project.notifications ? "font-bold" : "font-normal"}`}>{project.name}</p>
+                          <p className={`text-sm leading-[19px] text-black ${project.notifications || project.hasProjectNotification ? "font-bold" : "font-normal"}`}>{project.name}</p>
                           <p className="text-xs leading-[16px] text-[#646464]">{project.team}</p>
                         </div>
-                        {project.hasProjectNotification && (
-                          <div className="relative flex-shrink-0">
-                            <Bell size={16} className="text-[#848487]" />
-                            <div className="absolute -left-1 -top-1 min-w-[16px] h-4 bg-[#ff4337] border-2 border-white rounded-full flex items-center justify-center px-0.5">
-                              <span className="text-[9px] font-bold leading-[12px] text-white">1</span>
-                            </div>
-                          </div>
-                        )}
                       </div>
                       <div className="flex items-center justify-center">
-                        {project.notifications && project.notifications > 0 && project.notificationActions && (
-                          <Popover>
-                            <PopoverTrigger asChild>
-                              <button className="w-8 h-8 rounded-full bg-amber-100 flex items-center justify-center text-xs font-semibold text-amber-600 hover:bg-amber-200 transition-colors cursor-pointer">
-                                {project.notifications}
-                              </button>
-                            </PopoverTrigger>
-                            <PopoverContent align="start" sideOffset={8} className="w-80 p-0 bg-white border border-[#e0e0e0] shadow-lg">
-                              <div className="p-4 border-b border-[#e0e0e0]">
-                                <h3 className="text-base font-bold leading-[21.28px] text-black">Actions required</h3>
-                              </div>
-                              <div className="max-h-96 overflow-y-auto">
-                                {project.notificationActions.map((action) => (
-                                  <div key={action.id} className="p-4 border-b border-[#f1f1f3] hover:bg-[#f9f9f9] transition">
-                                    <p className="text-sm leading-[18.62px] text-black">{action.message}</p>
-                                  </div>
-                                ))}
-                              </div>
-                            </PopoverContent>
-                          </Popover>
-                        )}
+                        {((project.notifications && project.notifications > 0) || project.hasProjectNotification) && (() => {
+                          // Calculate notification count
+                          const notificationCount = project.notifications || (project.hasProjectNotification ? 1 : 0);
+                          
+                          // Get actions or create default ones to match the count
+                          let actions = project.notificationActions || [];
+                          
+                          // If no actions but hasProjectNotification, create default actions
+                          if (project.hasProjectNotification && actions.length === 0) {
+                            actions = Array.from({ length: notificationCount }, (_, i) => ({
+                              id: i + 1,
+                              message: "Action required"
+                            }));
+                          }
+                          
+                          // Ensure actions array length matches notification count
+                          // If actions are fewer than count, pad with defaults
+                          // If actions are more than count, limit to count
+                          if (actions.length < notificationCount) {
+                            const additionalActions = Array.from({ length: notificationCount - actions.length }, (_, i) => ({
+                              id: actions.length + i + 1,
+                              message: "Action required"
+                            }));
+                            actions = [...actions, ...additionalActions];
+                          } else if (actions.length > notificationCount) {
+                            actions = actions.slice(0, notificationCount);
+                          }
+                          
+                          return (
+                            <Popover>
+                              <PopoverTrigger asChild>
+                                <button className="w-8 h-8 rounded-full bg-amber-100 flex items-center justify-center hover:bg-amber-200 transition-colors cursor-pointer relative">
+                                  <Bell size={16} className="text-amber-600" />
+                                  {notificationCount > 0 && (
+                                    <div className="absolute -right-1 -top-1 min-w-[16px] h-4 bg-[#ff4337] border-2 border-white rounded-full flex items-center justify-center px-0.5">
+                                      <span className="text-[9px] font-bold leading-[12px] text-white">
+                                        {notificationCount}
+                                      </span>
+                                    </div>
+                                  )}
+                                </button>
+                              </PopoverTrigger>
+                              <PopoverContent align="start" sideOffset={8} className="w-80 p-0 bg-white border border-[#e0e0e0] shadow-lg">
+                                <div className="p-4 border-b border-[#e0e0e0]">
+                                  <h3 className="text-base font-bold leading-[21.28px] text-black">Actions required</h3>
+                                </div>
+                                <div className="max-h-96 overflow-y-auto">
+                                  {actions.length > 0 ? (
+                                    actions.map((action) => (
+                                      <div key={action.id} className="p-4 border-b border-[#f1f1f3] hover:bg-[#f9f9f9] transition">
+                                        <p className="text-sm leading-[18.62px] text-black">{action.message}</p>
+                                      </div>
+                                    ))
+                                  ) : (
+                                    <div className="p-4">
+                                      <p className="text-sm leading-[18.62px] text-black">No actions available</p>
+                                    </div>
+                                  )}
+                                </div>
+                              </PopoverContent>
+                            </Popover>
+                          );
+                        })()}
                       </div>
                       <div className="flex items-center justify-center gap-2">
                         <div className="flex -space-x-2">

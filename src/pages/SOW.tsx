@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { FileText, ArrowLeft, X, Download, Send } from "lucide-react";
 import { format } from "date-fns";
 import DashboardLayout from "@/components/layout/DashboardLayout";
@@ -262,6 +262,7 @@ export const SIGNED_SOWS: SOW[] = [
 
 export default function SOWPage() {
   const navigate = useNavigate();
+  const location = useLocation();
   const { activeName } = useActiveNav();
   const [selectedSOW, setSelectedSOW] = useState<SOW | null>(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -269,6 +270,31 @@ export default function SOWPage() {
   const [isSuccessDialogOpen, setIsSuccessDialogOpen] = useState(false);
   const [comments, setComments] = useState<Record<string, Comment[]>>({});
   const [newComment, setNewComment] = useState("");
+
+  // Handle opening SOW dialog from navigation state
+  useEffect(() => {
+    const state = location.state as { sowId?: string } | null;
+    if (state?.sowId) {
+      const sow = READY_TO_SIGN_SOWS.find(s => s.id === state.sowId);
+      if (sow) {
+        setSelectedSOW(sow);
+        setIsDialogOpen(true);
+        // Initialize comments for this SOW if not already loaded
+        setComments((prev) => {
+          if (!prev[sow.id]) {
+            return {
+              ...prev,
+              [sow.id]: getMockCommentsForSOW(sow.id),
+            };
+          }
+          return prev;
+        });
+        setNewComment("");
+        // Clear the state to prevent reopening on re-render
+        navigate(location.pathname, { replace: true });
+      }
+    }
+  }, [location, navigate]);
 
   const topbarRight = <DashboardTopbarRight />;
 

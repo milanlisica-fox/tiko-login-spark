@@ -15,7 +15,7 @@ import { useActiveNav } from "@/hooks/useActiveNav";
 import { BRAND } from "@/constants/branding";
 import { cn } from "@/lib/utils";
 
-type TransactionAction = "added" | "removed" | "consumed";
+type TransactionAction = "added" | "spent";
 
 interface TokenTransaction {
   id: string;
@@ -27,58 +27,26 @@ interface TokenTransaction {
 
 // Mock data - transactions in descending order (most recent first)
 const generateMockTransactions = (): TokenTransaction[] => {
-  const actions: TransactionAction[] = ["added", "removed", "consumed"];
-  const descriptions = [
-    "Initial budget allocation for Q1 2025",
-    "Project completion: Summer Campaign 2025",
-    "Budget adjustment: Marketing reallocation",
-    "Project: W Summer Festival 2025 - Asset creation",
-    "Project: Fold Toolkit Q3 2025 - Video production",
-    "Budget top-up: Additional campaign funding",
-    "Project: Promotional Campaign - Master KV creation",
-    "Project cancellation: Unused tokens returned",
-    "Project: BAU Campaign - Static KV adaptation",
-    "Budget reduction: Cost optimization",
-    "Project: Flagship Campaign - Animation creation",
-    "Project: Social Content - Asset adaptation",
-    "Budget adjustment: Quarterly review",
-    "Project: Digital POS - Master KV creation",
-    "Project: POS Campaign - Roundel creation",
-    "Budget allocation: New client onboarding",
-    "Project: Feature Asset - Video creation",
-    "Project: Partnerships - Asset adaptation",
-    "Budget top-up: Year-end allocation",
-    "Project: Promotional Campaign - PPT files",
-    "Project: BAU Campaign - Urgency tag creation",
-    "Budget adjustment: Department reallocation",
-    "Project: Flagship Campaign - Watermarked files",
-    "Project: Social Content - Video adaptation",
-    "Budget reduction: Budget constraints",
-    "Project: Digital POS - Animation adaptation",
-    "Project: POS Campaign - Master KV creation",
-    "Budget top-up: Campaign expansion",
-    "Project: Feature Asset - Static KV adaptation",
-    "Project: Partnerships - Master KV creation",
-    "Budget adjustment: Strategic reallocation",
-    "Project: Promotional Campaign - Roundel creation",
-    "Project: BAU Campaign - Video creation",
-    "Budget top-up: Q2 2025 allocation",
-    "Project: Flagship Campaign - PPT files",
-    "Project: Social Content - Urgency tag creation",
-    "Budget reduction: Cost savings",
-    "Project: Digital POS - Watermarked files",
-    "Project: POS Campaign - Video adaptation",
-    "Budget allocation: New project funding",
-    "Project: Feature Asset - Animation creation",
-    "Project: Partnerships - Static KV adaptation",
-    "Budget adjustment: Monthly review",
-    "Project: Promotional Campaign - Master KV creation",
-    "Project: BAU Campaign - Asset adaptation",
-    "Budget top-up: Additional resources",
-    "Project: Flagship Campaign - Roundel creation",
-    "Project: Social Content - Video creation",
-    "Budget reduction: Budget optimization",
-    "Project: Digital POS - PPT files",
+  const actions: TransactionAction[] = ["added", "spent"];
+  
+  // Budget descriptions for "added" transactions
+  const budgetDescriptions = [
+    "Budget for Q1",
+    "Budget for Q2",
+    "Budget for Q3",
+    "Budget for Q4",
+    "Budget for Q1 2025",
+    "Budget for Q2 2025",
+    "Budget for Q3 2025",
+    "Budget for Q4 2025",
+  ];
+
+  // Project names for "spent" transactions
+  const projectNames = [
+    "Fold Toolkit Q3 2025",
+    "Watch Radio Campaign Q3 2025",
+    "S Series OOH Campaign Q2 2025",
+    "A Series Promotional Campaign Q3 2025",
   ];
 
   const transactions: TokenTransaction[] = [];
@@ -92,13 +60,17 @@ const generateMockTransactions = (): TokenTransaction[] => {
 
     const action = actions[Math.floor(Math.random() * actions.length)];
     let amount: number;
+    let description: string;
     
     if (action === "added") {
-      amount = Math.floor(Math.random() * 5000) + 1000; // 1000-6000 tokens
-    } else if (action === "removed") {
-      amount = Math.floor(Math.random() * 3000) + 500; // 500-3500 tokens
+      // Round numbers (multiples of 500): 1500, 2000, 2500, 3000, etc.
+      const multiplier = Math.floor(Math.random() * 10) + 3; // 3-12 multipliers
+      amount = multiplier * 500; // Results in 1500, 2000, 2500, ..., 6000
+      description = budgetDescriptions[i % budgetDescriptions.length];
     } else {
+      // Spent: can be different numbers
       amount = Math.floor(Math.random() * 2000) + 100; // 100-2100 tokens
+      description = projectNames[i % projectNames.length];
     }
 
     transactions.push({
@@ -106,7 +78,7 @@ const generateMockTransactions = (): TokenTransaction[] => {
       timestamp,
       action,
       amount,
-      description: descriptions[i % descriptions.length],
+      description,
     });
   }
 
@@ -171,10 +143,8 @@ export default function TokenTransactionsPage() {
     switch (action) {
       case "added":
         return "default";
-      case "removed":
+      case "spent":
         return "destructive";
-      case "consumed":
-        return "secondary";
       default:
         return "default";
     }
@@ -184,10 +154,8 @@ export default function TokenTransactionsPage() {
     switch (action) {
       case "added":
         return "Added";
-      case "removed":
-        return "Removed";
-      case "consumed":
-        return "Consumed";
+      case "spent":
+        return "Spent";
       default:
         return action;
     }
@@ -232,7 +200,7 @@ export default function TokenTransactionsPage() {
       >
         <ArrowLeft className="h-5 w-5 text-black" />
       </Button>
-      <span className="text-sm leading-[19.6px] text-black">Token Transactions</span>
+      <span className="text-sm leading-[19.6px] text-black">Token transactions</span>
     </div>
   );
 
@@ -252,7 +220,7 @@ export default function TokenTransactionsPage() {
             <div className="flex items-center gap-3">
               <Wallet size={20} className="text-[#03b3e2]" />
               <div>
-                <div className="text-sm text-[#646464] mb-1">Token Balance</div>
+                <div className="text-sm text-[#646464] mb-1">Token balance</div>
                 <div className="text-2xl font-bold text-[#03b3e2]">
                   {tokenBalance.remaining.toLocaleString()} tokens
                 </div>
@@ -266,7 +234,7 @@ export default function TokenTransactionsPage() {
             <CardHeader className="pb-4">
               <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
                 <CardTitle className="text-base font-bold leading-[21.28px] text-black">
-                  Transaction History
+                  Transaction history
                 </CardTitle>
                 
                 {/* Filters */}
@@ -277,10 +245,9 @@ export default function TokenTransactionsPage() {
                       <SelectValue placeholder="All actions" />
                     </SelectTrigger>
                     <SelectContent className="bg-white">
-                      <SelectItem value="all" className="text-black">All actions</SelectItem>
+                      <SelectItem value="all" className="text-black">All transactions</SelectItem>
                       <SelectItem value="added" className="text-black">Added</SelectItem>
-                      <SelectItem value="removed" className="text-black">Removed</SelectItem>
-                      <SelectItem value="consumed" className="text-black">Consumed</SelectItem>
+                      <SelectItem value="spent" className="text-black">Spent</SelectItem>
                     </SelectContent>
                   </Select>
 
@@ -380,7 +347,7 @@ export default function TokenTransactionsPage() {
                   <TableHeader>
                     <TableRow className="bg-[#f5f5f5] hover:bg-[#f5f5f5]">
                       <TableHead className="px-4 py-3 text-black font-semibold text-sm">Timestamp</TableHead>
-                      <TableHead className="px-4 py-3 text-black font-semibold text-sm">Action</TableHead>
+                      <TableHead className="px-4 py-3 text-black font-semibold text-sm">Type</TableHead>
                       <TableHead className="px-4 py-3 text-black font-semibold text-sm text-right">Amount</TableHead>
                       <TableHead className="px-4 py-3 text-black font-semibold text-sm">Description</TableHead>
                     </TableRow>
@@ -404,7 +371,7 @@ export default function TokenTransactionsPage() {
                             </Badge>
                           </TableCell>
                           <TableCell className="px-4 py-4 text-black text-sm text-right font-medium">
-                            {transaction.action === "added" ? "+" : transaction.action === "removed" ? "-" : "-"}
+                            {transaction.action === "added" ? "+" : "-"}
                             {transaction.amount.toLocaleString()} tokens
                           </TableCell>
                           <TableCell className="px-4 py-4 text-black text-sm">

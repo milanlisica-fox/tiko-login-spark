@@ -158,7 +158,7 @@ export default function BriefReview() {
                 {/* Due Date */}
                 <div className="flex flex-col gap-2">
                   <div className="flex flex-col gap-0.5">
-                    <Label className="text-sm font-bold leading-[18.62px] text-[#09090a]">Due date</Label>
+                    <Label className="text-sm font-bold leading-[18.62px] text-[#09090a]">Delivery date</Label>
                   </div>
                   <div className="border border-[#e0e0e0] rounded-[85px] px-5 py-2.5 bg-[#f9f9f9] text-sm text-[#09090a]">
                     {briefData.dueDate || "Pick a date"}
@@ -242,7 +242,7 @@ export default function BriefReview() {
                 {/* Due Date */}
                 <div className="flex flex-col gap-2">
                   <div className="flex flex-col gap-0.5">
-                    <Label className="text-sm font-bold leading-[18.62px] text-[#09090a]">Due date</Label>
+                    <Label className="text-sm font-bold leading-[18.62px] text-[#09090a]">Delivery date</Label>
                   </div>
                   <div className="border border-[#e0e0e0] rounded-[85px] px-5 py-2.5 bg-[#f9f9f9] text-sm text-[#09090a]">
                     {briefData.dueDate || "Pick a date"}

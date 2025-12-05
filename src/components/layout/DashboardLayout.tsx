@@ -107,7 +107,7 @@ export default function DashboardLayout({
       <Dialog open={isHelpOpen} onOpenChange={(open) => (open ? setIsHelpOpen(true) : closeHelp())}>
         <DialogContent className="max-w-2xl">
           <DialogHeader>
-            <DialogTitle>Submit a Request</DialogTitle>
+            <DialogTitle>Submit a request</DialogTitle>
           </DialogHeader>
           <div className="space-y-4">
             <div className="space-y-3">

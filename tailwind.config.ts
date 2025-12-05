@@ -150,6 +150,16 @@ export default {
             opacity: "0.8",
           },
         },
+        "slide-in-coin": {
+          "0%": {
+            opacity: "0",
+            transform: "translateX(-20px) scale(0.5)",
+          },
+          "100%": {
+            opacity: "1",
+            transform: "translateX(0) scale(1)",
+          },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
@@ -159,6 +169,7 @@ export default {
         "slide-in-right": "slide-in-right 0.3s ease-out",
         "scale-in": "scale-in 0.2s ease-out",
         "pulse-subtle": "pulse-subtle 2s ease-in-out infinite",
+        "slide-in-coin": "slide-in-coin 0.3s ease-out",
       },
     },
   },

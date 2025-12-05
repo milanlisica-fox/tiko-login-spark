@@ -1,6 +1,10 @@
 import React from "react";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 
 export default function TokenEstimate({ value }: { value: number | string }) {
+  const numericValue = typeof value === "string" ? parseFloat(value) : value;
+  const poundsValue = numericValue * 5;
+  
   return (
     <div className="flex gap-2 items-center pb-2">
       <span className="h-5 w-5 flex items-center justify-center">
@@ -10,7 +14,16 @@ export default function TokenEstimate({ value }: { value: number | string }) {
           <path d="M10.0018 8.05164C13.3867 8.05164 16.1308 6.98073 16.1308 5.65972C16.1308 4.33871 13.3867 3.26782 10.0018 3.26782C6.61682 3.26782 3.87276 4.33871 3.87276 5.65972C3.87276 6.98073 6.61682 8.05164 10.0018 8.05164Z" fill="#03B3E2" />
         </svg>
       </span>
-      <span className="text-[13px] leading-[18.62px] text-black">{value}</span>
+      <TooltipProvider>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <span className="text-[13px] leading-[18.62px] text-black cursor-help">£{poundsValue}</span>
+          </TooltipTrigger>
+          <TooltipContent>
+            <p>Each token is worth 5 pounds</p>
+          </TooltipContent>
+        </Tooltip>
+      </TooltipProvider>
       <span className="text-[13px] leading-[18.62px] text-[#848487]">Tokens estimate</span>
     </div>
   );

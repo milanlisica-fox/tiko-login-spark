@@ -35,7 +35,7 @@ const [open, setOpen] = useState(false);
   // Mock data for budget wallet (quarter view)
   const quarterBudgetData = {
     totalBudget: 10000,
-    tokensSpent: 2750,
+    tokensSpent: 4150,
     tokensCommitted: 2000,
     tokensRemaining: 4500,
     tokensPending: 750,
@@ -44,7 +44,7 @@ const [open, setOpen] = useState(false);
   // Mock data for budget wallet (annual view)
   const annualBudgetData = {
     totalBudget: 40000,
-    tokensSpent: 11000,
+    tokensSpent: 14400,
     tokensCommitted: 8000,
     tokensRemaining: 18000,
     tokensPending: 3000,
@@ -125,7 +125,7 @@ const [open, setOpen] = useState(false);
                       onClick={() => navigate("/dashboard/briefs", { state: { activeTab: "Drafts" } })}
                       className="card-item flex-1 bg-[#f9f9f9] rounded-[12px] p-4 md:p-[20px] flex flex-col gap-[10px] relative overflow-clip hover:bg-[#f0f0f0] transition cursor-pointer text-left"
                     >
-                      <p className="text-xs md:text-sm font-bold leading-[18.62px] text-black pr-4">Draft briefs</p>
+                      <p className="text-xs md:text-sm font-bold leading-[18.62px] text-black pr-4">In draft</p>
                       <p className="text-2xl md:text-[40px] font-medium leading-[45.6px] text-black">5</p>
                       <img 
                         src={briefsVector1} 

@@ -1,10 +1,11 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { Home, FileText, Folder, BarChart2, LogOut, Bell, ChevronDown, Calculator, Coins, Plus, X } from "lucide-react";
 import { toast } from "sonner";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Popover, PopoverTrigger, PopoverContent } from "@/components/ui/popover";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import DashboardLayout from "@/components/layout/DashboardLayout";
 import DashboardTopbarRight from "@/components/layout/DashboardTopbarRight";
 import { useActiveNav } from "@/hooks/useActiveNav";
@@ -54,6 +55,10 @@ export default function CalculatorPage() {
   const [filtersApplied, setFiltersApplied] = useState(false);
   const [quantityInputs, setQuantityInputs] = useState<Record<string, string>>({});
   const [showAllAssets, setShowAllAssets] = useState(false);
+  const [previousTotal, setPreviousTotal] = useState(0);
+  const [showCoinAnimation, setShowCoinAnimation] = useState(false);
+  const [displayTotal, setDisplayTotal] = useState(0);
+  const coinAnimationTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   // nav items centralized via DashboardLayout
   const { activeName } = useActiveNav();
@@ -200,6 +205,61 @@ export default function CalculatorPage() {
     (sum, asset) => sum + asset.tokens * asset.quantity,
     0
   );
+
+  // Handle coin animation when total changes
+  useEffect(() => {
+    if (totalTokens !== previousTotal) {
+      if (previousTotal > 0 && totalTokens > previousTotal) {
+        // Asset added or quantity increased - show coin animation
+        setShowCoinAnimation(true);
+        setDisplayTotal(previousTotal);
+        
+        // Animate number from previous to new total
+        const duration = 500; // 500ms animation
+        const steps = 30;
+        const stepDuration = duration / steps;
+        const increment = (totalTokens - previousTotal) / steps;
+        let currentStep = 0;
+        
+        const animateNumber = () => {
+          currentStep++;
+          const newValue = Math.round(previousTotal + increment * currentStep);
+          setDisplayTotal(newValue);
+          
+          if (currentStep < steps) {
+            setTimeout(animateNumber, stepDuration);
+          } else {
+            setDisplayTotal(totalTokens);
+            // Hide coin after number animation completes
+            if (coinAnimationTimeoutRef.current) {
+              clearTimeout(coinAnimationTimeoutRef.current);
+            }
+            coinAnimationTimeoutRef.current = setTimeout(() => {
+              setShowCoinAnimation(false);
+            }, 200);
+          }
+        };
+        
+        // Start number animation after coin slides in (300ms)
+        setTimeout(animateNumber, 300);
+      } else {
+        // Asset removed, quantity decreased, or initial state - just update number, no coin
+        setDisplayTotal(totalTokens);
+        setShowCoinAnimation(false);
+      }
+    }
+    
+    // Update previous total after handling animation
+    if (totalTokens !== previousTotal) {
+      setPreviousTotal(totalTokens);
+    }
+    
+    return () => {
+      if (coinAnimationTimeoutRef.current) {
+        clearTimeout(coinAnimationTimeoutRef.current);
+      }
+    };
+  }, [totalTokens, previousTotal]);
 
   const assetTypeOptions = [
     "Animated Key Visual",
@@ -518,11 +578,10 @@ export default function CalculatorPage() {
                     </p>
                   ) : (
                     <div className="flex flex-col gap-4">
-                      {selectedAssets.map((asset, index) => (
+                      {selectedAssets.map((asset) => (
                         <div 
                           key={asset.id} 
-                          className="flex items-center justify-between animate-slide-in-right transition-all duration-200 hover:translate-x-1"
-                          style={{ animationDelay: `${index * 0.05}s` }}
+                          className="flex items-center justify-between transition-all duration-200 hover:translate-x-1"
                         >
                           <p className="text-sm leading-[18.62px] text-black flex-1 transition-all duration-200">
                             {availableAssets.find((a) => a.id === asset.id)?.title || ""}
@@ -542,14 +601,31 @@ export default function CalculatorPage() {
                 {/* Total */}
                 {selectedAssets.length > 0 && (
                   <>
-                    <div className="h-px bg-[#e0e0e0] animate-fade-in" />
-                    <div className="flex items-center justify-between animate-scale-in">
+                    <div className="h-px bg-[#e0e0e0]" />
+                    <div className="flex items-center justify-between">
                       <p className="text-sm font-bold leading-[18.62px] text-black">
                         Total
                       </p>
-                      <p className="text-sm font-bold leading-[18.62px] text-black transition-all duration-300">
-                        <span className="inline-block animate-pulse-subtle">{totalTokens}</span> tokens
-                      </p>
+                      <div className="relative flex items-center gap-2">
+                        {showCoinAnimation && (
+                          <Coins 
+                            size={16} 
+                            className="text-[#ffb546] animate-slide-in-coin"
+                          />
+                        )}
+                        <TooltipProvider>
+                          <Tooltip>
+                            <TooltipTrigger asChild>
+                              <p className="text-sm font-bold leading-[18.62px] text-black transition-all duration-300 cursor-help">
+                                <span className="inline-block">£{displayTotal * 5}</span>
+                              </p>
+                            </TooltipTrigger>
+                            <TooltipContent>
+                              <p>Each token is worth 5 pounds</p>
+                            </TooltipContent>
+                          </Tooltip>
+                        </TooltipProvider>
+                      </div>
                     </div>
                   </>
                 )}

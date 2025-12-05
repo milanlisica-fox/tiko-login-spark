@@ -2502,6 +2502,7 @@ export default function TrackerPage() {
                     <TableHeader>
                       <TableRow className="bg-[#f1f1f3] hover:bg-[#f1f1f3] border-b border-[#ececec]">
                         <TableHead className="h-12 px-4 text-left font-bold text-black">Project</TableHead>
+                        <TableHead className="h-12 px-4 text-left font-bold text-black">Team</TableHead>
                         <TableHead className="h-12 px-4 text-left font-bold text-black">Category</TableHead>
                         <TableHead className="h-12 px-4 text-left font-bold text-black">Tokens spent</TableHead>
                         <TableHead className="h-12 px-4 text-left font-bold text-black">Duration</TableHead>
@@ -2522,6 +2523,7 @@ export default function TrackerPage() {
                             className={`border-b border-[#ececec] ${index % 2 === 0 ? 'bg-white' : 'bg-[#f9f9f9]'} hover:bg-[#f1f1f3]`}
                           >
                             <TableCell className="px-4 py-4 text-black font-medium">{project.projectName}</TableCell>
+                            <TableCell className="px-4 py-4 text-black">{project.deliveryTeam}</TableCell>
                             <TableCell className="px-4 py-4 text-black">{project.category}</TableCell>
                             <TableCell className="px-4 py-4 text-black">{project.tokensSpent.toLocaleString()}</TableCell>
                             <TableCell className="px-4 py-4 text-black">{project.durationWeeks} wks</TableCell>
@@ -3033,6 +3035,7 @@ export default function TrackerPage() {
                     <TableHeader>
                       <TableRow className="bg-[#f1f1f3] hover:bg-[#f1f1f3] border-b border-[#ececec]">
                         <TableHead className="h-12 px-4 text-left font-bold text-black">Project</TableHead>
+                        <TableHead className="h-12 px-4 text-left font-bold text-black">Team</TableHead>
                         <TableHead className="h-12 px-4 text-left font-bold text-black">Category</TableHead>
                         <TableHead className="h-12 px-4 text-left font-bold text-black">Tokens spent</TableHead>
                         <TableHead className="h-12 px-4 text-left font-bold text-black">Duration</TableHead>
@@ -3053,6 +3056,7 @@ export default function TrackerPage() {
                             className={`border-b border-[#ececec] ${index % 2 === 0 ? 'bg-white' : 'bg-[#f9f9f9]'} hover:bg-[#f1f1f3]`}
                           >
                             <TableCell className="px-4 py-4 text-black font-medium">{project.projectName}</TableCell>
+                            <TableCell className="px-4 py-4 text-black">{project.deliveryTeam}</TableCell>
                             <TableCell className="px-4 py-4 text-black">{project.category}</TableCell>
                             <TableCell className="px-4 py-4 text-black">{project.tokensSpent.toLocaleString()}</TableCell>
                             <TableCell className="px-4 py-4 text-black">{project.durationWeeks} wks</TableCell>
@@ -4111,6 +4115,26 @@ export default function TrackerPage() {
                           <ChevronRight size={20} className="ml-2 text-black" />
                       </Button>
                     </div>
+                    
+                    {/* Example Questions and Answers */}
+                    <div className="space-y-4 pt-4 border-t border-[#ececec]">
+                      <p className="text-sm font-medium text-black">Example questions:</p>
+                      <div className="space-y-4">
+                        <div className="space-y-2">
+                          <p className="text-sm font-medium text-black">Q: "Which team has the best brief quality score?"</p>
+                          <p className="text-sm text-[#646464] pl-4">A: "Based on current data, Omni & Digital leads with a 95% brief quality score, followed by Marcomms at 94%. Brief quality correlates strongly with completion—complete briefs score 4.9/5 vs 3.1/5 for incomplete ones."</p>
+                        </div>
+                        <div className="space-y-2">
+                          <p className="text-sm font-medium text-black">Q: "How can we reduce change requests?"</p>
+                          <p className="text-sm text-[#646464] pl-4">A: "Complete briefing templates score 4.9/5 vs 3.1/5 for incomplete briefs. Missing 'target operator' field results in 34% more change requests. Implementing mandatory field validation could reduce change requests by 65%."</p>
+                        </div>
+                        <div className="space-y-2">
+                          <p className="text-sm font-medium text-black">Q: "Which category has the highest token efficiency?"</p>
+                          <p className="text-sm text-[#646464] pl-4">A: "SMP category shows the highest token efficiency at 96%, with 4,500 tokens spent across 68 briefs. This is followed by B2B at 95% efficiency. Ecosystem and Promotions categories could benefit from process optimization."</p>
+                        </div>
+                      </div>
+                    </div>
+                    
                     {showTikoResponse && (
                       <div className="space-y-4 pt-2 border-t border-[#ececec]">
                         <p className="text-sm text-black">
@@ -4305,6 +4329,26 @@ export default function TrackerPage() {
                         <ChevronRight size={20} className="ml-2 text-black" />
                       </Button>
                     </div>
+                    
+                    {/* Example Questions and Answers */}
+                    <div className="space-y-4 pt-4 border-t border-[#ececec]">
+                      <p className="text-sm font-medium text-black">Example questions:</p>
+                      <div className="space-y-4">
+                        <div className="space-y-2">
+                          <p className="text-sm font-medium text-black">Q: "Which team has the best brief quality score?"</p>
+                          <p className="text-sm text-[#646464] pl-4">A: "Based on current data, Omni & Digital leads with a 95% brief quality score, followed by Marcomms at 94%. Brief quality correlates strongly with completion—complete briefs score 4.9/5 vs 3.1/5 for incomplete ones."</p>
+                        </div>
+                        <div className="space-y-2">
+                          <p className="text-sm font-medium text-black">Q: "How can we reduce change requests?"</p>
+                          <p className="text-sm text-[#646464] pl-4">A: "Complete briefing templates score 4.9/5 vs 3.1/5 for incomplete briefs. Missing 'target operator' field results in 34% more change requests. Implementing mandatory field validation could reduce change requests by 65%."</p>
+                        </div>
+                        <div className="space-y-2">
+                          <p className="text-sm font-medium text-black">Q: "Which category has the highest token efficiency?"</p>
+                          <p className="text-sm text-[#646464] pl-4">A: "SMP category shows the highest token efficiency at 96%, with 4,500 tokens spent across 68 briefs. This is followed by B2B at 95% efficiency. Ecosystem and Promotions categories could benefit from process optimization."</p>
+                        </div>
+                      </div>
+                    </div>
+                    
                     {showTikoResponse && (
                       <div className="space-y-4 pt-2 border-t border-[#ececec]">
                         <p className="text-sm text-black">
