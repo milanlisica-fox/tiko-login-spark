@@ -55,6 +55,296 @@ export const FORM_TEMPLATE_OPTIONS: { id: string; title: string; icon: string }[
   { id: "flagship-campaign", title: "Flagship toolkit", icon: iconFeatureAsset },
 ];
 
+// Past briefs for duplication
+export const PAST_BRIEFS: Array<{
+  id: string;
+  title: string;
+  data: Omit<NewBriefFormValues, "projectTitle" | "dueDate" | "projectLead">;
+}> = [
+  {
+    id: "past-brief-1",
+    title: "Cashback Campaign 2024",
+    data: {
+      objective: "Increase customer engagement and retention through a cashback promotion campaign targeting existing customers.",
+      workType: ["Strategy", "Design", "Production"],
+      channels: ["Online", "Social", "Mobile"],
+      expectedOutputs: ["Digital marketing asset", "Copy asset"],
+      briefSummary: "Develop a comprehensive cashback campaign to reward loyal customers and attract new ones through targeted promotions.",
+      assets: [
+        {
+          id: "calc-1",
+          name: "Master KV creation (PSD, JPEG, INDD, PDF)",
+          description: "Master KV creation (PSD, JPEG, INDD, PDF)",
+          tokenPrice: 8,
+          assetSpecification: "1920x1080, 300dpi, CMYK",
+          deliveryWeek: "Week 12",
+          quantity: 1,
+          isCustom: false,
+        },
+        {
+          id: "calc-2",
+          name: "Static KV adaption (PSD, JPEG)",
+          description: "Static KV adaption (PSD, JPEG)",
+          tokenPrice: 5,
+          assetSpecification: "Multiple sizes for social media",
+          deliveryWeek: "Week 13",
+          quantity: 3,
+          isCustom: false,
+        },
+      ],
+      selectedTemplate: "promotional-campaign",
+      additionalAssetDetails: "All assets should include cashback percentage prominently displayed.",
+      watermarkFiles: false,
+      attachedDocuments: [],
+    },
+  },
+  {
+    id: "past-brief-2",
+    title: "Summer Sale BAU 2024",
+    data: {
+      objective: "Create standard BAU assets for summer sale promotion across all retail channels and digital platforms.",
+      workType: ["Design", "Production"],
+      channels: ["Retail", "Online", "Social", "Print"],
+      expectedOutputs: ["Print asset", "Digital marketing asset"],
+      briefSummary: "Standard BAU campaign for summer sale with consistent messaging and visual identity across all touchpoints.",
+      assets: [
+        {
+          id: "calc-12",
+          name: "Master KV",
+          description: "Master KV",
+          tokenPrice: 8,
+          assetSpecification: "A4, A3, A2 formats",
+          deliveryWeek: "Week 8",
+          quantity: 1,
+          isCustom: false,
+        },
+        {
+          id: "calc-13",
+          name: "Digital display banner",
+          description: "Digital display banner",
+          tokenPrice: 5,
+          assetSpecification: "728x90, 300x250, 970x250",
+          deliveryWeek: "Week 9",
+          quantity: 5,
+          isCustom: false,
+        },
+        {
+          id: "calc-14",
+          name: "Social banners static",
+          description: "Social banners static",
+          tokenPrice: 4,
+          assetSpecification: "1080x1080, 1200x628",
+          deliveryWeek: "Week 9",
+          quantity: 4,
+          isCustom: false,
+        },
+      ],
+      selectedTemplate: "bau-campaign",
+      additionalAssetDetails: "Ensure brand guidelines are strictly followed. All assets must be approved before final delivery.",
+      watermarkFiles: true,
+      attachedDocuments: [],
+    },
+  },
+  {
+    id: "past-brief-3",
+    title: "Galaxy S24 Flagship Launch",
+    data: {
+      objective: "Launch comprehensive marketing toolkit for Galaxy S24 flagship product with full ecosystem support.",
+      workType: ["Strategy", "Design", "Production", "Planning"],
+      channels: ["TVC", "Online", "Social", "Retail", "Out of home"],
+      expectedOutputs: ["Video asset", "Print asset", "Digital marketing asset"],
+      briefSummary: "Create flagship toolkit for Galaxy S24 launch including master assets, adaptations, and localized variations for global markets.",
+      assets: [
+        {
+          id: "calc-16",
+          name: "Toolkit",
+          description: "Toolkit",
+          tokenPrice: 6,
+          assetSpecification: "Complete brand toolkit",
+          deliveryWeek: "Week 6",
+          quantity: 1,
+          isCustom: false,
+        },
+        {
+          id: "calc-19",
+          name: "Static KVs",
+          description: "Static KVs",
+          tokenPrice: 5,
+          assetSpecification: "Multiple product angles",
+          deliveryWeek: "Week 7",
+          quantity: 8,
+          isCustom: false,
+        },
+        {
+          id: "calc-20",
+          name: "Animated KVs",
+          description: "Animated KVs",
+          tokenPrice: 7,
+          assetSpecification: "15s and 30s versions",
+          deliveryWeek: "Week 8",
+          quantity: 4,
+          isCustom: false,
+        },
+        {
+          id: "calc-23",
+          name: "Digi banners",
+          description: "Digi banners",
+          tokenPrice: 5,
+          assetSpecification: "All standard sizes",
+          deliveryWeek: "Week 9",
+          quantity: 6,
+          isCustom: false,
+        },
+      ],
+      selectedTemplate: "flagship-campaign",
+      additionalAssetDetails: "Priority on premium quality and high-end visuals. All assets must showcase product features clearly.",
+      watermarkFiles: false,
+      attachedDocuments: [],
+    },
+  },
+  {
+    id: "past-brief-4",
+    title: "Holiday Season Promo 2023",
+    data: {
+      objective: "Drive holiday sales through festive promotional campaign with seasonal messaging and visuals.",
+      workType: ["Design", "Production", "Execution (Inc.Media booking)"],
+      channels: ["Social", "Online", "Retail", "Print"],
+      expectedOutputs: ["Digital marketing asset", "Print asset", "Copy asset"],
+      briefSummary: "Holiday season promotional campaign with festive themes, gift-focused messaging, and seasonal visuals for all channels.",
+      assets: [
+        {
+          id: "calc-1",
+          name: "Master KV creation (PSD, JPEG, INDD, PDF)",
+          description: "Master KV creation (PSD, JPEG, INDD, PDF)",
+          tokenPrice: 8,
+          assetSpecification: "Festive theme with holiday colors",
+          deliveryWeek: "Week 10",
+          quantity: 1,
+          isCustom: false,
+        },
+        {
+          id: "calc-4",
+          name: "Master KV animation creation (MP4, AEP)",
+          description: "Master KV animation creation (MP4, AEP)",
+          tokenPrice: 10,
+          assetSpecification: "30s animation loop",
+          deliveryWeek: "Week 11",
+          quantity: 1,
+          isCustom: false,
+        },
+        {
+          id: "calc-6",
+          name: "PPT Files",
+          description: "PPT Files",
+          tokenPrice: 4,
+          assetSpecification: "Presentation deck template",
+          deliveryWeek: "Week 11",
+          quantity: 1,
+          isCustom: false,
+        },
+      ],
+      selectedTemplate: "promotional-campaign",
+      additionalAssetDetails: "Ensure festive feel while maintaining brand identity. Include gift messaging prominently.",
+      watermarkFiles: false,
+      attachedDocuments: [],
+    },
+  },
+  {
+    id: "past-brief-5",
+    title: "Q4 Product Refresh BAU",
+    data: {
+      objective: "Update existing product assets for Q4 refresh with new messaging and seasonal adaptations.",
+      workType: ["Design", "Production"],
+      channels: ["Online", "Social", "Mobile"],
+      expectedOutputs: ["Digital marketing asset"],
+      briefSummary: "BAU refresh of existing product assets with updated messaging and seasonal adaptations for Q4 campaign.",
+      assets: [
+        {
+          id: "calc-12",
+          name: "Master KV",
+          description: "Master KV",
+          tokenPrice: 8,
+          assetSpecification: "Updated product imagery",
+          deliveryWeek: "Week 5",
+          quantity: 1,
+          isCustom: false,
+        },
+        {
+          id: "calc-15",
+          name: "Social banners animation",
+          description: "Social banners animation",
+          tokenPrice: 6,
+          assetSpecification: "Stories and feed formats",
+          deliveryWeek: "Week 6",
+          quantity: 6,
+          isCustom: false,
+        },
+        {
+          id: "calc-3",
+          name: "Static KV adaption (INDD, PDF)",
+          description: "Static KV adaption (INDD, PDF)",
+          tokenPrice: 5,
+          assetSpecification: "Print-ready formats",
+          deliveryWeek: "Week 6",
+          quantity: 2,
+          isCustom: false,
+        },
+      ],
+      selectedTemplate: "bau-campaign",
+      additionalAssetDetails: "Maintain consistency with existing brand assets while refreshing for Q4 messaging.",
+      watermarkFiles: true,
+      attachedDocuments: [],
+    },
+  },
+  {
+    id: "past-brief-6",
+    title: "New Year Launch Campaign",
+    data: {
+      objective: "Kick off the new year with a fresh campaign launch celebrating new beginnings and product innovations.",
+      workType: ["Strategy", "Design", "Production", "Planning"],
+      channels: ["TVC", "Social", "Online", "Retail", "Out of home"],
+      expectedOutputs: ["Video asset", "Digital marketing asset", "Copy asset"],
+      briefSummary: "New Year launch campaign with fresh visuals, innovative messaging, and multi-channel approach to celebrate new beginnings.",
+      assets: [
+        {
+          id: "calc-1",
+          name: "Master KV creation (PSD, JPEG, INDD, PDF)",
+          description: "Master KV creation (PSD, JPEG, INDD, PDF)",
+          tokenPrice: 8,
+          assetSpecification: "Fresh, modern aesthetic",
+          deliveryWeek: "Week 1",
+          quantity: 1,
+          isCustom: false,
+        },
+        {
+          id: "calc-9",
+          name: "Video creation",
+          description: "Video creation",
+          tokenPrice: 12,
+          assetSpecification: "60s hero video",
+          deliveryWeek: "Week 2",
+          quantity: 1,
+          isCustom: false,
+        },
+        {
+          id: "calc-5",
+          name: "Master KV animation adaption (MP4, AEP)",
+          description: "Master KV animation adaption (MP4, AEP)",
+          tokenPrice: 7,
+          assetSpecification: "15s and 30s cutdowns",
+          deliveryWeek: "Week 3",
+          quantity: 3,
+          isCustom: false,
+        },
+      ],
+      selectedTemplate: "promotional-campaign",
+      additionalAssetDetails: "Focus on fresh, forward-looking visuals that inspire and energize. Celebrate innovation and progress.",
+      watermarkFiles: false,
+      attachedDocuments: [],
+    },
+  },
+];
+
 // Template to asset mapping
 export const TEMPLATE_ASSETS_MAP: Record<string, string[]> = {
   "promotional-campaign": [
@@ -911,6 +1201,7 @@ export default function BriefsPage() {
         tokens: number;
         quantity: number;
       }>;
+      duplicateBrief?: Omit<NewBriefFormValues, "projectTitle" | "dueDate" | "projectLead">;
     } | null;
 
     if (!state) {
@@ -942,8 +1233,21 @@ export default function BriefsPage() {
     }
 
     if (state.createBrief) {
+      // Handle duplicate brief - populate all fields except General information
+      if (state.duplicateBrief) {
+        const draftWithDuplicate: NewBriefFormValues = {
+          ...createBriefFormDefaults(),
+          ...state.duplicateBrief,
+          // Keep General information fields empty
+          projectTitle: "",
+          dueDate: undefined,
+          projectLead: [],
+        };
+        setNewBriefDraft(draftWithDuplicate);
+        setFromCalculator(false);
+      }
       // Convert calculator assets to SelectedAsset format and pre-populate form
-      if (state.calculatorAssets && state.calculatorAssets.length > 0) {
+      else if (state.calculatorAssets && state.calculatorAssets.length > 0) {
         const convertedAssets: SelectedAsset[] = state.calculatorAssets.map((calcAsset) => ({
           id: `calc-${calcAsset.id}`,
           name: calcAsset.title,
@@ -1399,6 +1703,43 @@ function TemplateSelectionScreen({ onCancel, onCreateBrief }: { onCancel: () => 
                 </div>
               </div>
             </button>
+          ))}
+        </div>
+      </div>
+
+      {/* Duplicate Past Briefs Section */}
+      <div className="flex flex-col gap-6 items-start max-w-[610px] w-full">
+        {/* Section Header */}
+        <div className="flex flex-col gap-1 px-6">
+          <h2 className="text-lg font-bold leading-[23.94px] text-black">Duplicate past briefs</h2>
+          <p className="text-sm leading-[18.62px] text-black">Start from a previous brief and customize it for your new project.</p>
+        </div>
+
+        {/* Past Briefs List */}
+        <div className="flex flex-col gap-4 px-6 w-full">
+          {PAST_BRIEFS.map((pastBrief) => (
+            <div
+              key={pastBrief.id}
+              className="border border-[#e0e0e0] rounded-xl p-4 hover:bg-[#f9f9f9] transition relative w-full"
+            >
+              <div className="flex items-center justify-between">
+                <h3 className="text-lg font-bold leading-[23.94px] text-black">{pastBrief.title}</h3>
+                <button
+                  onClick={() => {
+                    navigate("/dashboard/briefs", {
+                      state: {
+                        createBrief: true,
+                        showForm: true,
+                        duplicateBrief: pastBrief.data,
+                      },
+                    });
+                  }}
+                  className="px-4 py-2 bg-[#03b3e2] text-black hover:opacity-90 rounded-[28px] transition text-sm font-semibold whitespace-nowrap"
+                >
+                  Duplicate
+                </button>
+              </div>
+            </div>
           ))}
         </div>
       </div>
