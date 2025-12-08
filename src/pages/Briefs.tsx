@@ -1268,7 +1268,7 @@ export default function BriefsPage() {
         const draftWithAssets: NewBriefFormValues = {
           ...createBriefFormDefaults(),
           assets: convertedAssets,
-          selectedTemplate: state.selectedTemplate || "",
+          selectedTemplate: "other", // Set to "other" so "build-your-own" mode shows all assets
         };
         setNewBriefDraft(draftWithAssets);
         setFromCalculator(true);
@@ -1781,7 +1781,7 @@ function NewBriefForm({
   const [additionalAssetsLoaded, setAdditionalAssetsLoaded] = useState(0);
   const [pendingDraftPayload, setPendingDraftPayload] = useState<SubmittedBriefPayload | null>(null);
   const [quantityInputs, setQuantityInputs] = useState<Record<string, string>>({});
-  const [deliverableSelectionMode, setDeliverableSelectionMode] = useState<"template" | "build-your-own">("template");
+  const [deliverableSelectionMode, setDeliverableSelectionMode] = useState<"template" | "build-your-own">(fromCalculator ? "build-your-own" : "template");
   const tokenEstimate = useMemo(
     () => formData.assets
       .filter((asset) => !asset.isCustom)
