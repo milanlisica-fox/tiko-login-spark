@@ -3,7 +3,7 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/comp
 
 export default function TokenEstimate({ value }: { value: number | string }) {
   const numericValue = typeof value === "string" ? parseFloat(value) : value;
-  const poundsValue = numericValue * 4.5;
+  const poundsValue = numericValue * 4.502;
   
   return (
     <div className="flex gap-2 items-center pb-2">
@@ -20,7 +20,7 @@ export default function TokenEstimate({ value }: { value: number | string }) {
             <span className="text-[13px] leading-[18.62px] text-black cursor-help">£{poundsValue}</span>
           </TooltipTrigger>
           <TooltipContent>
-            <p>Each token is worth 4.5 pounds</p>
+            <p>Each token is worth 4.502 pounds</p>
           </TooltipContent>
         </Tooltip>
       </TooltipProvider>
