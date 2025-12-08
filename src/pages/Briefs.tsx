@@ -1879,7 +1879,8 @@ function NewBriefForm({
       );
       return [...calculatorAssets, ...customAssets];
     } else if (deliverableSelectionMode === "build-your-own" || selectedTemplate === "other") {
-      return [...RECOMMENDED_ASSETS.slice(0, assetsToShow), ...customAssets];
+      // Show all assets when "build-your-own" mode is active, same as Calculator
+      return [...RECOMMENDED_ASSETS, ...customAssets];
     } else if (selectedTemplate && templateAssetIds.length > 0) {
       const templateAssets = CALCULATOR_ASSETS_LIST.filter((a) => templateAssetIds.includes(a.id));
       return [...templateAssets, ...customAssets];
@@ -1893,6 +1894,16 @@ function NewBriefForm({
     formData.dueDate !== undefined && 
     formData.projectLead.length > 0 &&
     (formData.assets.length > 0 || (formData.selectedTemplate && formData.selectedTemplate !== ""));
+
+  // Check if project title matches "New Year 2026" or similar pattern
+  const hasDuplicateTitle = useMemo(() => {
+    const title = formData.projectTitle.trim().toLowerCase();
+    if (!title) return false;
+    
+    // Check for "New Year 2026" or similar patterns (e.g., "New Year 2026", "New Year Launch 2026")
+    const newYearPattern = /new\s*year.*2026/i;
+    return newYearPattern.test(title);
+  }, [formData.projectTitle]);
 
   const handleFieldChange = (field: keyof NewBriefFormValues, value: unknown) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
@@ -2425,14 +2436,24 @@ function NewBriefForm({
               </label>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 min-w-0">
-            <Field label="Project title*" helpText="Enter a descriptive name that clearly identifies your project and campaign">
-              <StyledInput
-                value={formData.projectTitle}
-                  onChange={(e) => handleFieldChange("projectTitle", e.target.value)}
-                placeholder="Project name - Campaign name - Year"
-                variant="brief"
-              />
-            </Field>
+            <div className="flex flex-col gap-2">
+              <Field label="Project title*" helpText="Enter a descriptive name that clearly identifies your project and campaign">
+                <StyledInput
+                  value={formData.projectTitle}
+                    onChange={(e) => handleFieldChange("projectTitle", e.target.value)}
+                  placeholder="Project name - Campaign name - Year"
+                  variant="brief"
+                />
+              </Field>
+              {hasDuplicateTitle && (
+                <div className="flex items-start gap-2 px-1">
+                  <AlertCircle className="h-4 w-4 text-red-600 shrink-0 mt-0.5" />
+                  <p className="text-sm text-red-600 leading-[18.62px]">
+                    A brief or project with a similar title already exists. Please check with your manager or other departments.
+                  </p>
+                </div>
+              )}
+            </div>
             <DateField
                 label="Delivery date*"
                 helpText="Select the target completion date for this project"
@@ -2593,14 +2614,6 @@ function NewBriefForm({
                 <div className="flex flex-col gap-5">
                   {renderedAssets}
                 </div>
-                {deliverableSelectionMode === "build-your-own" && RECOMMENDED_ASSETS.length > assetsToShow && (
-                  <button
-                    onClick={() => setAssetsToShow((prev) => prev + 10)}
-                    className="w-full rounded-[28px] border border-[#e0e0e0] px-4 py-2 text-sm font-semibold text-[#424242] hover:bg-[#f9f9f9] transition"
-                  >
-                    More Assets
-                  </button>
-                )}
                 <button
                   onClick={() => setShowCustomAssetFields((prev) => !prev)}
                   className="w-full rounded-[28px] border border-dashed border-[#cfcfcf] px-4 py-2 text-sm font-semibold text-[#424242] hover:border-[#a5a5a8] transition"
