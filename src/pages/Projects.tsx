@@ -1,10 +1,13 @@
 import { useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Home, FileText, Folder, BarChart2, LogOut, Bell, ChevronDown, ArrowRight, Coins, ArrowUpDown, ArrowUp, ArrowDown } from "lucide-react";
+import { Home, FileText, Folder, BarChart2, LogOut, Bell, ChevronDown, ArrowRight, Coins, ArrowUpDown, ArrowUp, ArrowDown, Filter, X } from "lucide-react";
 import { toast } from "sonner";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Popover, PopoverTrigger, PopoverContent } from "@/components/ui/popover";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Badge } from "@/components/ui/badge";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import DashboardLayout from "@/components/layout/DashboardLayout";
 import DashboardTopbarRight from "@/components/layout/DashboardTopbarRight";
 import { useActiveNav } from "@/hooks/useActiveNav";
@@ -36,6 +39,9 @@ interface Project {
 
 type SortField = "name" | "rag" | "progress" | "dueDate" | null;
 type SortDirection = "asc" | "desc" | null;
+
+type RAGStatus = "High" | "Medium" | "Low";
+type ProgressRange = "0" | "1-25" | "26-50" | "51-75" | "76-99" | "100";
 
 // Helper function to get RAG color (red, amber, green)
 function getRAGColor(priority: "High" | "Medium" | "Low"): string {
@@ -69,6 +75,9 @@ export default function ProjectsPage() {
   const navigate = useNavigate();
   const [sortField, setSortField] = useState<SortField>(null);
   const [sortDirection, setSortDirection] = useState<SortDirection>(null);
+  const [selectedRAGStatuses, setSelectedRAGStatuses] = useState<Set<RAGStatus>>(new Set());
+  const [selectedProgressRanges, setSelectedProgressRanges] = useState<Set<ProgressRange>>(new Set());
+  const [isFilterDialogOpen, setIsFilterDialogOpen] = useState<boolean>(false);
 
   // nav items centralized via DashboardLayout
   const { activeName } = useActiveNav();
@@ -214,42 +223,118 @@ export default function ProjectsPage() {
     }
   };
 
-  // Sort projects
+  // Handle RAG status filter toggle
+  const handleRAGFilterToggle = (status: RAGStatus) => {
+    setSelectedRAGStatuses((prev) => {
+      const newSet = new Set(prev);
+      if (newSet.has(status)) {
+        newSet.delete(status);
+      } else {
+        newSet.add(status);
+      }
+      return newSet;
+    });
+  };
+
+  // Handle progress range filter toggle
+  const handleProgressFilterToggle = (range: ProgressRange) => {
+    setSelectedProgressRanges((prev) => {
+      const newSet = new Set(prev);
+      if (newSet.has(range)) {
+        newSet.delete(range);
+      } else {
+        newSet.add(range);
+      }
+      return newSet;
+    });
+  };
+
+  // Check if project matches progress range
+  const matchesProgressRange = (progress: number, range: ProgressRange): boolean => {
+    switch (range) {
+      case "0":
+        return progress === 0;
+      case "1-25":
+        return progress >= 1 && progress <= 25;
+      case "26-50":
+        return progress >= 26 && progress <= 50;
+      case "51-75":
+        return progress >= 51 && progress <= 75;
+      case "76-99":
+        return progress >= 76 && progress <= 99;
+      case "100":
+        return progress === 100;
+      default:
+        return false;
+    }
+  };
+
+  // Clear all filters
+  const clearFilters = () => {
+    setSelectedRAGStatuses(new Set());
+    setSelectedProgressRanges(new Set());
+  };
+
+  // Check if any filters are active
+  const hasActiveFilters = selectedRAGStatuses.size > 0 || selectedProgressRanges.size > 0;
+
+  // Filter and sort projects
   const projects = useMemo(() => {
-    if (!sortField || !sortDirection) return projectsData;
-
-    const sorted = [...projectsData].sort((a, b) => {
-      let aValue: any;
-      let bValue: any;
-
-      switch (sortField) {
-        case "name":
-          aValue = a.name.toLowerCase();
-          bValue = b.name.toLowerCase();
-          break;
-        case "rag":
-          aValue = getRAGSortValue(a.priority);
-          bValue = getRAGSortValue(b.priority);
-          break;
-        case "progress":
-          aValue = a.progress;
-          bValue = b.progress;
-          break;
-        case "dueDate":
-          aValue = new Date(a.dueDate || "").getTime();
-          bValue = new Date(b.dueDate || "").getTime();
-          break;
-        default:
-          return 0;
+    // Apply filters
+    let filtered = projectsData.filter((project) => {
+      // RAG status filter
+      if (selectedRAGStatuses.size > 0 && !selectedRAGStatuses.has(project.priority)) {
+        return false;
       }
 
-      if (aValue < bValue) return sortDirection === "asc" ? -1 : 1;
-      if (aValue > bValue) return sortDirection === "asc" ? 1 : -1;
-      return 0;
+      // Progress range filter
+      if (selectedProgressRanges.size > 0) {
+        const matchesAnyRange = Array.from(selectedProgressRanges).some((range) =>
+          matchesProgressRange(project.progress, range)
+        );
+        if (!matchesAnyRange) {
+          return false;
+        }
+      }
+
+      return true;
     });
 
-    return sorted;
-  }, [projectsData, sortField, sortDirection]);
+    // Apply sorting
+    if (sortField && sortDirection) {
+      filtered = [...filtered].sort((a, b) => {
+        let aValue: any;
+        let bValue: any;
+
+        switch (sortField) {
+          case "name":
+            aValue = a.name.toLowerCase();
+            bValue = b.name.toLowerCase();
+            break;
+          case "rag":
+            aValue = getRAGSortValue(a.priority);
+            bValue = getRAGSortValue(b.priority);
+            break;
+          case "progress":
+            aValue = a.progress;
+            bValue = b.progress;
+            break;
+          case "dueDate":
+            aValue = new Date(a.dueDate || "").getTime();
+            bValue = new Date(b.dueDate || "").getTime();
+            break;
+          default:
+            return 0;
+        }
+
+        if (aValue < bValue) return sortDirection === "asc" ? -1 : 1;
+        if (aValue > bValue) return sortDirection === "asc" ? 1 : -1;
+        return 0;
+      });
+    }
+
+    return filtered;
+  }, [projectsData, sortField, sortDirection, selectedRAGStatuses, selectedProgressRanges]);
 
   // Calculate stats
   const stats = useMemo(() => {
@@ -323,6 +408,18 @@ export default function ProjectsPage() {
                 <p className="text-[46px] leading-[46px] font-medium text-black">{stats.forReview}</p>
               </div>
             </div>
+          </div>
+
+          {/* Filter Button */}
+          <div className="flex justify-end">
+            <button 
+              onClick={() => setIsFilterDialogOpen(true)}
+              className="w-8 h-8 rounded-full bg-[#ffb546] flex items-center justify-center hover:opacity-90 transition-opacity"
+            >
+              <svg className="w-4 h-4" xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 12 12" fill="none">
+                <path d="M11.026 0.0996094C11.3327 0.0996094 11.5816 0.348498 11.5816 0.655165C11.5816 0.962572 11.3327 1.21072 11.026 1.21072H0.655653C0.348987 1.21072 0.100098 0.962572 0.100098 0.655165C0.100098 0.348498 0.348987 0.0996094 0.655653 0.0996094H11.026ZM5.2801 4.91146C5.58602 4.91146 5.83565 5.16035 5.83565 5.46702C5.83565 5.77442 5.58602 6.02257 5.2801 6.02257L0.655653 6.02554C0.348987 6.02554 0.100098 5.77739 0.100098 5.46998C0.100098 5.16331 0.348987 4.91442 0.655653 4.91442L5.2801 4.91146ZM5.2801 9.72776C5.58602 9.72776 5.83565 9.97665 5.83565 10.2833C5.83565 10.5907 5.58602 10.8389 5.2801 10.8389L0.655653 10.8404C0.348987 10.8404 0.100098 10.5922 0.100098 10.2848C0.100098 9.97813 0.348987 9.72924 0.655653 9.72924L5.2801 9.72776ZM11.1031 4.63294C11.4008 4.63294 11.5119 4.80331 11.546 4.87665C11.5801 4.94998 11.6386 5.14479 11.4453 5.37146L9.7401 7.31739V10.6129C9.7401 10.9189 9.49121 11.1678 9.18528 11.1678C8.87936 11.1678 8.63047 10.9189 8.63047 10.6129V7.30998L6.9238 5.37146C6.73121 5.14479 6.78899 4.94998 6.82306 4.87665C6.85713 4.80331 6.96825 4.63294 7.26676 4.63294H11.1031Z" fill="black" stroke="black" strokeWidth="0.2"/>
+              </svg>
+            </button>
           </div>
 
           <div className="bg-white rounded-xl overflow-hidden">
@@ -479,6 +576,113 @@ export default function ProjectsPage() {
           </div>
         </div>
       </div>
+
+      {/* Filter Dialog */}
+      <Dialog open={isFilterDialogOpen} onOpenChange={setIsFilterDialogOpen}>
+        <DialogContent className="max-w-[661px] p-[40px] rounded-[26px] shadow-[0px_13px_61px_0px_rgba(169,169,169,0.37)] bg-white">
+          <DialogHeader className="relative">
+            <DialogTitle className="text-[28px] font-bold leading-[37.24px] text-black">
+              Filters
+            </DialogTitle>
+            <button
+              onClick={() => setIsFilterDialogOpen(false)}
+              className="absolute right-[0px] top-[0px] w-[58px] p-4 flex items-center justify-center hover:bg-[#f1f1f3] rounded-[8px] transition"
+            >
+              <div className="w-6 h-6 overflow-hidden relative">
+                <svg className="w-full h-full" xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 15 15" fill="none">
+                  <path d="M8.31075 7.24875L14.2818 1.27975C14.5748 0.98675 14.5748 0.51275 14.2818 0.21975C13.9888 -0.07325 13.5127 -0.07325 13.2207 0.21975L7.24975 6.18775L1.28075 0.21975C0.98775 -0.07325 0.51275 -0.07325 0.21975 0.21975C-0.07325 0.51275 -0.07325 0.98675 0.21975 1.27975L6.18975 7.24875L0.21975 13.2198C-0.07325 13.5128 -0.07325 13.9867 0.21975 14.2797C0.36675 14.4268 0.55775 14.4987 0.74975 14.4987C0.94275 14.4987 1.13375 14.4268 1.28075 14.2797L7.24975 8.31075L13.2207 14.2797C13.3667 14.4268 13.5588 14.4987 13.7508 14.4987C13.9428 14.4987 14.1348 14.4268 14.2818 14.2797C14.5748 13.9867 14.5748 13.5128 14.2818 13.2198L8.31075 7.24875Z" fill="black"/>
+                </svg>
+              </div>
+            </button>
+          </DialogHeader>
+
+          <div className="flex flex-col gap-[10px] mt-0">
+            <div className="flex flex-col gap-[40px]">
+              {/* RAG Status Filter */}
+              <div className="flex flex-col gap-[16px]">
+                <p className="text-[14px] font-bold leading-[18.62px] text-[#09090a]">
+                  Select RAG Status
+                </p>
+                <div className="flex flex-wrap gap-[10px]">
+                  {(["High", "Medium", "Low"] as RAGStatus[]).map((status) => (
+                    <button
+                      key={status}
+                      onClick={() => handleRAGFilterToggle(status)}
+                      className={`px-[16px] py-[6px] rounded-[85px] text-[12px] leading-[15.96px] transition-all duration-200 border ${
+                        selectedRAGStatuses.has(status)
+                          ? "bg-[#03B3E2] text-white border-[#03B3E2] scale-105"
+                          : "bg-white text-black border-[#e0e0e0] hover:bg-[#f9f9f9] hover:scale-105 active:scale-95"
+                      }`}
+                    >
+                      <span className="flex items-center gap-2">
+                        <div className="w-2 h-2 rounded-full" style={{ backgroundColor: getRAGColor(status) }} />
+                        {status}
+                      </span>
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Progress Range Filter */}
+              <div className="flex flex-col gap-[16px]">
+                <p className="text-[14px] font-bold leading-[18.62px] text-[#09090a]">
+                  Select Progress Range
+                </p>
+                <div className="flex flex-wrap gap-[10px]">
+                  {(
+                    [
+                      { range: "0" as ProgressRange, label: "Not started (0%)" },
+                      { range: "1-25" as ProgressRange, label: "Early (1-25%)" },
+                      { range: "26-50" as ProgressRange, label: "Mid (26-50%)" },
+                      { range: "51-75" as ProgressRange, label: "Late (51-75%)" },
+                      { range: "76-99" as ProgressRange, label: "Near complete (76-99%)" },
+                      { range: "100" as ProgressRange, label: "Complete (100%)" },
+                    ] as const
+                  ).map(({ range, label }) => (
+                    <button
+                      key={range}
+                      onClick={() => handleProgressFilterToggle(range)}
+                      className={`px-[16px] py-[6px] rounded-[85px] text-[12px] leading-[15.96px] transition-all duration-200 border ${
+                        selectedProgressRanges.has(range)
+                          ? "bg-[#03B3E2] text-white border-[#03B3E2] scale-105"
+                          : "bg-white text-black border-[#e0e0e0] hover:bg-[#f9f9f9] hover:scale-105 active:scale-95"
+                      }`}
+                    >
+                      {label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            {/* Action Buttons */}
+            <div className="flex gap-[10px] mt-4">
+              <Button
+                variant="outline"
+                onClick={() => setIsFilterDialogOpen(false)}
+                className="flex-1 h-[32px] bg-gray-200 hover:bg-gray-300 backdrop-blur-[6px] rounded-[28px] px-6 py-[18px] hover:scale-[1.02] active:scale-[0.98] transition-all duration-200"
+              >
+                <span className="text-[13px] font-semibold leading-[18.62px] text-black">
+                  Close
+                </span>
+              </Button>
+              {hasActiveFilters && (
+                <Button
+                  onClick={() => {
+                    clearFilters();
+                    setIsFilterDialogOpen(false);
+                  }}
+                  className="flex-1 h-[32px] bg-[#ffb546] hover:opacity-90 backdrop-blur-[6px] rounded-[28px] px-6 py-[18px] hover:scale-[1.02] active:scale-[0.98] transition-all duration-200"
+                >
+                  <span className="text-[13px] font-semibold leading-[18.62px] text-black whitespace-nowrap">
+                    Clear filters
+                  </span>
+                </Button>
+              )}
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
     </DashboardLayout>
   );
 }

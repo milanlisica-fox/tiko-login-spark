@@ -428,7 +428,7 @@ export default function TrackerPage() {
   const keyStatsData = {
     draftBrief: 12,
     briefsInReview: 8,
-    sowsReadyToSign: 5,
+    scopesReadyToSign: 5,
     briefsApproved: 142,
   };
 
@@ -1531,7 +1531,7 @@ export default function TrackerPage() {
                         <CardContent className="pt-6">
                           <div className="flex flex-col gap-2">
                             <span className="text-sm text-[#646464]">Scopes ready to sign</span>
-                            <span className="text-[32px] font-bold leading-[38.4px] text-black">{keyStatsData.sowsReadyToSign}</span>
+                            <span className="text-[32px] font-bold leading-[38.4px] text-black">{keyStatsData.scopesReadyToSign}</span>
                           </div>
                         </CardContent>
                       </Card>
@@ -1980,7 +1980,7 @@ export default function TrackerPage() {
                         <CardContent className="pt-6">
                           <div className="flex flex-col gap-2">
                             <span className="text-sm text-[#646464]">Scopes ready to sign</span>
-                            <span className="text-[32px] font-bold leading-[38.4px] text-black">{keyStatsData.sowsReadyToSign}</span>
+                            <span className="text-[32px] font-bold leading-[38.4px] text-black">{keyStatsData.scopesReadyToSign}</span>
                           </div>
                         </CardContent>
                       </Card>
@@ -2429,7 +2429,7 @@ export default function TrackerPage() {
                         <CardContent className="pt-6">
                           <div className="flex flex-col gap-2">
                             <span className="text-sm text-[#646464]">Scopes ready to sign</span>
-                            <span className="text-[32px] font-bold leading-[38.4px] text-black">{keyStatsData.sowsReadyToSign}</span>
+                            <span className="text-[32px] font-bold leading-[38.4px] text-black">{keyStatsData.scopesReadyToSign}</span>
                           </div>
                         </CardContent>
                       </Card>

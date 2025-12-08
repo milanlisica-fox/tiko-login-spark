@@ -1,7 +1,7 @@
-// SOW assets
-import sowDocumentImage from "@/assets/images/sow-document.webp";
+// Scope assets
+import scopeDocumentImage from "@/assets/images/sow-document.webp";
 
-export const SOW_ASSETS = {
-  sowDocument: sowDocumentImage,
+export const SCOPE_ASSETS = {
+  scopeDocument: scopeDocumentImage,
 } as const;
 

@@ -1,11 +1,11 @@
-import { SOW } from "@/pages/SOW";
+import { Scope } from "@/pages/SOW";
 import { BRAND } from "@/constants/branding";
 
-interface SOWDocumentProps {
-  sow: SOW;
+interface ScopeDocumentProps {
+  scope: Scope;
 }
 
-export default function SOWDocument({ sow }: SOWDocumentProps) {
+export default function ScopeDocument({ scope }: ScopeDocumentProps) {
   // Format date for display
   const formatDate = (dateStr: string) => {
     const [day, month, year] = dateStr.split("/");
@@ -24,14 +24,14 @@ export default function SOWDocument({ sow }: SOWDocumentProps) {
           <img src={BRAND.logo} alt="TIKO Logo" className="h-8" />
           <div className="text-sm text-[#848487]">Statement of Work</div>
         </div>
-        <h1 className="text-3xl font-bold text-black mb-2">{sow.title}</h1>
-        <p className="text-sm text-[#848487]">Project Lead: {sow.projectLead}</p>
+        <h1 className="text-3xl font-bold text-black mb-2">{scope.title}</h1>
+        <p className="text-sm text-[#848487]">Project Lead: {scope.projectLead}</p>
       </div>
 
       {/* Document Date */}
       <div className="mb-8">
         <p className="text-sm text-[#848487] mb-1">Date:</p>
-        <p className="text-base text-black font-medium">{formatDate(sow.date)}</p>
+        <p className="text-base text-black font-medium">{formatDate(scope.date)}</p>
       </div>
 
       {/* Project Overview */}
@@ -39,10 +39,10 @@ export default function SOWDocument({ sow }: SOWDocumentProps) {
         <h2 className="text-xl font-semibold text-black mb-4">1. Project Overview</h2>
         <div className="space-y-4 text-sm text-black leading-relaxed">
           <p>
-            This Statement of Work (SOW) outlines the scope of work, deliverables, timeline, and terms for the {sow.title} project.
+            This Statement of Work (Scope) outlines the scope of work, deliverables, timeline, and terms for the {scope.title} project.
           </p>
           <p>
-            The project will be led by <strong>{sow.projectLead}</strong> and executed in accordance with the specifications detailed below.
+            The project will be led by <strong>{scope.projectLead}</strong> and executed in accordance with the specifications detailed below.
           </p>
         </div>
       </section>
@@ -108,7 +108,7 @@ export default function SOWDocument({ sow }: SOWDocumentProps) {
         <div className="space-y-3 text-sm text-black">
           <div className="flex items-center gap-4 pb-3 border-b border-[#e0e0e0]">
             <div className="w-24 text-[#848487]">Start Date:</div>
-            <div className="font-medium">{formatDate(sow.date)}</div>
+            <div className="font-medium">{formatDate(scope.date)}</div>
           </div>
           <div className="flex items-center gap-4 pb-3 border-b border-[#e0e0e0]">
             <div className="w-24 text-[#848487]">Target Completion:</div>
@@ -117,7 +117,7 @@ export default function SOWDocument({ sow }: SOWDocumentProps) {
           <div className="flex items-center gap-4">
             <div className="w-24 text-[#848487]">Status:</div>
             <div className="font-medium">
-              {sow.status === "ready_to_sign" ? "Ready to Sign" : "Signed"}
+              {scope.status === "ready_to_sign" ? "Ready to Sign" : "Signed"}
             </div>
           </div>
         </div>
@@ -146,22 +146,22 @@ export default function SOWDocument({ sow }: SOWDocumentProps) {
             <h3 className="text-base font-semibold text-black mb-6">Client Signature</h3>
             <div className="space-y-4">
               <div className="border-b-2 border-[#848487] pb-2 min-h-[60px] flex items-end">
-                {sow.signatures?.client ? (
+                {scope.signatures?.client ? (
                   <p className="text-base text-black font-semibold italic" style={{ fontFamily: 'cursive' }}>
-                    {sow.signatures.client.signature}
+                    {scope.signatures.client.signature}
                   </p>
                 ) : null}
               </div>
               <p className="text-xs text-[#848487]">Signature</p>
               <div className="border-b border-[#e0e0e0] pb-2 mt-4">
                 <p className="text-sm text-black font-medium">
-                  {sow.signatures?.client?.name || sow.projectLead}
+                  {scope.signatures?.client?.name || scope.projectLead}
                 </p>
               </div>
               <p className="text-xs text-[#848487]">Name</p>
               <div className="border-b border-[#e0e0e0] pb-2 mt-4">
                 <p className="text-sm text-black">
-                  {sow.signatures?.client?.date || formatDate(sow.date)}
+                  {scope.signatures?.client?.date || formatDate(scope.date)}
                 </p>
               </div>
               <p className="text-xs text-[#848487]">Date</p>
@@ -171,22 +171,22 @@ export default function SOWDocument({ sow }: SOWDocumentProps) {
             <h3 className="text-base font-semibold text-black mb-6">Vendor Signature</h3>
             <div className="space-y-4">
               <div className="border-b-2 border-[#848487] pb-2 min-h-[60px] flex items-end">
-                {sow.signatures?.vendor ? (
+                {scope.signatures?.vendor ? (
                   <p className="text-base text-black font-semibold italic" style={{ fontFamily: 'cursive' }}>
-                    {sow.signatures.vendor.signature}
+                    {scope.signatures.vendor.signature}
                   </p>
                 ) : null}
               </div>
               <p className="text-xs text-[#848487]">Signature</p>
               <div className="border-b border-[#e0e0e0] pb-2 mt-4">
                 <p className="text-sm text-black font-medium">
-                  {sow.signatures?.vendor?.name || "TIKO Team"}
+                  {scope.signatures?.vendor?.name || "TIKO Team"}
                 </p>
               </div>
               <p className="text-xs text-[#848487]">Name</p>
               <div className="border-b border-[#e0e0e0] pb-2 mt-4">
                 <p className="text-sm text-black">
-                  {sow.signatures?.vendor?.date || formatDate(sow.date)}
+                  {scope.signatures?.vendor?.date || formatDate(scope.date)}
                 </p>
               </div>
               <p className="text-xs text-[#848487]">Date</p>

@@ -13,7 +13,7 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import SuccessDialog from "@/components/common/SuccessDialog";
 import { triggerSuccessConfetti } from "@/lib/animations";
-import SOWDocument from "@/components/common/SOWDocument";
+import ScopeDocument from "@/components/common/SOWDocument";
 import { toast } from "sonner";
 
 const logoImage = BRAND.logo;
@@ -28,7 +28,7 @@ export interface Comment {
   isIris?: boolean;
 }
 
-export interface SOW {
+export interface Scope {
   id: string;
   title: string;
   projectLead: string;
@@ -49,15 +49,15 @@ export interface SOW {
   };
 }
 
-// Mock comments for each SOW
-const getMockCommentsForSOW = (sowId: string): Comment[] => {
+// Mock comments for each Scope
+const getMockCommentsForScope = (scopeId: string): Comment[] => {
   const baseComments: Record<string, Comment[]> = {
     "1": [
       {
         id: "comment-1-1",
         author: "Iris",
         authorAvatar: "iris",
-        message: "Hi! I've reviewed the Q7B7 Toolkit SOW. Everything looks good. Could you confirm the delivery timeline for the key visuals?",
+        message: "Hi! I've reviewed the Q7B7 Toolkit Scope. Everything looks good. Could you confirm the delivery timeline for the key visuals?",
         timestamp: new Date(2025, 11, 8, 10, 30),
         isIris: true,
       },
@@ -83,7 +83,7 @@ const getMockCommentsForSOW = (sowId: string): Comment[] => {
         id: "comment-2-1",
         author: "Iris",
         authorAvatar: "iris",
-        message: "I've reviewed the Fold Toolkit Q3 2025 SOW. The scope looks comprehensive. Do you have specific brand guidelines we should follow for this project?",
+        message: "I've reviewed the Fold Toolkit Q3 2025 Scope. The scope looks comprehensive. Do you have specific brand guidelines we should follow for this project?",
         timestamp: new Date(2025, 11, 15, 11, 0),
         isIris: true,
       },
@@ -109,7 +109,7 @@ const getMockCommentsForSOW = (sowId: string): Comment[] => {
         id: "comment-3-1",
         author: "Iris",
         authorAvatar: "iris",
-        message: "Hi! I've reviewed the Buds3 Campaign Toolkit SOW. The deliverables list is clear. Could you provide more details on the target markets for localization?",
+        message: "Hi! I've reviewed the Buds3 Campaign Toolkit Scope. The deliverables list is clear. Could you provide more details on the target markets for localization?",
         timestamp: new Date(2025, 11, 20, 9, 15),
         isIris: true,
       },
@@ -135,7 +135,7 @@ const getMockCommentsForSOW = (sowId: string): Comment[] => {
         id: "comment-4-1",
         author: "Iris",
         authorAvatar: "iris",
-        message: "The W Summer Festival 2025 SOW has been signed and we've started work on the project. Initial concepts will be ready for review next week.",
+        message: "The W Summer Festival 2025 Scope has been signed and we've started work on the project. Initial concepts will be ready for review next week.",
         timestamp: new Date(2024, 7, 28, 10, 0),
         isIris: true,
       },
@@ -153,7 +153,7 @@ const getMockCommentsForSOW = (sowId: string): Comment[] => {
         id: "comment-5-1",
         author: "Iris",
         authorAvatar: "iris",
-        message: "The Adapt AI Toolkit Q3 2025 SOW is signed and we're proceeding with the deliverables. All assets are on track for the agreed timeline.",
+        message: "The Adapt AI Toolkit Q3 2025 Scope is signed and we're proceeding with the deliverables. All assets are on track for the agreed timeline.",
         timestamp: new Date(2024, 8, 16, 11, 30),
         isIris: true,
       },
@@ -167,10 +167,10 @@ const getMockCommentsForSOW = (sowId: string): Comment[] => {
       },
     ],
   };
-  return baseComments[sowId] || [];
+  return baseComments[scopeId] || [];
 };
 
-export const READY_TO_SIGN_SOWS: SOW[] = [
+export const READY_TO_SIGN_SCOPES: Scope[] = [
   {
     id: "1",
     title: "Q7B7 Toolkit",
@@ -209,7 +209,7 @@ export const READY_TO_SIGN_SOWS: SOW[] = [
   },
 ];
 
-export const SIGNED_SOWS: SOW[] = [
+export const SIGNED_SCOPES: Scope[] = [
   {
     id: "4",
     title: "W Summer Festival 2025",
@@ -260,31 +260,31 @@ export const SIGNED_SOWS: SOW[] = [
   },
 ];
 
-export default function SOWPage() {
+export default function ScopePage() {
   const navigate = useNavigate();
   const location = useLocation();
   const { activeName } = useActiveNav();
-  const [selectedSOW, setSelectedSOW] = useState<SOW | null>(null);
+  const [selectedScope, setSelectedScope] = useState<Scope | null>(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [isConfirmDialogOpen, setIsConfirmDialogOpen] = useState(false);
   const [isSuccessDialogOpen, setIsSuccessDialogOpen] = useState(false);
   const [comments, setComments] = useState<Record<string, Comment[]>>({});
   const [newComment, setNewComment] = useState("");
 
-  // Handle opening SOW dialog from navigation state
+  // Handle opening Scope dialog from navigation state
   useEffect(() => {
-    const state = location.state as { sowId?: string } | null;
-    if (state?.sowId) {
-      const sow = READY_TO_SIGN_SOWS.find(s => s.id === state.sowId);
-      if (sow) {
-        setSelectedSOW(sow);
+    const state = location.state as { scopeId?: string } | null;
+    if (state?.scopeId) {
+      const scope = READY_TO_SIGN_SCOPES.find(s => s.id === state.scopeId);
+      if (scope) {
+        setSelectedScope(scope);
         setIsDialogOpen(true);
-        // Initialize comments for this SOW if not already loaded
+        // Initialize comments for this Scope if not already loaded
         setComments((prev) => {
-          if (!prev[sow.id]) {
+          if (!prev[scope.id]) {
             return {
               ...prev,
-              [sow.id]: getMockCommentsForSOW(sow.id),
+              [scope.id]: getMockCommentsForScope(scope.id),
             };
           }
           return prev;
@@ -307,31 +307,31 @@ export default function SOWPage() {
     </div>
   );
 
-  const handleSOWClick = (sow: SOW) => {
-    setSelectedSOW(sow);
+  const handleScopeClick = (scope: Scope) => {
+    setSelectedScope(scope);
     setIsDialogOpen(true);
-    // Initialize comments for this SOW if not already loaded
-    if (!comments[sow.id]) {
+    // Initialize comments for this Scope if not already loaded
+    if (!comments[scope.id]) {
       setComments((prev) => ({
         ...prev,
-        [sow.id]: getMockCommentsForSOW(sow.id),
+        [scope.id]: getMockCommentsForScope(scope.id),
       }));
     }
     setNewComment("");
   };
 
-  const handleDownloadSOW = () => {
-    // TODO: Implement download SOW functionality
-    console.log("Download SOW clicked for:", selectedSOW?.title);
+  const handleDownloadScope = () => {
+    // TODO: Implement download Scope functionality
+    console.log("Download Scope clicked for:", selectedScope?.title);
   };
 
   const handlePostComment = () => {
-    if (!selectedSOW || !newComment.trim()) {
+    if (!selectedScope || !newComment.trim()) {
       return;
     }
 
     const comment: Comment = {
-      id: `comment-${selectedSOW.id}-${Date.now()}`,
+      id: `comment-${selectedScope.id}-${Date.now()}`,
       author: "Samsung",
       authorAvatar: "samsung",
       message: newComment.trim(),
@@ -341,19 +341,19 @@ export default function SOWPage() {
 
     setComments((prev) => ({
       ...prev,
-      [selectedSOW.id]: [...(prev[selectedSOW.id] || []), comment],
+      [selectedScope.id]: [...(prev[selectedScope.id] || []), comment],
     }));
     setNewComment("");
     toast.success("Comment posted successfully");
   };
 
-  const handleSignSOW = () => {
+  const handleSignScope = () => {
     setIsConfirmDialogOpen(true);
   };
 
-  const handleConfirmSignSOW = () => {
-    // TODO: Implement sign SOW functionality
-    console.log("Sign SOW confirmed for:", selectedSOW?.title);
+  const handleConfirmSignScope = () => {
+    // TODO: Implement sign Scope functionality
+    console.log("Sign Scope confirmed for:", selectedScope?.title);
     setIsConfirmDialogOpen(false);
     setIsDialogOpen(false);
     setIsSuccessDialogOpen(true);
@@ -389,27 +389,27 @@ export default function SOWPage() {
           <div className="space-y-4">
             <h2 className="text-base font-semibold leading-[21.28px] text-black">Scope ready to sign</h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-              {READY_TO_SIGN_SOWS.map((sow) => (
+              {READY_TO_SIGN_SCOPES.map((scope) => (
                 <button
-                  key={sow.id}
-                  onClick={() => handleSOWClick(sow)}
+                  key={scope.id}
+                  onClick={() => handleScopeClick(scope)}
                   className="card-brief text-left w-full"
                 >
                   <BriefCard
-                    title={sow.title}
-                    description={`Project lead: ${sow.projectLead} • ${sow.date}`}
-                    right={sow.icon}
+                    title={scope.title}
+                    description={`Project lead: ${scope.projectLead} • ${scope.date}`}
+                    right={scope.icon}
                     className="h-full hover:shadow-md transition cursor-pointer"
                   >
                     <div className="h-px bg-[#ececec]" />
                     <div className="flex items-center justify-between text-xs text-[#848487]">
                       <div className="flex items-center gap-1">
                         <span>📄</span>
-                        <span>SOW</span>
+                        <span>Scope</span>
                       </div>
                       <div className="flex items-center gap-1">
                         <span>🕒</span>
-                        <span>{sow.date}</span>
+                        <span>{scope.date}</span>
                       </div>
                     </div>
                   </BriefCard>
@@ -418,20 +418,20 @@ export default function SOWPage() {
             </div>
           </div>
 
-          {/* SOW Signed Section */}
+          {/* Scope Signed Section */}
           <div className="space-y-4">
             <h2 className="text-base font-semibold leading-[21.28px] text-black">Scope signed</h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-              {SIGNED_SOWS.map((sow) => (
+              {SIGNED_SCOPES.map((scope) => (
                 <button
-                  key={sow.id}
-                  onClick={() => handleSOWClick(sow)}
+                  key={scope.id}
+                  onClick={() => handleScopeClick(scope)}
                   className="card-brief text-left w-full"
                 >
                   <BriefCard
-                    title={sow.title}
-                    description={`Project lead: ${sow.projectLead} • ${sow.date}`}
-                    right={sow.icon}
+                    title={scope.title}
+                    description={`Project lead: ${scope.projectLead} • ${scope.date}`}
+                    right={scope.icon}
                     className="h-full hover:shadow-md transition cursor-pointer opacity-75"
                   >
                     <div className="h-px bg-[#ececec]" />
@@ -442,7 +442,7 @@ export default function SOWPage() {
                       </div>
                       <div className="flex items-center gap-1">
                         <span>🕒</span>
-                        <span>{sow.date}</span>
+                        <span>{scope.date}</span>
                       </div>
                     </div>
                   </BriefCard>
@@ -453,14 +453,14 @@ export default function SOWPage() {
         </div>
       </div>
 
-      {/* SOW Document Modal */}
+      {/* Scope Document Modal */}
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
         <DialogContent className="max-w-5xl max-h-[95vh] p-0 bg-white flex flex-col">
           <div className="p-6 pb-4 shrink-0 relative">
             <DialogHeader>
-              <DialogTitle className="text-xl font-bold text-black pr-10">{selectedSOW?.title}</DialogTitle>
+              <DialogTitle className="text-xl font-bold text-black pr-10">{selectedScope?.title}</DialogTitle>
               <DialogDescription className="sr-only">
-                Review and sign the Statement of Work document for {selectedSOW?.title}
+                Review and sign the Statement of Work document for {selectedScope?.title}
               </DialogDescription>
             </DialogHeader>
             <button
@@ -473,24 +473,24 @@ export default function SOWPage() {
           </div>
           
           <div className="px-6 w-full overflow-y-auto flex-1 min-h-0 space-y-6">
-            {/* SOW Document */}
-            {selectedSOW && (
+            {/* Scope Document */}
+            {selectedScope && (
               <div className="w-full bg-white border border-[#e0e0e0] rounded-lg overflow-hidden shadow-sm">
-                <SOWDocument sow={selectedSOW} />
+                <ScopeDocument scope={selectedScope} />
               </div>
             )}
 
             {/* Comments Section */}
-            {selectedSOW && (
+            {selectedScope && (
               <div className="w-full bg-white border border-[#ececec] rounded-2xl p-4 md:p-6 space-y-6">
                 <div className="flex flex-col gap-2">
                   <h3 className="text-[21.6px] font-semibold text-black">Comments</h3>
-                  <p className="text-sm text-[#424242]">Exchange messages with Iris about this SOW.</p>
+                  <p className="text-sm text-[#424242]">Exchange messages with Iris about this Scope.</p>
                 </div>
 
                 {/* Comments List */}
                 <div className="flex flex-col gap-4 max-h-[400px] overflow-y-auto">
-                  {(comments[selectedSOW.id] || []).map((comment) => (
+                  {(comments[selectedScope.id] || []).map((comment) => (
                     <div
                       key={comment.id}
                       className={`flex gap-3 ${comment.isIris ? "flex-row" : "flex-row-reverse"}`}
@@ -579,18 +579,18 @@ export default function SOWPage() {
 
           <DialogFooter className="flex flex-col sm:flex-row gap-2 p-6 pt-4 border-t border-[#e0e0e0] shrink-0">
             <Button
-              onClick={handleDownloadSOW}
+              onClick={handleDownloadScope}
               variant="outline"
               className="w-full sm:w-auto bg-[#f9f9f9] border-[#e0e0e0] text-black hover:bg-[#e5e5e5] h-10 px-6 whitespace-nowrap"
             >
-              Download SOW
+              Download Scope
             </Button>
-            {selectedSOW?.status === "ready_to_sign" && (
+            {selectedScope?.status === "ready_to_sign" && (
               <Button
-                onClick={handleSignSOW}
+                onClick={handleSignScope}
                 className="w-full sm:w-auto bg-[#ffb546] text-black hover:opacity-90 h-10 px-6 whitespace-nowrap"
               >
-                Sign the SOW
+                Sign the Scope
               </Button>
             )}
           </DialogFooter>
@@ -602,15 +602,15 @@ export default function SOWPage() {
         <DialogContent className="max-w-md p-6 bg-white">
           <DialogHeader>
             <DialogTitle className="text-lg font-semibold text-black">
-              Confirm Sign SOW
+              Confirm Sign Scope
             </DialogTitle>
             <DialogDescription className="text-sm text-black mt-2">
-              Please confirm that you want to sign the SOW. Your name will appear on the SOW page.
+              Please confirm that you want to sign the Scope. Your name will appear on the Scope page.
             </DialogDescription>
           </DialogHeader>
           <DialogFooter className="mt-4">
             <Button
-              onClick={handleConfirmSignSOW}
+              onClick={handleConfirmSignScope}
               className="w-full bg-[#ffb546] text-black hover:opacity-90 h-10 px-6"
             >
               Confirm
@@ -624,7 +624,7 @@ export default function SOWPage() {
         open={isSuccessDialogOpen}
         onOpenChange={setIsSuccessDialogOpen}
         onConfirm={handleCloseSuccessDialog}
-        title="SOW successfully signed!"
+        title="Scope successfully signed!"
         description="We are now ready to start to work on your project."
         confirmText="Close"
       />

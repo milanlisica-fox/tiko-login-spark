@@ -14,7 +14,7 @@ import UserProfile from "./pages/UserProfile";
 import NotFound from "./pages/NotFound";
 import BriefReview from "./pages/BriefReview";
 import BriefSingle from "./pages/BriefSingle";
-import SOW from "./pages/SOW";
+import Scope from "./pages/SOW";
 import TokenTransactions from "./pages/TokenTransactions";
 import ClientConfiguration from "./pages/ClientConfiguration";
 
@@ -41,7 +41,7 @@ const AppRoutes = () => (
           <Route path="/dashboard/tracker" element={<Tracker />} />
           <Route path="/dashboard/calculator" element={<Calculator />} />
           <Route path="/dashboard/profile" element={<UserProfile />} />
-          <Route path="/dashboard/sow" element={<SOW />} />
+          <Route path="/dashboard/scope" element={<Scope />} />
           <Route path="/dashboard/token-transactions" element={<TokenTransactions />} />
           <Route path="/dashboard/client-configuration" element={<ClientConfiguration />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}

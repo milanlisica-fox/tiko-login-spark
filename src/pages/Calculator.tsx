@@ -80,7 +80,6 @@ export default function CalculatorPage() {
       { id: "8", title: "Urgency tag", tokens: getRandomToken() },
       { id: "9", title: "Video creation", tokens: getRandomToken() },
       { id: "10", title: "Video adaptation", tokens: getRandomToken() },
-      { id: "11", title: "Watermarked files", tokens: getRandomToken() },
       { id: "12", title: "Master KV", tokens: getRandomToken() },
       { id: "13", title: "Digital display banner", tokens: getRandomToken() },
       { id: "14", title: "Social banners static", tokens: getRandomToken() },

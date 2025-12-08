@@ -32,7 +32,7 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } f
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
-import { READY_TO_SIGN_SOWS } from "./SOW";
+import { READY_TO_SIGN_SCOPES } from "./SOW";
 
 // Reuse images from Dashboard for consistent visuals
 const logoImage = BRAND.logo;
@@ -66,9 +66,9 @@ export const PAST_BRIEFS: Array<{
     title: "Cashback Campaign 2024",
     data: {
       objective: "Increase customer engagement and retention through a cashback promotion campaign targeting existing customers.",
-      workType: ["Strategy", "Design", "Production"],
-      channels: ["Online", "Social", "Mobile"],
-      expectedOutputs: ["Digital marketing asset", "Copy asset"],
+      workType: ["Design", "Delivery"],
+      channels: ["Print", "Online", "Mobile", "Social", "Contact Centre"],
+      expectedOutputs: ["Plan", "Idea", "Copy asset", "Print asset", "Execution (live to consumer)", "Furniture", "Shop Display(s)", "Point of sale", "Digital marketing asset"],
       briefSummary: "Develop a comprehensive cashback campaign to reward loyal customers and attract new ones through targeted promotions.",
       assets: [
         {
@@ -1156,7 +1156,7 @@ export default function BriefsPage() {
 
   const draftBriefCount = useMemo(() => briefs.filter((brief) => brief.status === "Draft").length, [briefs]);
   const inReviewBriefCount = useMemo(() => briefs.filter((brief) => brief.status === "In review").length, [briefs]);
-  const sowReadyBriefCount = READY_TO_SIGN_SOWS.length;
+  const scopeReadyBriefCount = READY_TO_SIGN_SCOPES.length;
 
   const handleBriefSubmit = useCallback(
     (data: NewBriefFormValues) => {
@@ -1502,7 +1502,7 @@ export default function BriefsPage() {
                   { 
                     title: "Scope ready to sign",
                     titleBold: true,
-                    value: sowReadyBriefCount,
+                    value: scopeReadyBriefCount,
                     icon: (
                       <svg width="45" height="40" viewBox="0 0 45 40" fill="none" xmlns="http://www.w3.org/2000/svg" className="absolute right-5 top-5">
                         <path d="M23.8229 40H5.80935C2.59694 40 0 37.4332 0 34.2582V31.8843C0 30.5935 0.795591 29.4362 2.0115 28.9614L14.9212 22.908C17.5932 21.8546 17.5932 18.1306 14.9362 17.0623L1.99648 10.8902C0.795576 10.4154 0 9.25816 0 7.96736V5.74184C0 2.56677 2.59694 0 5.80935 0H23.8229C25.0838 0 26.3147 0.400603 27.3205 1.15728L42.692 15.4154C45.7693 17.7151 45.7693 22.27 42.692 24.5697L27.3205 38.8279C26.3147 39.5846 25.0838 39.9852 23.8229 39.9852V40Z" fill="#03B3E2"/>
@@ -1510,13 +1510,13 @@ export default function BriefsPage() {
                     )
                   },
                 ].map((card) => {
-                  const isSOWCard = card.title === "Scope ready to sign";
+                  const isScopeCard = card.title === "Scope ready to sign";
                   const isDraftCard = card.title === "In draft";
                   const isReviewCard = card.title === "In review";
                   
                   // Determine border color based on card type
                   let borderClass = "";
-                  if (isSOWCard) {
+                  if (isScopeCard) {
                     borderClass = "border-[3px] border-[#03B3E2] rounded-xl";
                   } else if (isDraftCard) {
                     borderClass = "border-[3px] border-[#FFB546] rounded-xl";
@@ -1524,11 +1524,11 @@ export default function BriefsPage() {
                     borderClass = "border-[3px] border-[#18c3b1] rounded-xl";
                   }
                   
-                  if (isSOWCard) {
+                  if (isScopeCard) {
                     return (
                       <button
                         key={card.title}
-                        onClick={() => navigate("/dashboard/sow")}
+                        onClick={() => navigate("/dashboard/scope")}
                         className={`card-brief cb2 relative overflow-hidden hover:opacity-90 transition cursor-pointer w-full text-left ${borderClass}`}
                       >
                         <StatCard title={card.title} value={card.value} className="rounded-xl p-6 border-0" titleBold={card.titleBold} />
@@ -3844,13 +3844,13 @@ function AllBriefsSection({
     }
   }, [initialTab]);
 
-  // Get SOW titles for filtering
-  const sowTitles = READY_TO_SIGN_SOWS.map(sow => sow.title);
+  // Get Scope titles for filtering
+  const scopeTitles = READY_TO_SIGN_SCOPES.map(scope => scope.title);
 
   // Filter briefs to show limited counts
-  const draftBriefs = allBriefs.filter((b) => b.status === "Draft" && !sowTitles.includes(b.title)).slice(0, 4);
+  const draftBriefs = allBriefs.filter((b) => b.status === "Draft" && !scopeTitles.includes(b.title)).slice(0, 4);
   const reviewBriefs = allBriefs.filter((b) => b.status === "In review").slice(0, 3);
-  const scopeReadyBriefs = allBriefs.filter((b) => sowTitles.includes(b.title)).slice(0, 2);
+  const scopeReadyBriefs = allBriefs.filter((b) => scopeTitles.includes(b.title)).slice(0, 2);
   
   const filtered = (() => {
     if (activeTab === "All") {
@@ -3887,22 +3887,22 @@ function AllBriefsSection({
         {filtered.map((b) => {
           const isDraft = b.status === "Draft";
           const isInReview = b.status === "In review";
-          const isSOWReady = sowTitles.includes(b.title);
+          const isScopeReady = scopeTitles.includes(b.title);
           
           return (
             <div
               key={b.id}
-              className={`text-left w-full ${isDraft || isSOWReady ? "cursor-pointer" : ""}`}
+              className={`text-left w-full ${isDraft || isScopeReady ? "cursor-pointer" : ""}`}
               onClick={() => {
-                if (isSOWReady) {
-                  // Find the matching SOW and navigate to SOW page
-                  const matchingSOW = READY_TO_SIGN_SOWS.find(sow => sow.title === b.title);
-                  if (matchingSOW) {
-                    navigate("/dashboard/sow", { state: { sowId: matchingSOW.id } });
+                if (isScopeReady) {
+                  // Find the matching Scope and navigate to Scope page
+                  const matchingScope = READY_TO_SIGN_SCOPES.find(scope => scope.title === b.title);
+                  if (matchingScope) {
+                    navigate("/dashboard/scope", { state: { scopeId: matchingScope.id } });
                   }
                 } else if (isDraft && onOpenDraftForm) {
                   onOpenDraftForm(b);
-                } else if (!isDraft && !isSOWReady) {
+                } else if (!isDraft && !isScopeReady) {
                   navigate(`/dashboard/briefs/${b.id}`);
                 }
               }}
@@ -3911,7 +3911,7 @@ function AllBriefsSection({
                 title={b.title}
                 description={b.description}
                 className={
-                  isSOWReady
+                  isScopeReady
                     ? "border-[3px] border-[#03B3E2] shadow-[0_0_0_1px_rgba(3,179,226,0.2),0_0_8px_rgba(3,179,226,0.3)] hover:opacity-90 transition cursor-pointer"
                     : isDraft 
                     ? "border-[3px] border-[#FFB546] shadow-[0_0_0_1px_rgba(255,181,70,0.2),0_0_8px_rgba(255,181,70,0.3)]" 
@@ -3920,7 +3920,7 @@ function AllBriefsSection({
                     : "hover:opacity-90 transition cursor-pointer"
                 }
                 right={
-                  isSOWReady ? (
+                  isScopeReady ? (
                     <div className="flex items-center gap-1.5">
                       <span className="text-xs font-semibold text-[#03B3E2] whitespace-nowrap animate-bounce">Ready to sign</span>
                       <ArrowRight 

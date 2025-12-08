@@ -11,7 +11,7 @@ export const DASHBOARD_NAV: NavItem[] = [
 
 export function matchActiveName(pathname: string): string {
   if (pathname.startsWith("/dashboard/briefs")) return "Briefs";
-  if (pathname.startsWith("/dashboard/sow")) return "Briefs";
+  if (pathname.startsWith("/dashboard/scope")) return "Briefs";
   if (pathname.startsWith("/dashboard/projects")) return "Projects";
   if (pathname.startsWith("/dashboard/tracker")) return "Tracker";
   if (pathname.startsWith("/dashboard/calculator")) return "Calculator";
