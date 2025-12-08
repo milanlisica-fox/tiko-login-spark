@@ -1651,6 +1651,7 @@ function NewBriefForm({
 }) {
   const navigate = useNavigate();
   const [formData, setFormData] = useState<NewBriefFormValues>(initialValues);
+  const [originalBriefData, setOriginalBriefData] = useState<NewBriefFormValues | null>(isChangeRequest ? initialValues : null);
   const [showConfirmation, setShowConfirmation] = useState(false);
   const [showSaveDraftConfirmation, setShowSaveDraftConfirmation] = useState(false);
   const [previewOpen, setPreviewOpen] = useState(false);
@@ -2225,7 +2226,11 @@ function NewBriefForm({
 
   useEffect(() => {
     setFormData(initialValues);
-  }, [initialValues]);
+    // Update original brief data when initial values change in change request mode
+    if (isChangeRequest && !originalBriefData) {
+      setOriginalBriefData(initialValues);
+    }
+  }, [initialValues, isChangeRequest, originalBriefData]);
   const handleViewAllBriefs = () => {
     setShowConfirmation(false);
     navigate("/dashboard/briefs", { state: { resetToOverview: true } });
@@ -2733,7 +2738,7 @@ function NewBriefForm({
                           isFormComplete ? "text-black" : "text-black"
                         }`}
                       >
-                        Review brief
+                        {changeRequestMode ? "Review change request" : "Review brief"}
                       </span>
                     </button>
                   </TooltipTrigger>
@@ -2772,13 +2777,25 @@ function NewBriefForm({
       <Dialog open={previewOpen} onOpenChange={setPreviewOpen}>
         <DialogContent className="max-w-[62.4rem]">
           <DialogHeader>
-            <DialogTitle>Brief preview</DialogTitle>
-            <DialogDescription>Make sure everything looks right before submitting.</DialogDescription>
+            <DialogTitle>{changeRequestMode ? "Change request preview" : "Brief preview"}</DialogTitle>
+            <DialogDescription>
+              {changeRequestMode 
+                ? "Review the changes you've made to the brief. Changed fields are highlighted below." 
+                : "Make sure everything looks right before submitting."}
+            </DialogDescription>
           </DialogHeader>
           <div className="space-y-6 pr-1">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <PreviewField label="Project title" value={formData.projectTitle || "—"} />
-              <PreviewField label="Delivery date" value={formData.dueDate ? format(formData.dueDate, "PPP") : "—"} />
+              <PreviewField 
+                label="Project title" 
+                value={formData.projectTitle || "—"} 
+                originalValue={originalBriefData?.projectTitle || "—"}
+              />
+              <PreviewField 
+                label="Delivery date" 
+                value={formData.dueDate ? format(formData.dueDate, "PPP") : "—"} 
+                originalValue={originalBriefData?.dueDate ? format(originalBriefData.dueDate, "PPP") : "—"}
+              />
               <PreviewField
                 label="Project lead"
                 value={
@@ -2789,30 +2806,120 @@ function NewBriefForm({
                         .join(", ")
                     : "—"
                 }
+                originalValue={
+                  originalBriefData && originalBriefData.projectLead.length > 0
+                    ? originalBriefData.projectLead
+                        .map((leadValue) => PROJECT_LEADS.find((lead) => lead.value === leadValue)?.label)
+                        .filter((label): label is string => Boolean(label))
+                        .join(", ")
+                    : "—"
+                }
               />
-              <PreviewField label="Under NDA" value={formData.underNDA ? "Yes" : "No"} />
-              <PreviewField label="Work type" value={formData.workType.length ? formData.workType.join(", ") : "—"} />
-              <PreviewField label="Channels" value={formData.channels.length ? formData.channels.join(", ") : "—"} />
+              <PreviewField 
+                label="Under NDA" 
+                value={formData.underNDA ? "Yes" : "No"} 
+                originalValue={originalBriefData ? (originalBriefData.underNDA ? "Yes" : "No") : undefined}
+              />
+              <PreviewField 
+                label="Work type" 
+                value={formData.workType.length ? formData.workType.join(", ") : "—"} 
+                originalValue={originalBriefData ? (originalBriefData.workType.length ? originalBriefData.workType.join(", ") : "—") : undefined}
+              />
+              <PreviewField 
+                label="Channels" 
+                value={formData.channels.length ? formData.channels.join(", ") : "—"} 
+                originalValue={originalBriefData ? (originalBriefData.channels.length ? originalBriefData.channels.join(", ") : "—") : undefined}
+              />
               <PreviewField
                 label="Expected outputs"
                 value={formData.expectedOutputs.length ? formData.expectedOutputs.join(", ") : "—"}
+                originalValue={originalBriefData ? (originalBriefData.expectedOutputs.length ? originalBriefData.expectedOutputs.join(", ") : "—") : undefined}
               />
-              <PreviewField label="Selected template" value={selectedTemplateName || "—"} />
+              <PreviewField 
+                label="Selected template" 
+                value={selectedTemplateName || "—"} 
+                originalValue={originalBriefData ? (FORM_TEMPLATE_OPTIONS.find((t) => t.id === originalBriefData.selectedTemplate)?.title || "—") : undefined}
+              />
             </div>
-            <PreviewField label="Brief summary" value={formData.briefSummary || "—"} fullWidth />
-            <PreviewField label="Objective" value={formData.objective || "—"} fullWidth />
-            <PreviewField label="Target audience" value={formData.targetAudience || "—"} fullWidth />
+            <PreviewField 
+              label="Brief summary" 
+              value={formData.briefSummary || "—"} 
+              originalValue={originalBriefData?.briefSummary || "—"}
+              fullWidth 
+            />
+            <PreviewField 
+              label="Objective" 
+              value={formData.objective || "—"} 
+              originalValue={originalBriefData?.objective || "—"}
+              fullWidth 
+            />
+            <PreviewField 
+              label="Target audience" 
+              value={formData.targetAudience || "—"} 
+              originalValue={originalBriefData?.targetAudience || "—"}
+              fullWidth 
+            />
 
             <div className="space-y-3">
-              <p className="text-sm font-semibold text-black">Assets</p>
+              <div className="flex items-center gap-2">
+                <p className="text-sm font-semibold text-black">Assets</p>
+                {changeRequestMode && originalBriefData && (
+                  (() => {
+                    const originalAssetIds = new Set(originalBriefData.assets.map(a => a.id));
+                    const currentAssetIds = new Set(formData.assets.map(a => a.id));
+                    const assetsChanged = 
+                      originalBriefData.assets.length !== formData.assets.length ||
+                      ![...originalAssetIds].every(id => currentAssetIds.has(id)) ||
+                      ![...currentAssetIds].every(id => originalAssetIds.has(id)) ||
+                      formData.assets.some(asset => {
+                        const original = originalBriefData.assets.find(a => a.id === asset.id);
+                        return original && (
+                          original.quantity !== asset.quantity ||
+                          original.assetSpecification !== asset.assetSpecification ||
+                          original.deliveryWeek !== asset.deliveryWeek
+                        );
+                      });
+                    return assetsChanged ? (
+                      <span className="text-[10px] uppercase tracking-wide text-[#ffb546] font-semibold bg-[#fff8ec] px-2 py-0.5 rounded">
+                        Changed
+                      </span>
+                    ) : null;
+                  })()
+                )}
+              </div>
               {formData.assets.length === 0 ? (
                 <p className="text-sm text-[#848487]">No assets added.</p>
               ) : (
                 <div className="space-y-3">
                   {formData.assets.map((asset) => {
                     const isCustom = asset.isCustom === true;
+                    const originalAsset = changeRequestMode && originalBriefData 
+                      ? originalBriefData.assets.find(a => a.id === asset.id) 
+                      : null;
+                    const assetChanged = originalAsset && (
+                      originalAsset.quantity !== asset.quantity ||
+                      originalAsset.assetSpecification !== asset.assetSpecification ||
+                      originalAsset.deliveryWeek !== asset.deliveryWeek ||
+                      originalAsset.name !== asset.name
+                    );
+                    const isNewAsset = changeRequestMode && originalBriefData && !originalAsset;
+                    
                     return (
-                      <div key={asset.id} className="rounded-xl border border-[#ececec] p-4 bg-[#f9f9f9] space-y-2">
+                      <div 
+                        key={asset.id} 
+                        className={`rounded-xl border p-4 space-y-2 ${
+                          assetChanged || isNewAsset
+                            ? "border-[#4caf50] bg-[#e8f5e9]"
+                            : "border-[#ececec] bg-[#f9f9f9]"
+                        }`}
+                      >
+                        {assetChanged && (
+                          <div className="flex items-center gap-2 mb-2">
+                            <span className="text-[10px] uppercase tracking-wide text-[#4caf50] font-semibold bg-white px-2 py-0.5 rounded">
+                              {isNewAsset ? "New Asset" : "Modified"}
+                            </span>
+                          </div>
+                        )}
                         <div className="flex items-center justify-between">
                           <div>
                             <p className="text-sm font-semibold text-black">{asset.name}</p>
@@ -2842,6 +2949,24 @@ function NewBriefForm({
                             )}
                           </div>
                         </div>
+                        {assetChanged && originalAsset && (
+                          <div className="bg-white rounded-lg p-2 space-y-1 mb-2">
+                            <p className="text-xs text-[#848487] font-semibold">Original:</p>
+                            <p className="text-xs text-[#6b6b6f] line-through opacity-60">
+                              Quantity: {originalAsset.quantity} × {originalAsset.tokenPrice} tokens
+                            </p>
+                            {originalAsset.assetSpecification && (
+                              <p className="text-xs text-[#6b6b6f] line-through opacity-60">
+                                Spec: {originalAsset.assetSpecification}
+                              </p>
+                            )}
+                            {originalAsset.deliveryWeek && (
+                              <p className="text-xs text-[#6b6b6f] line-through opacity-60">
+                                Delivery: {originalAsset.deliveryWeek}
+                              </p>
+                            )}
+                          </div>
+                        )}
                         <p className="text-xs text-[#6b6b6f]">
                           Specification: {asset.assetSpecification?.trim() ? asset.assetSpecification : "Not provided"}
                         </p>
@@ -2851,6 +2976,28 @@ function NewBriefForm({
                       </div>
                     );
                   })}
+                  {changeRequestMode && originalBriefData && originalBriefData.assets.some(origAsset => 
+                    !formData.assets.find(a => a.id === origAsset.id)
+                  ) && (
+                    <div className="space-y-2">
+                      <p className="text-xs font-semibold text-[#848487]">Removed Assets:</p>
+                      {originalBriefData.assets
+                        .filter(origAsset => !formData.assets.find(a => a.id === origAsset.id))
+                        .map((removedAsset) => (
+                          <div key={removedAsset.id} className="rounded-xl border border-[#ffb546] bg-[#fff8ec] p-4 space-y-2">
+                            <div className="flex items-center gap-2">
+                              <span className="text-[10px] uppercase tracking-wide text-[#ffb546] font-semibold bg-white px-2 py-0.5 rounded">
+                                Removed
+                              </span>
+                            </div>
+                            <p className="text-sm font-semibold text-black line-through opacity-60">{removedAsset.name}</p>
+                            <p className="text-xs text-[#6b6b6f] line-through opacity-60">
+                              Quantity: {removedAsset.quantity} × {removedAsset.tokenPrice} tokens
+                            </p>
+                          </div>
+                        ))}
+                    </div>
+                  )}
                 </div>
               )}
             </div>
@@ -2869,7 +3016,7 @@ function NewBriefForm({
                 isFormComplete ? "bg-[#ffb546] text-black hover:opacity-90" : "bg-[#f9f9f9] text-[#848487] cursor-not-allowed opacity-50"
               }`}
             >
-              Submit Brief
+              {changeRequestMode ? "Submit change request" : "Submit Brief"}
             </button>
           </div>
         </DialogContent>
@@ -2881,14 +3028,38 @@ function NewBriefForm({
 interface PreviewFieldProps {
   label: string;
   value: string;
+  originalValue?: string;
   fullWidth?: boolean;
+  isChanged?: boolean;
 }
 
-function PreviewField({ label, value, fullWidth }: PreviewFieldProps) {
+function PreviewField({ label, value, originalValue, fullWidth, isChanged }: PreviewFieldProps) {
+  const hasChanged = isChanged || (originalValue !== undefined && originalValue !== value);
+  
   return (
     <div className={fullWidth ? "col-span-1 md:col-span-2 space-y-1" : "space-y-1"}>
-      <p className="text-xs uppercase tracking-wide text-[#848487]">{label}</p>
-      <p className="text-sm text-black whitespace-pre-line">{value}</p>
+      <div className="flex items-center gap-2">
+        <p className="text-xs uppercase tracking-wide text-[#848487]">{label}</p>
+        {hasChanged && (
+          <span className="text-[10px] uppercase tracking-wide text-[#ffb546] font-semibold bg-[#fff8ec] px-2 py-0.5 rounded">
+            Changed
+          </span>
+        )}
+      </div>
+      {hasChanged && originalValue !== undefined ? (
+        <div className="space-y-2">
+          <div className="bg-[#fff8ec] border border-[#ffb546] rounded-lg p-2">
+            <p className="text-xs text-[#848487] mb-1">Original:</p>
+            <p className="text-sm text-black whitespace-pre-line line-through opacity-60">{originalValue || "—"}</p>
+          </div>
+          <div className="bg-[#e8f5e9] border border-[#4caf50] rounded-lg p-2">
+            <p className="text-xs text-[#848487] mb-1">New:</p>
+            <p className="text-sm text-black whitespace-pre-line font-medium">{value}</p>
+          </div>
+        </div>
+      ) : (
+        <p className="text-sm text-black whitespace-pre-line">{value}</p>
+      )}
     </div>
   );
 }
