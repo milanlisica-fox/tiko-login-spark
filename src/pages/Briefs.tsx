@@ -73,22 +73,82 @@ export const PAST_BRIEFS: Array<{
       assets: [
         {
           id: "calc-1",
-          name: "Master KV creation (PSD, JPEG, INDD, PDF)",
-          description: "Master KV creation (PSD, JPEG, INDD, PDF)",
-          tokenPrice: 8,
+          name: "Master KV creation",
+          description: "Master KV creation",
+          tokenPrice: 30,
           assetSpecification: "1920x1080, 300dpi, CMYK",
           deliveryWeek: "Week 12",
-          quantity: 1,
+          quantity: 10,
           isCustom: false,
         },
         {
           id: "calc-2",
-          name: "Static KV adaption (PSD, JPEG)",
-          description: "Static KV adaption (PSD, JPEG)",
-          tokenPrice: 5,
+          name: "Static KV adaptation",
+          description: "Static KV adaptation",
+          tokenPrice: 3,
           assetSpecification: "Multiple sizes for social media",
           deliveryWeek: "Week 13",
-          quantity: 3,
+          quantity: 50,
+          isCustom: false,
+        },
+        {
+          id: "calc-3",
+          name: "Status KV adaptation",
+          description: "Status KV adaptation",
+          tokenPrice: 3,
+          assetSpecification: "",
+          deliveryWeek: "",
+          quantity: 0,
+          isCustom: false,
+        },
+        {
+          id: "calc-4",
+          name: "Master KV animation creation",
+          description: "Master KV animation creation",
+          tokenPrice: 100,
+          assetSpecification: "",
+          deliveryWeek: "",
+          quantity: 10,
+          isCustom: false,
+        },
+        {
+          id: "calc-5",
+          name: "Master KV animation adaptation",
+          description: "Master KV animation adaptation",
+          tokenPrice: 3,
+          assetSpecification: "",
+          deliveryWeek: "",
+          quantity: 20,
+          isCustom: false,
+        },
+        {
+          id: "calc-6",
+          name: "PPT Files",
+          description: "PPT Files",
+          tokenPrice: 30,
+          assetSpecification: "",
+          deliveryWeek: "",
+          quantity: 1,
+          isCustom: false,
+        },
+        {
+          id: "calc-7",
+          name: "Roundel",
+          description: "Roundel",
+          tokenPrice: 3,
+          assetSpecification: "",
+          deliveryWeek: "",
+          quantity: 4,
+          isCustom: false,
+        },
+        {
+          id: "calc-8",
+          name: "Urgency tag",
+          description: "Urgency tag",
+          tokenPrice: 3,
+          assetSpecification: "",
+          deliveryWeek: "",
+          quantity: 4,
           isCustom: false,
         },
       ],
@@ -1121,6 +1181,8 @@ export default function BriefsPage() {
           dueDate: undefined,
           projectLead: [],
           underNDA: false,
+          // Filter out assets with quantity 0 or less
+          assets: state.duplicateBrief.assets.filter(asset => asset.quantity > 0),
         };
         setNewBriefDraft(draftWithDuplicate);
         setFromCalculator(false);
@@ -1755,22 +1817,45 @@ function NewBriefForm({
     const selectedTemplate = formData.selectedTemplate;
     const templateAssetIds = selectedTemplate ? TEMPLATE_ASSETS_MAP[selectedTemplate] || [] : [];
     
+    // Get base assets to display
+    let baseAssets: RecommendedAsset[] = [];
+    
     if (fromCalculator) {
       const calculatorAssets = formData.assets.filter(
         (a) => a.isCustom !== true && a.id.startsWith('calc-')
       );
-      return [...calculatorAssets, ...customAssets];
+      baseAssets = calculatorAssets.map(asset => {
+        const assetData = CALCULATOR_ASSETS_LIST.find(a => a.id === asset.id);
+        return assetData || asset;
+      });
     } else if (deliverableSelectionMode === "build-your-own" || selectedTemplate === "other") {
       // Show all assets when "build-your-own" mode is active, same as Calculator
-      return [...RECOMMENDED_ASSETS, ...customAssets];
+      baseAssets = [...RECOMMENDED_ASSETS];
     } else if (selectedTemplate && templateAssetIds.length > 0) {
       const templateAssets = CALCULATOR_ASSETS_LIST
         .filter((a) => templateAssetIds.includes(a.id))
         .map((a) => getAssetWithTemplatePrice(a, selectedTemplate));
-      return [...templateAssets, ...customAssets];
+      baseAssets = templateAssets;
     } else {
-      return [...RECOMMENDED_ASSETS.slice(0, assetsToShow), ...customAssets];
+      baseAssets = [...RECOMMENDED_ASSETS.slice(0, assetsToShow)];
     }
+    
+    // Also include any assets from formData.assets that aren't already in baseAssets
+    // This ensures duplicate brief assets are always visible
+    const existingAssetIds = new Set(baseAssets.map(a => a.id));
+    const additionalAssets = formData.assets
+      .filter((a) => !a.isCustom && !existingAssetIds.has(a.id) && a.id.startsWith('calc-'))
+      .map(asset => {
+        const assetData = CALCULATOR_ASSETS_LIST.find(a => a.id === asset.id);
+        if (assetData) {
+          return getAssetWithTemplatePrice(assetData, selectedTemplate || "");
+        }
+        // If not found in CALCULATOR_ASSETS_LIST, return the asset as-is (shouldn't happen but safe fallback)
+        return asset;
+      })
+      .filter((asset): asset is RecommendedAsset => asset !== undefined);
+    
+    return [...baseAssets, ...additionalAssets, ...customAssets];
   }, [formData.assets, formData.selectedTemplate, fromCalculator, assetsToShow, deliverableSelectionMode]);
 
   const isFormComplete =
