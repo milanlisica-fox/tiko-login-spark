@@ -148,12 +148,12 @@ const [open, setOpen] = useState(false);
                       />
                     </button>
 
-                    {/* SOW ready to sign */}
+                    {/* Scope ready to sign */}
                     <button
                       onClick={() => navigate("/dashboard/sow")}
                       className="card-item flex-1 bg-[#f9f9f9] rounded-[12px] p-4 md:p-[20px] flex flex-col gap-[10px] relative overflow-clip hover:bg-[#f0f0f0] transition cursor-pointer text-left"
                     >
-                      <p className="text-xs md:text-sm font-bold leading-[18.62px] text-black pr-4">SOW ready to sign</p>
+                      <p className="text-xs md:text-sm font-bold leading-[18.62px] text-black pr-4">Scope ready to sign</p>
                       <p className="text-2xl md:text-[40px] font-medium leading-[45.6px] text-black">3</p>
                       <img 
                         src={briefsVector3} 

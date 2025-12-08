@@ -94,8 +94,8 @@ export default function ProjectsPage() {
       owners: ["EF", "GH"],
       notifications: 2,
       notificationActions: [
-        { id: 1, message: "Assets ready for client review" },
-        { id: 2, message: "Assets uploaded to SMC" },
+        { id: 1, message: "Supply master asset" },
+        { id: 2, message: "Assets ready to review" },
       ],
       dueDate: "Jan 05, 2026",
     },
@@ -136,7 +136,7 @@ export default function ProjectsPage() {
       owners: ["YZ", "AA", "BB"],
       notifications: 1,
       notificationActions: [
-        { id: 1, message: "Assets ready for client review" },
+        { id: 1, message: "Supply master asset" },
       ],
       dueDate: "Dec 29, 2025",
     },
@@ -158,9 +158,9 @@ export default function ProjectsPage() {
       owners: ["EE", "FF"],
       notifications: 3,
       notificationActions: [
-        { id: 1, message: "Assets ready for client review" },
-        { id: 2, message: "Assets uploaded to SMC" },
-        { id: 3, message: "Review feedback received" },
+        { id: 1, message: "Supply master asset" },
+        { id: 2, message: "Assets ready to review" },
+        { id: 3, message: "Provide additional information" },
       ],
       dueDate: "Dec 15, 2025",
     },
@@ -386,9 +386,10 @@ export default function ProjectsPage() {
                           
                           // If no actions but hasProjectNotification, create default actions
                           if (project.hasProjectNotification && actions.length === 0) {
+                            const defaultMessages = ["Supply master asset", "Assets ready to review", "Provide additional information"];
                             actions = Array.from({ length: notificationCount }, (_, i) => ({
                               id: i + 1,
-                              message: "Action required"
+                              message: defaultMessages[i % defaultMessages.length]
                             }));
                           }
                           
@@ -396,9 +397,10 @@ export default function ProjectsPage() {
                           // If actions are fewer than count, pad with defaults
                           // If actions are more than count, limit to count
                           if (actions.length < notificationCount) {
+                            const defaultMessages = ["Supply master asset", "Assets ready to review", "Provide additional information"];
                             const additionalActions = Array.from({ length: notificationCount - actions.length }, (_, i) => ({
                               id: actions.length + i + 1,
-                              message: "Action required"
+                              message: defaultMessages[(actions.length + i) % defaultMessages.length]
                             }));
                             actions = [...actions, ...additionalActions];
                           } else if (actions.length > notificationCount) {

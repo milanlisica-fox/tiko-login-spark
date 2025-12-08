@@ -1,7 +1,7 @@
 import React from "react";
 import { cva, type VariantProps } from "@/lib/cva";
 
-const badgeVariants = cva("inline-flex items-center justify-center rounded-[12px] text-xs px-2 py-[2px]", {
+const badgeVariants = cva("inline-flex items-center justify-center rounded-[12px] text-xs px-2 py-[2px] whitespace-nowrap", {
   variants: {
     intent: {
       creation: "bg-[#0177C70D] text-[#0177C7]",

@@ -1,6 +1,6 @@
 import { useMemo, useState, useEffect, useRef, useCallback, ReactNode } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { Home, FileText, Folder, BarChart2, LogOut, Bell, ChevronDown, ArrowRight, Calculator, Coins, X, Calendar as CalendarIcon, ArrowLeft, Plus, Minus, ChevronDown as ChevronDownIcon, HelpCircle } from "lucide-react";
+import { Home, FileText, Folder, BarChart2, LogOut, Bell, ChevronDown, ArrowRight, Calculator, Coins, X, Calendar as CalendarIcon, ArrowLeft, Plus, Minus, ChevronDown as ChevronDownIcon, HelpCircle, AlertCircle } from "lucide-react";
 import { toast } from "sonner";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -59,7 +59,7 @@ export const FORM_TEMPLATE_OPTIONS: { id: string; title: string; icon: string }[
 export const PAST_BRIEFS: Array<{
   id: string;
   title: string;
-  data: Omit<NewBriefFormValues, "projectTitle" | "dueDate" | "projectLead">;
+  data: Omit<NewBriefFormValues, "projectTitle" | "dueDate" | "projectLead" | "underNDA" | "targetAudience">;
 }> = [
   {
     id: "past-brief-1",
@@ -673,7 +673,7 @@ const BriefLoadingGraphic = () => (
   </svg>
 );
 
-type BriefStatus = "Draft" | "In review" | "SOW ready to sign";
+type BriefStatus = "Draft" | "In review" | "Scope ready to sign";
 type BriefBadge = "Promotional campaign" | "BAU campaign" | "Flagship toolkit" | "default";
 
 // Helper function to map template ID to badge name
@@ -728,7 +728,9 @@ export interface NewBriefFormValues {
   projectTitle: string;
   dueDate?: Date;
   projectLead: string[];
+  underNDA: boolean;
   objective: string;
+  targetAudience: string;
   workType: string[];
   channels: string[];
   expectedOutputs: string[];
@@ -750,7 +752,9 @@ const createBriefFormDefaults = (): NewBriefFormValues => ({
   projectTitle: "",
   dueDate: undefined,
   projectLead: [],
+  underNDA: false,
   objective: "",
+  targetAudience: "",
   workType: [],
   channels: [],
   expectedOutputs: [],
@@ -1184,7 +1188,7 @@ export default function BriefsPage() {
   );
 
   // Check if we should show the form directly from navigation state or reset to overview
-  const [initialActiveTab, setInitialActiveTab] = useState<"All" | "Drafts" | "In review" | "SOW ready to sign" | undefined>(undefined);
+  const [initialActiveTab, setInitialActiveTab] = useState<"All" | "Drafts" | "In review" | "Scope ready to sign" | undefined>(undefined);
 
   useEffect(() => {
     const state = location.state as {
@@ -1194,14 +1198,14 @@ export default function BriefsPage() {
       brief?: NewBriefFormValues;
       submittedBrief?: SubmittedBriefPayload;
       selectedTemplate?: string;
-      activeTab?: "All" | "Drafts" | "In review" | "SOW ready to sign";
+      activeTab?: "All" | "Drafts" | "In review" | "Scope ready to sign";
       calculatorAssets?: Array<{
         id: string;
         title: string;
         tokens: number;
         quantity: number;
       }>;
-      duplicateBrief?: Omit<NewBriefFormValues, "projectTitle" | "dueDate" | "projectLead">;
+      duplicateBrief?: Omit<NewBriefFormValues, "projectTitle" | "dueDate" | "projectLead" | "underNDA">;
     } | null;
 
     if (!state) {
@@ -1242,6 +1246,7 @@ export default function BriefsPage() {
           projectTitle: "",
           dueDate: undefined,
           projectLead: [],
+          underNDA: false,
         };
         setNewBriefDraft(draftWithDuplicate);
         setFromCalculator(false);
@@ -1488,14 +1493,14 @@ export default function BriefsPage() {
                     value: inReviewBriefCount,
                     icon: (
                       <svg width="50" height="32" viewBox="0 0 50 32" fill="none" xmlns="http://www.w3.org/2000/svg" className="absolute right-5 top-5">
-                      <path d="M4.125 16.6961C3.95833 16.247 3.95833 15.753 4.125 15.3039C5.74832 11.3673 8.50381 8.00137 12.0421 5.63288C15.5805 3.26439 19.7423 2 24 2C28.2577 2 32.4195 3.26439 35.9579 5.63288C39.4962 8.00137 42.2517 11.3673 43.875 15.3039C44.0417 15.753 44.0417 16.247 43.875 16.6961C42.2517 20.6327 39.4962 23.9986 35.9579 26.3671C32.4195 28.7356 28.2577 30 24 30C19.7423 30 15.5805 28.7356 12.0421 26.3671C8.50381 23.9986 5.74832 20.6327 4.125 16.6961Z" stroke="#0177C7" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round"/>
-                      <path d="M24 22.0005C27.3135 22.0005 29.9997 19.314 29.9997 16C29.9997 12.686 27.3135 9.99947 24 9.99947C20.6865 9.99947 18.0003 12.686 18.0003 16C18.0003 19.314 20.6865 22.0005 24 22.0005Z" stroke="#0177C7" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round"/>
+                      <path d="M4.125 16.6961C3.95833 16.247 3.95833 15.753 4.125 15.3039C5.74832 11.3673 8.50381 8.00137 12.0421 5.63288C15.5805 3.26439 19.7423 2 24 2C28.2577 2 32.4195 3.26439 35.9579 5.63288C39.4962 8.00137 42.2517 11.3673 43.875 15.3039C44.0417 15.753 44.0417 16.247 43.875 16.6961C42.2517 20.6327 39.4962 23.9986 35.9579 26.3671C32.4195 28.7356 28.2577 30 24 30C19.7423 30 15.5805 28.7356 12.0421 26.3671C8.50381 23.9986 5.74832 20.6327 4.125 16.6961Z" stroke="#18c3b1" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round"/>
+                      <path d="M24 22.0005C27.3135 22.0005 29.9997 19.314 29.9997 16C29.9997 12.686 27.3135 9.99947 24 9.99947C20.6865 9.99947 18.0003 12.686 18.0003 16C18.0003 19.314 20.6865 22.0005 24 22.0005Z" stroke="#18c3b1" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round"/>
                       </svg>
                     ),
                     onClick: () => setInitialActiveTab("In review")
                   },
                   { 
-                    title: "SOW ready to sign",
+                    title: "Scope ready to sign",
                     titleBold: true,
                     value: sowReadyBriefCount,
                     icon: (
@@ -1505,7 +1510,7 @@ export default function BriefsPage() {
                     )
                   },
                 ].map((card) => {
-                  const isSOWCard = card.title === "SOW ready to sign";
+                  const isSOWCard = card.title === "Scope ready to sign";
                   const isDraftCard = card.title === "In draft";
                   const isReviewCard = card.title === "In review";
                   
@@ -1516,7 +1521,7 @@ export default function BriefsPage() {
                   } else if (isDraftCard) {
                     borderClass = "border-[3px] border-[#FFB546] rounded-xl";
                   } else if (isReviewCard) {
-                    borderClass = "border-[3px] border-[#E5E5E5] rounded-xl";
+                    borderClass = "border-[3px] border-[#18c3b1] rounded-xl";
                   }
                   
                   if (isSOWCard) {
@@ -1583,7 +1588,9 @@ export default function BriefsPage() {
                     projectLead: brief.projectLead 
                       ? PROJECT_LEADS.filter(lead => brief.projectLead?.includes(lead.label)).map(lead => lead.value)
                       : [],
+                    underNDA: false,
                     objective: brief.description,
+                    targetAudience: "",
                     workType: [],
                     channels: [],
                     expectedOutputs: [],
@@ -2383,12 +2390,39 @@ function NewBriefForm({
 
   return (
     <>
+      {formData.underNDA && (
+        <div className="mb-4 rounded-xl border border-[#ffb546] bg-[#fff8ec] p-4 flex items-start gap-3">
+          <AlertCircle className="h-5 w-5 text-[#ffb546] shrink-0 mt-0.5" />
+          <p className="text-sm text-black">
+            Heads up: This is NDA brief: Please ensure all communications reference the approved code word.
+          </p>
+        </div>
+      )}
       <div className="flex flex-col lg:flex-row gap-6 w-full max-w-full min-w-0 overflow-x-hidden pb-56 md:pb-24">
         <div className="flex-1 space-y-6 min-w-0 max-w-full">
           <section className="rounded-2xl border border-[#ececec] bg-white/80 p-4 md:p-6 space-y-6 max-w-full min-w-0">
             <div className="flex flex-col gap-2">
               <h3 className="text-[21.6px] font-semibold text-black">General information</h3>
               <p className="text-sm text-[#424242]">Start your brief by filling out these required fields.</p>
+            </div>
+            <div className="flex items-center gap-3 mb-4">
+              <Checkbox
+                id="under-nda"
+                checked={formData.underNDA}
+                onCheckedChange={(checked) => {
+                  setFormData((prev) => ({
+                    ...prev,
+                    underNDA: checked === true,
+                  }));
+                }}
+                className="mt-0"
+              />
+              <label
+                htmlFor="under-nda"
+                className="text-sm font-medium text-black cursor-pointer"
+              >
+                Under NDA
+              </label>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 min-w-0">
             <Field label="Project title*" helpText="Enter a descriptive name that clearly identifies your project and campaign">
@@ -2434,6 +2468,15 @@ function NewBriefForm({
                 onChange={(e) => handleFieldChange("objective", e.target.value)}
                 placeholder="e.g. Increase signups by 20% through targeted ads"
                 className="border-[#e0e0e0] rounded-lg px-5 py-2.5 min-h-[110px] resize-none bg-[#f9f9f9] text-black placeholder:text-[#848487]"
+              />
+            </Field>
+
+            <Field label="Target audience" helpText="">
+              <StyledInput
+                value={formData.targetAudience}
+                onChange={(e) => handleFieldChange("targetAudience", e.target.value)}
+                placeholder="Who is this activity intended to appeal to."
+                variant="brief"
               />
             </Field>
 
@@ -2844,6 +2887,7 @@ function NewBriefForm({
                     : "—"
                 }
               />
+              <PreviewField label="Under NDA" value={formData.underNDA ? "Yes" : "No"} />
               <PreviewField label="Work type" value={formData.workType.length ? formData.workType.join(", ") : "—"} />
               <PreviewField label="Channels" value={formData.channels.length ? formData.channels.join(", ") : "—"} />
               <PreviewField
@@ -2854,6 +2898,7 @@ function NewBriefForm({
             </div>
             <PreviewField label="Brief summary" value={formData.briefSummary || "—"} fullWidth />
             <PreviewField label="Objective" value={formData.objective || "—"} fullWidth />
+            <PreviewField label="Target audience" value={formData.targetAudience || "—"} fullWidth />
 
             <div className="space-y-3">
               <p className="text-sm font-semibold text-black">Assets</p>
@@ -3782,12 +3827,12 @@ function AllBriefsSection({
   onOpenDraftForm
 }: { 
   briefs: BriefSummary[];
-  initialTab?: "All" | "Drafts" | "In review" | "SOW ready to sign";
-  onTabChange?: (tab: "All" | "Drafts" | "In review" | "SOW ready to sign") => void;
+  initialTab?: "All" | "Drafts" | "In review" | "Scope ready to sign";
+  onTabChange?: (tab: "All" | "Drafts" | "In review" | "Scope ready to sign") => void;
   onOpenDraftForm?: (brief: BriefSummary) => void;
 }) {
   const navigate = useNavigate();
-  const [activeTab, setActiveTab] = useState<"All" | "Drafts" | "In review" | "SOW ready to sign">(initialTab || "All");
+  const [activeTab, setActiveTab] = useState<"All" | "Drafts" | "In review" | "Scope ready to sign">(initialTab || "All");
 
   // Avatar names for tooltips
   const avatarNames = ["Murray Gordon", "Henry Bray", "Holly Hayes"];
@@ -3802,22 +3847,32 @@ function AllBriefsSection({
   // Get SOW titles for filtering
   const sowTitles = READY_TO_SIGN_SOWS.map(sow => sow.title);
 
-  const filtered = allBriefs.filter((b) => {
-    if (activeTab === "All") return true;
-    if (activeTab === "Drafts") {
-      // Exclude SOW ready to sign briefs from drafts filter
-      return b.status === "Draft" && !sowTitles.includes(b.title);
+  // Filter briefs to show limited counts
+  const draftBriefs = allBriefs.filter((b) => b.status === "Draft" && !sowTitles.includes(b.title)).slice(0, 4);
+  const reviewBriefs = allBriefs.filter((b) => b.status === "In review").slice(0, 3);
+  const scopeReadyBriefs = allBriefs.filter((b) => sowTitles.includes(b.title)).slice(0, 2);
+  
+  const filtered = (() => {
+    if (activeTab === "All") {
+      return [...draftBriefs, ...reviewBriefs, ...scopeReadyBriefs];
     }
-    if (activeTab === "In review") return b.status === "In review";
-    if (activeTab === "SOW ready to sign") return sowTitles.includes(b.title);
-    return true;
-  });
+    if (activeTab === "Drafts") {
+      return draftBriefs;
+    }
+    if (activeTab === "In review") {
+      return reviewBriefs;
+    }
+    if (activeTab === "Scope ready to sign") {
+      return scopeReadyBriefs;
+    }
+    return allBriefs;
+  })();
 
   return (
     <div className="space-y-4">
       <h2 className="text-base font-semibold leading-[21.28px] text-black">All briefs</h2>
       <TabFilter
-        tabs={["All", "Drafts", "In review", "SOW ready to sign"]}
+        tabs={["All", "Drafts", "In review", "Scope ready to sign"]}
         activeTab={activeTab}
         onTabChange={(tab) => {
           const tabValue = tab as typeof activeTab;
@@ -3831,6 +3886,7 @@ function AllBriefsSection({
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {filtered.map((b) => {
           const isDraft = b.status === "Draft";
+          const isInReview = b.status === "In review";
           const isSOWReady = sowTitles.includes(b.title);
           
           return (
@@ -3859,6 +3915,8 @@ function AllBriefsSection({
                     ? "border-[3px] border-[#03B3E2] shadow-[0_0_0_1px_rgba(3,179,226,0.2),0_0_8px_rgba(3,179,226,0.3)] hover:opacity-90 transition cursor-pointer"
                     : isDraft 
                     ? "border-[3px] border-[#FFB546] shadow-[0_0_0_1px_rgba(255,181,70,0.2),0_0_8px_rgba(255,181,70,0.3)]" 
+                    : isInReview
+                    ? "border-[3px] border-[#18c3b1] shadow-[0_0_0_1px_rgba(24,195,177,0.2),0_0_8px_rgba(24,195,177,0.3)] hover:opacity-90 transition cursor-pointer"
                     : "hover:opacity-90 transition cursor-pointer"
                 }
                 right={
@@ -3894,12 +3952,7 @@ function AllBriefsSection({
                         b.badge === "Flagship toolkit" ? "creation" :
                         "default"
                       }
-                      width={
-                        b.badge === "Promotional campaign" ? "creation" :
-                        b.badge === "BAU campaign" ? "adaptation" :
-                        b.badge === "Flagship toolkit" ? "creation" :
-                        "auto"
-                      }
+                      width="auto"
                     />
                     <TooltipProvider>
                       <div className="flex -space-x-2">
