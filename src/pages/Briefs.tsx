@@ -1190,6 +1190,8 @@ export default function BriefsPage() {
   // Check if we should show the form directly from navigation state or reset to overview
   const [initialActiveTab, setInitialActiveTab] = useState<"All" | "Drafts" | "In review" | "Scope ready to sign" | undefined>(undefined);
 
+  const [isChangeRequest, setIsChangeRequest] = useState(false);
+
   useEffect(() => {
     const state = location.state as {
       createBrief?: boolean;
@@ -1206,6 +1208,7 @@ export default function BriefsPage() {
         quantity: number;
       }>;
       duplicateBrief?: Omit<NewBriefFormValues, "projectTitle" | "dueDate" | "projectLead" | "underNDA">;
+      isChangeRequest?: boolean;
     } | null;
 
     if (!state) {
@@ -1233,7 +1236,10 @@ export default function BriefsPage() {
         dueDate: state.brief.dueDate ? new Date(state.brief.dueDate) : undefined,
       };
       setNewBriefDraft(normalizedDraft);
+      setIsChangeRequest(state.isChangeRequest || false);
       shouldReplace = true;
+    } else {
+      setIsChangeRequest(false);
     }
 
     if (state.createBrief) {
@@ -1272,7 +1278,9 @@ export default function BriefsPage() {
         };
         setNewBriefDraft(draftWithAssets);
         setFromCalculator(true);
-      } else {
+      }
+      // If brief data exists (e.g., from change request), don't overwrite it
+      else if (!state.brief) {
         // Create draft with selected template if provided
         const draftDefaults = createBriefFormDefaults();
         if (state.selectedTemplate) {
@@ -1297,6 +1305,7 @@ export default function BriefsPage() {
         setNewBriefDraft(draftDefaults);
         setFromCalculator(false);
       }
+      // If state.brief exists, it was already set above, so we don't overwrite it
       
       setIsCreatingBrief(true);
       setBriefView(state.showForm ? "form" : "templates");
@@ -1417,6 +1426,7 @@ export default function BriefsPage() {
                 initialValues={newBriefDraft}
                 onFormDataChange={(data) => setNewBriefDraft({ ...data })}
                 fromCalculator={fromCalculator}
+                isChangeRequest={isChangeRequest}
               />
             ) : briefView === "deliverables" ? (
               <DeliverablesSelectionScreen 
@@ -1761,6 +1771,7 @@ function NewBriefForm({
   initialValues,
   onFormDataChange,
   fromCalculator = false,
+  isChangeRequest = false,
 }: {
   onCancel: () => void;
   onNext: () => void;
@@ -1768,6 +1779,7 @@ function NewBriefForm({
   initialValues: NewBriefFormValues;
   onFormDataChange: (data: NewBriefFormValues) => void;
   fromCalculator?: boolean;
+  isChangeRequest?: boolean;
 }) {
   const navigate = useNavigate();
   const [formData, setFormData] = useState<NewBriefFormValues>(initialValues);
@@ -1782,6 +1794,7 @@ function NewBriefForm({
   const [pendingDraftPayload, setPendingDraftPayload] = useState<SubmittedBriefPayload | null>(null);
   const [quantityInputs, setQuantityInputs] = useState<Record<string, string>>({});
   const [deliverableSelectionMode, setDeliverableSelectionMode] = useState<"template" | "build-your-own">(fromCalculator ? "build-your-own" : "template");
+  const changeRequestMode = Boolean(isChangeRequest);
   const tokenEstimate = useMemo(
     () => formData.assets
       .filter((asset) => !asset.isCustom)
@@ -1798,26 +1811,26 @@ function NewBriefForm({
   // Handle coin animation when total changes
   useEffect(() => {
     if (tokenEstimate !== previousTotal) {
-      const totalPounds = tokenEstimate * 5;
+      const totalPounds = tokenEstimate * 4.5;
       
       if (previousTotal > 0 && tokenEstimate > previousTotal) {
         // Asset added or quantity increased - show coin animation
         setShowCoinAnimation(true);
         setDisplayTokens(previousTotal);
-        setDisplayPounds(previousTotal * 5);
+        setDisplayPounds(previousTotal * 4.5);
         
         // Animate numbers from previous to new total
         const duration = 500; // 500ms animation
         const steps = 30;
         const stepDuration = duration / steps;
         const tokenIncrement = (tokenEstimate - previousTotal) / steps;
-        const poundIncrement = (totalPounds - previousTotal * 5) / steps;
+        const poundIncrement = (totalPounds - previousTotal * 4.5) / steps;
         let currentStep = 0;
         
         const animateNumbers = () => {
           currentStep++;
           const newTokenValue = Math.round(previousTotal + tokenIncrement * currentStep);
-          const newPoundValue = Math.round(previousTotal * 5 + poundIncrement * currentStep);
+          const newPoundValue = Math.round(previousTotal * 4.5 + poundIncrement * currentStep);
           setDisplayTokens(newTokenValue);
           setDisplayPounds(newPoundValue);
           
@@ -2799,7 +2812,7 @@ function NewBriefForm({
                         </span>
                       </TooltipTrigger>
                       <TooltipContent>
-                        <p>Each token is worth 5 pounds</p>
+                        <p>Each token is worth 4.5 pounds</p>
                       </TooltipContent>
                     </Tooltip>
                   </TooltipProvider>
@@ -2870,7 +2883,14 @@ function NewBriefForm({
         </div>
       </div>
 
-      <SuccessDialog open={showConfirmation} onOpenChange={setShowConfirmation} onConfirm={handleViewAllBriefs} />
+      <SuccessDialog 
+        open={showConfirmation} 
+        onOpenChange={setShowConfirmation} 
+        onConfirm={handleViewAllBriefs}
+        title={changeRequestMode ? "Your change request has been sent to IRIS" : undefined}
+        description={changeRequestMode ? "" : undefined}
+        confirmText={changeRequestMode ? "OK" : undefined}
+      />
 
       <SuccessDialog
         open={showSaveDraftConfirmation}

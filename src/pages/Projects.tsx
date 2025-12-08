@@ -466,14 +466,17 @@ export default function ProjectsPage() {
                 </div>
                 {projects.map((project, index) => (
                   <div key={project.id}>
-                    <div className="grid grid-cols-[minmax(200px,35%)_minmax(40px,5%)_minmax(120px,20%)_minmax(60px,10%)_minmax(140px,20%)_minmax(100px,10%)] items-center py-[12px] px-[8px] gap-4">
+                    <div 
+                      className="grid grid-cols-[minmax(200px,35%)_minmax(40px,5%)_minmax(120px,20%)_minmax(60px,10%)_minmax(140px,20%)_minmax(100px,10%)] items-center py-[12px] px-[8px] gap-4 cursor-pointer hover:bg-[#f9f9f9] transition-colors"
+                      onClick={() => navigate(`/dashboard/briefs/${project.id}`, { state: { project } })}
+                    >
                       <div className="flex items-center gap-2">
                         <div className="flex flex-col gap-[4px]">
                           <p className={`text-sm leading-[19px] text-black ${project.notifications || project.hasProjectNotification ? "font-bold" : "font-normal"}`}>{project.name}</p>
                           <p className="text-xs leading-[16px] text-[#646464]">{project.team}</p>
                         </div>
                       </div>
-                      <div className="flex items-center justify-center">
+                      <div className="flex items-center justify-center" onClick={(e) => e.stopPropagation()}>
                         {((project.notifications && project.notifications > 0) || project.hasProjectNotification) && (() => {
                           // Calculate notification count
                           const notificationCount = project.notifications || (project.hasProjectNotification ? 1 : 0);

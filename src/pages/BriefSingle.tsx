@@ -1,7 +1,7 @@
-import { useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useState, useMemo } from "react";
+import { useParams, useNavigate, useLocation } from "react-router-dom";
 import { ArrowLeft, Calendar as CalendarIcon, HelpCircle, Send } from "lucide-react";
-import { format } from "date-fns";
+import { format, parse } from "date-fns";
 import DashboardLayout from "@/components/layout/DashboardLayout";
 import DashboardTopbarRight from "@/components/layout/DashboardTopbarRight";
 import { useActiveNav } from "@/hooks/useActiveNav";
@@ -11,6 +11,7 @@ import { StyledInput } from "@/components/common/StyledInput";
 import { Textarea } from "@/components/ui/textarea";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
 import { Icons } from "@/constants/icons";
 import { PROJECT_LEADS, NewBriefFormValues, SelectedAsset } from "./Briefs";
 import { FORM_TEMPLATE_OPTIONS, WORK_TYPE_OPTIONS, CHANNEL_OPTIONS, OUTPUT_OPTIONS } from "./Briefs";
@@ -26,8 +27,10 @@ const logoDot = BRAND.logoDot;
 const mockBriefData: NewBriefFormValues = {
   projectTitle: "W Summer Festival 2025",
   dueDate: new Date(2025, 11, 15), // December 15, 2025
-  projectLead: "murray-bray",
+  projectLead: ["murray-bray"],
+  underNDA: false,
   objective: "Develop visual guide for the Summer Campaign Festival 2025. Create full set of campaign visuals, formats, and variations, for digital, print media. Increase brand awareness by 30% and drive engagement across all channels.",
+  targetAudience: "",
   workType: ["Design", "Production", "Planning"],
   channels: ["Online", "Social", "Print", "TVC"],
   expectedOutputs: ["Print asset", "Video asset", "Marketing asset"],
@@ -76,6 +79,8 @@ const mockBriefData: NewBriefFormValues = {
   ],
   selectedTemplate: "asset-adaptation",
   additionalAssetDetails: "Please ensure all assets follow brand guidelines and are optimized for both digital and print use. Include versions for different markets (UK, US, EU) with appropriate localization.",
+  watermarkFiles: false,
+  attachedDocuments: [],
 };
 
 interface Comment {
@@ -131,21 +136,83 @@ const mockComments: Comment[] = [
   },
 ];
 
+// Helper function to convert project data to brief form values
+function projectToBriefFormValues(project: { id: number; name: string; dueDate?: string; team: string; owners: string[] }): NewBriefFormValues {
+  // Parse due date if available
+  let parsedDueDate: Date | undefined = undefined;
+  if (project.dueDate) {
+    try {
+      // Try parsing formats like "Dec 12, 2025" or "Jan 05, 2026"
+      parsedDueDate = parse(project.dueDate, "MMM dd, yyyy", new Date());
+      if (isNaN(parsedDueDate.getTime())) {
+        parsedDueDate = parse(project.dueDate, "MMM d, yyyy", new Date());
+      }
+    } catch {
+      // If parsing fails, leave undefined
+    }
+  }
+
+  // Map owners to project leads (using first owner as default, or empty array)
+  const projectLeadValues: string[] = project.owners.length > 0 
+    ? [PROJECT_LEADS[0]?.value || "murray-bray"] // Default to first available lead
+    : [];
+
+  return {
+    projectTitle: project.name,
+    dueDate: parsedDueDate,
+    projectLead: projectLeadValues,
+    underNDA: false,
+    objective: `Project brief for ${project.name}. Team: ${project.team}.`,
+    targetAudience: "",
+    workType: ["Design", "Production"],
+    channels: ["Online", "Social"],
+    expectedOutputs: ["Digital marketing asset"],
+    briefSummary: `Brief for ${project.name} managed by ${project.team} team.`,
+    assets: [
+      {
+        id: "calc-1",
+        name: "Master KV creation (PSD, JPEG, INDD, PDF)",
+        description: "Master KV creation (PSD, JPEG, INDD, PDF)",
+        tokenPrice: 8,
+        assetSpecification: "High-resolution files in JPEG and PSD formats",
+        deliveryWeek: "Week 32",
+        quantity: 1,
+        isCustom: false,
+      },
+    ],
+    selectedTemplate: "promotional-campaign",
+    additionalAssetDetails: "",
+    watermarkFiles: false,
+    attachedDocuments: [],
+  };
+}
+
 export default function BriefSinglePage() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
+  const location = useLocation();
   const { activeName } = useActiveNav();
   const [comments, setComments] = useState<Comment[]>(mockComments);
   const [newComment, setNewComment] = useState("");
 
-  // In a real app, you would fetch the brief data based on the id
-  // For now, we'll use mock data
-  const briefData = mockBriefData;
+  // Check if we're coming from Projects page with project data
+  const projectData = (location.state as { project?: { id: number; name: string; dueDate?: string; team: string; owners: string[] } } | undefined)?.project;
+  
+  // Convert project data to brief form values if available, otherwise use mock data
+  const briefData = useMemo(() => {
+    if (projectData) {
+      return projectToBriefFormValues(projectData);
+    }
+    return mockBriefData;
+  }, [projectData]);
 
   const topbarRight = <DashboardTopbarRight />;
 
-  const projectLeadLabel = briefData.projectLead
-    ? PROJECT_LEADS.find((lead) => lead.value === briefData.projectLead)?.label ?? briefData.projectLead
+  const projectLeadLabel = briefData.projectLead && briefData.projectLead.length > 0
+    ? briefData.projectLead
+        .map((leadValue) => PROJECT_LEADS.find((lead) => lead.value === leadValue)?.label)
+        .filter((label): label is string => Boolean(label))
+        .join(", ")
     : "";
 
   const formattedDueDate = briefData.dueDate ? format(briefData.dueDate, "MMMM d, yyyy") : "";
@@ -585,6 +652,25 @@ export default function BriefSinglePage() {
             </div>
           </div>
         </section>
+
+        {/* Make Change Request Button */}
+        <div className="flex justify-end mt-6 pb-6">
+          <Button
+            onClick={() => {
+              navigate("/dashboard/briefs", {
+                state: {
+                  createBrief: true,
+                  showForm: true,
+                  brief: briefData,
+                  isChangeRequest: true,
+                },
+              });
+            }}
+            className="h-10 px-6 bg-[#ffb546] hover:opacity-90 text-black font-semibold"
+          >
+            Make change request
+          </Button>
+        </div>
       </div>
     </DashboardLayout>
   );
