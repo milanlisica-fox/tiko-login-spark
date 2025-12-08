@@ -64,42 +64,19 @@ export default function CalculatorPage() {
   // nav items centralized via DashboardLayout
   const { activeName } = useActiveNav();
 
-  // Available assets with random token values (memoized to ensure stable values)
+  // Available assets with fixed token values
   const availableAssets = useMemo<AssetItem[]>(() => {
-    // Helper function to generate random token value between 3 and 20
-    const getRandomToken = () => Math.floor(Math.random() * 18) + 3;
-    
     return [
-      { id: "1", title: "Master KV creation (PSD, JPEG, INDD, PDF)", tokens: getRandomToken() },
-      { id: "2", title: "Static KV adaption (PSD, JPEG)", tokens: getRandomToken() },
-      { id: "3", title: "Static KV adaption (INDD, PDF)", tokens: getRandomToken() },
-      { id: "4", title: "Master KV animation creation (MP4, AEP)", tokens: getRandomToken() },
-      { id: "5", title: "Master KV animation adaption (MP4, AEP)", tokens: getRandomToken() },
-      { id: "6", title: "PPT Files", tokens: getRandomToken() },
-      { id: "7", title: "Roundel", tokens: getRandomToken() },
-      { id: "8", title: "Urgency tag", tokens: getRandomToken() },
-      { id: "9", title: "Video creation", tokens: getRandomToken() },
-      { id: "10", title: "Video adaptation", tokens: getRandomToken() },
-      { id: "12", title: "Master KV", tokens: getRandomToken() },
-      { id: "13", title: "Digital display banner", tokens: getRandomToken() },
-      { id: "14", title: "Social banners static", tokens: getRandomToken() },
-      { id: "15", title: "Social banners animation", tokens: getRandomToken() },
-      { id: "16", title: "Toolkit", tokens: getRandomToken() },
-      { id: "17", title: "USP messaging", tokens: getRandomToken() },
-      { id: "18", title: "Redacted KVs", tokens: getRandomToken() },
-      { id: "19", title: "Static KVs", tokens: getRandomToken() },
-      { id: "20", title: "Animated KVs", tokens: getRandomToken() },
-      { id: "21", title: "Roundels", tokens: getRandomToken() },
-      { id: "22", title: "Urgency Tag", tokens: getRandomToken() },
-      { id: "23", title: "Digi banners", tokens: getRandomToken() },
-      { id: "24", title: "Storyboards", tokens: getRandomToken() },
-      { id: "25", title: "Icons", tokens: getRandomToken() },
-      { id: "26", title: "Feature assets localisation", tokens: getRandomToken() },
-      { id: "27", title: "Feature assets origination", tokens: getRandomToken() },
-      { id: "28", title: "Ecosystem KVs", tokens: getRandomToken() },
-      { id: "29", title: "Accessories statics", tokens: getRandomToken() },
-      { id: "30", title: "Accessories animations", tokens: getRandomToken() },
-      { id: "31", title: "Screenfills", tokens: getRandomToken() },
+      { id: "1", title: "Master KV creation", tokens: 30 },
+      { id: "2", title: "Static KV adaptation", tokens: 3 },
+      { id: "3", title: "Status KV adaptation", tokens: 3 },
+      { id: "4", title: "Master KV animation creation", tokens: 100 },
+      { id: "5", title: "Master KV animation adaptation", tokens: 3 },
+      { id: "6", title: "PPT Files", tokens: 30 },
+      { id: "7", title: "Roundel", tokens: 3 },
+      { id: "8", title: "Urgency tag", tokens: 3 },
+      { id: "9", title: "Video creation", tokens: 100 },
+      { id: "10", title: "Video adaptation", tokens: 3 },
     ];
   }, []);
 

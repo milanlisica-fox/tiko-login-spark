@@ -345,48 +345,19 @@ export const PAST_BRIEFS: Array<{
   },
 ];
 
-// Template to asset mapping
+// Template to asset mapping - randomly select 5 assets for promotional and BAU campaigns
+// Helper function to randomly select 5 assets from the list
+const getRandomAssets = (count: number, excludeIds: string[] = []): string[] => {
+  const allAssetIds = ["calc-1", "calc-2", "calc-3", "calc-4", "calc-5", "calc-6", "calc-7", "calc-8", "calc-9", "calc-10"];
+  const availableIds = allAssetIds.filter(id => !excludeIds.includes(id));
+  const shuffled = [...availableIds].sort(() => Math.random() - 0.5);
+  return shuffled.slice(0, count);
+};
+
 export const TEMPLATE_ASSETS_MAP: Record<string, string[]> = {
-  "promotional-campaign": [
-    "calc-1", // Master KV creation (PSD, JPEG, INDD, PDF)
-    "calc-2", // Static KV adaption (PSD, JPEG)
-    "calc-3", // Static KV adaption (INDD, PDF)
-    "calc-4", // Master KV animation creation (MP4, AEP)
-    "calc-5", // Master KV animation adaption (MP4, AEP)
-    "calc-6", // PPT Files
-    "calc-7", // Roundel
-    "calc-8", // Urgency tag
-    "calc-9", // Video creation
-    "calc-10", // Video adaptation
-    "calc-11", // Watermarked files (checkbox)
-  ],
-  "bau-campaign": [
-    "calc-12", // Master KV
-    "calc-13", // Digital display banner
-    "calc-14", // Social banners static
-    "calc-15", // Social banners animation
-    "calc-3", // Static KV adaption (INDD, PDF)
-    "calc-4", // Master KV animation creation (MP4, AEP)
-    "calc-5", // Master KV animation adaption (MP4, AEP)
-  ],
-  "flagship-campaign": [
-    "calc-16", // Toolkit
-    "calc-17", // USP messaging
-    "calc-18", // Redacted KVs
-    "calc-19", // Static KVs
-    "calc-20", // Animated KVs
-    "calc-21", // Roundels
-    "calc-22", // Urgency Tag
-    "calc-23", // Digi banners
-    "calc-24", // Storyboards
-    "calc-25", // Icons
-    "calc-26", // Feature assets localisation
-    "calc-27", // Feature assets origination
-    "calc-28", // Ecosystem KVs
-    "calc-29", // Accessories statics
-    "calc-30", // Accessories animations
-    "calc-31", // Screenfills
-  ],
+  "promotional-campaign": getRandomAssets(5),
+  "bau-campaign": getRandomAssets(5),
+  "flagship-campaign": getRandomAssets(5),
   "other": [], // Empty array means show all assets
 };
 
@@ -460,39 +431,39 @@ const DEFAULT_CUSTOM_ASSET_PRICE = 8;
 const CALCULATOR_ASSETS_LIST: RecommendedAsset[] = [
   {
     id: "calc-1",
-    name: "Master KV creation (PSD, JPEG, INDD, PDF)",
-    description: "Master KV creation (PSD, JPEG, INDD, PDF)",
-    tokenPrice: 8,
+    name: "Master KV creation",
+    description: "Master KV creation",
+    tokenPrice: 30,
   },
   {
     id: "calc-2",
-    name: "Static KV adaption (PSD, JPEG)",
-    description: "Static KV adaption (PSD, JPEG)",
-    tokenPrice: 5,
+    name: "Static KV adaptation",
+    description: "Static KV adaptation",
+    tokenPrice: 3,
   },
   {
     id: "calc-3",
-    name: "Static KV adaption (INDD, PDF)",
-    description: "Static KV adaption (INDD, PDF)",
-    tokenPrice: 5,
+    name: "Status KV adaptation",
+    description: "Status KV adaptation",
+    tokenPrice: 3,
   },
   {
     id: "calc-4",
-    name: "Master KV animation creation (MP4, AEP)",
-    description: "Master KV animation creation (MP4, AEP)",
-    tokenPrice: 10,
+    name: "Master KV animation creation",
+    description: "Master KV animation creation",
+    tokenPrice: 100,
   },
   {
     id: "calc-5",
-    name: "Master KV animation adaption (MP4, AEP)",
-    description: "Master KV animation adaption (MP4, AEP)",
-    tokenPrice: 7,
+    name: "Master KV animation adaptation",
+    description: "Master KV animation adaptation",
+    tokenPrice: 3,
   },
   {
     id: "calc-6",
     name: "PPT Files",
     description: "PPT Files",
-    tokenPrice: 4,
+    tokenPrice: 30,
   },
   {
     id: "calc-7",
@@ -510,13 +481,13 @@ const CALCULATOR_ASSETS_LIST: RecommendedAsset[] = [
     id: "calc-9",
     name: "Video creation",
     description: "Video creation",
-    tokenPrice: 12,
+    tokenPrice: 100,
   },
   {
     id: "calc-10",
     name: "Video adaptation",
     description: "Video adaptation",
-    tokenPrice: 8,
+    tokenPrice: 3,
   },
   {
     id: "calc-11",
@@ -524,130 +495,27 @@ const CALCULATOR_ASSETS_LIST: RecommendedAsset[] = [
     description: "Watermarked files",
     tokenPrice: 2,
   },
-  {
-    id: "calc-12",
-    name: "Master KV",
-    description: "Master KV",
-    tokenPrice: 8,
-  },
-  {
-    id: "calc-13",
-    name: "Digital display banner",
-    description: "Digital display banner",
-    tokenPrice: 5,
-  },
-  {
-    id: "calc-14",
-    name: "Social banners static",
-    description: "Social banners static",
-    tokenPrice: 4,
-  },
-  {
-    id: "calc-15",
-    name: "Social banners animation",
-    description: "Social banners animation",
-    tokenPrice: 6,
-  },
-  {
-    id: "calc-16",
-    name: "Toolkit",
-    description: "Toolkit",
-    tokenPrice: 6,
-  },
-  {
-    id: "calc-17",
-    name: "USP messaging",
-    description: "USP messaging",
-    tokenPrice: 4,
-  },
-  {
-    id: "calc-18",
-    name: "Redacted KVs",
-    description: "Redacted KVs",
-    tokenPrice: 5,
-  },
-  {
-    id: "calc-19",
-    name: "Static KVs",
-    description: "Static KVs",
-    tokenPrice: 5,
-  },
-  {
-    id: "calc-20",
-    name: "Animated KVs",
-    description: "Animated KVs",
-    tokenPrice: 7,
-  },
-  {
-    id: "calc-21",
-    name: "Roundels",
-    description: "Roundels",
-    tokenPrice: 3,
-  },
-  {
-    id: "calc-22",
-    name: "Urgency Tag",
-    description: "Urgency Tag",
-    tokenPrice: 3,
-  },
-  {
-    id: "calc-23",
-    name: "Digi banners",
-    description: "Digi banners",
-    tokenPrice: 5,
-  },
-  {
-    id: "calc-24",
-    name: "Storyboards",
-    description: "Storyboards",
-    tokenPrice: 6,
-  },
-  {
-    id: "calc-25",
-    name: "Icons",
-    description: "Icons",
-    tokenPrice: 3,
-  },
-  {
-    id: "calc-26",
-    name: "Feature assets localisation",
-    description: "Feature assets localisation",
-    tokenPrice: 7,
-  },
-  {
-    id: "calc-27",
-    name: "Feature assets origination",
-    description: "Feature assets origination",
-    tokenPrice: 10,
-  },
-  {
-    id: "calc-28",
-    name: "Ecosystem KVs",
-    description: "Ecosystem KVs",
-    tokenPrice: 8,
-  },
-  {
-    id: "calc-29",
-    name: "Accessories statics",
-    description: "Accessories statics",
-    tokenPrice: 5,
-  },
-  {
-    id: "calc-30",
-    name: "Accessories animations",
-    description: "Accessories animations",
-    tokenPrice: 7,
-  },
-  {
-    id: "calc-31",
-    name: "Screenfills",
-    description: "Screenfills",
-    tokenPrice: 4,
-  },
 ];
+
+// Flagship toolkit token prices (different from standard)
+const FLAGSHIP_TOKEN_PRICES: Record<string, number> = {
+  "calc-1": 70,  // Master KV creation
+  "calc-2": 4,   // Static KV adaptation
+  "calc-3": 4,   // Status KV adaptation
+  "calc-4": 100, // Master KV animation creation
+  "calc-5": 6,   // Master KV animation adaptation
+};
 
 const RECOMMENDED_ASSETS = CALCULATOR_ASSETS_LIST;
 const ADDITIONAL_ASSETS: RecommendedAsset[] = [];
+
+// Helper function to get asset with correct pricing based on template
+const getAssetWithTemplatePrice = (asset: RecommendedAsset, templateId: string): RecommendedAsset => {
+  if (templateId === "flagship-campaign" && FLAGSHIP_TOKEN_PRICES[asset.id]) {
+    return { ...asset, tokenPrice: FLAGSHIP_TOKEN_PRICES[asset.id] };
+  }
+  return asset;
+};
 
 const paperclipIcon = (
   <svg xmlns="http://www.w3.org/2000/svg" width="14" height="16" viewBox="0 0 14 16" fill="none">
@@ -1895,7 +1763,9 @@ function NewBriefForm({
       // Show all assets when "build-your-own" mode is active, same as Calculator
       return [...RECOMMENDED_ASSETS, ...customAssets];
     } else if (selectedTemplate && templateAssetIds.length > 0) {
-      const templateAssets = CALCULATOR_ASSETS_LIST.filter((a) => templateAssetIds.includes(a.id));
+      const templateAssets = CALCULATOR_ASSETS_LIST
+        .filter((a) => templateAssetIds.includes(a.id))
+        .map((a) => getAssetWithTemplatePrice(a, selectedTemplate));
       return [...templateAssets, ...customAssets];
     } else {
       return [...RECOMMENDED_ASSETS.slice(0, assetsToShow), ...customAssets];
@@ -2812,7 +2682,7 @@ function NewBriefForm({
                         </span>
                       </TooltipTrigger>
                       <TooltipContent>
-                        <p>Each token is worth 4.5 pounds</p>
+                        <p>Each token is worth 5 pounds</p>
                       </TooltipContent>
                     </Tooltip>
                   </TooltipProvider>
