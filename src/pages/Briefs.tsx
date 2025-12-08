@@ -2923,10 +2923,12 @@ function MultiSelectDropdown({ label, placeholder, options, selectedValues, onTo
               key={option}
               type="button"
               onClick={() => onToggle(option)}
-              className="flex w-full items-center gap-2 rounded-lg px-2 py-1 hover:bg-[#f4f4f5] transition text-left"
+              className="flex w-full items-center gap-2 rounded-lg px-2 py-1 hover:bg-[#f4f4f5] transition text-left cursor-pointer"
             >
-              <Checkbox checked={selectedValues.includes(option)} onCheckedChange={() => onToggle(option)} />
-              <span className="text-sm text-black">{option}</span>
+              <div onClick={(e) => e.stopPropagation()} className="cursor-pointer">
+                <Checkbox checked={selectedValues.includes(option)} onCheckedChange={() => onToggle(option)} />
+              </div>
+              <span className="text-sm text-black flex-1">{option}</span>
             </button>
           ))}
         </PopoverContent>
@@ -2978,10 +2980,12 @@ function ProjectLeadMultiSelect({ label, placeholder = "Choose leads", selectedV
               key={lead.value}
               type="button"
               onClick={() => onToggle(lead.value)}
-              className="flex w-full items-center gap-2 rounded-lg px-2 py-1 hover:bg-[#f4f4f5] transition text-left"
+              className="flex w-full items-center gap-2 rounded-lg px-2 py-1 hover:bg-[#f4f4f5] transition text-left cursor-pointer"
             >
-              <Checkbox checked={selectedValues.includes(lead.value)} onCheckedChange={() => onToggle(lead.value)} />
-              <span className="text-sm text-black">{lead.label}</span>
+              <div onClick={(e) => e.stopPropagation()} className="cursor-pointer">
+                <Checkbox checked={selectedValues.includes(lead.value)} onCheckedChange={() => onToggle(lead.value)} />
+              </div>
+              <span className="text-sm text-black flex-1">{lead.label}</span>
             </button>
           ))}
         </PopoverContent>
