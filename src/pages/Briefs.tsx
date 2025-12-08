@@ -1680,26 +1680,26 @@ function NewBriefForm({
   // Handle coin animation when total changes
   useEffect(() => {
     if (tokenEstimate !== previousTotal) {
-      const totalPounds = tokenEstimate * 4.502;
+      const totalPounds = tokenEstimate * 4.5;
       
       if (previousTotal > 0 && tokenEstimate > previousTotal) {
         // Asset added or quantity increased - show coin animation
         setShowCoinAnimation(true);
         setDisplayTokens(previousTotal);
-        setDisplayPounds(previousTotal * 4.502);
+        setDisplayPounds(previousTotal * 4.5);
         
         // Animate numbers from previous to new total
         const duration = 500; // 500ms animation
         const steps = 30;
         const stepDuration = duration / steps;
         const tokenIncrement = (tokenEstimate - previousTotal) / steps;
-        const poundIncrement = (totalPounds - previousTotal * 4.502) / steps;
+        const poundIncrement = (totalPounds - previousTotal * 4.5) / steps;
         let currentStep = 0;
         
         const animateNumbers = () => {
           currentStep++;
           const newTokenValue = Math.round(previousTotal + tokenIncrement * currentStep);
-          const newPoundValue = Math.round(previousTotal * 4.502 + poundIncrement * currentStep);
+          const newPoundValue = Math.round(previousTotal * 4.5 + poundIncrement * currentStep);
           setDisplayTokens(newTokenValue);
           setDisplayPounds(newPoundValue);
           
@@ -2687,7 +2687,7 @@ function NewBriefForm({
                         </span>
                       </TooltipTrigger>
                       <TooltipContent>
-                        <p>Each token is worth 4.502 pounds</p>
+                        <p>Each token is worth 4.5 pounds</p>
                       </TooltipContent>
                     </Tooltip>
                   </TooltipProvider>
