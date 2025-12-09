@@ -1694,6 +1694,590 @@ function TemplateSelectionScreen({ onCancel, onCreateBrief }: { onCancel: () => 
   );
 }
 
+// Diff detection helpers
+interface DiffSummary {
+  fieldCount: number;
+  assetCount: number;
+  hasChanges: boolean;
+}
+
+function detectDiffs(current: NewBriefFormValues, original: NewBriefFormValues | null): DiffSummary {
+  if (!original) {
+    return { fieldCount: 0, assetCount: 0, hasChanges: false };
+  }
+
+  let fieldCount = 0;
+  let assetCount = 0;
+
+  // Check general info fields
+  if (current.projectTitle !== original.projectTitle) fieldCount++;
+  if (current.dueDate?.getTime() !== original.dueDate?.getTime()) fieldCount++;
+  if (JSON.stringify(current.projectLead) !== JSON.stringify(original.projectLead)) fieldCount++;
+  if (current.underNDA !== original.underNDA) fieldCount++;
+
+  // Check project description fields
+  if (current.objective !== original.objective) fieldCount++;
+  if (current.briefSummary !== original.briefSummary) fieldCount++;
+  if (current.targetAudience !== original.targetAudience) fieldCount++;
+  if (JSON.stringify(current.workType) !== JSON.stringify(original.workType)) fieldCount++;
+  if (JSON.stringify(current.channels) !== JSON.stringify(original.channels)) fieldCount++;
+  if (JSON.stringify(current.expectedOutputs) !== JSON.stringify(original.expectedOutputs)) fieldCount++;
+  if (current.selectedTemplate !== original.selectedTemplate) fieldCount++;
+  if (current.watermarkFiles !== original.watermarkFiles) fieldCount++;
+
+  // Check assets
+  const originalAssetIds = new Set(original.assets.map(a => a.id));
+  const currentAssetIds = new Set(current.assets.map(a => a.id));
+  
+  // Added assets
+  const addedAssets = current.assets.filter(a => !originalAssetIds.has(a.id));
+  // Removed assets
+  const removedAssets = original.assets.filter(a => !currentAssetIds.has(a.id));
+  // Modified assets
+  const modifiedAssets = current.assets.filter(asset => {
+    const originalAsset = original.assets.find(a => a.id === asset.id);
+    if (!originalAsset) return false;
+    return (
+      originalAsset.quantity !== asset.quantity ||
+      originalAsset.assetSpecification !== asset.assetSpecification ||
+      originalAsset.deliveryWeek !== asset.deliveryWeek ||
+      originalAsset.name !== asset.name ||
+      originalAsset.tokenPrice !== asset.tokenPrice
+    );
+  });
+
+  assetCount = addedAssets.length + removedAssets.length + modifiedAssets.length;
+
+  return {
+    fieldCount,
+    assetCount,
+    hasChanges: fieldCount > 0 || assetCount > 0,
+  };
+}
+
+// ReviewNewBriefModal - For new briefs (no change highlights)
+function ReviewNewBriefModal({
+  open,
+  onOpenChange,
+  formData,
+  selectedTemplateName,
+  isFormComplete,
+  onSubmit,
+}: {
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  formData: NewBriefFormValues;
+  selectedTemplateName: string;
+  isFormComplete: boolean;
+  onSubmit: () => void;
+}) {
+  const projectLeadLabel = formData.projectLead.length > 0
+    ? formData.projectLead
+        .map((leadValue) => PROJECT_LEADS.find((lead) => lead.value === leadValue)?.label)
+        .filter((label): label is string => Boolean(label))
+        .join(", ")
+    : "—";
+
+  return (
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      <DialogContent className="max-w-[62.4rem]">
+        <DialogHeader>
+          <DialogTitle>Brief preview</DialogTitle>
+          <DialogDescription>
+            Make sure everything looks right before submitting.
+          </DialogDescription>
+        </DialogHeader>
+        <div className="space-y-6 pr-1">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="space-y-1">
+              <p className="text-xs uppercase tracking-wide text-[#848487]">Project title</p>
+              <p className="text-sm text-black">{formData.projectTitle || "—"}</p>
+            </div>
+            <div className="space-y-1">
+              <p className="text-xs uppercase tracking-wide text-[#848487]">Delivery date</p>
+              <p className="text-sm text-black">{formData.dueDate ? format(formData.dueDate, "PPP") : "—"}</p>
+            </div>
+            <div className="space-y-1">
+              <p className="text-xs uppercase tracking-wide text-[#848487]">Project lead</p>
+              <p className="text-sm text-black">{projectLeadLabel}</p>
+            </div>
+            <div className="space-y-1">
+              <p className="text-xs uppercase tracking-wide text-[#848487]">Under NDA</p>
+              <div className="flex items-center gap-2">
+                <p className="text-sm text-black">{formData.underNDA ? "Yes" : "No"}</p>
+                {formData.underNDA && (
+                  <span className="text-[10px] uppercase tracking-wide text-[#ffb546] font-semibold bg-[#fff8ec] px-2 py-0.5 rounded">
+                    NDA
+                  </span>
+                )}
+              </div>
+            </div>
+            <div className="space-y-1">
+              <p className="text-xs uppercase tracking-wide text-[#848487]">Work type</p>
+              <p className="text-sm text-black">{formData.workType.length ? formData.workType.join(", ") : "—"}</p>
+            </div>
+            <div className="space-y-1">
+              <p className="text-xs uppercase tracking-wide text-[#848487]">Channels</p>
+              <p className="text-sm text-black">{formData.channels.length ? formData.channels.join(", ") : "—"}</p>
+            </div>
+            <div className="space-y-1">
+              <p className="text-xs uppercase tracking-wide text-[#848487]">Expected outputs</p>
+              <p className="text-sm text-black">{formData.expectedOutputs.length ? formData.expectedOutputs.join(", ") : "—"}</p>
+            </div>
+            <div className="space-y-1">
+              <p className="text-xs uppercase tracking-wide text-[#848487]">Selected template</p>
+              <p className="text-sm text-black">{selectedTemplateName || "—"}</p>
+            </div>
+          </div>
+          <div className="col-span-1 md:col-span-2 space-y-1">
+            <p className="text-xs uppercase tracking-wide text-[#848487]">Brief summary</p>
+            <p className="text-sm text-black whitespace-pre-line">{formData.briefSummary || "—"}</p>
+          </div>
+          <div className="col-span-1 md:col-span-2 space-y-1">
+            <p className="text-xs uppercase tracking-wide text-[#848487]">Objective</p>
+            <p className="text-sm text-black whitespace-pre-line">{formData.objective || "—"}</p>
+          </div>
+          <div className="col-span-1 md:col-span-2 space-y-1">
+            <p className="text-xs uppercase tracking-wide text-[#848487]">Target audience</p>
+            <p className="text-sm text-black whitespace-pre-line">{formData.targetAudience || "—"}</p>
+          </div>
+
+          <div className="space-y-3">
+            <p className="text-sm font-semibold text-black">Assets</p>
+            {formData.assets.length === 0 ? (
+              <p className="text-sm text-[#848487]">No assets added.</p>
+            ) : (
+              <div className="space-y-3">
+                {formData.assets.map((asset) => {
+                  const isCustom = asset.isCustom === true;
+                  return (
+                    <div key={asset.id} className="rounded-xl border border-[#ececec] bg-[#f9f9f9] p-4 space-y-2">
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <p className="text-sm font-semibold text-black">{asset.name}</p>
+                          <p className="text-xs text-[#6b6b6f]">{asset.description}</p>
+                        </div>
+                        <div className="flex items-center gap-1">
+                          <span className="text-xs text-[#424242]">
+                            {asset.quantity} ×
+                          </span>
+                          {isCustom ? (
+                            <TooltipProvider>
+                              <Tooltip>
+                                <TooltipTrigger asChild>
+                                  <HelpCircle size={14} className="text-[#848487] cursor-help" />
+                                </TooltipTrigger>
+                                <TooltipContent>
+                                  <p className="max-w-[300px]">
+                                    IRIS will review this asset and provide token price for it. You will be informed once this is done.
+                                  </p>
+                                </TooltipContent>
+                              </Tooltip>
+                            </TooltipProvider>
+                          ) : (
+                            <span className="text-xs text-[#424242]">
+                              {asset.tokenPrice} tokens
+                            </span>
+                          )}
+                        </div>
+                      </div>
+                      <p className="text-xs text-[#6b6b6f]">
+                        Specification: {asset.assetSpecification?.trim() ? asset.assetSpecification : "Not provided"}
+                      </p>
+                      <p className="text-xs text-[#6b6b6f]">
+                        Delivery week: {asset.deliveryWeek?.trim() ? asset.deliveryWeek : "Not provided"}
+                      </p>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+          </div>
+
+          {formData.attachedDocuments.length > 0 && (
+            <div className="space-y-3">
+              <p className="text-sm font-semibold text-black">Attached documents</p>
+              <div className="space-y-2">
+                {formData.attachedDocuments.map((file, index) => (
+                  <div key={index} className="flex items-center gap-2 p-2 bg-[#f9f9f9] border border-[#e0e0e0] rounded-lg">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-[#848487]">
+                      <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                      <polyline points="14 2 14 8 20 8" />
+                    </svg>
+                    <span className="text-sm text-black">{file.name}</span>
+                    <span className="text-xs text-[#848487]">({(file.size / 1024).toFixed(1)} KB)</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+        <div className="flex flex-col sm:flex-row gap-3 pt-4 border-t border-[#e0e0e0] mt-4">
+          <button
+            onClick={() => onOpenChange(false)}
+            className="w-full sm:flex-1 h-10 px-4 rounded-[28px] border border-[#ececec] text-[#424242] font-semibold hover:bg-[#f9f9f9] transition"
+          >
+            Edit brief
+          </button>
+          <button
+            onClick={onSubmit}
+            disabled={!isFormComplete}
+            className={`w-full sm:flex-1 h-10 px-4 rounded-[28px] font-semibold transition ${
+              isFormComplete ? "bg-[#ffb546] text-black hover:opacity-90" : "bg-[#f9f9f9] text-[#848487] cursor-not-allowed opacity-50"
+            }`}
+          >
+            Submit Brief
+          </button>
+        </div>
+      </DialogContent>
+    </Dialog>
+  );
+}
+
+// ReviewChangeRequestModal - For change requests (with diff UI)
+function ReviewChangeRequestModal({
+  open,
+  onOpenChange,
+  formData,
+  originalBriefData,
+  selectedTemplateName,
+  isFormComplete,
+  onSubmit,
+}: {
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  formData: NewBriefFormValues;
+  originalBriefData: NewBriefFormValues | null;
+  selectedTemplateName: string;
+  isFormComplete: boolean;
+  onSubmit: () => void;
+}) {
+  const diffSummary = detectDiffs(formData, originalBriefData);
+  const projectLeadLabel = formData.projectLead.length > 0
+    ? formData.projectLead
+        .map((leadValue) => PROJECT_LEADS.find((lead) => lead.value === leadValue)?.label)
+        .filter((label): label is string => Boolean(label))
+        .join(", ")
+    : "—";
+  const originalProjectLeadLabel = originalBriefData && originalBriefData.projectLead.length > 0
+    ? originalBriefData.projectLead
+        .map((leadValue) => PROJECT_LEADS.find((lead) => lead.value === leadValue)?.label)
+        .filter((label): label is string => Boolean(label))
+        .join(", ")
+    : "—";
+
+  // Check individual field changes
+  const titleChanged = formData.projectTitle !== (originalBriefData?.projectTitle || "");
+  const dateChanged = formData.dueDate?.getTime() !== originalBriefData?.dueDate?.getTime();
+  const leadChanged = projectLeadLabel !== originalProjectLeadLabel;
+  const ndaChanged = formData.underNDA !== (originalBriefData?.underNDA || false);
+  const workTypeChanged = JSON.stringify(formData.workType) !== JSON.stringify(originalBriefData?.workType || []);
+  const channelsChanged = JSON.stringify(formData.channels) !== JSON.stringify(originalBriefData?.channels || []);
+  const outputsChanged = JSON.stringify(formData.expectedOutputs) !== JSON.stringify(originalBriefData?.expectedOutputs || []);
+  const templateChanged = formData.selectedTemplate !== (originalBriefData?.selectedTemplate || "");
+  const summaryChanged = formData.briefSummary !== (originalBriefData?.briefSummary || "");
+  const objectiveChanged = formData.objective !== (originalBriefData?.objective || "");
+  const audienceChanged = formData.targetAudience !== (originalBriefData?.targetAudience || "");
+  const watermarkChanged = formData.watermarkFiles !== (originalBriefData?.watermarkFiles || false);
+
+  return (
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      <DialogContent className="max-w-[62.4rem]">
+        <DialogHeader>
+          <DialogTitle>Change request preview</DialogTitle>
+          <DialogDescription>
+            {diffSummary.hasChanges 
+              ? `You changed ${diffSummary.fieldCount} field${diffSummary.fieldCount !== 1 ? "s" : ""}, ${diffSummary.assetCount} asset${diffSummary.assetCount !== 1 ? "s" : ""}. Changed fields are highlighted below.`
+              : "Review the changes you've made to the brief. Changed fields are highlighted below."}
+          </DialogDescription>
+        </DialogHeader>
+        {!diffSummary.hasChanges && (
+          <div className="rounded-xl border border-[#ffb546] bg-[#fff8ec] p-4 mb-4">
+            <p className="text-sm text-black font-semibold">No changes detected</p>
+            <p className="text-xs text-[#424242] mt-1">You haven't made any changes to the brief yet.</p>
+          </div>
+        )}
+        <div className="space-y-6 pr-1">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <PreviewField 
+              label="Project title" 
+              value={formData.projectTitle || "—"} 
+              originalValue={originalBriefData?.projectTitle || "—"}
+              isChanged={titleChanged}
+            />
+            <PreviewField 
+              label="Delivery date" 
+              value={formData.dueDate ? format(formData.dueDate, "PPP") : "—"} 
+              originalValue={originalBriefData?.dueDate ? format(originalBriefData.dueDate, "PPP") : "—"}
+              isChanged={dateChanged}
+            />
+            <PreviewField
+              label="Project lead"
+              value={projectLeadLabel}
+              originalValue={originalProjectLeadLabel}
+              isChanged={leadChanged}
+            />
+            <div className="space-y-1">
+              <div className="flex items-center gap-2">
+                <p className="text-xs uppercase tracking-wide text-[#848487]">Under NDA</p>
+                {ndaChanged && (
+                  <span className="text-[10px] uppercase tracking-wide text-[#ffb546] font-semibold bg-[#fff8ec] px-2 py-0.5 rounded">
+                    Changed
+                  </span>
+                )}
+              </div>
+              {ndaChanged && originalBriefData ? (
+                <div className="space-y-2">
+                  <div className="bg-[#fff8ec] border border-[#ffb546] rounded-lg p-2">
+                    <p className="text-xs text-[#848487] mb-1">Original:</p>
+                    <p className="text-sm text-black whitespace-pre-line line-through opacity-60">
+                      {originalBriefData.underNDA ? "Yes" : "No"}
+                    </p>
+                  </div>
+                  <div className="bg-[#e8f5e9] border border-[#4caf50] rounded-lg p-2">
+                    <p className="text-xs text-[#848487] mb-1">New:</p>
+                    <div className="flex items-center gap-2">
+                      <p className="text-sm text-black font-medium">{formData.underNDA ? "Yes" : "No"}</p>
+                      {formData.underNDA && (
+                        <span className="text-[10px] uppercase tracking-wide text-[#ffb546] font-semibold bg-[#fff8ec] px-2 py-0.5 rounded">
+                          NDA
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              ) : (
+                <div className="flex items-center gap-2">
+                  <p className="text-sm text-black whitespace-pre-line">{formData.underNDA ? "Yes" : "No"}</p>
+                  {formData.underNDA && (
+                    <span className="text-[10px] uppercase tracking-wide text-[#ffb546] font-semibold bg-[#fff8ec] px-2 py-0.5 rounded">
+                      NDA
+                    </span>
+                  )}
+                </div>
+              )}
+            </div>
+            <PreviewField 
+              label="Work type" 
+              value={formData.workType.length ? formData.workType.join(", ") : "—"} 
+              originalValue={originalBriefData ? (originalBriefData.workType.length ? originalBriefData.workType.join(", ") : "—") : undefined}
+              isChanged={workTypeChanged}
+            />
+            <PreviewField 
+              label="Channels" 
+              value={formData.channels.length ? formData.channels.join(", ") : "—"} 
+              originalValue={originalBriefData ? (originalBriefData.channels.length ? originalBriefData.channels.join(", ") : "—") : undefined}
+              isChanged={channelsChanged}
+            />
+            <PreviewField
+              label="Expected outputs"
+              value={formData.expectedOutputs.length ? formData.expectedOutputs.join(", ") : "—"}
+              originalValue={originalBriefData ? (originalBriefData.expectedOutputs.length ? originalBriefData.expectedOutputs.join(", ") : "—") : undefined}
+              isChanged={outputsChanged}
+            />
+            <PreviewField 
+              label="Selected template" 
+              value={selectedTemplateName || "—"} 
+              originalValue={originalBriefData ? (FORM_TEMPLATE_OPTIONS.find((t) => t.id === originalBriefData.selectedTemplate)?.title || "—") : undefined}
+              isChanged={templateChanged}
+            />
+          </div>
+          <PreviewField 
+            label="Brief summary" 
+            value={formData.briefSummary || "—"} 
+            originalValue={originalBriefData?.briefSummary || "—"}
+            fullWidth
+            isChanged={summaryChanged}
+          />
+          <PreviewField 
+            label="Objective" 
+            value={formData.objective || "—"} 
+            originalValue={originalBriefData?.objective || "—"}
+            fullWidth
+            isChanged={objectiveChanged}
+          />
+          <PreviewField 
+            label="Target audience" 
+            value={formData.targetAudience || "—"} 
+            originalValue={originalBriefData?.targetAudience || "—"}
+            fullWidth
+            isChanged={audienceChanged}
+          />
+
+          <div className="space-y-3">
+            <div className="flex items-center gap-2">
+              <p className="text-sm font-semibold text-black">Assets</p>
+              {diffSummary.assetCount > 0 && (
+                <span className="text-[10px] uppercase tracking-wide text-[#ffb546] font-semibold bg-[#fff8ec] px-2 py-0.5 rounded">
+                  Changed
+                </span>
+              )}
+            </div>
+            {formData.assets.length === 0 ? (
+              <p className="text-sm text-[#848487]">No assets added.</p>
+            ) : (
+              <div className="space-y-3">
+                {formData.assets.map((asset) => {
+                  const isCustom = asset.isCustom === true;
+                  const originalAsset = originalBriefData?.assets.find(a => a.id === asset.id);
+                  const assetChanged = originalAsset && (
+                    originalAsset.quantity !== asset.quantity ||
+                    originalAsset.assetSpecification !== asset.assetSpecification ||
+                    originalAsset.deliveryWeek !== asset.deliveryWeek ||
+                    originalAsset.name !== asset.name ||
+                    originalAsset.tokenPrice !== asset.tokenPrice
+                  );
+                  const isNewAsset = originalBriefData && !originalAsset;
+                  
+                  return (
+                    <div 
+                      key={asset.id} 
+                      className={`rounded-xl border p-4 space-y-2 ${
+                        assetChanged || isNewAsset
+                          ? "border-[#4caf50] bg-[#e8f5e9]"
+                          : "border-[#ececec] bg-[#f9f9f9]"
+                      }`}
+                    >
+                      {(assetChanged || isNewAsset) && (
+                        <div className="flex items-center gap-2 mb-2">
+                          <span className="text-[10px] uppercase tracking-wide text-[#4caf50] font-semibold bg-white px-2 py-0.5 rounded">
+                            {isNewAsset ? "New Asset" : "Modified"}
+                          </span>
+                        </div>
+                      )}
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <p className="text-sm font-semibold text-black">{asset.name}</p>
+                          <p className="text-xs text-[#6b6b6f]">{asset.description}</p>
+                        </div>
+                        <div className="flex items-center gap-1">
+                          <span className="text-xs text-[#424242]">
+                            {asset.quantity} ×
+                          </span>
+                          {isCustom ? (
+                            <TooltipProvider>
+                              <Tooltip>
+                                <TooltipTrigger asChild>
+                                  <HelpCircle size={14} className="text-[#848487] cursor-help" />
+                                </TooltipTrigger>
+                                <TooltipContent>
+                                  <p className="max-w-[300px]">
+                                    IRIS will review this asset and provide token price for it. You will be informed once this is done.
+                                  </p>
+                                </TooltipContent>
+                              </Tooltip>
+                            </TooltipProvider>
+                          ) : (
+                            <span className="text-xs text-[#424242]">
+                              {asset.tokenPrice} tokens
+                            </span>
+                          )}
+                        </div>
+                      </div>
+                      {assetChanged && originalAsset && (
+                        <div className="bg-white rounded-lg p-2 space-y-1 mb-2">
+                          <p className="text-xs text-[#848487] font-semibold">Original:</p>
+                          <p className="text-xs text-[#6b6b6f] line-through opacity-60">
+                            Quantity: {originalAsset.quantity} × {originalAsset.tokenPrice} tokens
+                          </p>
+                          {originalAsset.assetSpecification && (
+                            <p className="text-xs text-[#6b6b6f] line-through opacity-60">
+                              Spec: {originalAsset.assetSpecification}
+                            </p>
+                          )}
+                          {originalAsset.deliveryWeek && (
+                            <p className="text-xs text-[#6b6b6f] line-through opacity-60">
+                              Delivery: {originalAsset.deliveryWeek}
+                            </p>
+                          )}
+                        </div>
+                      )}
+                      <p className="text-xs text-[#6b6b6f]">
+                        Specification: {asset.assetSpecification?.trim() ? asset.assetSpecification : "Not provided"}
+                      </p>
+                      <p className="text-xs text-[#6b6b6f]">
+                        Delivery week: {asset.deliveryWeek?.trim() ? asset.deliveryWeek : "Not provided"}
+                      </p>
+                    </div>
+                  );
+                })}
+                {originalBriefData && originalBriefData.assets.some(origAsset => 
+                  !formData.assets.find(a => a.id === origAsset.id)
+                ) && (
+                  <div className="space-y-2">
+                    <p className="text-xs font-semibold text-[#848487]">Removed Assets:</p>
+                    {originalBriefData.assets
+                      .filter(origAsset => !formData.assets.find(a => a.id === origAsset.id))
+                      .map((removedAsset) => (
+                        <div key={removedAsset.id} className="rounded-xl border border-[#ffb546] bg-[#fff8ec] p-4 space-y-2">
+                          <div className="flex items-center gap-2">
+                            <span className="text-[10px] uppercase tracking-wide text-[#ffb546] font-semibold bg-white px-2 py-0.5 rounded">
+                              Removed
+                            </span>
+                          </div>
+                          <p className="text-sm font-semibold text-black line-through opacity-60">{removedAsset.name}</p>
+                          <p className="text-xs text-[#6b6b6f] line-through opacity-60">
+                            Quantity: {removedAsset.quantity} × {removedAsset.tokenPrice} tokens
+                          </p>
+                        </div>
+                      ))}
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
+
+          {watermarkChanged && (
+            <div className="space-y-3">
+              <PreviewField
+                label="Watermark files"
+                value={formData.watermarkFiles ? "Yes" : "No"}
+                originalValue={originalBriefData ? (originalBriefData.watermarkFiles ? "Yes" : "No") : undefined}
+                isChanged={watermarkChanged}
+              />
+            </div>
+          )}
+
+          {formData.attachedDocuments.length > 0 && (
+            <div className="space-y-3">
+              <p className="text-sm font-semibold text-black">Attached documents</p>
+              <div className="space-y-2">
+                {formData.attachedDocuments.map((file, index) => (
+                  <div key={index} className="flex items-center gap-2 p-2 bg-[#f9f9f9] border border-[#e0e0e0] rounded-lg">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-[#848487]">
+                      <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                      <polyline points="14 2 14 8 20 8" />
+                    </svg>
+                    <span className="text-sm text-black">{file.name}</span>
+                    <span className="text-xs text-[#848487]">({(file.size / 1024).toFixed(1)} KB)</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+        <div className="flex flex-col sm:flex-row gap-3 pt-4 border-t border-[#e0e0e0] mt-4">
+          <button
+            onClick={() => onOpenChange(false)}
+            className="w-full sm:flex-1 h-10 px-4 rounded-[28px] border border-[#ececec] text-[#424242] font-semibold hover:bg-[#f9f9f9] transition"
+          >
+            Back to edit
+          </button>
+          <button
+            onClick={onSubmit}
+            disabled={!isFormComplete || !diffSummary.hasChanges}
+            className={`w-full sm:flex-1 h-10 px-4 rounded-[28px] font-semibold transition ${
+              isFormComplete && diffSummary.hasChanges ? "bg-[#ffb546] text-black hover:opacity-90" : "bg-[#f9f9f9] text-[#848487] cursor-not-allowed opacity-50"
+            }`}
+          >
+            Submit changes
+          </button>
+        </div>
+      </DialogContent>
+    </Dialog>
+  );
+}
+
 function NewBriefForm({
   onCancel,
   onNext,
@@ -1717,6 +2301,7 @@ function NewBriefForm({
   const [showConfirmation, setShowConfirmation] = useState(false);
   const [showSaveDraftConfirmation, setShowSaveDraftConfirmation] = useState(false);
   const [previewOpen, setPreviewOpen] = useState(false);
+  const [reviewMode, setReviewMode] = useState<"new" | "change">("new");
   const [showCustomAssetFields, setShowCustomAssetFields] = useState(false);
   const [customAssetDraft, setCustomAssetDraft] = useState({ name: "", description: "", quantity: 1 });
   const [assetsWithDetails, setAssetsWithDetails] = useState<string[]>([]);
@@ -2261,6 +2846,10 @@ function NewBriefForm({
       return;
     }
 
+    // Determine review mode: "change" if isChangeRequest is true, otherwise "new"
+    // originalBriefData should always be set when isChangeRequest is true
+    const mode: "new" | "change" = isChangeRequest ? "change" : "new";
+    setReviewMode(mode);
     setPreviewOpen(true);
   };
 
@@ -2312,10 +2901,10 @@ function NewBriefForm({
   useEffect(() => {
     setFormData(initialValues);
     // Update original brief data when initial values change in change request mode
-    if (isChangeRequest && !originalBriefData) {
+    if (isChangeRequest) {
       setOriginalBriefData(initialValues);
     }
-  }, [initialValues, isChangeRequest, originalBriefData]);
+  }, [initialValues, isChangeRequest]);
   const handleViewAllBriefs = () => {
     setShowConfirmation(false);
     navigate("/dashboard/briefs", { state: { resetToOverview: true } });
@@ -2859,253 +3448,27 @@ function NewBriefForm({
         title="Brief successfully drafted!"
       />
 
-      <Dialog open={previewOpen} onOpenChange={setPreviewOpen}>
-        <DialogContent className="max-w-[62.4rem]">
-          <DialogHeader>
-            <DialogTitle>{changeRequestMode ? "Change request preview" : "Brief preview"}</DialogTitle>
-            <DialogDescription>
-              {changeRequestMode 
-                ? "Review the changes you've made to the brief. Changed fields are highlighted below." 
-                : "Make sure everything looks right before submitting."}
-            </DialogDescription>
-          </DialogHeader>
-          <div className="space-y-6 pr-1">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <PreviewField 
-                label="Project title" 
-                value={formData.projectTitle || "—"} 
-                originalValue={originalBriefData?.projectTitle || "—"}
-              />
-              <PreviewField 
-                label="Delivery date" 
-                value={formData.dueDate ? format(formData.dueDate, "PPP") : "—"} 
-                originalValue={originalBriefData?.dueDate ? format(originalBriefData.dueDate, "PPP") : "—"}
-              />
-              <PreviewField
-                label="Project lead"
-                value={
-                  formData.projectLead.length > 0
-                    ? formData.projectLead
-                        .map((leadValue) => PROJECT_LEADS.find((lead) => lead.value === leadValue)?.label)
-                        .filter((label): label is string => Boolean(label))
-                        .join(", ")
-                    : "—"
-                }
-                originalValue={
-                  originalBriefData && originalBriefData.projectLead.length > 0
-                    ? originalBriefData.projectLead
-                        .map((leadValue) => PROJECT_LEADS.find((lead) => lead.value === leadValue)?.label)
-                        .filter((label): label is string => Boolean(label))
-                        .join(", ")
-                    : "—"
-                }
-              />
-              <PreviewField 
-                label="Under NDA" 
-                value={formData.underNDA ? "Yes" : "No"} 
-                originalValue={originalBriefData ? (originalBriefData.underNDA ? "Yes" : "No") : undefined}
-              />
-              <PreviewField 
-                label="Work type" 
-                value={formData.workType.length ? formData.workType.join(", ") : "—"} 
-                originalValue={originalBriefData ? (originalBriefData.workType.length ? originalBriefData.workType.join(", ") : "—") : undefined}
-              />
-              <PreviewField 
-                label="Channels" 
-                value={formData.channels.length ? formData.channels.join(", ") : "—"} 
-                originalValue={originalBriefData ? (originalBriefData.channels.length ? originalBriefData.channels.join(", ") : "—") : undefined}
-              />
-              <PreviewField
-                label="Expected outputs"
-                value={formData.expectedOutputs.length ? formData.expectedOutputs.join(", ") : "—"}
-                originalValue={originalBriefData ? (originalBriefData.expectedOutputs.length ? originalBriefData.expectedOutputs.join(", ") : "—") : undefined}
-              />
-              <PreviewField 
-                label="Selected template" 
-                value={selectedTemplateName || "—"} 
-                originalValue={originalBriefData ? (FORM_TEMPLATE_OPTIONS.find((t) => t.id === originalBriefData.selectedTemplate)?.title || "—") : undefined}
-              />
-            </div>
-            <PreviewField 
-              label="Brief summary" 
-              value={formData.briefSummary || "—"} 
-              originalValue={originalBriefData?.briefSummary || "—"}
-              fullWidth 
-            />
-            <PreviewField 
-              label="Objective" 
-              value={formData.objective || "—"} 
-              originalValue={originalBriefData?.objective || "—"}
-              fullWidth 
-            />
-            <PreviewField 
-              label="Target audience" 
-              value={formData.targetAudience || "—"} 
-              originalValue={originalBriefData?.targetAudience || "—"}
-              fullWidth 
-            />
-
-            <div className="space-y-3">
-              <div className="flex items-center gap-2">
-                <p className="text-sm font-semibold text-black">Assets</p>
-                {changeRequestMode && originalBriefData && (
-                  (() => {
-                    const originalAssetIds = new Set(originalBriefData.assets.map(a => a.id));
-                    const currentAssetIds = new Set(formData.assets.map(a => a.id));
-                    const assetsChanged = 
-                      originalBriefData.assets.length !== formData.assets.length ||
-                      ![...originalAssetIds].every(id => currentAssetIds.has(id)) ||
-                      ![...currentAssetIds].every(id => originalAssetIds.has(id)) ||
-                      formData.assets.some(asset => {
-                        const original = originalBriefData.assets.find(a => a.id === asset.id);
-                        return original && (
-                          original.quantity !== asset.quantity ||
-                          original.assetSpecification !== asset.assetSpecification ||
-                          original.deliveryWeek !== asset.deliveryWeek
-                        );
-                      });
-                    return assetsChanged ? (
-                      <span className="text-[10px] uppercase tracking-wide text-[#ffb546] font-semibold bg-[#fff8ec] px-2 py-0.5 rounded">
-                        Changed
-                      </span>
-                    ) : null;
-                  })()
-                )}
-              </div>
-              {formData.assets.length === 0 ? (
-                <p className="text-sm text-[#848487]">No assets added.</p>
-              ) : (
-                <div className="space-y-3">
-                  {formData.assets.map((asset) => {
-                    const isCustom = asset.isCustom === true;
-                    const originalAsset = changeRequestMode && originalBriefData 
-                      ? originalBriefData.assets.find(a => a.id === asset.id) 
-                      : null;
-                    const assetChanged = originalAsset && (
-                      originalAsset.quantity !== asset.quantity ||
-                      originalAsset.assetSpecification !== asset.assetSpecification ||
-                      originalAsset.deliveryWeek !== asset.deliveryWeek ||
-                      originalAsset.name !== asset.name
-                    );
-                    const isNewAsset = changeRequestMode && originalBriefData && !originalAsset;
-                    
-                    return (
-                      <div 
-                        key={asset.id} 
-                        className={`rounded-xl border p-4 space-y-2 ${
-                          assetChanged || isNewAsset
-                            ? "border-[#4caf50] bg-[#e8f5e9]"
-                            : "border-[#ececec] bg-[#f9f9f9]"
-                        }`}
-                      >
-                        {assetChanged && (
-                          <div className="flex items-center gap-2 mb-2">
-                            <span className="text-[10px] uppercase tracking-wide text-[#4caf50] font-semibold bg-white px-2 py-0.5 rounded">
-                              {isNewAsset ? "New Asset" : "Modified"}
-                            </span>
-                          </div>
-                        )}
-                        <div className="flex items-center justify-between">
-                          <div>
-                            <p className="text-sm font-semibold text-black">{asset.name}</p>
-                            <p className="text-xs text-[#6b6b6f]">{asset.description}</p>
-                          </div>
-                          <div className="flex items-center gap-1">
-                            <span className="text-xs text-[#424242]">
-                              {asset.quantity} ×
-                            </span>
-                            {isCustom ? (
-                              <TooltipProvider>
-                                <Tooltip>
-                                  <TooltipTrigger asChild>
-                                    <HelpCircle size={14} className="text-[#848487] cursor-help" />
-                                  </TooltipTrigger>
-                                  <TooltipContent>
-                                    <p className="max-w-[300px]">
-                                      IRIS will review this asset and provide token price for it. You will be informed once this is done.
-                                    </p>
-                                  </TooltipContent>
-                                </Tooltip>
-                              </TooltipProvider>
-                            ) : (
-                              <span className="text-xs text-[#424242]">
-                                {asset.tokenPrice} tokens
-                              </span>
-                            )}
-                          </div>
-                        </div>
-                        {assetChanged && originalAsset && (
-                          <div className="bg-white rounded-lg p-2 space-y-1 mb-2">
-                            <p className="text-xs text-[#848487] font-semibold">Original:</p>
-                            <p className="text-xs text-[#6b6b6f] line-through opacity-60">
-                              Quantity: {originalAsset.quantity} × {originalAsset.tokenPrice} tokens
-                            </p>
-                            {originalAsset.assetSpecification && (
-                              <p className="text-xs text-[#6b6b6f] line-through opacity-60">
-                                Spec: {originalAsset.assetSpecification}
-                              </p>
-                            )}
-                            {originalAsset.deliveryWeek && (
-                              <p className="text-xs text-[#6b6b6f] line-through opacity-60">
-                                Delivery: {originalAsset.deliveryWeek}
-                              </p>
-                            )}
-                          </div>
-                        )}
-                        <p className="text-xs text-[#6b6b6f]">
-                          Specification: {asset.assetSpecification?.trim() ? asset.assetSpecification : "Not provided"}
-                        </p>
-                        <p className="text-xs text-[#6b6b6f]">
-                          Delivery week: {asset.deliveryWeek?.trim() ? asset.deliveryWeek : "Not provided"}
-                        </p>
-                      </div>
-                    );
-                  })}
-                  {changeRequestMode && originalBriefData && originalBriefData.assets.some(origAsset => 
-                    !formData.assets.find(a => a.id === origAsset.id)
-                  ) && (
-                    <div className="space-y-2">
-                      <p className="text-xs font-semibold text-[#848487]">Removed Assets:</p>
-                      {originalBriefData.assets
-                        .filter(origAsset => !formData.assets.find(a => a.id === origAsset.id))
-                        .map((removedAsset) => (
-                          <div key={removedAsset.id} className="rounded-xl border border-[#ffb546] bg-[#fff8ec] p-4 space-y-2">
-                            <div className="flex items-center gap-2">
-                              <span className="text-[10px] uppercase tracking-wide text-[#ffb546] font-semibold bg-white px-2 py-0.5 rounded">
-                                Removed
-                              </span>
-                            </div>
-                            <p className="text-sm font-semibold text-black line-through opacity-60">{removedAsset.name}</p>
-                            <p className="text-xs text-[#6b6b6f] line-through opacity-60">
-                              Quantity: {removedAsset.quantity} × {removedAsset.tokenPrice} tokens
-                            </p>
-                          </div>
-                        ))}
-                    </div>
-                  )}
-                </div>
-              )}
-            </div>
-          </div>
-          <div className="flex flex-col sm:flex-row gap-3 pt-4 border-t border-[#e0e0e0] mt-4">
-            <button
-              onClick={() => setPreviewOpen(false)}
-              className="w-full sm:flex-1 h-10 px-4 rounded-[28px] border border-[#ececec] text-[#424242] font-semibold hover:bg-[#f9f9f9] transition"
-            >
-              Edit brief
-            </button>
-            <button
-              onClick={handleSubmit}
-              disabled={!isFormComplete}
-              className={`w-full sm:flex-1 h-10 px-4 rounded-[28px] font-semibold transition ${
-                isFormComplete ? "bg-[#ffb546] text-black hover:opacity-90" : "bg-[#f9f9f9] text-[#848487] cursor-not-allowed opacity-50"
-              }`}
-            >
-              {changeRequestMode ? "Submit change request" : "Submit Brief"}
-            </button>
-          </div>
-        </DialogContent>
-      </Dialog>
+      {/* Render appropriate modal based on reviewMode */}
+      {reviewMode === "new" ? (
+        <ReviewNewBriefModal
+          open={previewOpen}
+          onOpenChange={setPreviewOpen}
+          formData={formData}
+          selectedTemplateName={selectedTemplateName}
+          isFormComplete={isFormComplete}
+          onSubmit={handleSubmit}
+        />
+      ) : (
+        <ReviewChangeRequestModal
+          open={previewOpen}
+          onOpenChange={setPreviewOpen}
+          formData={formData}
+          originalBriefData={originalBriefData}
+          selectedTemplateName={selectedTemplateName}
+          isFormComplete={isFormComplete}
+          onSubmit={handleSubmit}
+        />
+      )}
     </>
   );
 }
