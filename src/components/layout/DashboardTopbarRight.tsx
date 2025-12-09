@@ -13,7 +13,7 @@ interface DashboardTopbarRightProps {
 }
 
 export default function DashboardTopbarRight({
-  tokenCount = 4500,
+  tokenCount = 3100,
   userName = "Murray Gordon",
   userDept = "Marcomms",
   avatarSrc,

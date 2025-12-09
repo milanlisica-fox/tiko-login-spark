@@ -385,7 +385,7 @@ export default function ProjectsPage() {
             </Button>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 w-full">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full">
             <button
               type="button"
               onClick={() => navigate("/dashboard/tracker?tab=project-performance")}
@@ -400,12 +400,6 @@ export default function ProjectsPage() {
               <div className="flex flex-col gap-[24px]">
                 <h3 className="text-base leading-[24px] text-black font-normal">In progress</h3>
                 <p className="text-[46px] leading-[46px] font-medium text-black">{stats.inProgress}</p>
-              </div>
-            </div>
-            <div className="bg-white rounded-[60px] h-[118px] p-[40px] flex flex-col justify-center text-center md:text-center lg:text-left">
-              <div className="flex flex-col gap-[24px]">
-                <h3 className="text-base leading-[24px] text-black font-normal">Blocked</h3>
-                <p className="text-[46px] leading-[46px] font-medium text-black">{stats.blocked}</p>
               </div>
             </div>
           </div>

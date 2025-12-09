@@ -737,7 +737,7 @@ export default function TrackerPage() {
     totalBudget: 10000,
     tokensSpent: 4150,
     tokensCommitted: 2000,
-    tokensRemaining: 4500,
+    tokensRemaining: 3100,
     tokensPending: 750,
   };
 
@@ -746,7 +746,7 @@ export default function TrackerPage() {
     totalBudget: 40000,
     tokensSpent: 14400,
     tokensCommitted: 8000,
-    tokensRemaining: 18000,
+    tokensRemaining: 14600,
     tokensPending: 3000,
   };
 
