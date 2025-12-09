@@ -2642,7 +2642,7 @@ export default function TrackerPage() {
 
                     {/* Breakdown by Product Line */}
                     <div className="space-y-4">
-                      <h4 className="text-sm font-bold leading-[18.62px] text-black">Change in request rate by product line</h4>
+                      <h4 className="text-sm font-bold leading-[18.62px] text-black">Change in request rate by category</h4>
                       <div className="space-y-3">
                         {changeRequestsData.map((item) => {
                           const absValue = Math.abs(item.changeRate);
@@ -2660,7 +2660,6 @@ export default function TrackerPage() {
                             <div key={item.productLine} className="space-y-1">
                               <div className="flex items-center justify-between">
                                 <span className="text-sm text-black">{item.productLine}</span>
-                                <span className="text-sm font-medium text-black">{item.changeRate}%</span>
                               </div>
                               <div className="relative h-6 w-full bg-[#f1f1f3] rounded-md overflow-hidden">
                                 <div
@@ -2781,7 +2780,7 @@ export default function TrackerPage() {
 
                     {/* Breakdown by Product Line */}
                     <div className="space-y-4">
-                      <h4 className="text-sm font-bold leading-[18.62px] text-black">Change in on-time delivery by product line</h4>
+                      <h4 className="text-sm font-bold leading-[18.62px] text-black">Change in on-time delivery by category</h4>
                       <div className="space-y-3">
                         {onTimeDeliveryData.map((item) => {
                           const maxValue = 32;
@@ -3028,7 +3027,7 @@ export default function TrackerPage() {
                           <TableHead className="h-12 px-4 text-left font-bold text-black">In flight</TableHead>
                           <TableHead className="h-12 px-4 text-left font-bold text-black">Resolved</TableHead>
                           <TableHead className="h-12 px-4 text-left font-bold text-black">Impact</TableHead>
-                          <TableHead className="h-12 px-4 text-left font-bold text-black">Primary product line</TableHead>
+                          <TableHead className="h-12 px-4 text-left font-bold text-black">Primary categore</TableHead>
                         </TableRow>
                       </TableHeader>
                       <TableBody>
@@ -3251,7 +3250,7 @@ export default function TrackerPage() {
 
                     {/* Breakdown by Product Line */}
                     <div className="space-y-4">
-                      <h4 className="text-sm font-bold leading-[18.62px] text-black">Change in request rate by product line</h4>
+                      <h4 className="text-sm font-bold leading-[18.62px] text-black">Change in request rate by category</h4>
                       <div className="space-y-3">
                         {changeRequestsData.map((item) => {
                           const absValue = Math.abs(item.changeRate);
@@ -3269,7 +3268,6 @@ export default function TrackerPage() {
                             <div key={item.productLine} className="space-y-1">
                               <div className="flex items-center justify-between">
                                 <span className="text-sm text-black">{item.productLine}</span>
-                                <span className="text-sm font-medium text-black">{item.changeRate}%</span>
                               </div>
                               <div className="relative h-6 w-full bg-[#f1f1f3] rounded-md overflow-hidden">
                                 <div
@@ -3310,7 +3308,7 @@ export default function TrackerPage() {
 
                     {/* Breakdown by Product Line */}
                     <div className="space-y-4">
-                      <h4 className="text-sm font-bold leading-[18.62px] text-black">Change in on-time delivery by product line</h4>
+                      <h4 className="text-sm font-bold leading-[18.62px] text-black">Change in on-time delivery by category</h4>
                       <div className="space-y-3">
                         {onTimeDeliveryData.map((item) => {
                           const maxValue = 32;
@@ -3532,7 +3530,7 @@ export default function TrackerPage() {
                           <TableHead className="h-12 px-4 text-left font-bold text-black">In flight</TableHead>
                           <TableHead className="h-12 px-4 text-left font-bold text-black">Resolved</TableHead>
                           <TableHead className="h-12 px-4 text-left font-bold text-black">Impact</TableHead>
-                          <TableHead className="h-12 px-4 text-left font-bold text-black">Primary product line</TableHead>
+                          <TableHead className="h-12 px-4 text-left font-bold text-black">Primary category</TableHead>
                         </TableRow>
                       </TableHeader>
                       <TableBody>
@@ -4162,7 +4160,7 @@ export default function TrackerPage() {
                         </div>
                         <div className="space-y-2">
                           <p className="text-sm font-medium text-black">Q: "Which category has the highest token efficiency?"</p>
-                          <p className="text-sm text-[#646464] pl-4">A: "SMP category shows the highest token efficiency at 96%, with 4,500 tokens spent across 68 briefs. This is followed by B2B at 95% efficiency. Ecosystem and Promotions categories could benefit from process optimization."</p>
+                          <p className="text-sm text-[#646464] pl-4">A: "SMP category shows the highest token efficiency at 96%, with 4,500 tokens spent across 68 briefs. This is followed by B2B at 95% efficiency. Ecosystem and Promotions categories could benefit from process optimisation."</p>
                         </div>
                       </div>
                     </div>
@@ -4321,7 +4319,7 @@ export default function TrackerPage() {
                         </div>
                         <div className="space-y-2">
                           <p className="text-sm font-medium text-black">Q: "Which category has the highest token efficiency?"</p>
-                          <p className="text-sm text-[#646464] pl-4">A: "SMP category shows the highest token efficiency at 96%, with 4,500 tokens spent across 68 briefs. This is followed by B2B at 95% efficiency. Ecosystem and Promotions categories could benefit from process optimization."</p>
+                          <p className="text-sm text-[#646464] pl-4">A: "SMP category shows the highest token efficiency at 96%, with 4,500 tokens spent across 68 briefs. This is followed by B2B at 95% efficiency. Ecosystem and Promotions categories could benefit from process optimisation."</p>
                         </div>
                       </div>
                     </div>
@@ -4414,8 +4412,8 @@ export default function TrackerPage() {
               </div>                {/* Optimization Opportunities */}
               <div className="space-y-4 pt-6">
                   <div className="flex flex-col gap-1">
-                    <h3 className="text-[22px] font-bold leading-[29.26px] text-black">Optimization opportunities</h3>
-                    <p className="text-sm text-[#646464]">Data-driven insights for performance improvement, budget optimization, and process enhancement</p>
+                    <h3 className="text-[22px] font-bold leading-[29.26px] text-black">Optimisation opportunities</h3>
+                    <p className="text-sm text-[#646464]">Data-driven insights for performance improvement, budget optimisation, and process enhancement</p>
                   </div>
                 {/* Desktop: 3 columns inline */}
                 <div className="hidden lg:grid lg:grid-cols-3 lg:gap-5">
@@ -4530,7 +4528,7 @@ export default function TrackerPage() {
                       <CardHeader className="pb-3">
                         <div className="flex items-center gap-2">
                         <TrendingUp size={20} className="text-[#00C3B1]" />
-                          <CardTitle className="text-base font-bold leading-[21.28px] text-black">Process optimization</CardTitle>
+                          <CardTitle className="text-base font-bold leading-[21.28px] text-black">Process optimisation</CardTitle>
                         </div>
                       </CardHeader>
                       <CardContent className="space-y-4 flex-1 flex flex-col">
@@ -4680,7 +4678,7 @@ export default function TrackerPage() {
                       <CardHeader className="pb-3">
                         <div className="flex items-center gap-2">
                         <TrendingUp size={20} className="text-[#00C3B1]" />
-                        <CardTitle className="text-base font-bold leading-[21.28px] text-black">Process optimization</CardTitle>
+                        <CardTitle className="text-base font-bold leading-[21.28px] text-black">Process optimisation</CardTitle>
                         </div>
                       </CardHeader>
                       <CardContent className="space-y-4">
@@ -4745,7 +4743,7 @@ export default function TrackerPage() {
                             <span className="text-sm font-bold text-black">14.2 days</span>
                           </div>
                           <div className="flex items-center justify-between">
-                            <span className="text-sm text-black">Optimized timeline</span>
+                            <span className="text-sm text-black">Optimised timeline</span>
                             <span className="text-sm font-bold text-black">9.6 days</span>
                           </div>
                           <div className="flex items-center justify-between">
@@ -4765,7 +4763,7 @@ export default function TrackerPage() {
                       <CardHeader className="pb-3">
                         <div className="flex items-center gap-2">
                           <PoundSterling size={20} className="text-[#ff9800]" />
-                          <CardTitle className="text-base font-bold leading-[21.28px] text-black">Budget optimization</CardTitle>
+                          <CardTitle className="text-base font-bold leading-[21.28px] text-black">Budget optimisation</CardTitle>
                         </div>
                       </CardHeader>
                       <CardContent className="space-y-4">
@@ -4836,7 +4834,7 @@ export default function TrackerPage() {
                       </CardHeader>
                       <CardContent className="space-y-4">
                         <p className="text-sm text-black leading-[18.62px] font-medium">
-                          Optimize team allocation to handle 5% increased brief volume.
+                          Optimise team allocation to handle 5% increased brief volume.
                         </p>
                         <div className="space-y-2">
                           <div className="flex items-center justify-between">
@@ -4854,7 +4852,7 @@ export default function TrackerPage() {
                         </div>
                         <div className="border border-[#00C3B1] rounded-lg bg-[#00C3B10F] p-3">
                           <p className="text-xs font-bold text-[#00C3B1] mb-1">Action required</p>
-                          <p className="text-xs text-black">Cross-train 3 team members across product lines. Optimize scheduling for peak periods.</p>
+                          <p className="text-xs text-black">Cross-train 3 team members across categorys. Optimise scheduling for peak periods.</p>
                         </div>
                       </CardContent>
                     </Card>

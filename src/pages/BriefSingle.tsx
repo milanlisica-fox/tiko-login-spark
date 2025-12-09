@@ -78,7 +78,7 @@ const mockBriefData: NewBriefFormValues = {
     },
   ],
   selectedTemplate: "asset-adaptation",
-  additionalAssetDetails: "Please ensure all assets follow brand guidelines and are optimized for both digital and print use. Include versions for different markets (UK, US, EU) with appropriate localization.",
+  additionalAssetDetails: "Please ensure all assets follow brand guidelines and are optimised for both digital and print use. Include versions for different markets (UK, US, EU) with appropriate localization.",
   watermarkFiles: false,
   attachedDocuments: [],
 };

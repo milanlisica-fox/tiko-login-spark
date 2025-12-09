@@ -762,7 +762,7 @@ const initialBriefs: BriefSummary[] = [
   {
     id: "brief-action-4",
     title: "Adapt AI Toolkit Q3 2025",
-    description: "Adapt all AI master campaign assets into formats optimized for print and add localized variations for different markets, ensuring visual consistency and high production quality across all deliverables.",
+    description: "Adapt all AI master campaign assets into formats optimised for print and add localized variations for different markets, ensuring visual consistency and high production quality across all deliverables.",
     badge: "BAU campaign",
     date: "20 Dec",
     comments: 12,
