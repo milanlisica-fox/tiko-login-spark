@@ -1828,6 +1828,17 @@ function ReviewNewBriefModal({
               <p className="text-xs uppercase tracking-wide text-[#848487]">Selected template</p>
               <p className="text-sm text-black">{selectedTemplateName || "—"}</p>
             </div>
+            <div className="space-y-1">
+              <p className="text-xs uppercase tracking-wide text-[#848487]">Watermark files</p>
+              <div className="flex items-center gap-2">
+                <p className="text-sm text-black">{formData.watermarkFiles ? "Yes" : "No"}</p>
+                {formData.watermarkFiles && (
+                  <span className="text-[10px] uppercase tracking-wide text-[#ffb546] font-semibold bg-[#fff8ec] px-2 py-0.5 rounded">
+                    Watermarked
+                  </span>
+                )}
+              </div>
+            </div>
           </div>
           <div className="col-span-1 md:col-span-2 space-y-1">
             <p className="text-xs uppercase tracking-wide text-[#848487]">Brief summary</p>
@@ -2081,6 +2092,46 @@ function ReviewChangeRequestModal({
               originalValue={originalBriefData ? (FORM_TEMPLATE_OPTIONS.find((t) => t.id === originalBriefData.selectedTemplate)?.title || "—") : undefined}
               isChanged={templateChanged}
             />
+            <div className="space-y-1">
+              <div className="flex items-center gap-2">
+                <p className="text-xs uppercase tracking-wide text-[#848487]">Watermark files</p>
+                {watermarkChanged && (
+                  <span className="text-[10px] uppercase tracking-wide text-[#ffb546] font-semibold bg-[#fff8ec] px-2 py-0.5 rounded">
+                    Changed
+                  </span>
+                )}
+              </div>
+              {watermarkChanged && originalBriefData ? (
+                <div className="space-y-2">
+                  <div className="bg-[#fff8ec] border border-[#ffb546] rounded-lg p-2">
+                    <p className="text-xs text-[#848487] mb-1">Original:</p>
+                    <p className="text-sm text-black whitespace-pre-line line-through opacity-60">
+                      {originalBriefData.watermarkFiles ? "Yes" : "No"}
+                    </p>
+                  </div>
+                  <div className="bg-[#e8f5e9] border border-[#4caf50] rounded-lg p-2">
+                    <p className="text-xs text-[#848487] mb-1">New:</p>
+                    <div className="flex items-center gap-2">
+                      <p className="text-sm text-black font-medium">{formData.watermarkFiles ? "Yes" : "No"}</p>
+                      {formData.watermarkFiles && (
+                        <span className="text-[10px] uppercase tracking-wide text-[#ffb546] font-semibold bg-[#fff8ec] px-2 py-0.5 rounded">
+                          Watermarked
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              ) : (
+                <div className="flex items-center gap-2">
+                  <p className="text-sm text-black whitespace-pre-line">{formData.watermarkFiles ? "Yes" : "No"}</p>
+                  {formData.watermarkFiles && (
+                    <span className="text-[10px] uppercase tracking-wide text-[#ffb546] font-semibold bg-[#fff8ec] px-2 py-0.5 rounded">
+                      Watermarked
+                    </span>
+                  )}
+                </div>
+              )}
+            </div>
           </div>
           <PreviewField 
             label="Brief summary" 
@@ -2226,17 +2277,6 @@ function ReviewChangeRequestModal({
               </div>
             )}
           </div>
-
-          {watermarkChanged && (
-            <div className="space-y-3">
-              <PreviewField
-                label="Watermark files"
-                value={formData.watermarkFiles ? "Yes" : "No"}
-                originalValue={originalBriefData ? (originalBriefData.watermarkFiles ? "Yes" : "No") : undefined}
-                isChanged={watermarkChanged}
-              />
-            </div>
-          )}
 
           {formData.attachedDocuments.length > 0 && (
             <div className="space-y-3">
