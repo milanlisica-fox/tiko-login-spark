@@ -4780,8 +4780,8 @@ export default function TrackerPage() {
                             <span className="text-sm font-bold text-black">2,400 tokens</span>
                           </div>
                           <div className="flex items-center justify-between">
-                            <span className="text-sm text-black">Potential savings</span>
-                            <span className="text-sm font-bold text-[#00C3B1]">£1.4M annual</span>
+                            <span className="text-sm text-black">Potential savings for reallocation</span>
+                            <span className="text-sm font-bold text-[#00C3B1]">£300,000</span>
                           </div>
                         </div>
                         <div className="border border-[#00C3B1] rounded-lg bg-[#00C3B10F] p-3">
