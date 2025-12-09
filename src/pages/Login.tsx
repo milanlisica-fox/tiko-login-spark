@@ -16,8 +16,10 @@ const Login = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
 
-  const handleLogin = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleLogin = async (e?: React.FormEvent) => {
+    if (e) {
+      e.preventDefault();
+    }
     setErrorMessage("");
     
     if (!email || !password) {
@@ -54,7 +56,7 @@ const Login = () => {
         Welcome back!
       </h1>
 
-      <form onSubmit={handleLogin} className="space-y-4">
+      <form onSubmit={handleLogin} className="space-y-4" noValidate>
         <div>
           <StyledInput
             type="email"
@@ -76,8 +78,13 @@ const Login = () => {
           />
           <button
             type="button"
-            onClick={() => setShowPassword(!showPassword)}
-            className="absolute right-5 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-secondary transition-colors"
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              setShowPassword(!showPassword);
+            }}
+            className="absolute right-5 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-secondary transition-colors touch-manipulation z-10"
+            style={{ touchAction: 'manipulation' }}
           >
             {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
           </button>
@@ -96,7 +103,8 @@ const Login = () => {
           <Button
             type="submit"
             disabled={isLoading}
-            className="login-btn w-full h-14 rounded-full bg-accent hover:bg-accent/90 text-accent-foreground font-semibold text-lg shadow-lg hover:shadow-xl transition-all animate-gentle-bounce flex items-center justify-center gap-[10px]"
+            className="login-btn w-full h-14 rounded-full bg-accent hover:bg-accent/90 text-accent-foreground font-semibold text-lg shadow-lg hover:shadow-xl transition-all animate-gentle-bounce flex items-center justify-center gap-[10px] touch-manipulation active:scale-[0.98]"
+            style={{ touchAction: 'manipulation', WebkitTapHighlightColor: 'transparent' }}
           >
             <span>Login</span>
             <svg
