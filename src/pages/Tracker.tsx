@@ -734,10 +734,10 @@ export default function TrackerPage() {
 
   // Mock data for budget wallet (quarter view)
   const quarterBudgetData = {
-    totalBudget: 124900,
+    totalBudget: 125000,
     tokensSpent: 4150,
     tokensCommitted: 2000,
-    tokensRemaining: 118000,
+    tokensRemaining: 118100,
     tokensPending: 750,
   };
 
