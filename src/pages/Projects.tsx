@@ -338,11 +338,11 @@ export default function ProjectsPage() {
 
   // Calculate stats
   const stats = useMemo(() => {
-    const complete = projectsData.filter((p) => p.progress === 100).length;
-    const inProgress = projectsData.filter((p) => p.progress > 0 && p.progress < 100).length;
-    const forReview = projectsData.filter((p) => p.priority === "High" && p.progress < 50).length;
-    return { complete, inProgress, forReview };
-  }, [projectsData]);
+    const complete = 8;
+    const inProgress = 12;
+    const blocked = 2;
+    return { complete, inProgress, blocked };
+  }, []);
 
   // Get sort icon for column headers
   const getSortIcon = (field: SortField) => {
@@ -404,8 +404,8 @@ export default function ProjectsPage() {
             </div>
             <div className="bg-white rounded-[60px] h-[118px] p-[40px] flex flex-col justify-center text-center md:text-center lg:text-left">
               <div className="flex flex-col gap-[24px]">
-                <h3 className="text-base leading-[24px] text-black font-normal">For review</h3>
-                <p className="text-[46px] leading-[46px] font-medium text-black">{stats.forReview}</p>
+                <h3 className="text-base leading-[24px] text-black font-normal">Blocked</h3>
+                <p className="text-[46px] leading-[46px] font-medium text-black">{stats.blocked}</p>
               </div>
             </div>
           </div>

@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { Home, FileText, Folder, BarChart2, LogOut, Bell, ChevronDown, ArrowRight, Coins, ChevronRight, Clock, Bot, Target, AlertTriangle, TrendingUp, CheckCircle2, DollarSign, Menu, Wallet, HelpCircle } from "lucide-react";
+import { Home, FileText, Folder, BarChart2, LogOut, Bell, ChevronDown, ArrowRight, Coins, ChevronRight, Clock, Bot, Target, AlertTriangle, TrendingUp, CheckCircle2, DollarSign, Menu, Wallet, HelpCircle, PoundSterling } from "lucide-react";
 import { toast } from "sonner";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -173,11 +173,11 @@ export default function TrackerPage() {
 
   // Mock data for Client satisfaction radar chart
   const clientSatisfactionData = [
-    { category: "Quality", score: 4.5 },
-    { category: "Timeliness", score: 4.0 },
-    { category: "Communication", score: 4.0 },
-    { category: "Value", score: 4.5 },
-    { category: "Innovation", score: 3.5 },
+    { category: "Quality", score: 4.5, color: "#03b3e2" },
+    { category: "Timeliness", score: 4.0, color: "#00C3B1" },
+    { category: "Communication", score: 4.0, color: "#ff9800" },
+    { category: "Value", score: 4.5, color: "#0177c7" },
+    { category: "Innovation", score: 3.5, color: "#646464" },
   ];
 
   const clientSatisfactionConfig = {
@@ -2502,7 +2502,6 @@ export default function TrackerPage() {
                     <TableHeader>
                       <TableRow className="bg-[#f1f1f3] hover:bg-[#f1f1f3] border-b border-[#ececec]">
                         <TableHead className="h-12 px-4 text-left font-bold text-black">Project</TableHead>
-                        <TableHead className="h-12 px-4 text-left font-bold text-black">Team</TableHead>
                         <TableHead className="h-12 px-4 text-left font-bold text-black">Category</TableHead>
                         <TableHead className="h-12 px-4 text-left font-bold text-black">Tokens spent</TableHead>
                         <TableHead className="h-12 px-4 text-left font-bold text-black">Duration</TableHead>
@@ -2523,7 +2522,6 @@ export default function TrackerPage() {
                             className={`border-b border-[#ececec] ${index % 2 === 0 ? 'bg-white' : 'bg-[#f9f9f9]'} hover:bg-[#f1f1f3]`}
                           >
                             <TableCell className="px-4 py-4 text-black font-medium">{project.projectName}</TableCell>
-                            <TableCell className="px-4 py-4 text-black">{project.deliveryTeam}</TableCell>
                             <TableCell className="px-4 py-4 text-black">{project.category}</TableCell>
                             <TableCell className="px-4 py-4 text-black">{project.tokensSpent.toLocaleString()}</TableCell>
                             <TableCell className="px-4 py-4 text-black">{project.durationWeeks} wks</TableCell>
@@ -2799,7 +2797,7 @@ export default function TrackerPage() {
                 <div className="space-y-4">
                   <div className="flex flex-col gap-1">
                     <h3 className="text-[22px] font-bold leading-[29.26px] text-black">Top reasons for issues - all categories</h3>
-                    <p className="text-sm text-[#646464]">ANALYSIS OF PRIMARY FACTORS CAUSING PROJECT DELAYS AND PERFORMANCE ISSUES.</p>
+                    <p className="text-sm text-[#646464]">Analysis of primary factors causing project delays and performance issues.</p>
                   </div>
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
                     {/* Card 1: Late briefs */}
@@ -3035,7 +3033,6 @@ export default function TrackerPage() {
                     <TableHeader>
                       <TableRow className="bg-[#f1f1f3] hover:bg-[#f1f1f3] border-b border-[#ececec]">
                         <TableHead className="h-12 px-4 text-left font-bold text-black">Project</TableHead>
-                        <TableHead className="h-12 px-4 text-left font-bold text-black">Team</TableHead>
                         <TableHead className="h-12 px-4 text-left font-bold text-black">Category</TableHead>
                         <TableHead className="h-12 px-4 text-left font-bold text-black">Tokens spent</TableHead>
                         <TableHead className="h-12 px-4 text-left font-bold text-black">Duration</TableHead>
@@ -3056,7 +3053,6 @@ export default function TrackerPage() {
                             className={`border-b border-[#ececec] ${index % 2 === 0 ? 'bg-white' : 'bg-[#f9f9f9]'} hover:bg-[#f1f1f3]`}
                           >
                             <TableCell className="px-4 py-4 text-black font-medium">{project.projectName}</TableCell>
-                            <TableCell className="px-4 py-4 text-black">{project.deliveryTeam}</TableCell>
                             <TableCell className="px-4 py-4 text-black">{project.category}</TableCell>
                             <TableCell className="px-4 py-4 text-black">{project.tokensSpent.toLocaleString()}</TableCell>
                             <TableCell className="px-4 py-4 text-black">{project.durationWeeks} wks</TableCell>
@@ -3329,7 +3325,7 @@ export default function TrackerPage() {
                 <div className="space-y-4">
                   <div className="flex flex-col gap-1">
                     <h3 className="text-[22px] font-bold leading-[29.26px] text-black">Top reasons for issues - all categories</h3>
-                    <p className="text-sm text-[#646464]">ANALYSIS OF PRIMARY FACTORS CAUSING PROJECT DELAYS AND PERFORMANCE ISSUES.</p>
+                    <p className="text-sm text-[#646464]">Analysis of primary factors causing project delays and performance issues.</p>
                   </div>
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
                     {/* Card 1: Late briefs */}
@@ -4166,18 +4162,18 @@ export default function TrackerPage() {
 
                   {/* Client satisfaction - Centered for desktop */}
                   <Card className="border border-[#ececec] bg-white col-span-3">
-                  <CardHeader className="pb-3">
-                      <div className="flex items-center gap-2">
+                  <CardHeader className="p-0 pb-1">
+                      <div className="flex items-center gap-2 mt-2 ml-2">
                         <BarChart2 size={20} className="text-black" />
                         <CardTitle className="text-base font-bold leading-[21.28px] text-black">Client satisfaction</CardTitle>
                     </div>
                   </CardHeader>
-                  <CardContent className="space-y-4">
+                  <CardContent className="p-0 pt-0">
                     <div className="flex justify-center">
                         <div className="w-full max-w-[80%]">
-                          <ChartContainer config={clientSatisfactionConfig} className="h-[400px] w-full">
+                          <ChartContainer config={clientSatisfactionConfig} className="h-[450px] w-full">
                           <ResponsiveContainer width="100%" height="100%">
-                            <RadarChart data={clientSatisfactionData} margin={{ top: 20, right: 30, bottom: 20, left: 30 }}>
+                            <RadarChart data={clientSatisfactionData} margin={{ top: 0, right: 30, bottom: 0, left: 30 }}>
                                 <ChartTooltip 
                                   content={({ active }) => {
                                     if (active) {
@@ -4189,7 +4185,7 @@ export default function TrackerPage() {
                               <PolarGrid stroke="#e0e0e0" />
                               <PolarAngleAxis
                                 dataKey="category"
-                                tick={{ fill: "#646464", fontSize: 12 }}
+                                tick={false}
                                 className="text-xs"
                               />
                               <PolarRadiusAxis
@@ -4212,9 +4208,13 @@ export default function TrackerPage() {
                         </ChartContainer>
                       </div>
                     </div>
-                    <div className="flex items-center justify-center gap-2">
-                      <div className="w-4 h-0.5 bg-[#03b3e2]"></div>
-                      <span className="text-sm text-black">Overall average</span>
+                    <div className="flex flex-wrap items-center justify-center gap-4 mt-0 pt-2">
+                      {clientSatisfactionData.map((item, index) => (
+                        <div key={index} className="flex items-center justify-center gap-2">
+                          <div className="w-4 h-4 rounded-full flex-shrink-0" style={{ backgroundColor: item.color }}></div>
+                          <span className="text-sm text-black leading-none">{item.category}</span>
+                        </div>
+                      ))}
                     </div>
                   </CardContent>
                 </Card>
@@ -4437,23 +4437,23 @@ export default function TrackerPage() {
 
                 {/* 2. Client satisfaction */}
                 <Card className="border border-[#ececec] bg-white">
-                  <CardHeader className="pb-3">
-                    <div className="flex items-center gap-2">
+                  <CardHeader className="p-0 pb-1">
+                    <div className="flex items-center gap-2 mt-2 ml-2">
                       <BarChart2 size={20} className="text-black" />
                       <CardTitle className="text-base font-bold leading-[21.28px] text-black">Client satisfaction</CardTitle>
                     </div>
                   </CardHeader>
-                  <CardContent className="space-y-4">
+                  <CardContent className="p-0 pt-0">
                     <div className="flex flex-col lg:flex-row items-start gap-6">
                       {/* Graph on top/left */}
                       <div className="flex-1 w-full">
-                        <ChartContainer config={clientSatisfactionConfig} className="h-[400px] w-full">
+                        <ChartContainer config={clientSatisfactionConfig} className="h-[450px] w-full">
                           <ResponsiveContainer width="100%" height="100%">
-                            <RadarChart data={clientSatisfactionData} margin={{ top: 20, right: 30, bottom: 20, left: 30 }}>
+                            <RadarChart data={clientSatisfactionData} margin={{ top: 0, right: 30, bottom: 0, left: 30 }}>
                               <PolarGrid stroke="#e0e0e0" />
                               <PolarAngleAxis
                                 dataKey="category"
-                                tick={{ fill: "#646464", fontSize: 12 }}
+                                tick={false}
                                 className="text-xs"
                               />
                               <PolarRadiusAxis
@@ -4485,7 +4485,10 @@ export default function TrackerPage() {
                           </div>
                           {clientSatisfactionData.map((item, index) => (
                             <div key={index} className="flex items-center justify-between gap-3">
-                              <span className="text-xs text-black">{item.category}</span>
+                              <div className="flex items-center gap-2">
+                                <div className="w-3 h-3 rounded-full" style={{ backgroundColor: item.color }}></div>
+                                <span className="text-xs text-black">{item.category}</span>
+                              </div>
                               <div className="flex items-center gap-2">
                                 <span className="text-xs font-medium text-black">{item.score}/5</span>
                               </div>
@@ -4494,13 +4497,22 @@ export default function TrackerPage() {
                         </div>
                       </div>
                     </div>
+                    {/* Legend below chart */}
+                    <div className="flex flex-wrap items-center justify-center gap-4 mt-0 pt-2">
+                      {clientSatisfactionData.map((item, index) => (
+                        <div key={index} className="flex items-center justify-center gap-2">
+                          <div className="w-4 h-4 rounded-full flex-shrink-0" style={{ backgroundColor: item.color }}></div>
+                          <span className="text-sm text-black leading-none">{item.category}</span>
+                        </div>
+                      ))}
+                    </div>
                   </CardContent>
                 </Card>
               </div>                {/* Optimization Opportunities */}
               <div className="space-y-4 pt-6">
                   <div className="flex flex-col gap-1">
                     <h3 className="text-[22px] font-bold leading-[29.26px] text-black">Optimization opportunities</h3>
-                    <p className="text-sm text-[#646464]">DATA-DRIVEN INSIGHTS FOR PERFORMANCE IMPROVEMENT, Budget optimization, AND PROCESS ENHANCEMENT</p>
+                    <p className="text-sm text-[#646464]">Data-driven insights for performance improvement, budget optimization, and process enhancement</p>
                   </div>
                 {/* Desktop: 3 columns inline */}
                 <div className="hidden lg:grid lg:grid-cols-3 lg:gap-5">
@@ -4809,7 +4821,7 @@ export default function TrackerPage() {
               <div className="space-y-4 pt-6">
                   <div className="flex flex-col gap-1">
                     <h3 className="text-[22px] font-bold leading-[29.26px] text-black">Predictive insights</h3>
-                    <p className="text-sm text-[#646464]">AI-POWERED FORECASTING AND TREND PREDICTIONS BASED ON CURRENT DATA PATTERNS.</p>
+                    <p className="text-sm text-[#646464]">AI-powered forecasting and trend predictions based on current data patterns.</p>
                   </div>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                     {/* Top-Left: Process efficiency gains */}
@@ -4849,7 +4861,7 @@ export default function TrackerPage() {
                     <Card className="border border-[#ececec] bg-white">
                       <CardHeader className="pb-3">
                         <div className="flex items-center gap-2">
-                          <DollarSign size={20} className="text-[#ff9800]" />
+                          <PoundSterling size={20} className="text-[#ff9800]" />
                           <CardTitle className="text-base font-bold leading-[21.28px] text-black">Budget optimization</CardTitle>
                         </div>
                       </CardHeader>
