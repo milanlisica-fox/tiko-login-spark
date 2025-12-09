@@ -4108,10 +4108,10 @@ export default function TrackerPage() {
             <TabsContent value="predictive-analytics" className="mt-6">
               {/* Desktop: Side-by-side layout */}
               <div className="hidden lg:block space-y-6">
-                {/* Row 1: Ask TIKO 70% / Client satisfaction 30% */}
-                <div className="grid grid-cols-10 gap-5">
+                {/* Row 1: Ask TIKO */}
+                <div className="grid grid-cols-1 gap-5">
                 {/* Ask TIKO a question */}
-                  <Card className="border border-[#ececec] bg-white rounded-xl overflow-hidden relative col-span-7">
+                  <Card className="border border-[#ececec] bg-white rounded-xl overflow-hidden relative">
                     <CardHeader className="pb-3">
                     <div className="flex items-start gap-3">
                         <div className="w-12 h-12 rounded-full bg-[#ffb546] flex items-center justify-center flex-shrink-0">
@@ -4193,65 +4193,6 @@ export default function TrackerPage() {
                         </div>
                       </div>
                     )}
-                  </CardContent>
-                </Card>
-
-                  {/* Client satisfaction - Centered for desktop */}
-                  <Card className="border border-[#ececec] bg-white col-span-3">
-                  <CardHeader className="p-0 pb-1">
-                      <div className="flex items-center gap-2 mt-2 ml-2">
-                        <BarChart2 size={20} className="text-black" />
-                        <CardTitle className="text-base font-bold leading-[21.28px] text-black">Client satisfaction</CardTitle>
-                    </div>
-                  </CardHeader>
-                  <CardContent className="p-0 pt-0">
-                    <div className="flex justify-center">
-                        <div className="w-full max-w-[80%]">
-                          <ChartContainer config={clientSatisfactionConfig} className="h-[450px] w-full">
-                          <ResponsiveContainer width="100%" height="100%">
-                            <RadarChart data={clientSatisfactionData} margin={{ top: 0, right: 30, bottom: 0, left: 30 }}>
-                                <ChartTooltip 
-                                  content={({ active }) => {
-                                    if (active) {
-                                      return <RadarChartTooltip data={clientSatisfactionData} />;
-                                    }
-                                    return null;
-                                  }}
-                                />
-                              <PolarGrid stroke="#e0e0e0" />
-                              <PolarAngleAxis
-                                dataKey="category"
-                                tick={false}
-                                className="text-xs"
-                              />
-                              <PolarRadiusAxis
-                                angle={90}
-                                domain={[0, 5]}
-                                  tickCount={4}
-                                tick={{ fill: "#646464", fontSize: 12 }}
-                                axisLine={false}
-                              />
-                              <Radar
-                                name="Overall average"
-                                dataKey="score"
-                                stroke="#03b3e2"
-                                fill="#03b3e2"
-                                fillOpacity={0.3}
-                                strokeWidth={2}
-                              />
-                            </RadarChart>
-                          </ResponsiveContainer>
-                        </ChartContainer>
-                      </div>
-                    </div>
-                    <div className="flex flex-wrap items-center justify-center gap-4 mt-0 pt-2">
-                      {clientSatisfactionData.map((item, index) => (
-                        <div key={index} className="flex items-center justify-center gap-2">
-                          <div className="w-4 h-4 rounded-full flex-shrink-0" style={{ backgroundColor: item.color }}></div>
-                          <span className="text-sm text-black leading-none">{item.category}</span>
-                        </div>
-                      ))}
-                    </div>
                   </CardContent>
                 </Card>
                 </div>
@@ -4467,80 +4408,6 @@ export default function TrackerPage() {
                     <div className="rounded-lg bg-[#f9f9f9] border border-[#ececec] p-3">
                       <p className="text-xs font-bold text-[#00C3B1] tracking-wide">Insight</p>
                       <p className="text-sm text-[#646464]">AI alerts are saving an estimated 180 hours of rework and keep budgets focused on live priorities.</p>
-                    </div>
-                  </CardContent>
-                </Card>
-
-                {/* 2. Client satisfaction */}
-                <Card className="border border-[#ececec] bg-white">
-                  <CardHeader className="p-0 pb-1">
-                    <div className="flex items-center gap-2 mt-2 ml-2">
-                      <BarChart2 size={20} className="text-black" />
-                      <CardTitle className="text-base font-bold leading-[21.28px] text-black">Client satisfaction</CardTitle>
-                    </div>
-                  </CardHeader>
-                  <CardContent className="p-0 pt-0">
-                    <div className="flex flex-col lg:flex-row items-start gap-6">
-                      {/* Graph on top/left */}
-                      <div className="flex-1 w-full">
-                        <ChartContainer config={clientSatisfactionConfig} className="h-[450px] w-full">
-                          <ResponsiveContainer width="100%" height="100%">
-                            <RadarChart data={clientSatisfactionData} margin={{ top: 0, right: 30, bottom: 0, left: 30 }}>
-                              <PolarGrid stroke="#e0e0e0" />
-                              <PolarAngleAxis
-                                dataKey="category"
-                                tick={false}
-                                className="text-xs"
-                              />
-                              <PolarRadiusAxis
-                                angle={90}
-                                domain={[0, 5]}
-                                tickCount={4}
-                                tick={{ fill: "#646464", fontSize: 12 }}
-                                axisLine={false}
-                              />
-                              <Radar
-                                name="Overall average"
-                                dataKey="score"
-                                stroke="#03b3e2"
-                                fill="#03b3e2"
-                                fillOpacity={0.3}
-                                strokeWidth={2}
-                              />
-                            </RadarChart>
-                          </ResponsiveContainer>
-                        </ChartContainer>
-                      </div>
-                      
-                      {/* Results below (tablet) or on the right (desktop) */}
-                      <div className="w-full lg:w-[250px] flex-shrink-0">
-                        <div className="space-y-3">
-                          <div className="flex items-center gap-2 mb-4">
-                            <div className="w-4 h-0.5 bg-[#03b3e2]"></div>
-                            <span className="text-sm font-bold text-black">Overall average</span>
-                          </div>
-                          {clientSatisfactionData.map((item, index) => (
-                            <div key={index} className="flex items-center justify-between gap-3">
-                              <div className="flex items-center gap-2">
-                                <div className="w-3 h-3 rounded-full" style={{ backgroundColor: item.color }}></div>
-                                <span className="text-xs text-black">{item.category}</span>
-                              </div>
-                              <div className="flex items-center gap-2">
-                                <span className="text-xs font-medium text-black">{item.score}/5</span>
-                              </div>
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-                    </div>
-                    {/* Legend below chart */}
-                    <div className="flex flex-wrap items-center justify-center gap-4 mt-0 pt-2">
-                      {clientSatisfactionData.map((item, index) => (
-                        <div key={index} className="flex items-center justify-center gap-2">
-                          <div className="w-4 h-4 rounded-full flex-shrink-0" style={{ backgroundColor: item.color }}></div>
-                          <span className="text-sm text-black leading-none">{item.category}</span>
-                        </div>
-                      ))}
                     </div>
                   </CardContent>
                 </Card>
