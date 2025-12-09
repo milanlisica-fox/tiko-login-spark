@@ -17,34 +17,59 @@ const Login = () => {
   const [errorMessage, setErrorMessage] = useState("");
 
   const handleLogin = async (e?: React.FormEvent) => {
+    console.log('handleLogin called', { email, password, isLoading });
     if (e) {
       e.preventDefault();
     }
     setErrorMessage("");
     
     if (!email || !password) {
+      console.log('Validation failed: empty fields');
       toast.error("Please fill in all fields");
       return;
     }
 
     if (!isValidEmail(email)) {
+      console.log('Validation failed: invalid email');
       toast.error("Please enter a valid email address");
       return;
     }
 
     if (password !== "admin1239") {
+      console.log('Validation failed: incorrect password');
       setErrorMessage("Password is incorect");
       setPassword("");
       return;
     }
 
+    console.log('Starting login process');
     setIsLoading(true);
 
     try {
-      await triggerArrow();
+      // Try to trigger animation, but don't wait too long (especially on mobile)
+      const arrowPromise = triggerArrow().catch((err) => {
+        console.warn('Arrow animation error (non-critical):', err);
+      });
+      
+      // Use Promise.race to ensure we don't wait forever
+      await Promise.race([
+        arrowPromise,
+        new Promise(resolve => setTimeout(resolve, 500)) // Max 500ms wait
+      ]);
+      
+      console.log('Navigation starting');
       toast.success("Welcome back!");
       navigate("/dashboard");
-      await finishArrow();
+      
+      // Don't wait for finish animation - it's not critical
+      finishArrow().catch(() => {
+        // Ignore errors
+      });
+    } catch (error) {
+      console.error('Login error:', error);
+      // Even if there's an error, try to navigate
+      toast.success("Welcome back!");
+      navigate("/dashboard");
     } finally {
       setIsLoading(false);
     }
@@ -56,7 +81,7 @@ const Login = () => {
         Welcome back!
       </h1>
 
-      <form onSubmit={handleLogin} className="space-y-4" noValidate>
+      <form onSubmit={handleLogin} className="space-y-4 relative z-10" noValidate>
         <div>
           <StyledInput
             type="email"
@@ -101,10 +126,20 @@ const Login = () => {
 
         <div className="space-y-3">
           <Button
-            type="submit"
+            type="button"
             disabled={isLoading}
-            className="login-btn w-full h-14 rounded-full bg-accent hover:bg-accent/90 text-accent-foreground font-semibold text-lg shadow-lg hover:shadow-xl transition-all animate-gentle-bounce flex items-center justify-center gap-[10px] touch-manipulation active:scale-[0.98]"
-            style={{ touchAction: 'manipulation', WebkitTapHighlightColor: 'transparent' }}
+            onClick={(e) => {
+              console.log('Login button clicked', { email, password, isLoading });
+              e.preventDefault();
+              e.stopPropagation();
+              handleLogin();
+            }}
+            onTouchStart={(e) => {
+              console.log('Login button touched', { email, password, isLoading });
+              // Don't prevent default - let onClick handle it
+            }}
+            className="login-btn w-full h-14 rounded-full bg-accent hover:bg-accent/90 text-accent-foreground font-semibold text-lg shadow-lg hover:shadow-xl transition-all animate-gentle-bounce flex items-center justify-center gap-[10px] touch-manipulation active:scale-[0.98] relative z-20 cursor-pointer"
+            style={{ touchAction: 'manipulation', WebkitTapHighlightColor: 'transparent', position: 'relative', zIndex: 20 }}
           >
             <span>Login</span>
             <svg

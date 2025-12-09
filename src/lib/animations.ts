@@ -13,10 +13,21 @@ export function triggerArrow(): Promise<void> {
   arrow.style.transition = previousTransition;
 
   return new Promise((resolve) => {
+    let resolved = false;
+    const timeout = setTimeout(() => {
+      if (!resolved) {
+        resolved = true;
+        arrow.removeEventListener("transitionend", handleTransitionEnd);
+        resolve();
+      }
+    }, 1000); // 1 second timeout as fallback
+
     const handleTransitionEnd = (event: TransitionEvent) => {
-      if (event.propertyName !== "transform") {
+      if (event.propertyName !== "transform" || resolved) {
         return;
       }
+      resolved = true;
+      clearTimeout(timeout);
       arrow.removeEventListener("transitionend", handleTransitionEnd);
       resolve();
     };
@@ -37,10 +48,22 @@ export function finishArrow(): Promise<void> {
   arrow.classList.remove("after");
 
   return new Promise((resolve) => {
+    let resolved = false;
+    const timeout = setTimeout(() => {
+      if (!resolved) {
+        resolved = true;
+        arrow.removeEventListener("transitionend", handleTransitionEnd);
+        arrow.classList.remove("middle");
+        resolve();
+      }
+    }, 1000); // 1 second timeout as fallback
+
     const handleTransitionEnd = (event: TransitionEvent) => {
-      if (event.propertyName !== "transform") {
+      if (event.propertyName !== "transform" || resolved) {
         return;
       }
+      resolved = true;
+      clearTimeout(timeout);
       arrow.removeEventListener("transitionend", handleTransitionEnd);
       arrow.classList.remove("middle");
       resolve();
