@@ -734,19 +734,19 @@ export default function TrackerPage() {
 
   // Mock data for budget wallet (quarter view)
   const quarterBudgetData = {
-    totalBudget: 10000,
+    totalBudget: 124900,
     tokensSpent: 4150,
     tokensCommitted: 2000,
-    tokensRemaining: 3100,
+    tokensRemaining: 118000,
     tokensPending: 750,
   };
 
   // Mock data for budget wallet (annual view)
   const annualBudgetData = {
-    totalBudget: 40000,
+    totalBudget: 335000,
     tokensSpent: 14400,
     tokensCommitted: 8000,
-    tokensRemaining: 14600,
+    tokensRemaining: 309600,
     tokensPending: 3000,
   };
 
@@ -2791,22 +2791,12 @@ export default function TrackerPage() {
                             Wearable: "#00c3b1",
                               Ecosystem: "#00c3b1",
                           };
-                          const badgeColorMap: Record<string, string> = {
-                            Mobile: "#0177c7",
-                            Tablet: "#03b3e2",
-                            Wearable: "#00c3b1",
-                              Ecosystem: "#00c3b1",
-                          };
                           const color = colorMap[item.productLine] || "#0177c7";
-                          const badgeColor = badgeColorMap[item.productLine] || "#0177c7";
 
                           return (
                             <div key={item.productLine} className="space-y-1">
                               <div className="flex items-center justify-between">
                                 <span className="text-sm text-black">{item.productLine}</span>
-                                <div className="inline-flex items-center px-2 py-0.5 rounded-md" style={{ backgroundColor: `${badgeColor}1A`, color: badgeColor }}>
-                                  <span className="text-sm font-medium">+{item.changeRate}%</span>
-                                </div>
                               </div>
                               <div className="relative h-6 w-full bg-[#f1f1f3] rounded-md overflow-hidden">
                                 <div
@@ -3319,22 +3309,12 @@ export default function TrackerPage() {
                             Promotions: "#00c3b1",
                             B2B: "#8092DC",
                           };
-                          const badgeColorMap: Record<string, string> = {
-                            SMP: "#0177c7",
-                            Ecosystem: "#03b3e2",
-                            Promotions: "#00c3b1",
-                            B2B: "#8092DC",
-                          };
                           const color = colorMap[item.productLine] || "#0177c7";
-                          const badgeColor = badgeColorMap[item.productLine] || "#0177c7";
 
                           return (
                             <div key={item.productLine} className="space-y-1">
                               <div className="flex items-center justify-between">
                                 <span className="text-sm text-black">{item.productLine}</span>
-                                <div className="inline-flex items-center px-2 py-0.5 rounded-md" style={{ backgroundColor: `${badgeColor}1A`, color: badgeColor }}>
-                                  <span className="text-sm font-medium">+{item.changeRate}%</span>
-                                </div>
                               </div>
                               <div className="relative h-6 w-full bg-[#f1f1f3] rounded-md overflow-hidden">
                                 <div
@@ -4781,7 +4761,7 @@ export default function TrackerPage() {
                           </div>
                           <div className="flex items-center justify-between">
                             <span className="text-sm text-black">Potential savings for reallocation</span>
-                            <span className="text-sm font-bold text-[#00C3B1]">£300,000</span>
+                            <span className="text-sm font-bold text-[#00C3B1]">£13,900</span>
                           </div>
                         </div>
                         <div className="border border-[#00C3B1] rounded-lg bg-[#00C3B10F] p-3">

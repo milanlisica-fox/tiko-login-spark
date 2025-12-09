@@ -34,19 +34,19 @@ const [open, setOpen] = useState(false);
 
   // Mock data for budget wallet (quarter view)
   const quarterBudgetData = {
-    totalBudget: 10000,
+    totalBudget: 124900,
     tokensSpent: 4150,
     tokensCommitted: 2000,
-    tokensRemaining: 3100,
+    tokensRemaining: 118000,
     tokensPending: 750,
   };
 
   // Mock data for budget wallet (annual view)
   const annualBudgetData = {
-    totalBudget: 40000,
+    totalBudget: 335000,
     tokensSpent: 14400,
     tokensCommitted: 8000,
-    tokensRemaining: 14600,
+    tokensRemaining: 309600,
     tokensPending: 3000,
   };
 
