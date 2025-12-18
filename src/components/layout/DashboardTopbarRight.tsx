@@ -35,7 +35,7 @@ export default function DashboardTopbarRight({
         onClick={() => navigate("/dashboard/tracker?tab=budget")}
         className="flex items-center gap-1 hover:opacity-70 transition cursor-pointer"
       >
-        <Icons.tokens size={18} className="text-[#848487] lg:w-5 lg:h-5" />
+        <Icons.tokens size={11} className="text-[#848487] lg:w-3 lg:h-3" />
         <span className="text-xs leading-[15.96px] text-[#646464]">{tokenCount} Budget remaining this quarter</span>
       </button>
       <button

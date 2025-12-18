@@ -443,13 +443,13 @@ const [open, setOpen] = useState(false);
                                   {/* Pounds Spent */}
                                   <div className="border border-[#ececec] rounded-lg p-4 bg-white">
                                     <div className="flex items-center justify-between mb-2">
-                                      <span className="text-sm text-black">Pounds spent on completed projects</span>
+                                      <span className="text-sm text-black">Budget spent on completed projects</span>
                                       <Tooltip>
                                         <TooltipTrigger asChild>
                                           <HelpCircle size={16} className="text-[#646464] cursor-help" />
                                         </TooltipTrigger>
                                         <TooltipContent className="bg-white border border-[#ececec] text-black max-w-xs">
-                                          <p className="text-xs">Pounds used for completed projects. This amount reflects budget already spent.</p>
+                                          <p className="text-xs">Budget used for completed projects. This amount reflects budget already spent.</p>
                                         </TooltipContent>
                                       </Tooltip>
                                     </div>
@@ -460,13 +460,13 @@ const [open, setOpen] = useState(false);
                                   {/* Pounds Committed */}
                                   <div className="border border-[#ececec] rounded-lg p-4 bg-white">
                                     <div className="flex items-center justify-between mb-2">
-                                      <span className="text-sm text-black">Pounds committed to WIP projects</span>
+                                      <span className="text-sm text-black">Budget committed to WIP projects</span>
                                       <Tooltip>
                                         <TooltipTrigger asChild>
                                           <HelpCircle size={16} className="text-[#646464] cursor-help" />
                                         </TooltipTrigger>
                                         <TooltipContent className="bg-white border border-[#ececec] text-black max-w-xs">
-                                          <p className="text-xs">Pounds allocated to projects currently in progress. If a project is paused or stopped, unused pounds may be reinstated depending on its stage.</p>
+                                          <p className="text-xs">Budget allocated to projects currently in progress. If a project is paused or stopped, unused pounds may be reinstated depending on its stage.</p>
                                         </TooltipContent>
                                       </Tooltip>
                                     </div>
@@ -477,13 +477,13 @@ const [open, setOpen] = useState(false);
                                   {/* Pounds Remaining */}
                                   <div className="border border-[#ececec] rounded-lg p-4 bg-white">
                                     <div className="flex items-center justify-between mb-2">
-                                      <span className="text-sm text-black">Pounds remaining in budget {periodLabel}</span>
+                                      <span className="text-sm text-black">Budget remaining in budget {periodLabel}</span>
                                       <Tooltip>
                                         <TooltipTrigger asChild>
                                           <HelpCircle size={16} className="text-[#646464] cursor-help" />
                                         </TooltipTrigger>
                                         <TooltipContent className="bg-white border border-[#ececec] text-black max-w-xs">
-                                          <p className="text-xs">Pounds still available in your overall budget that have not yet been used or allocated.</p>
+                                          <p className="text-xs">Budget still available in your overall budget that have not yet been used or allocated.</p>
                                         </TooltipContent>
                                       </Tooltip>
                                     </div>
@@ -494,13 +494,13 @@ const [open, setOpen] = useState(false);
                                   {/* Pounds Pending */}
                                   <div className="border border-[#ececec] rounded-lg p-4 bg-white">
                                     <div className="flex items-center justify-between mb-2">
-                                      <span className="text-sm text-black">Pounds pending for briefs in progress</span>
+                                      <span className="text-sm text-black">Budget pending for briefs in progress</span>
                                       <Tooltip>
                                         <TooltipTrigger asChild>
                                           <HelpCircle size={16} className="text-[#646464] cursor-help" />
                                         </TooltipTrigger>
                                         <TooltipContent className="bg-white border border-[#ececec] text-black max-w-xs">
-                                          <p className="text-xs">Estimated pound amounts assigned to briefs in progress that are awaiting confirmation or project start.</p>
+                                          <p className="text-xs">Estimated budget amounts assigned to briefs in progress that are awaiting confirmation or project start.</p>
                                         </TooltipContent>
                                       </Tooltip>
                                     </div>
