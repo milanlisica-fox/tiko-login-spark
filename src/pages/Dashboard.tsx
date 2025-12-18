@@ -35,19 +35,19 @@ const [open, setOpen] = useState(false);
   // Mock data for budget wallet (quarter view)
   const quarterBudgetData = {
     totalBudget: 125000,
-    tokensSpent: 4150,
-    tokensCommitted: 2000,
-    tokensRemaining: 118100,
-    tokensPending: 750,
+    poundsSpent: 4150,
+    poundsCommitted: 2000,
+    poundsRemaining: 118100,
+    poundsPending: 750,
   };
 
   // Mock data for budget wallet (annual view)
   const annualBudgetData = {
     totalBudget: 335000,
-    tokensSpent: 14400,
-    tokensCommitted: 8000,
-    tokensRemaining: 309600,
-    tokensPending: 3000,
+    poundsSpent: 14400,
+    poundsCommitted: 8000,
+    poundsRemaining: 309600,
+    poundsPending: 3000,
   };
 
   const topbarRight = <DashboardTopbarRight />;
@@ -435,77 +435,77 @@ const [open, setOpen] = useState(false);
                               <div className="space-y-4">
                                 <div className="flex items-center justify-between">
                                   <span className="text-sm text-black">Total budget {periodLabel}</span>
-                                  <span className="text-lg font-bold text-black">{budgetData.totalBudget.toLocaleString()} tokens</span>
+                                  <span className="text-lg font-bold text-black">£{budgetData.totalBudget.toLocaleString()}</span>
                                 </div>
                                 
                                 {/* Metrics Grid - 2x2 */}
                                 <div className="grid grid-cols-4 gap-4">
-                                  {/* Tokens Spent */}
+                                  {/* Pounds Spent */}
                                   <div className="border border-[#ececec] rounded-lg p-4 bg-white">
                                     <div className="flex items-center justify-between mb-2">
-                                      <span className="text-sm text-black">Tokens spent on completed projects</span>
+                                      <span className="text-sm text-black">Pounds spent on completed projects</span>
                                       <Tooltip>
                                         <TooltipTrigger asChild>
                                           <HelpCircle size={16} className="text-[#646464] cursor-help" />
                                         </TooltipTrigger>
                                         <TooltipContent className="bg-white border border-[#ececec] text-black max-w-xs">
-                                          <p className="text-xs">Tokens used for completed projects. This amount reflects budget already spent.</p>
+                                          <p className="text-xs">Pounds used for completed projects. This amount reflects budget already spent.</p>
                                         </TooltipContent>
                                       </Tooltip>
                                     </div>
-                                    <div className="text-2xl font-bold text-black">{budgetData.tokensSpent.toLocaleString()}</div>
-                                    <div className="text-xs text-[#646464] mt-1">{((budgetData.tokensSpent / budgetData.totalBudget) * 100).toFixed(1)}% of budget</div>
+                                    <div className="text-2xl font-bold text-black">£{budgetData.poundsSpent.toLocaleString()}</div>
+                                    <div className="text-xs text-[#646464] mt-1">{((budgetData.poundsSpent / budgetData.totalBudget) * 100).toFixed(1)}% of budget</div>
                                   </div>
 
-                                  {/* Tokens Committed */}
+                                  {/* Pounds Committed */}
                                   <div className="border border-[#ececec] rounded-lg p-4 bg-white">
                                     <div className="flex items-center justify-between mb-2">
-                                      <span className="text-sm text-black">Tokens committed to WIP projects</span>
+                                      <span className="text-sm text-black">Pounds committed to WIP projects</span>
                                       <Tooltip>
                                         <TooltipTrigger asChild>
                                           <HelpCircle size={16} className="text-[#646464] cursor-help" />
                                         </TooltipTrigger>
                                         <TooltipContent className="bg-white border border-[#ececec] text-black max-w-xs">
-                                          <p className="text-xs">Tokens allocated to projects currently in progress. If a project is paused or stopped, unused tokens may be reinstated depending on its stage.</p>
+                                          <p className="text-xs">Pounds allocated to projects currently in progress. If a project is paused or stopped, unused pounds may be reinstated depending on its stage.</p>
                                         </TooltipContent>
                                       </Tooltip>
                                     </div>
-                                    <div className="text-2xl font-bold text-black">{budgetData.tokensCommitted.toLocaleString()}</div>
-                                    <div className="text-xs text-[#646464] mt-1">{((budgetData.tokensCommitted / budgetData.totalBudget) * 100).toFixed(1)}% of budget</div>
+                                    <div className="text-2xl font-bold text-black">£{budgetData.poundsCommitted.toLocaleString()}</div>
+                                    <div className="text-xs text-[#646464] mt-1">{((budgetData.poundsCommitted / budgetData.totalBudget) * 100).toFixed(1)}% of budget</div>
                                   </div>
 
-                                  {/* Tokens Remaining */}
+                                  {/* Pounds Remaining */}
                                   <div className="border border-[#ececec] rounded-lg p-4 bg-white">
                                     <div className="flex items-center justify-between mb-2">
-                                      <span className="text-sm text-black">Tokens remaining in budget {periodLabel}</span>
+                                      <span className="text-sm text-black">Pounds remaining in budget {periodLabel}</span>
                                       <Tooltip>
                                         <TooltipTrigger asChild>
                                           <HelpCircle size={16} className="text-[#646464] cursor-help" />
                                         </TooltipTrigger>
                                         <TooltipContent className="bg-white border border-[#ececec] text-black max-w-xs">
-                                          <p className="text-xs">Tokens still available in your overall budget that have not yet been used or allocated.</p>
+                                          <p className="text-xs">Pounds still available in your overall budget that have not yet been used or allocated.</p>
                                         </TooltipContent>
                                       </Tooltip>
                                     </div>
-                                    <div className="text-2xl font-bold text-[#03b3e2]">{budgetData.tokensRemaining.toLocaleString()}</div>
-                                    <div className="text-xs text-[#646464] mt-1">{((budgetData.tokensRemaining / budgetData.totalBudget) * 100).toFixed(1)}% of budget</div>
+                                    <div className="text-2xl font-bold text-[#03b3e2]">£{budgetData.poundsRemaining.toLocaleString()}</div>
+                                    <div className="text-xs text-[#646464] mt-1">{((budgetData.poundsRemaining / budgetData.totalBudget) * 100).toFixed(1)}% of budget</div>
                                   </div>
 
-                                  {/* Tokens Pending */}
+                                  {/* Pounds Pending */}
                                   <div className="border border-[#ececec] rounded-lg p-4 bg-white">
                                     <div className="flex items-center justify-between mb-2">
-                                      <span className="text-sm text-black">Tokens pending for briefs in progress</span>
+                                      <span className="text-sm text-black">Pounds pending for briefs in progress</span>
                                       <Tooltip>
                                         <TooltipTrigger asChild>
                                           <HelpCircle size={16} className="text-[#646464] cursor-help" />
                                         </TooltipTrigger>
                                         <TooltipContent className="bg-white border border-[#ececec] text-black max-w-xs">
-                                          <p className="text-xs">Estimated token amounts assigned to briefs in progress that are awaiting confirmation or project start.</p>
+                                          <p className="text-xs">Estimated pound amounts assigned to briefs in progress that are awaiting confirmation or project start.</p>
                                         </TooltipContent>
                                       </Tooltip>
                                     </div>
-                                    <div className="text-2xl font-bold text-black">{budgetData.tokensPending.toLocaleString()}</div>
-                                    <div className="text-xs text-[#646464] mt-1">{((budgetData.tokensPending / budgetData.totalBudget) * 100).toFixed(1)}% of budget</div>
+                                    <div className="text-2xl font-bold text-black">£{budgetData.poundsPending.toLocaleString()}</div>
+                                    <div className="text-xs text-[#646464] mt-1">{((budgetData.poundsPending / budgetData.totalBudget) * 100).toFixed(1)}% of budget</div>
                                   </div>
                                 </div>
                               </div>

@@ -223,28 +223,28 @@ export default function TrackerPage() {
 
   const duplicateBriefsStats = {
     preventedTotal: 29,
-    tokensSaved: 3120,
+    poundsSaved: 3120,
     hoursSaved: 180,
     teamsImpacted: 6,
   };
 
   // Mock data for Budget risk alert chart
   const budgetRiskData = [
-    { month: "Jul", tokensUsed: 800, tokensAllocated: 950 },
-    { month: "Aug", tokensUsed: 850, tokensAllocated: 950 },
-    { month: "Sep", tokensUsed: 900, tokensAllocated: 1000 },
-    { month: "Oct", tokensUsed: 1050, tokensAllocated: 1000 },
-    { month: "Nov", tokensUsed: 1150, tokensAllocated: 1100 },
-    { month: "Dec", tokensUsed: 1250, tokensAllocated: 1200 },
+    { month: "Jul", poundsUsed: 800, poundsAllocated: 950 },
+    { month: "Aug", poundsUsed: 850, poundsAllocated: 950 },
+    { month: "Sep", poundsUsed: 900, poundsAllocated: 1000 },
+    { month: "Oct", poundsUsed: 1050, poundsAllocated: 1000 },
+    { month: "Nov", poundsUsed: 1150, poundsAllocated: 1100 },
+    { month: "Dec", poundsUsed: 1250, poundsAllocated: 1200 },
   ];
 
   const budgetRiskConfig = {
-    tokensUsed: {
-      label: "Tokens used",
+    poundsUsed: {
+      label: "Pounds used",
       color: "#0177c7",
     },
-    tokensAllocated: {
-      label: "Tokens allocated",
+    poundsAllocated: {
+      label: "Pounds allocated",
       color: "#03b3e2",
     },
   };
@@ -277,7 +277,7 @@ export default function TrackerPage() {
       iconColor: "text-yellow-500",
       overallScore: 95,
       briefQualityScore: 95,
-      tokenEfficiency: 96,
+      poundEfficiency: 96,
       assetsRightFirstTime: 94,
       progressBarColor: "#03B3E2", // blue
       isMyTeam: false,
@@ -290,7 +290,7 @@ export default function TrackerPage() {
       iconColor: "text-gray-400",
       overallScore: 94,
       briefQualityScore: 94,
-      tokenEfficiency: 95,
+      poundEfficiency: 95,
       assetsRightFirstTime: 93,
       progressBarColor: "#8092DC", // purple
       isMyTeam: true,
@@ -303,7 +303,7 @@ export default function TrackerPage() {
       iconColor: "text-amber-600",
       overallScore: 92,
       briefQualityScore: 92,
-      tokenEfficiency: 93,
+      poundEfficiency: 93,
       assetsRightFirstTime: 91,
       progressBarColor: "#00c3b1", // teal/green
       isMyTeam: false,
@@ -316,7 +316,7 @@ export default function TrackerPage() {
       iconColor: "text-yellow-500",
       overallScore: 96,
       briefQualityScore: 96,
-      tokenEfficiency: 97,
+      poundEfficiency: 97,
       assetsRightFirstTime: 95,
       progressBarColor: "#0177c7", // blue
       isMyTeam: false,
@@ -329,7 +329,7 @@ export default function TrackerPage() {
       iconColor: "text-amber-600",
       overallScore: 93,
       briefQualityScore: 93,
-      tokenEfficiency: 94,
+      poundEfficiency: 94,
       assetsRightFirstTime: 92,
       progressBarColor: "#ffb546", // orange
       isMyTeam: false,
@@ -546,7 +546,7 @@ export default function TrackerPage() {
       issueType: "3rd Party Changes",
       inFlight: 0,
       resolved: 6,
-      impact: "0K tokens budget impact",
+      impact: "0K pounds budget impact",
       primaryProductLine: "All resolved",
     },
   ];
@@ -557,7 +557,7 @@ export default function TrackerPage() {
       projectName: "Galaxy S25 UK Launch Toolkit",
       category: "SMP",
       deliveryTeam: "Omni & Digital",
-      tokensSpent: 1850,
+      poundsSpent: 1850,
       durationWeeks: 6,
       onTime: true,
       changeRequests: 1,
@@ -569,7 +569,7 @@ export default function TrackerPage() {
       projectName: "Festival Retail Experience Refresh",
       category: "Ecosystem",
       deliveryTeam: "Brand Experience",
-      tokensSpent: 1620,
+      poundsSpent: 1620,
       durationWeeks: 7,
       onTime: false,
       changeRequests: 3,
@@ -581,7 +581,7 @@ export default function TrackerPage() {
       projectName: "Q2 Promotions Always-On Creative",
       category: "Promotions",
       deliveryTeam: "Marcomms",
-      tokensSpent: 1480,
+      poundsSpent: 1480,
       durationWeeks: 5,
       onTime: true,
       changeRequests: 2,
@@ -593,7 +593,7 @@ export default function TrackerPage() {
       projectName: "B2B Partner Playbook 2025",
       category: "B2B",
       deliveryTeam: "Product Marketing",
-      tokensSpent: 1725,
+      poundsSpent: 1725,
       durationWeeks: 8,
       onTime: true,
       changeRequests: 1,
@@ -605,7 +605,7 @@ export default function TrackerPage() {
       projectName: "Wearables Loyalty Lifecycle",
       category: "Ecosystem",
       deliveryTeam: "IMG",
-      tokensSpent: 1290,
+      poundsSpent: 1290,
       durationWeeks: 4,
       onTime: true,
       changeRequests: 0,
@@ -617,7 +617,7 @@ export default function TrackerPage() {
       projectName: "Enterprise Solutions Portal Redesign",
       category: "B2B",
       deliveryTeam: "Product Marketing",
-      tokensSpent: 2100,
+      poundsSpent: 2100,
       durationWeeks: 9,
       onTime: false,
       changeRequests: 4,
@@ -629,7 +629,7 @@ export default function TrackerPage() {
       projectName: "Summer Campaign Visual Identity",
       category: "Promotions",
       deliveryTeam: "Marcomms",
-      tokensSpent: 1450,
+      poundsSpent: 1450,
       durationWeeks: 5,
       onTime: true,
       changeRequests: 2,
@@ -641,7 +641,7 @@ export default function TrackerPage() {
       projectName: "Customer Onboarding Experience",
       category: "Ecosystem",
       deliveryTeam: "Brand Experience",
-      tokensSpent: 1780,
+      poundsSpent: 1780,
       durationWeeks: 7,
       onTime: true,
       changeRequests: 1,
@@ -695,17 +695,17 @@ export default function TrackerPage() {
     "Insufficient time": { label: "Insufficient time", color: "#8092DC" },
   };
 
-  // Mock data for Additional token spend by category
-  const additionalTokenSpendData = [
-    { category: "SMP", tokens: 450 },
-    { category: "Ecosystem", tokens: 320 },
-    { category: "Promotions", tokens: 280 },
-    { category: "B2B", tokens: 180 },
+  // Mock data for Additional pound spend by category
+  const additionalPoundSpendData = [
+    { category: "SMP", pounds: 450 },
+    { category: "Ecosystem", pounds: 320 },
+    { category: "Promotions", pounds: 280 },
+    { category: "B2B", pounds: 180 },
   ];
 
-  const additionalTokenSpendConfig = {
-    tokens: {
-      label: "Additional Tokens",
+  const additionalPoundSpendConfig = {
+    pounds: {
+      label: "Additional Pounds",
       color: "#8092DC",
     },
   };
@@ -735,32 +735,32 @@ export default function TrackerPage() {
   // Mock data for budget wallet (quarter view)
   const quarterBudgetData = {
     totalBudget: 125000,
-    tokensSpent: 4150,
-    tokensCommitted: 2000,
-    tokensRemaining: 118100,
-    tokensPending: 750,
+    poundsSpent: 4150,
+    poundsCommitted: 2000,
+    poundsRemaining: 118100,
+    poundsPending: 750,
   };
 
   // Mock data for budget wallet (annual view)
   const annualBudgetData = {
     totalBudget: 335000,
-    tokensSpent: 14400,
-    tokensCommitted: 8000,
-    tokensRemaining: 309600,
-    tokensPending: 3000,
+    poundsSpent: 14400,
+    poundsCommitted: 8000,
+    poundsRemaining: 309600,
+    poundsPending: 3000,
   };
 
-  // Mock data for token distribution by category
-  const tokenDistributionByCategoryData = [
-    { category: "SMP", tokens: 4500 },
-    { category: "Ecosys..", tokens: 3200 },
-    { category: "Promotions", tokens: 2800 },
-    { category: "B2B", tokens: 1800 },
+  // Mock data for pound distribution by category
+  const poundDistributionByCategoryData = [
+    { category: "SMP", pounds: 4500 },
+    { category: "Ecosys..", pounds: 3200 },
+    { category: "Promotions", pounds: 2800 },
+    { category: "B2B", pounds: 1800 },
   ];
 
-  const tokenDistributionCategoryConfig = {
-    tokens: {
-      label: "Tokens",
+  const poundDistributionCategoryConfig = {
+    pounds: {
+      label: "Pounds",
       color: "#03b3e2",
     },
   };
@@ -789,21 +789,21 @@ export default function TrackerPage() {
 
   const historicalSpendConfig = {
     spend: {
-      label: "Spend (Tokens)",
+      label: "Spend (Pounds)",
       color: "#0177c7",
     },
   };
 
   const changeRequestsSpendByCategoryData = [
-    { category: "SMP", tokens: 3200 },
-    { category: "Ecosystem", tokens: 2800 },
-    { category: "Promotions", tokens: 2400 },
-    { category: "B2B", tokens: 2100 },
+    { category: "SMP", pounds: 3200 },
+    { category: "Ecosystem", pounds: 2800 },
+    { category: "Promotions", pounds: 2400 },
+    { category: "B2B", pounds: 2100 },
   ];
 
   const changeRequestsSpendByCategoryConfig = {
-    tokens: {
-      label: "Token spend",
+    pounds: {
+      label: "Pound spend",
       color: "#03b3e2",
     },
   };
@@ -828,15 +828,15 @@ export default function TrackerPage() {
 
   const spendConfig = {
     spent: {
-      label: "Tokens spent",
+      label: "Pounds spent",
       color: "#00c3b1",
     },
     committed: {
-      label: "Tokens committed ",
+      label: "Pounds committed ",
       color: "#03b3e2",
     },
     remaining: {
-      label: "Tokens remaining",
+      label: "Pounds remaining",
       color: "#0177c7",
     },
   };
@@ -1045,7 +1045,7 @@ export default function TrackerPage() {
                       </div>
                     </div>
                       <div className="flex items-center justify-between"><span className="text-sm leading-[18.62px] text-black">Brief quality score</span><span className="text-sm leading-[18.62px] text-black font-normal">{team.briefQualityScore}%</span></div>
-                    <div className="flex items-center justify-between"><span className="text-sm leading-[18.62px] text-black">Token efficiency</span><span className="text-sm leading-[18.62px] text-black font-normal">{team.tokenEfficiency}%</span></div>
+                    <div className="flex items-center justify-between"><span className="text-sm leading-[18.62px] text-black">Pound efficiency</span><span className="text-sm leading-[18.62px] text-black font-normal">{team.poundEfficiency}%</span></div>
                     <div className="flex items-center justify-between"><span className="text-sm leading-[18.62px] text-black">Assets right first time</span><span className="text-sm leading-[18.62px] text-black font-normal">{team.assetsRightFirstTime}%</span></div>
                     <div className="flex items-center gap-2 pt-2">
                       <div className="w-8 h-8 rounded-full border border-[#03b3e2] overflow-hidden"><img src={boltImg} alt="Bolt" className="w-full h-full object-cover" /></div>
@@ -1097,7 +1097,7 @@ export default function TrackerPage() {
                       </div>
                     </div>
                     <div className="flex items-center justify-between"><span className="text-sm leading-[18.62px] text-black">Brief quality score</span><span className="text-sm leading-[18.62px] text-black font-normal">{team.briefQualityScore}%</span></div>
-                    <div className="flex items-center justify-between"><span className="text-sm leading-[18.62px] text-black">Token efficiency</span><span className="text-sm leading-[18.62px] text-black font-normal">{team.tokenEfficiency}%</span></div>
+                    <div className="flex items-center justify-between"><span className="text-sm leading-[18.62px] text-black">Pound efficiency</span><span className="text-sm leading-[18.62px] text-black font-normal">{team.poundEfficiency}%</span></div>
                     <div className="flex items-center justify-between"><span className="text-sm leading-[18.62px] text-black">Assets right first time</span><span className="text-sm leading-[18.62px] text-black font-normal">{team.assetsRightFirstTime}%</span></div>
                     <div className="flex items-center gap-2 pt-2">
                       <div className="w-8 h-8 rounded-full border border-[#03b3e2] overflow-hidden"><img src={boltImg} alt="Bolt" className="w-full h-full object-cover" /></div>
@@ -2539,7 +2539,7 @@ export default function TrackerPage() {
                       <TableRow className="bg-[#f1f1f3] hover:bg-[#f1f1f3] border-b border-[#ececec]">
                         <TableHead className="h-12 px-4 text-left font-bold text-black">Project</TableHead>
                         <TableHead className="h-12 px-4 text-left font-bold text-black">Category</TableHead>
-                        <TableHead className="h-12 px-4 text-left font-bold text-black">Tokens spent</TableHead>
+                        <TableHead className="h-12 px-4 text-left font-bold text-black">Pounds spent</TableHead>
                         <TableHead className="h-12 px-4 text-left font-bold text-black">Duration</TableHead>
                         <TableHead className="h-12 px-4 text-left font-bold text-black">On-time</TableHead>
                         <TableHead className="h-12 px-4 text-left font-bold text-black">Change requests</TableHead>
@@ -2559,7 +2559,7 @@ export default function TrackerPage() {
                           >
                             <TableCell className="px-4 py-4 text-black font-medium">{project.projectName}</TableCell>
                             <TableCell className="px-4 py-4 text-black">{project.category}</TableCell>
-                            <TableCell className="px-4 py-4 text-black">{project.tokensSpent.toLocaleString()}</TableCell>
+                            <TableCell className="px-4 py-4 text-black">£{project.poundsSpent.toLocaleString()}</TableCell>
                             <TableCell className="px-4 py-4 text-black">{project.durationWeeks} wks</TableCell>
                             <TableCell className="px-4 py-4 text-black">
                               <span className={onTimeClasses}>{project.onTime ? "On time" : "Delayed"}</span>
@@ -2681,17 +2681,17 @@ export default function TrackerPage() {
                 </Card>
                 </div>
 
-                {/* Row 2: Additional token spend / Brand Legal / On-time */}
+                {/* Row 2: Additional pound spend / Brand Legal / On-time */}
                 <div className="grid grid-cols-10 gap-5">
-                  {/* Additional token spend */}
+                  {/* Additional pound spend */}
                   <Card className="border border-[#ececec] bg-white col-span-3 flex flex-col">
                   <CardHeader className="pb-3">
-                      <CardTitle className="text-base font-bold leading-[21.28px] text-black">Additional token spend</CardTitle>
+                      <CardTitle className="text-base font-bold leading-[21.28px] text-black">Additional pound spend</CardTitle>
                   </CardHeader>
                     <CardContent className="flex-1 flex items-center justify-center">
-                      <ChartContainer config={additionalTokenSpendConfig} className="h-[250px] md:h-[200px] w-full">
+                      <ChartContainer config={additionalPoundSpendConfig} className="h-[250px] md:h-[200px] w-full">
                         <ResponsiveContainer width="100%" height="100%">
-                          <BarChart data={additionalTokenSpendData} margin={{ left: 10, right: 10, top: 10, bottom: 20 }}>
+                          <BarChart data={additionalPoundSpendData} margin={{ left: 10, right: 10, top: 10, bottom: 20 }}>
                             <CartesianGrid strokeDasharray="3 3" stroke="#e0e0e0" vertical={false} />
                             <XAxis 
                               dataKey="category" 
@@ -2705,10 +2705,10 @@ export default function TrackerPage() {
                               domain={[0, 500]}
                               ticks={[0, 100, 200, 300, 400, 500]}
                               tick={{ fill: "#646464", fontSize: 11 }}
-                              label={{ value: "Tokens", angle: -90, position: "insideLeft", offset: 10, style: { fill: "#646464", fontSize: 11, textAnchor: "middle" } }}
+                              label={{ value: "Pounds", angle: -90, position: "insideLeft", offset: 10, style: { fill: "#646464", fontSize: 11, textAnchor: "middle" } }}
                             />
                             <ChartTooltip content={<ChartTooltipContent className="bg-white [&_span]:text-black [&_div]:text-black" />} />
-                            <Bar dataKey="tokens" fill="#8092DC" radius={[4, 4, 0, 0]} />
+                            <Bar dataKey="pounds" fill="#8092DC" radius={[4, 4, 0, 0]} />
                           </BarChart>
                         </ResponsiveContainer>
                       </ChartContainer>
@@ -3059,7 +3059,7 @@ export default function TrackerPage() {
                       <TableRow className="bg-[#f1f1f3] hover:bg-[#f1f1f3] border-b border-[#ececec]">
                         <TableHead className="h-12 px-4 text-left font-bold text-black">Project</TableHead>
                         <TableHead className="h-12 px-4 text-left font-bold text-black">Category</TableHead>
-                        <TableHead className="h-12 px-4 text-left font-bold text-black">Tokens spent</TableHead>
+                        <TableHead className="h-12 px-4 text-left font-bold text-black">Pounds spent</TableHead>
                         <TableHead className="h-12 px-4 text-left font-bold text-black">Duration</TableHead>
                         <TableHead className="h-12 px-4 text-left font-bold text-black">On-time</TableHead>
                         <TableHead className="h-12 px-4 text-left font-bold text-black">Change requests</TableHead>
@@ -3079,7 +3079,7 @@ export default function TrackerPage() {
                           >
                             <TableCell className="px-4 py-4 text-black font-medium">{project.projectName}</TableCell>
                             <TableCell className="px-4 py-4 text-black">{project.category}</TableCell>
-                            <TableCell className="px-4 py-4 text-black">{project.tokensSpent.toLocaleString()}</TableCell>
+                            <TableCell className="px-4 py-4 text-black">£{project.poundsSpent.toLocaleString()}</TableCell>
                             <TableCell className="px-4 py-4 text-black">{project.durationWeeks} wks</TableCell>
                             <TableCell className="px-4 py-4 text-black">
                               <span className={onTimeClasses}>{project.onTime ? "On time" : "Delayed"}</span>
@@ -3095,15 +3095,15 @@ export default function TrackerPage() {
                 </CardContent>
               </Card>
 
-                {/* Row 1: Additional token spend */}
+                {/* Row 1: Additional pound spend */}
                 <Card className="border border-[#ececec] bg-white flex flex-col">
                   <CardHeader className="pb-3">
-                    <CardTitle className="text-base font-bold leading-[21.28px] text-black">Additional token spend</CardTitle>
+                    <CardTitle className="text-base font-bold leading-[21.28px] text-black">Additional pound spend</CardTitle>
                   </CardHeader>
                   <CardContent className="flex-1 flex items-center justify-center">
-                    <ChartContainer config={additionalTokenSpendConfig} className="h-[250px] md:h-[200px] w-full">
+                    <ChartContainer config={additionalPoundSpendConfig} className="h-[250px] md:h-[200px] w-full">
                       <ResponsiveContainer width="100%" height="100%">
-                        <BarChart data={additionalTokenSpendData} margin={{ left: 10, right: 10, top: 10, bottom: 20 }}>
+                        <BarChart data={additionalPoundSpendData} margin={{ left: 10, right: 10, top: 10, bottom: 20 }}>
                           <CartesianGrid strokeDasharray="3 3" stroke="#e0e0e0" vertical={false} />
                           <XAxis 
                             dataKey="category" 
@@ -3117,10 +3117,10 @@ export default function TrackerPage() {
                             domain={[0, 500]}
                             ticks={[0, 100, 200, 300, 400, 500]}
                             tick={{ fill: "#646464", fontSize: 11 }}
-                            label={{ value: "Tokens", angle: -90, position: "insideLeft", offset: 10, style: { fill: "#646464", fontSize: 11, textAnchor: "middle" } }}
+                            label={{ value: "Pounds", angle: -90, position: "insideLeft", offset: 10, style: { fill: "#646464", fontSize: 11, textAnchor: "middle" } }}
                           />
                           <ChartTooltip content={<ChartTooltipContent className="bg-white [&_span]:text-black [&_div]:text-black" />} />
-                          <Bar dataKey="tokens" fill="#8092DC" radius={[4, 4, 0, 0]} />
+                          <Bar dataKey="pounds" fill="#8092DC" radius={[4, 4, 0, 0]} />
                         </BarChart>
                       </ResponsiveContainer>
                     </ChartContainer>
@@ -3580,77 +3580,77 @@ export default function TrackerPage() {
                               <div className="space-y-4">
                                 <div className="flex items-center justify-between">
                                   <span className="text-sm text-black">Total budget {periodLabel}</span>
-                                  <span className="text-lg font-bold text-black">{budgetData.totalBudget.toLocaleString()} tokens</span>
+                                  <span className="text-lg font-bold text-black">£{budgetData.totalBudget.toLocaleString()}</span>
                                 </div>
                                 
                                 {/* Metrics Grid - 2x2 */}
                                 <div className="grid grid-cols-2 gap-4">
-                                  {/* Tokens spent */}
+                                  {/* Pounds spent */}
                                   <div className="border border-[#ececec] rounded-lg p-4 bg-white">
                                     <div className="flex items-center justify-between mb-2">
-                                      <span className="text-sm text-black">Tokens spent on completed projects</span>
+                                      <span className="text-sm text-black">Pounds spent on completed projects</span>
                                       <Tooltip>
                                         <TooltipTrigger asChild>
                                           <HelpCircle size={16} className="text-[#646464] cursor-help" />
                                         </TooltipTrigger>
                                         <TooltipContent className="bg-white border border-[#ececec] text-black max-w-xs">
-                                          <p className="text-xs">Tokens used for completed projects. This amount reflects budget already spent.</p>
+                                          <p className="text-xs">Pounds used for completed projects. This amount reflects budget already spent.</p>
                                         </TooltipContent>
                                       </Tooltip>
                                     </div>
-                                    <div className="text-2xl font-bold text-black">{budgetData.tokensSpent.toLocaleString()}</div>
-                                    <div className="text-xs text-[#646464] mt-1">{((budgetData.tokensSpent / budgetData.totalBudget) * 100).toFixed(1)}% of budget</div>
+                                    <div className="text-2xl font-bold text-black">£{budgetData.poundsSpent.toLocaleString()}</div>
+                                    <div className="text-xs text-[#646464] mt-1">{((budgetData.poundsSpent / budgetData.totalBudget) * 100).toFixed(1)}% of budget</div>
                                   </div>
 
-                                  {/* Tokens committed  */}
+                                  {/* Pounds committed  */}
                                   <div className="border border-[#ececec] rounded-lg p-4 bg-white">
                                     <div className="flex items-center justify-between mb-2">
-                                      <span className="text-sm text-black">Tokens committed to WIP projects</span>
+                                      <span className="text-sm text-black">Pounds committed to WIP projects</span>
                                       <Tooltip>
                                         <TooltipTrigger asChild>
                                           <HelpCircle size={16} className="text-[#646464] cursor-help" />
                                         </TooltipTrigger>
                                         <TooltipContent className="bg-white border border-[#ececec] text-black max-w-xs">
-                                          <p className="text-xs">Tokens allocated to projects currently in progress. If a project is paused or stopped, unused tokens may be reinstated depending on its stage.</p>
+                                          <p className="text-xs">Pounds allocated to projects currently in progress. If a project is paused or stopped, unused pounds may be reinstated depending on its stage.</p>
                                         </TooltipContent>
                                       </Tooltip>
                                     </div>
-                                    <div className="text-2xl font-bold text-black">{budgetData.tokensCommitted.toLocaleString()}</div>
-                                    <div className="text-xs text-[#646464] mt-1">{((budgetData.tokensCommitted / budgetData.totalBudget) * 100).toFixed(1)}% of budget</div>
+                                    <div className="text-2xl font-bold text-black">£{budgetData.poundsCommitted.toLocaleString()}</div>
+                                    <div className="text-xs text-[#646464] mt-1">{((budgetData.poundsCommitted / budgetData.totalBudget) * 100).toFixed(1)}% of budget</div>
                                   </div>
 
-                                  {/* Tokens remaining */}
+                                  {/* Pounds remaining */}
                                   <div className="border border-[#ececec] rounded-lg p-4 bg-white">
                                     <div className="flex items-center justify-between mb-2">
-                                      <span className="text-sm text-black">Tokens remaining in budget this quarter</span>
+                                      <span className="text-sm text-black">Pounds remaining in budget this quarter</span>
                                       <Tooltip>
                                         <TooltipTrigger asChild>
                                           <HelpCircle size={16} className="text-[#646464] cursor-help" />
                                         </TooltipTrigger>
                                         <TooltipContent className="bg-white border border-[#ececec] text-black max-w-xs">
-                                          <p className="text-xs">Tokens still available in your overall budget that have not yet been used or allocated.</p>
+                                          <p className="text-xs">Pounds still available in your overall budget that have not yet been used or allocated.</p>
                                         </TooltipContent>
                                       </Tooltip>
                                     </div>
-                                    <div className="text-2xl font-bold text-[#03b3e2]">{budgetData.tokensRemaining.toLocaleString()}</div>
-                                    <div className="text-xs text-[#646464] mt-1">{((budgetData.tokensRemaining / budgetData.totalBudget) * 100).toFixed(1)}% of budget</div>
+                                    <div className="text-2xl font-bold text-[#03b3e2]">£{budgetData.poundsRemaining.toLocaleString()}</div>
+                                    <div className="text-xs text-[#646464] mt-1">{((budgetData.poundsRemaining / budgetData.totalBudget) * 100).toFixed(1)}% of budget</div>
                                   </div>
 
-                                  {/* Tokens pending */}
+                                  {/* Pounds pending */}
                                   <div className="border border-[#ececec] rounded-lg p-4 bg-white">
                                     <div className="flex items-center justify-between mb-2">
-                                      <span className="text-sm text-black">Tokens pending for briefs in progress</span>
+                                      <span className="text-sm text-black">Pounds pending for briefs in progress</span>
                                       <Tooltip>
                                         <TooltipTrigger asChild>
                                           <HelpCircle size={16} className="text-[#646464] cursor-help" />
                                         </TooltipTrigger>
                                         <TooltipContent className="bg-white border border-[#ececec] text-black max-w-xs">
-                                          <p className="text-xs">Estimated token amounts assigned to briefs in progress that are awaiting confirmation or project start.</p>
+                                          <p className="text-xs">Estimated pound amounts assigned to briefs in progress that are awaiting confirmation or project start.</p>
                                         </TooltipContent>
                                       </Tooltip>
                                     </div>
-                                    <div className="text-2xl font-bold text-black">{budgetData.tokensPending.toLocaleString()}</div>
-                                    <div className="text-xs text-[#646464] mt-1">{((budgetData.tokensPending / budgetData.totalBudget) * 100).toFixed(1)}% of budget</div>
+                                    <div className="text-2xl font-bold text-black">£{budgetData.poundsPending.toLocaleString()}</div>
+                                    <div className="text-xs text-[#646464] mt-1">{((budgetData.poundsPending / budgetData.totalBudget) * 100).toFixed(1)}% of budget</div>
                                   </div>
                                 </div>
                               </div>
@@ -3658,28 +3658,28 @@ export default function TrackerPage() {
                           );
                         })()}
                         
-                        {/* View Token Transactions Button */}
+                        {/* View Pound Transactions Button */}
                         <div className="pt-4 border-t border-[#ececec]">
                           <Button
                             variant="outline"
-                            onClick={() => navigate("/dashboard/token-transactions")}
+                            onClick={() => navigate("/dashboard/pound-transactions")}
                             className="w-full border-[#e0e0e0] bg-white text-black hover:bg-[#f5f5f5]"
                           >
-                            View token transactions
+                            View pound transactions
                           </Button>
                         </div>
                       </CardContent>
                     </Card>
 
-                  {/* Token Distribution by Category */}
+                  {/* Pound Distribution by Category */}
                   <Card className="border border-[#ececec] bg-white lg:col-span-3">
                     <CardHeader className="pb-3">
-                      <CardTitle className="text-base font-bold leading-[21.28px] text-black">Token distribution</CardTitle>
+                      <CardTitle className="text-base font-bold leading-[21.28px] text-black">Pound distribution</CardTitle>
                     </CardHeader>
                     <CardContent>
-                      <ChartContainer config={tokenDistributionCategoryConfig} className="h-[300px] md:h-[250px] w-full">
+                      <ChartContainer config={poundDistributionCategoryConfig} className="h-[300px] md:h-[250px] w-full">
                         <ResponsiveContainer width="100%" height="100%">
-                          <BarChart data={tokenDistributionByCategoryData} margin={{ left: 10, right: 10, top: 10, bottom: 35 }}>
+                          <BarChart data={poundDistributionByCategoryData} margin={{ left: 10, right: 10, top: 10, bottom: 35 }}>
                             <CartesianGrid strokeDasharray="3 3" stroke="#e0e0e0" vertical={false} />
                             <XAxis 
                               dataKey="category" 
@@ -3694,10 +3694,10 @@ export default function TrackerPage() {
                               domain={[0, 8000]}
                               ticks={[0, 2000, 4000, 6000, 8000]}
                               tick={{ fill: "#646464", fontSize: 12 }}
-                              label={{ value: "Tokens", angle: -90, position: "insideLeft", offset: 15, style: { fill: "#646464", fontSize: 12, textAnchor: "middle" } }}
+                              label={{ value: "Pounds", angle: -90, position: "insideLeft", offset: 15, style: { fill: "#646464", fontSize: 12, textAnchor: "middle" } }}
                             />
                             <ChartTooltip content={<ChartTooltipContent className="bg-white [&_span]:text-black [&_div]:text-black" />} />
-                            <Bar dataKey="tokens" fill="#03b3e2" radius={[4, 4, 0, 0]} />
+                            <Bar dataKey="pounds" fill="#03b3e2" radius={[4, 4, 0, 0]} />
                           </BarChart>
                         </ResponsiveContainer>
                       </ChartContainer>
@@ -3740,7 +3740,7 @@ export default function TrackerPage() {
                               domain={[0, 5000]}
                               ticks={[0, 1000, 2000, 3000, 4000, 5000]}
                               tick={{ fill: "#646464", fontSize: 12 }}
-                              label={{ value: "Spend (Tokens)", angle: -90, position: "insideLeft", offset: 15, style: { fill: "#646464", fontSize: 12, textAnchor: "middle" } }}
+                              label={{ value: "Spend (Pounds)", angle: -90, position: "insideLeft", offset: 15, style: { fill: "#646464", fontSize: 12, textAnchor: "middle" } }}
                             />
                             <ChartTooltip content={<ChartTooltipContent className="bg-white [&_span]:text-black [&_div]:text-black" />} />
                             <Bar dataKey="spend" fill="#0177c7" radius={[4, 4, 0, 0]} />
@@ -3772,10 +3772,10 @@ export default function TrackerPage() {
                               domain={[0, 4000]}
                               ticks={[0, 1000, 2000, 3000, 4000]}
                               tick={{ fill: "#646464", fontSize: 12 }}
-                              label={{ value: "Tokens", angle: -90, position: "insideLeft", offset: 15, style: { fill: "#646464", fontSize: 12, textAnchor: "middle" } }}
+                              label={{ value: "Pounds", angle: -90, position: "insideLeft", offset: 15, style: { fill: "#646464", fontSize: 12, textAnchor: "middle" } }}
                             />
                             <ChartTooltip content={<ChartTooltipContent className="bg-white [&_span]:text-black [&_div]:text-black" />} />
-                            <Bar dataKey="tokens" fill={changeRequestsSpendByCategoryConfig.tokens.color} radius={[4, 4, 0, 0]} />
+                            <Bar dataKey="pounds" fill={changeRequestsSpendByCategoryConfig.pounds.color} radius={[4, 4, 0, 0]} />
                           </BarChart>
                         </ResponsiveContainer>
                       </ChartContainer>
@@ -3803,7 +3803,7 @@ export default function TrackerPage() {
                               domain={[0, 11000]}
                               ticks={[0, 2000, 4000, 6000, 8000, 10000]}
                               tick={{ fill: "#646464", fontSize: 12 }}
-                              label={{ value: "Tokens", angle: -90, position: "insideLeft", offset: 15, style: { fill: "#646464", fontSize: 12, textAnchor: "middle" } }}
+                              label={{ value: "Pounds", angle: -90, position: "insideLeft", offset: 15, style: { fill: "#646464", fontSize: 12, textAnchor: "middle" } }}
                             />
                             <ChartTooltip content={<ChartTooltipContent className="bg-white [&_span]:text-black [&_div]:text-black" />} />
                             <Legend verticalAlign="top" wrapperStyle={{ paddingBottom: 12 }} />
@@ -3856,77 +3856,77 @@ export default function TrackerPage() {
                             <div className="space-y-4">
                               <div className="flex items-center justify-between">
                                 <span className="text-sm text-black">Total budget {periodLabel}</span>
-                                <span className="text-lg font-bold text-black">{budgetData.totalBudget.toLocaleString()} tokens</span>
+                                <span className="text-lg font-bold text-black">{budgetData.totalBudget.toLocaleString()} pounds</span>
                               </div>
                               
                                 {/* Metrics Grid - 2x2 */}
                                 <div className="grid grid-cols-2 gap-4">
-                                {/* Tokens spent */}
+                                {/* Pounds spent */}
                                 <div className="border border-[#ececec] rounded-lg p-4 bg-white">
                                   <div className="flex items-center justify-between mb-2">
-                                    <span className="text-sm text-black">Tokens spent on completed projects</span>
+                                    <span className="text-sm text-black">Pounds spent on completed projects</span>
                                     <Tooltip>
                                       <TooltipTrigger asChild>
                                         <HelpCircle size={16} className="text-[#646464] cursor-help" />
                                       </TooltipTrigger>
                                       <TooltipContent className="bg-white border border-[#ececec] text-black max-w-xs">
-                                        <p className="text-xs">Tokens used for completed projects. This amount reflects budget already spent.</p>
+                                        <p className="text-xs">Pounds used for completed projects. This amount reflects budget already spent.</p>
                                       </TooltipContent>
                                     </Tooltip>
                                   </div>
-                                  <div className="text-2xl font-bold text-black">{budgetData.tokensSpent.toLocaleString()}</div>
-                                  <div className="text-xs text-[#646464] mt-1">{((budgetData.tokensSpent / budgetData.totalBudget) * 100).toFixed(1)}% of budget</div>
+                                  <div className="text-2xl font-bold text-black">{budgetData.poundsSpent.toLocaleString()}</div>
+                                  <div className="text-xs text-[#646464] mt-1">{((budgetData.poundsSpent / budgetData.totalBudget) * 100).toFixed(1)}% of budget</div>
                                 </div>
 
-                                {/* Tokens committed  */}
+                                {/* Pounds committed  */}
                                 <div className="border border-[#ececec] rounded-lg p-4 bg-white">
                                   <div className="flex items-center justify-between mb-2">
-                                    <span className="text-sm text-black">Tokens committed to WIP projects</span>
+                                    <span className="text-sm text-black">Pounds committed to WIP projects</span>
                                     <Tooltip>
                                       <TooltipTrigger asChild>
                                         <HelpCircle size={16} className="text-[#646464] cursor-help" />
                                       </TooltipTrigger>
                                       <TooltipContent className="bg-white border border-[#ececec] text-black max-w-xs">
-                                        <p className="text-xs">Tokens allocated to projects currently in progress. If a project is paused or stopped, unused tokens may be reinstated depending on its stage.</p>
+                                        <p className="text-xs">Pounds allocated to projects currently in progress. If a project is paused or stopped, unused pounds may be reinstated depending on its stage.</p>
                                       </TooltipContent>
                                     </Tooltip>
                                   </div>
-                                  <div className="text-2xl font-bold text-black">{budgetData.tokensCommitted.toLocaleString()}</div>
-                                  <div className="text-xs text-[#646464] mt-1">{((budgetData.tokensCommitted / budgetData.totalBudget) * 100).toFixed(1)}% of budget</div>
+                                  <div className="text-2xl font-bold text-black">{budgetData.poundsCommitted.toLocaleString()}</div>
+                                  <div className="text-xs text-[#646464] mt-1">{((budgetData.poundsCommitted / budgetData.totalBudget) * 100).toFixed(1)}% of budget</div>
                                 </div>
 
-                                {/* Tokens remaining */}
+                                {/* Pounds remaining */}
                                 <div className="border border-[#ececec] rounded-lg p-4 bg-white">
                                   <div className="flex items-center justify-between mb-2">
-                                    <span className="text-sm text-black">Tokens remaining in budget this quarter</span>
+                                    <span className="text-sm text-black">Pounds remaining in budget this quarter</span>
                                     <Tooltip>
                                       <TooltipTrigger asChild>
                                         <HelpCircle size={16} className="text-[#646464] cursor-help" />
                                       </TooltipTrigger>
                                       <TooltipContent className="bg-white border border-[#ececec] text-black max-w-xs">
-                                        <p className="text-xs">Tokens still available in your overall budget that have not yet been used or allocated.</p>
+                                        <p className="text-xs">Pounds still available in your overall budget that have not yet been used or allocated.</p>
                                       </TooltipContent>
                                     </Tooltip>
                                   </div>
-                                  <div className="text-2xl font-bold text-[#03b3e2]">{budgetData.tokensRemaining.toLocaleString()}</div>
-                                  <div className="text-xs text-[#646464] mt-1">{((budgetData.tokensRemaining / budgetData.totalBudget) * 100).toFixed(1)}% of budget</div>
+                                  <div className="text-2xl font-bold text-[#03b3e2]">{budgetData.poundsRemaining.toLocaleString()}</div>
+                                  <div className="text-xs text-[#646464] mt-1">{((budgetData.poundsRemaining / budgetData.totalBudget) * 100).toFixed(1)}% of budget</div>
                                 </div>
 
-                                {/* Tokens pending */}
+                                {/* Pounds pending */}
                                 <div className="border border-[#ececec] rounded-lg p-4 bg-white">
                                   <div className="flex items-center justify-between mb-2">
-                                    <span className="text-sm text-black">Tokens pending for briefs in progress</span>
+                                    <span className="text-sm text-black">Pounds pending for briefs in progress</span>
                                     <Tooltip>
                                       <TooltipTrigger asChild>
                                         <HelpCircle size={16} className="text-[#646464] cursor-help" />
                                       </TooltipTrigger>
                                       <TooltipContent className="bg-white border border-[#ececec] text-black max-w-xs">
-                                        <p className="text-xs">Estimated token amounts assigned to briefs in progress that are awaiting confirmation or project start.</p>
+                                        <p className="text-xs">Estimated pound amounts assigned to briefs in progress that are awaiting confirmation or project start.</p>
                                       </TooltipContent>
                                     </Tooltip>
                                   </div>
-                                  <div className="text-2xl font-bold text-black">{budgetData.tokensPending.toLocaleString()}</div>
-                                  <div className="text-xs text-[#646464] mt-1">{((budgetData.tokensPending / budgetData.totalBudget) * 100).toFixed(1)}% of budget</div>
+                                  <div className="text-2xl font-bold text-black">{budgetData.poundsPending.toLocaleString()}</div>
+                                  <div className="text-xs text-[#646464] mt-1">{((budgetData.poundsPending / budgetData.totalBudget) * 100).toFixed(1)}% of budget</div>
                                 </div>
                               </div>
                             </div>
@@ -3936,15 +3936,15 @@ export default function TrackerPage() {
                     </CardContent>
                   </Card>
 
-                  {/* Token Distribution by Category */}
+                  {/* Pound Distribution by Category */}
                   <Card className="border border-[#ececec] bg-white">
                     <CardHeader className="pb-3">
-                      <CardTitle className="text-base font-bold leading-[21.28px] text-black">Token distribution</CardTitle>
+                      <CardTitle className="text-base font-bold leading-[21.28px] text-black">Pound distribution</CardTitle>
                     </CardHeader>
                     <CardContent>
-                      <ChartContainer config={tokenDistributionCategoryConfig} className="h-[300px] md:h-[250px] w-full">
+                      <ChartContainer config={poundDistributionCategoryConfig} className="h-[300px] md:h-[250px] w-full">
                         <ResponsiveContainer width="100%" height="100%">
-                          <BarChart data={tokenDistributionByCategoryData} margin={{ left: 10, right: 10, top: 10, bottom: 35 }}>
+                          <BarChart data={poundDistributionByCategoryData} margin={{ left: 10, right: 10, top: 10, bottom: 35 }}>
                             <CartesianGrid strokeDasharray="3 3" stroke="#e0e0e0" vertical={false} />
                             <XAxis 
                               dataKey="category" 
@@ -3959,10 +3959,10 @@ export default function TrackerPage() {
                               domain={[0, 8000]}
                               ticks={[0, 2000, 4000, 6000, 8000]}
                               tick={{ fill: "#646464", fontSize: 12 }}
-                              label={{ value: "Tokens", angle: -90, position: "insideLeft", offset: 15, style: { fill: "#646464", fontSize: 12, textAnchor: "middle" } }}
+                              label={{ value: "Pounds", angle: -90, position: "insideLeft", offset: 15, style: { fill: "#646464", fontSize: 12, textAnchor: "middle" } }}
                             />
                             <ChartTooltip content={<ChartTooltipContent className="bg-white [&_span]:text-black [&_div]:text-black" />} />
-                            <Bar dataKey="tokens" fill="#03b3e2" radius={[4, 4, 0, 0]} />
+                            <Bar dataKey="pounds" fill="#03b3e2" radius={[4, 4, 0, 0]} />
                           </BarChart>
                         </ResponsiveContainer>
                       </ChartContainer>
@@ -3991,10 +3991,10 @@ export default function TrackerPage() {
                               domain={[0, 4000]}
                               ticks={[0, 1000, 2000, 3000, 4000]}
                               tick={{ fill: "#646464", fontSize: 12 }}
-                              label={{ value: "Tokens", angle: -90, position: "insideLeft", offset: 15, style: { fill: "#646464", fontSize: 12, textAnchor: "middle" } }}
+                              label={{ value: "Pounds", angle: -90, position: "insideLeft", offset: 15, style: { fill: "#646464", fontSize: 12, textAnchor: "middle" } }}
                             />
                             <ChartTooltip content={<ChartTooltipContent className="bg-white [&_span]:text-black [&_div]:text-black" />} />
-                            <Bar dataKey="tokens" fill={changeRequestsSpendByCategoryConfig.tokens.color} radius={[4, 4, 0, 0]} />
+                            <Bar dataKey="pounds" fill={changeRequestsSpendByCategoryConfig.pounds.color} radius={[4, 4, 0, 0]} />
                           </BarChart>
                         </ResponsiveContainer>
                       </ChartContainer>
@@ -4022,7 +4022,7 @@ export default function TrackerPage() {
                               domain={[0, 11000]}
                               ticks={[0, 2000, 4000, 6000, 8000, 10000]}
                               tick={{ fill: "#646464", fontSize: 12 }}
-                              label={{ value: "Tokens", angle: -90, position: "insideLeft", offset: 15, style: { fill: "#646464", fontSize: 12, textAnchor: "middle" } }}
+                              label={{ value: "Pounds", angle: -90, position: "insideLeft", offset: 15, style: { fill: "#646464", fontSize: 12, textAnchor: "middle" } }}
                             />
                             <ChartTooltip content={<ChartTooltipContent className="bg-white [&_span]:text-black [&_div]:text-black" />} />
                             <Legend verticalAlign="top" wrapperStyle={{ paddingBottom: 12 }} />
@@ -4069,7 +4069,7 @@ export default function TrackerPage() {
                               domain={[0, 5000]}
                               ticks={[0, 1000, 2000, 3000, 4000, 5000]}
                               tick={{ fill: "#646464", fontSize: 12 }}
-                              label={{ value: "Spend (Tokens)", angle: -90, position: "insideLeft", offset: 15, style: { fill: "#646464", fontSize: 12, textAnchor: "middle" } }}
+                              label={{ value: "Spend (Pounds)", angle: -90, position: "insideLeft", offset: 15, style: { fill: "#646464", fontSize: 12, textAnchor: "middle" } }}
                             />
                             <ChartTooltip content={<ChartTooltipContent className="bg-white [&_span]:text-black [&_div]:text-black" />} />
                             <Bar dataKey="spend" fill="#0177c7" radius={[4, 4, 0, 0]} />
@@ -4139,8 +4139,8 @@ export default function TrackerPage() {
                           <p className="text-sm text-[#646464] pl-4">A: "Complete briefing templates score 4.9/5 vs 3.1/5 for incomplete briefs. Missing 'target operator' field results in 34% more change requests. Implementing mandatory field validation could reduce change requests by 65%."</p>
                         </div>
                         <div className="space-y-2">
-                          <p className="text-sm font-medium text-black">Q: "Which category has the highest token efficiency?"</p>
-                          <p className="text-sm text-[#646464] pl-4">A: "SMP category shows the highest token efficiency at 96%, with 4,500 tokens spent across 68 briefs. This is followed by B2B at 95% efficiency. Ecosystem and Promotions categories could benefit from process optimisation."</p>
+                          <p className="text-sm font-medium text-black">Q: "Which category has the highest pound efficiency?"</p>
+                          <p className="text-sm text-[#646464] pl-4">A: "SMP category shows the highest pound efficiency at 96%, with 4,500 pounds spent across 68 briefs. This is followed by B2B at 95% efficiency. Ecosystem and Promotions categories could benefit from process optimisation."</p>
                         </div>
                       </div>
                     </div>
@@ -4221,8 +4221,8 @@ export default function TrackerPage() {
                     </CardHeader>
                     <CardContent className="space-y-4">
                       <div className="flex items-center gap-3 p-3 rounded-lg bg-[#f9f9f9]">
-                        <div className="text-[32px] font-bold leading-[38.4px] text-[#03b3e2]">{duplicateBriefsStats.tokensSaved.toLocaleString()}+</div>
-                        <p className="text-sm text-[#646464]">tokens safeguarded by consolidating overlapping work</p>
+                        <div className="text-[32px] font-bold leading-[38.4px] text-[#03b3e2]">{duplicateBriefsStats.poundsSaved.toLocaleString()}+</div>
+                        <p className="text-sm text-[#646464]">pounds safeguarded by consolidating overlapping work</p>
                       </div>
                       <div className="grid grid-cols-2 gap-3">
                         <div className="flex flex-col gap-1 rounded-lg border border-[#ececec] p-3">
@@ -4298,8 +4298,8 @@ export default function TrackerPage() {
                           <p className="text-sm text-[#646464] pl-4">A: "Complete briefing templates score 4.9/5 vs 3.1/5 for incomplete briefs. Missing 'target operator' field results in 34% more change requests. Implementing mandatory field validation could reduce change requests by 65%."</p>
                         </div>
                         <div className="space-y-2">
-                          <p className="text-sm font-medium text-black">Q: "Which category has the highest token efficiency?"</p>
-                          <p className="text-sm text-[#646464] pl-4">A: "SMP category shows the highest token efficiency at 96%, with 4,500 tokens spent across 68 briefs. This is followed by B2B at 95% efficiency. Ecosystem and Promotions categories could benefit from process optimisation."</p>
+                          <p className="text-sm font-medium text-black">Q: "Which category has the highest pound efficiency?"</p>
+                          <p className="text-sm text-[#646464] pl-4">A: "SMP category shows the highest pound efficiency at 96%, with 4,500 pounds spent across 68 briefs. This is followed by B2B at 95% efficiency. Ecosystem and Promotions categories could benefit from process optimisation."</p>
                         </div>
                       </div>
                     </div>
@@ -4373,8 +4373,8 @@ export default function TrackerPage() {
                     </ChartContainer>
                     <div className="grid grid-cols-2 gap-3 text-sm">
                       <div className="flex flex-col gap-1 rounded-lg border border-[#ececec] p-3">
-                        <span className="text-xs font-medium text-[#848487]">Tokens safeguarded</span>
-                        <span className="text-lg font-semibold text-black">{duplicateBriefsStats.tokensSaved.toLocaleString()}+</span>
+                        <span className="text-xs font-medium text-[#848487]">Pounds safeguarded</span>
+                        <span className="text-lg font-semibold text-black">{duplicateBriefsStats.poundsSaved.toLocaleString()}+</span>
                         <span className="text-xs text-[#646464]">redirected to priority deliverables</span>
                       </div>
                       <div className="flex flex-col gap-1 rounded-lg border border-[#ececec] p-3">
@@ -4452,7 +4452,7 @@ export default function TrackerPage() {
                       </CardHeader>
                       <CardContent className="space-y-4 flex-1 flex flex-col">
                         <p className="text-sm text-black leading-[18.62px]">
-                          Mobile division tracking 97% token utilization with 23% Q4 overrun risk. Current token usage vs. allocated tokens shows escalating variance.
+                          Mobile division tracking 97% pound utilization with 23% Q4 overrun risk. Current pound usage vs. allocated pounds shows escalating variance.
                         </p>
                         <div className="flex-1 flex flex-col">
                           <ChartContainer config={budgetRiskConfig} className="h-[200px] w-full">
@@ -4471,26 +4471,26 @@ export default function TrackerPage() {
                                   domain={[700, 1300]}
                                   ticks={[800, 950, 1100, 1250]}
                                   tick={{ fill: "#646464", fontSize: 12 }}
-                                  label={{ value: "Tokens", angle: -90, position: "insideLeft", offset: 15, style: { fill: "#646464", fontSize: 12, textAnchor: "middle" } }}
+                                  label={{ value: "Pounds", angle: -90, position: "insideLeft", offset: 15, style: { fill: "#646464", fontSize: 12, textAnchor: "middle" } }}
                                 />
                                 <ChartTooltip content={<ChartTooltipContent className="bg-white [&_span]:text-black [&_div]:text-black" />} />
                                 <Legend />
                                 <Line 
                                   type="monotone" 
-                                  dataKey="tokensUsed" 
+                                  dataKey="poundsUsed" 
                                   stroke="#0177c7" 
                                   strokeWidth={2} 
                                   dot={{ fill: "#0177c7", r: 4 }}
-                                  name="Tokens used"
+                                  name="Pounds used"
                                 />
                                 <Line 
                                   type="monotone" 
-                                  dataKey="tokensAllocated" 
+                                  dataKey="poundsAllocated" 
                                   stroke="#03b3e2" 
                                   strokeWidth={2} 
                                   strokeDasharray="5 5"
                                   dot={{ fill: "#03b3e2", r: 4 }}
-                                  name="Tokens allocated"
+                                  name="Pounds allocated"
                                 />
                               </LineChart>
                             </ResponsiveContainer>
@@ -4604,7 +4604,7 @@ export default function TrackerPage() {
                       </CardHeader>
                       <CardContent className="space-y-4">
                         <p className="text-sm text-black leading-[18.62px]">
-                          Mobile division tracking 97% token utilization with 23% Q4 overrun risk. Current token usage vs. allocated tokens shows escalating variance.
+                          Mobile division tracking 97% pound utilization with 23% Q4 overrun risk. Current pound usage vs. allocated pounds shows escalating variance.
                         </p>
                         <ChartContainer config={budgetRiskConfig} className="h-[200px] w-full">
                           <ResponsiveContainer width="100%" height="100%">
@@ -4622,26 +4622,26 @@ export default function TrackerPage() {
                                 domain={[700, 1300]}
                                 ticks={[800, 950, 1100, 1250]}
                                 tick={{ fill: "#646464", fontSize: 12 }}
-                                label={{ value: "Tokens", angle: -90, position: "insideLeft", offset: 15, style: { fill: "#646464", fontSize: 12, textAnchor: "middle" } }}
+                                label={{ value: "Pounds", angle: -90, position: "insideLeft", offset: 15, style: { fill: "#646464", fontSize: 12, textAnchor: "middle" } }}
                               />
                               <ChartTooltip content={<ChartTooltipContent className="bg-white [&_span]:text-black [&_div]:text-black" />} />
                               <Legend />
                               <Line 
                                 type="monotone" 
-                                dataKey="tokensUsed" 
+                                dataKey="poundsUsed" 
                                 stroke="#0177c7" 
                                 strokeWidth={2} 
                                 dot={{ fill: "#0177c7", r: 4 }}
-                                name="Tokens used"
+                                name="Pounds used"
                               />
                               <Line 
                                 type="monotone" 
-                                dataKey="tokensAllocated" 
+                                dataKey="poundsAllocated" 
                                 stroke="#03b3e2" 
                                 strokeWidth={2} 
                                 strokeDasharray="5 5"
                                 dot={{ fill: "#03b3e2", r: 4 }}
-                                name="Tokens allocated"
+                                name="Pounds allocated"
                               />
                             </LineChart>
                           </ResponsiveContainer>
@@ -4748,7 +4748,7 @@ export default function TrackerPage() {
                       </CardHeader>
                       <CardContent className="space-y-4">
                         <p className="text-sm text-black leading-[18.62px] font-medium">
-                          Reallocate token spend to achieve 23% cost efficiency improvement.
+                          Reallocate pound spend to achieve 23% cost efficiency improvement.
                         </p>
                         <div className="space-y-2">
                           <div className="flex items-center justify-between">
@@ -4756,8 +4756,8 @@ export default function TrackerPage() {
                             <span className="text-sm font-bold text-black">3 divisions</span>
                           </div>
                           <div className="flex items-center justify-between">
-                            <span className="text-sm text-black">Under-utilized tokens</span>
-                            <span className="text-sm font-bold text-black">2,400 tokens</span>
+                            <span className="text-sm text-black">Under-utilized pounds</span>
+                            <span className="text-sm font-bold text-black">2,400 pounds</span>
                           </div>
                           <div className="flex items-center justify-between">
                             <span className="text-sm text-black">Potential savings for reallocation</span>
@@ -4766,7 +4766,7 @@ export default function TrackerPage() {
                         </div>
                         <div className="border border-[#00C3B1] rounded-lg bg-[#00C3B10F] p-3">
                           <p className="text-xs font-bold text-[#00C3B1] mb-1">Action required</p>
-                          <p className="text-xs text-black">Redistribute 1,200 tokens from Mobile to Wearable division. Implement quarterly budget reviews.</p>
+                          <p className="text-xs text-black">Redistribute 1,200 pounds from Mobile to Wearable division. Implement quarterly budget reviews.</p>
                         </div>
                       </CardContent>
                     </Card>

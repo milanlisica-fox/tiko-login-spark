@@ -56,7 +56,7 @@ export default function Topbar({
               className="flex items-center gap-1 hover:opacity-70 transition cursor-pointer"
             >
               <TokensIcon size={18} className="text-[#848487] lg:w-5 lg:h-5" />
-              <span className="text-xs leading-[15.96px] text-[#646464]">4,500 Tokens remaining this quarter</span>
+              <span className="text-xs leading-[15.96px] text-[#646464]">£4,500 remaining this quarter</span>
             </button>
             <UserMenu name="Murray Gordon" dept="Marcomms" onClick={() => navigate("/dashboard/profile")} />
           </>

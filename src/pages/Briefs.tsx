@@ -75,7 +75,7 @@ export const PAST_BRIEFS: Array<{
           id: "calc-1",
           name: "Master KV creation",
           description: "Master KV creation",
-          tokenPrice: 30,
+          poundPrice: 30,
           assetSpecification: "1920x1080, 300dpi, CMYK",
           deliveryWeek: "Week 12",
           quantity: 10,
@@ -85,7 +85,7 @@ export const PAST_BRIEFS: Array<{
           id: "calc-2",
           name: "Static KV adaptation",
           description: "Static KV adaptation",
-          tokenPrice: 3,
+          poundPrice: 3,
           assetSpecification: "Multiple sizes for social media",
           deliveryWeek: "Week 13",
           quantity: 50,
@@ -95,7 +95,7 @@ export const PAST_BRIEFS: Array<{
           id: "calc-3",
           name: "Status KV adaptation",
           description: "Status KV adaptation",
-          tokenPrice: 3,
+          poundPrice: 3,
           assetSpecification: "",
           deliveryWeek: "",
           quantity: 0,
@@ -105,7 +105,7 @@ export const PAST_BRIEFS: Array<{
           id: "calc-4",
           name: "Master KV animation creation",
           description: "Master KV animation creation",
-          tokenPrice: 100,
+          poundPrice: 100,
           assetSpecification: "",
           deliveryWeek: "",
           quantity: 10,
@@ -115,7 +115,7 @@ export const PAST_BRIEFS: Array<{
           id: "calc-5",
           name: "Master KV animation adaptation",
           description: "Master KV animation adaptation",
-          tokenPrice: 3,
+          poundPrice: 3,
           assetSpecification: "",
           deliveryWeek: "",
           quantity: 20,
@@ -125,7 +125,7 @@ export const PAST_BRIEFS: Array<{
           id: "calc-6",
           name: "PPT Files",
           description: "PPT Files",
-          tokenPrice: 30,
+          poundPrice: 30,
           assetSpecification: "",
           deliveryWeek: "",
           quantity: 1,
@@ -135,7 +135,7 @@ export const PAST_BRIEFS: Array<{
           id: "calc-7",
           name: "Roundel",
           description: "Roundel",
-          tokenPrice: 3,
+          poundPrice: 3,
           assetSpecification: "",
           deliveryWeek: "",
           quantity: 4,
@@ -145,7 +145,7 @@ export const PAST_BRIEFS: Array<{
           id: "calc-8",
           name: "Urgency tag",
           description: "Urgency tag",
-          tokenPrice: 3,
+          poundPrice: 3,
           assetSpecification: "",
           deliveryWeek: "",
           quantity: 4,
@@ -172,7 +172,7 @@ export const PAST_BRIEFS: Array<{
           id: "calc-12",
           name: "Master KV",
           description: "Master KV",
-          tokenPrice: 8,
+          poundPrice: 8,
           assetSpecification: "A4, A3, A2 formats",
           deliveryWeek: "Week 8",
           quantity: 1,
@@ -182,7 +182,7 @@ export const PAST_BRIEFS: Array<{
           id: "calc-13",
           name: "Digital display banner",
           description: "Digital display banner",
-          tokenPrice: 5,
+          poundPrice: 5,
           assetSpecification: "728x90, 300x250, 970x250",
           deliveryWeek: "Week 9",
           quantity: 5,
@@ -192,7 +192,7 @@ export const PAST_BRIEFS: Array<{
           id: "calc-14",
           name: "Social banners static",
           description: "Social banners static",
-          tokenPrice: 4,
+          poundPrice: 4,
           assetSpecification: "1080x1080, 1200x628",
           deliveryWeek: "Week 9",
           quantity: 4,
@@ -219,7 +219,7 @@ export const PAST_BRIEFS: Array<{
           id: "calc-16",
           name: "Toolkit",
           description: "Toolkit",
-          tokenPrice: 6,
+          poundPrice: 6,
           assetSpecification: "Complete brand toolkit",
           deliveryWeek: "Week 6",
           quantity: 1,
@@ -229,7 +229,7 @@ export const PAST_BRIEFS: Array<{
           id: "calc-19",
           name: "Static KVs",
           description: "Static KVs",
-          tokenPrice: 5,
+          poundPrice: 5,
           assetSpecification: "Multiple product angles",
           deliveryWeek: "Week 7",
           quantity: 8,
@@ -239,7 +239,7 @@ export const PAST_BRIEFS: Array<{
           id: "calc-20",
           name: "Animated KVs",
           description: "Animated KVs",
-          tokenPrice: 7,
+          poundPrice: 7,
           assetSpecification: "15s and 30s versions",
           deliveryWeek: "Week 8",
           quantity: 4,
@@ -249,7 +249,7 @@ export const PAST_BRIEFS: Array<{
           id: "calc-23",
           name: "Digi banners",
           description: "Digi banners",
-          tokenPrice: 5,
+          poundPrice: 5,
           assetSpecification: "All standard sizes",
           deliveryWeek: "Week 9",
           quantity: 6,
@@ -276,7 +276,7 @@ export const PAST_BRIEFS: Array<{
           id: "calc-1",
           name: "Master KV creation (PSD, JPEG, INDD, PDF)",
           description: "Master KV creation (PSD, JPEG, INDD, PDF)",
-          tokenPrice: 8,
+          poundPrice: 8,
           assetSpecification: "Festive theme with holiday colors",
           deliveryWeek: "Week 10",
           quantity: 1,
@@ -286,7 +286,7 @@ export const PAST_BRIEFS: Array<{
           id: "calc-4",
           name: "Master KV animation creation (MP4, AEP)",
           description: "Master KV animation creation (MP4, AEP)",
-          tokenPrice: 10,
+          poundPrice: 10,
           assetSpecification: "30s animation loop",
           deliveryWeek: "Week 11",
           quantity: 1,
@@ -296,7 +296,7 @@ export const PAST_BRIEFS: Array<{
           id: "calc-6",
           name: "PPT Files",
           description: "PPT Files",
-          tokenPrice: 4,
+          poundPrice: 4,
           assetSpecification: "Presentation deck template",
           deliveryWeek: "Week 11",
           quantity: 1,
@@ -323,7 +323,7 @@ export const PAST_BRIEFS: Array<{
           id: "calc-12",
           name: "Master KV",
           description: "Master KV",
-          tokenPrice: 8,
+          poundPrice: 8,
           assetSpecification: "Updated product imagery",
           deliveryWeek: "Week 5",
           quantity: 1,
@@ -333,7 +333,7 @@ export const PAST_BRIEFS: Array<{
           id: "calc-15",
           name: "Social banners animation",
           description: "Social banners animation",
-          tokenPrice: 6,
+          poundPrice: 6,
           assetSpecification: "Stories and feed formats",
           deliveryWeek: "Week 6",
           quantity: 6,
@@ -343,7 +343,7 @@ export const PAST_BRIEFS: Array<{
           id: "calc-3",
           name: "Static KV adaption (INDD, PDF)",
           description: "Static KV adaption (INDD, PDF)",
-          tokenPrice: 5,
+          poundPrice: 5,
           assetSpecification: "Print-ready formats",
           deliveryWeek: "Week 6",
           quantity: 2,
@@ -370,7 +370,7 @@ export const PAST_BRIEFS: Array<{
           id: "calc-1",
           name: "Master KV creation (PSD, JPEG, INDD, PDF)",
           description: "Master KV creation (PSD, JPEG, INDD, PDF)",
-          tokenPrice: 8,
+          poundPrice: 8,
           assetSpecification: "Fresh, modern aesthetic",
           deliveryWeek: "Week 1",
           quantity: 1,
@@ -380,7 +380,7 @@ export const PAST_BRIEFS: Array<{
           id: "calc-9",
           name: "Video creation",
           description: "Video creation",
-          tokenPrice: 12,
+          poundPrice: 12,
           assetSpecification: "60s hero video",
           deliveryWeek: "Week 2",
           quantity: 1,
@@ -390,7 +390,7 @@ export const PAST_BRIEFS: Array<{
           id: "calc-5",
           name: "Master KV animation adaption (MP4, AEP)",
           description: "Master KV animation adaption (MP4, AEP)",
-          tokenPrice: 7,
+          poundPrice: 7,
           assetSpecification: "15s and 30s cutdowns",
           deliveryWeek: "Week 3",
           quantity: 3,
@@ -423,7 +423,6 @@ export const TEMPLATE_ASSETS_MAP: Record<string, string[]> = {
 
 // New brief form images from Figma
 const briefLoadingIcon = BRIEFS_ASSETS.briefLoadingIcon;
-const tokenIcon = BRIEFS_ASSETS.tokenIcon;
 const createBriefArrowIcon = BRIEFS_ASSETS.createBriefArrowIcon;
 
 // Deliverables screen images from Figma
@@ -493,71 +492,71 @@ const CALCULATOR_ASSETS_LIST: RecommendedAsset[] = [
     id: "calc-1",
     name: "Master KV creation",
     description: "Master KV creation",
-    tokenPrice: 30,
+    poundPrice: 30,
   },
   {
     id: "calc-2",
     name: "Static KV adaptation",
     description: "Static KV adaptation",
-    tokenPrice: 3,
+    poundPrice: 3,
   },
   {
     id: "calc-3",
     name: "Status KV adaptation",
     description: "Status KV adaptation",
-    tokenPrice: 3,
+    poundPrice: 3,
   },
   {
     id: "calc-4",
     name: "Master KV animation creation",
     description: "Master KV animation creation",
-    tokenPrice: 100,
+    poundPrice: 100,
   },
   {
     id: "calc-5",
     name: "Master KV animation adaptation",
     description: "Master KV animation adaptation",
-    tokenPrice: 3,
+    poundPrice: 3,
   },
   {
     id: "calc-6",
     name: "PPT Files",
     description: "PPT Files",
-    tokenPrice: 30,
+    poundPrice: 30,
   },
   {
     id: "calc-7",
     name: "Roundel",
     description: "Roundel",
-    tokenPrice: 3,
+    poundPrice: 3,
   },
   {
     id: "calc-8",
     name: "Urgency tag",
     description: "Urgency tag",
-    tokenPrice: 3,
+    poundPrice: 3,
   },
   {
     id: "calc-9",
     name: "Video creation",
     description: "Video creation",
-    tokenPrice: 100,
+    poundPrice: 100,
   },
   {
     id: "calc-10",
     name: "Video adaptation",
     description: "Video adaptation",
-    tokenPrice: 3,
+    poundPrice: 3,
   },
   {
     id: "calc-11",
     name: "Watermarked files",
     description: "Watermarked files",
-    tokenPrice: 2,
+    poundPrice: 2,
   },
 ];
 
-// Flagship toolkit token prices (different from standard)
+// Flagship toolkit pound prices (different from standard)
 const FLAGSHIP_TOKEN_PRICES: Record<string, number> = {
   "calc-1": 70,  // Master KV creation
   "calc-2": 4,   // Static KV adaptation
@@ -572,7 +571,7 @@ const ADDITIONAL_ASSETS: RecommendedAsset[] = [];
 // Helper function to get asset with correct pricing based on template
 const getAssetWithTemplatePrice = (asset: RecommendedAsset, templateId: string): RecommendedAsset => {
   if (templateId === "flagship-campaign" && FLAGSHIP_TOKEN_PRICES[asset.id]) {
-    return { ...asset, tokenPrice: FLAGSHIP_TOKEN_PRICES[asset.id] };
+    return { ...asset, poundPrice: FLAGSHIP_TOKEN_PRICES[asset.id] };
   }
   return asset;
 };
@@ -629,7 +628,7 @@ interface RecommendedAsset {
   id: string;
   name: string;
   description: string;
-  tokenPrice: number;
+  poundPrice: number;
 }
 
 export interface SelectedAsset extends RecommendedAsset {
@@ -1132,7 +1131,7 @@ export default function BriefsPage() {
       calculatorAssets?: Array<{
         id: string;
         title: string;
-        tokens: number;
+        pounds: number;
         quantity: number;
       }>;
       duplicateBrief?: Omit<NewBriefFormValues, "projectTitle" | "dueDate" | "projectLead" | "underNDA">;
@@ -1193,7 +1192,7 @@ export default function BriefsPage() {
           id: `calc-${calcAsset.id}`,
           name: calcAsset.title,
           description: calcAsset.title,
-          tokenPrice: calcAsset.tokens,
+          poundPrice: calcAsset.pounds,
           assetSpecification: "",
           deliveryWeek: "",
           quantity: calcAsset.quantity,
@@ -1742,7 +1741,7 @@ function detectDiffs(current: NewBriefFormValues, original: NewBriefFormValues |
       originalAsset.assetSpecification !== asset.assetSpecification ||
       originalAsset.deliveryWeek !== asset.deliveryWeek ||
       originalAsset.name !== asset.name ||
-      originalAsset.tokenPrice !== asset.tokenPrice
+      originalAsset.poundPrice !== asset.poundPrice
     );
   });
 
@@ -1880,14 +1879,14 @@ function ReviewNewBriefModal({
                                 </TooltipTrigger>
                                 <TooltipContent>
                                   <p className="max-w-[300px]">
-                                    IRIS will review this asset and provide token price for it. You will be informed once this is done.
+                                    IRIS will review this asset and provide pound price for it. You will be informed once this is done.
                                   </p>
                                 </TooltipContent>
                               </Tooltip>
                             </TooltipProvider>
                           ) : (
                             <span className="text-xs text-[#424242]">
-                              {asset.tokenPrice} tokens
+                              £{asset.poundPrice}
                             </span>
                           )}
                         </div>
@@ -2176,7 +2175,7 @@ function ReviewChangeRequestModal({
                     originalAsset.assetSpecification !== asset.assetSpecification ||
                     originalAsset.deliveryWeek !== asset.deliveryWeek ||
                     originalAsset.name !== asset.name ||
-                    originalAsset.tokenPrice !== asset.tokenPrice
+                    originalAsset.poundPrice !== asset.poundPrice
                   );
                   const isNewAsset = originalBriefData && !originalAsset;
                   
@@ -2213,14 +2212,14 @@ function ReviewChangeRequestModal({
                                 </TooltipTrigger>
                                 <TooltipContent>
                                   <p className="max-w-[300px]">
-                                    IRIS will review this asset and provide token price for it. You will be informed once this is done.
+                                    IRIS will review this asset and provide pound price for it. You will be informed once this is done.
                                   </p>
                                 </TooltipContent>
                               </Tooltip>
                             </TooltipProvider>
                           ) : (
                             <span className="text-xs text-[#424242]">
-                              {asset.tokenPrice} tokens
+                              £{asset.poundPrice}
                             </span>
                           )}
                         </div>
@@ -2229,7 +2228,7 @@ function ReviewChangeRequestModal({
                         <div className="bg-white rounded-lg p-2 space-y-1 mb-2">
                           <p className="text-xs text-[#848487] font-semibold">Original:</p>
                           <p className="text-xs text-[#6b6b6f] line-through opacity-60">
-                            Quantity: {originalAsset.quantity} × {originalAsset.tokenPrice} tokens
+                            Quantity: {originalAsset.quantity} × £{originalAsset.poundPrice}
                           </p>
                           {originalAsset.assetSpecification && (
                             <p className="text-xs text-[#6b6b6f] line-through opacity-60">
@@ -2268,7 +2267,7 @@ function ReviewChangeRequestModal({
                           </div>
                           <p className="text-sm font-semibold text-black line-through opacity-60">{removedAsset.name}</p>
                           <p className="text-xs text-[#6b6b6f] line-through opacity-60">
-                            Quantity: {removedAsset.quantity} × {removedAsset.tokenPrice} tokens
+                            Quantity: {removedAsset.quantity} × £{removedAsset.poundPrice}
                           </p>
                         </div>
                       ))}
@@ -2351,50 +2350,42 @@ function NewBriefForm({
   const [quantityInputs, setQuantityInputs] = useState<Record<string, string>>({});
   const [deliverableSelectionMode, setDeliverableSelectionMode] = useState<"template" | "build-your-own">(fromCalculator ? "build-your-own" : "template");
   const changeRequestMode = Boolean(isChangeRequest);
-  const tokenEstimate = useMemo(
+  const poundEstimate = useMemo(
     () => formData.assets
       .filter((asset) => !asset.isCustom)
-      .reduce((total, asset) => total + asset.tokenPrice * asset.quantity, 0),
+      .reduce((total, asset) => total + asset.poundPrice * asset.quantity, 0),
     [formData.assets]
   );
 
   const [previousTotal, setPreviousTotal] = useState(0);
   const [showCoinAnimation, setShowCoinAnimation] = useState(false);
-  const [displayTokens, setDisplayTokens] = useState(0);
   const [displayPounds, setDisplayPounds] = useState(0);
   const coinAnimationTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   // Handle coin animation when total changes
   useEffect(() => {
-    if (tokenEstimate !== previousTotal) {
-      const totalPounds = tokenEstimate * 4.5;
-      
-      if (previousTotal > 0 && tokenEstimate > previousTotal) {
+    if (poundEstimate !== previousTotal) {
+      if (previousTotal > 0 && poundEstimate > previousTotal) {
         // Asset added or quantity increased - show coin animation
         setShowCoinAnimation(true);
-        setDisplayTokens(previousTotal);
-        setDisplayPounds(previousTotal * 4.5);
+        setDisplayPounds(previousTotal);
         
         // Animate numbers from previous to new total
         const duration = 500; // 500ms animation
         const steps = 30;
         const stepDuration = duration / steps;
-        const tokenIncrement = (tokenEstimate - previousTotal) / steps;
-        const poundIncrement = (totalPounds - previousTotal * 4.5) / steps;
+        const poundIncrement = (poundEstimate - previousTotal) / steps;
         let currentStep = 0;
         
         const animateNumbers = () => {
           currentStep++;
-          const newTokenValue = Math.round(previousTotal + tokenIncrement * currentStep);
-          const newPoundValue = Math.round(previousTotal * 4.5 + poundIncrement * currentStep);
-          setDisplayTokens(newTokenValue);
+          const newPoundValue = Math.round(previousTotal + poundIncrement * currentStep);
           setDisplayPounds(newPoundValue);
           
           if (currentStep < steps) {
             setTimeout(animateNumbers, stepDuration);
           } else {
-            setDisplayTokens(tokenEstimate);
-            setDisplayPounds(totalPounds);
+            setDisplayPounds(poundEstimate);
             // Hide coin after number animation completes
             if (coinAnimationTimeoutRef.current) {
               clearTimeout(coinAnimationTimeoutRef.current);
@@ -2409,15 +2400,14 @@ function NewBriefForm({
         setTimeout(animateNumbers, 300);
       } else {
         // Asset removed, quantity decreased, or initial state - just update numbers, no coin
-        setDisplayTokens(tokenEstimate);
-        setDisplayPounds(totalPounds);
+        setDisplayPounds(poundEstimate);
         setShowCoinAnimation(false);
       }
     }
     
     // Update previous total after handling animation
-    if (tokenEstimate !== previousTotal) {
-      setPreviousTotal(tokenEstimate);
+    if (poundEstimate !== previousTotal) {
+      setPreviousTotal(poundEstimate);
     }
     
     return () => {
@@ -2425,7 +2415,7 @@ function NewBriefForm({
         clearTimeout(coinAnimationTimeoutRef.current);
       }
     };
-  }, [tokenEstimate, previousTotal]);
+  }, [poundEstimate, previousTotal]);
 
   const hasCustomAssets = useMemo(
     () => formData.assets.some((asset) => asset.isCustom),
@@ -2693,7 +2683,7 @@ function NewBriefForm({
       id,
       name: customAssetDraft.name.trim(),
       description: customAssetDraft.description.trim() || "Custom asset",
-      tokenPrice: DEFAULT_CUSTOM_ASSET_PRICE,
+      poundPrice: DEFAULT_CUSTOM_ASSET_PRICE,
       assetSpecification: customAssetDraft.description.trim(),
       deliveryWeek: "",
       quantity: quantity,
@@ -2717,7 +2707,7 @@ function NewBriefForm({
       const isCustom = 'isCustom' in asset && asset.isCustom === true;
       const isWatermarked = asset.id === "calc-11";
       const isChecked = isWatermarked && quantity > 0;
-      const totalTokens = quantity > 0 && selectedAsset && !isCustom ? selectedAsset.tokenPrice * (isWatermarked ? 1 : quantity) : 0;
+      const totalPounds = quantity > 0 && selectedAsset && !isCustom ? selectedAsset.poundPrice * (isWatermarked ? 1 : quantity) : 0;
 
       return (
         <div key={asset.id}>
@@ -2726,7 +2716,7 @@ function NewBriefForm({
               <p className="text-sm leading-[18.62px] text-black truncate">{asset.name}</p>
               {!isCustom && (
                 <p className="text-[16.24px] leading-[14px] text-black">
-                  {asset.tokenPrice} {asset.tokenPrice === 1 ? "token" : "tokens"}
+                  £{asset.poundPrice}
                 </p>
               )}
               {isCustom && (
@@ -2738,7 +2728,7 @@ function NewBriefForm({
                       </TooltipTrigger>
                       <TooltipContent>
                         <p className="max-w-[300px]">
-                          IRIS will review this asset and provide token price for it. You will be informed once this is done.
+                          IRIS will review this asset and provide pound price for it. You will be informed once this is done.
                         </p>
                       </TooltipContent>
                     </Tooltip>
@@ -2810,7 +2800,7 @@ function NewBriefForm({
                                 </TooltipTrigger>
                                 <TooltipContent>
                                   <p className="max-w-[300px]">
-                                    IRIS will review this asset and provide token price for it. You will be informed once this is done.
+                                    IRIS will review this asset and provide pound price for it. You will be informed once this is done.
                                   </p>
                                 </TooltipContent>
                               </Tooltip>
@@ -2834,7 +2824,7 @@ function NewBriefForm({
               </div>
               {quantity > 0 && !isCustom && (
                 <p className="text-[16.24px] leading-[14px] text-black">
-                  {totalTokens} {totalTokens === 1 ? "token" : "tokens"} total
+                  £{totalPounds} total
                 </p>
               )}
             </div>
@@ -3375,7 +3365,7 @@ function NewBriefForm({
         {/* Bottom Action Buttons - Fixed */}
         <div className="fixed bottom-0 left-0 lg:left-[240px] right-0 pt-4 pb-2 px-4 md:px-6 z-10 pointer-events-none bg-white shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.1)]">
           <div className="flex flex-col gap-2.5 w-full max-w-full pointer-events-auto">
-            {/* Token Estimate */}
+            {/* Pound Estimate */}
             <div className="flex items-center gap-2 justify-end pb-2">
               <div className="flex gap-2 md:gap-4 items-center">
                 <span className="h-8 w-8 md:h-10 md:w-10 flex items-center justify-center shrink-0">
@@ -3392,21 +3382,11 @@ function NewBriefForm({
                       className="text-[#ffb546] animate-slide-in-coin"
                     />
                   )}
-                  <TooltipProvider>
-                    <Tooltip>
-                      <TooltipTrigger asChild>
-                        <span className="text-lg md:text-[26px] leading-[25px] md:leading-[37.24px] text-black font-medium cursor-help transition-all duration-300 tabular-nums">
-                          {displayTokens}
-                          <span className="text-[#848487] ml-1">(£{displayPounds})</span>
-                        </span>
-                      </TooltipTrigger>
-                      <TooltipContent>
-                        <p>Each token is worth 4.5 pounds</p>
-                      </TooltipContent>
-                    </Tooltip>
-                  </TooltipProvider>
+                  <span className="text-lg md:text-[26px] leading-[25px] md:leading-[37.24px] text-black font-medium transition-all duration-300 tabular-nums">
+                    £{displayPounds}
+                  </span>
                 </div>
-                <span className="text-sm md:text-[26px] leading-[18px] md:leading-[37.24px] text-[#848487]">Total tokens</span>
+                <span className="text-sm md:text-[26px] leading-[18px] md:leading-[37.24px] text-[#848487]">Total estimate</span>
               </div>
               {hasCustomAssets && (
                 <TooltipProvider>
@@ -3416,7 +3396,7 @@ function NewBriefForm({
                     </TooltipTrigger>
                     <TooltipContent>
                       <p className="max-w-[300px]">
-                        Your list of assets contains one or more custom assets. IRIS will review it and set the token price. You will be informed once this is done.
+                        Your list of assets contains one or more custom assets. IRIS will review it and set the pound price. You will be informed once this is done.
                       </p>
                     </TooltipContent>
                   </Tooltip>
@@ -3675,7 +3655,7 @@ function DeliverablesSelectionScreen({
 }) {
   const navigate = useNavigate();
   const [selectedDeliverables, setSelectedDeliverables] = useState<string[]>([]);
-  const [tokenEstimate, setTokenEstimate] = useState(0);
+  const [poundEstimate, setPoundEstimate] = useState(0);
   const [chatInput, setChatInput] = useState("");
   const [showConfirmation, setShowConfirmation] = useState(false);
   const [showSaveDraftConfirmation, setShowSaveDraftConfirmation] = useState(false);
@@ -3711,13 +3691,13 @@ function DeliverablesSelectionScreen({
     }
   };
 
-  const handleAddDeliverable = (deliverableId: string, tokens: number) => {
+  const handleAddDeliverable = (deliverableId: string, pounds: number) => {
     if (selectedDeliverables.includes(deliverableId)) {
       setSelectedDeliverables(selectedDeliverables.filter(id => id !== deliverableId));
-      setTokenEstimate(prev => prev - tokens);
+      setPoundEstimate(prev => prev - pounds);
     } else {
       setSelectedDeliverables([...selectedDeliverables, deliverableId]);
-      setTokenEstimate(prev => prev + tokens);
+      setPoundEstimate(prev => prev + pounds);
     }
   };
 
@@ -3783,11 +3763,11 @@ function DeliverablesSelectionScreen({
                           {deliverable.title}
                         </p>
                         <p className="text-[10px] leading-[14px] text-black">
-                          {deliverable.tokens} {deliverable.tokens === 1 ? "token" : "tokens"}
+                          £{deliverable.pounds}
                         </p>
                       </div>
                       <button
-                        onClick={() => handleAddDeliverable(deliverable.id, deliverable.tokens)}
+                        onClick={() => handleAddDeliverable(deliverable.id, deliverable.pounds)}
                         className={`w-8 h-8 rounded-full flex items-center justify-center transition ${
                           isSelected 
                             ? "bg-[#03B3E2] hover:bg-[#0299c7]" 
@@ -3857,8 +3837,8 @@ function DeliverablesSelectionScreen({
 
           {/* Footer */}
           <div className="flex flex-col gap-1 items-end shrink-0 w-full">
-            {/* Token Estimate */}
-            <TokenEstimate value={tokenEstimate} />
+            {/* Pound Estimate */}
+            <TokenEstimate value={poundEstimate} />
 
             {/* Action Buttons */}
             <div className="flex items-center w-full gap-2 min-w-0">
@@ -3915,11 +3895,11 @@ function DeliverablesSelectionScreen({
                           {deliverable.title}
                         </p>
                         <p className="text-[10px] leading-[14px] text-black">
-                          {deliverable.tokens} {deliverable.tokens === 1 ? "token" : "tokens"}
+                          £{deliverable.pounds}
                         </p>
                       </div>
                       <button
-                        onClick={() => handleAddDeliverable(deliverable.id, deliverable.tokens)}
+                        onClick={() => handleAddDeliverable(deliverable.id, deliverable.pounds)}
                         className={`w-8 h-8 rounded-full flex items-center justify-center transition ${
                           isSelected 
                             ? "bg-[#03B3E2] hover:bg-[#0299c7]" 
@@ -4215,7 +4195,7 @@ function AIResponseScreen({
 
           {/* Footer */}
           <div className="flex flex-col gap-1 items-end shrink-0 w-full">
-            {/* Token Estimate */}
+            {/* Pound Estimate */}
             <TokenEstimate value={10} />
 
             {/* Action Buttons */}

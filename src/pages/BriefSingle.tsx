@@ -1,6 +1,6 @@
 import { useState, useMemo } from "react";
 import { useParams, useNavigate, useLocation } from "react-router-dom";
-import { ArrowLeft, Calendar as CalendarIcon, HelpCircle, Send } from "lucide-react";
+import { ArrowLeft, Calendar as CalendarIcon, HelpCircle, Send, PoundSterling } from "lucide-react";
 import { format, parse } from "date-fns";
 import DashboardLayout from "@/components/layout/DashboardLayout";
 import DashboardTopbarRight from "@/components/layout/DashboardTopbarRight";
@@ -40,7 +40,7 @@ const mockBriefData: NewBriefFormValues = {
       id: "asset-key-visual",
       name: "Key visual",
       description: "Primary KV ready for localisation",
-      tokenPrice: 4,
+      poundPrice: 4,
       assetSpecification: "High-resolution files in JPEG and PSD formats. Multiple variants: clean, 70/30, and 80/20 versions. Sizes: PDF, PT EXT, LS EXT for 80/20 variant.",
       deliveryWeek: "Week 32",
       quantity: 2,
@@ -50,7 +50,7 @@ const mockBriefData: NewBriefFormValues = {
       id: "asset-social-media-pack",
       name: "Social media pack",
       description: "Complete set of social media assets",
-      tokenPrice: 3,
+      poundPrice: 3,
       assetSpecification: "Instagram posts (1080x1080), Stories (1080x1920), Facebook cover (1200x630), Twitter header (1500x500)",
       deliveryWeek: "Week 33",
       quantity: 1,
@@ -60,7 +60,7 @@ const mockBriefData: NewBriefFormValues = {
       id: "asset-video-content",
       name: "Video content",
       description: "Video assets for digital channels",
-      tokenPrice: 7,
+      poundPrice: 7,
       assetSpecification: "15-second and 30-second versions. Formats: MP4 (1080p), MOV (4K). Include subtitles and versions without text overlay.",
       deliveryWeek: "Week 34",
       quantity: 1,
@@ -70,7 +70,7 @@ const mockBriefData: NewBriefFormValues = {
       id: "custom-1",
       name: "Custom POS Toolkit",
       description: "Custom asset",
-      tokenPrice: 8,
+      poundPrice: 8,
       assetSpecification: "Point of sale materials including shelf talkers, window displays, and counter cards. Sizes: A4, A3, and custom formats for specific retail locations.",
       deliveryWeek: "Week 35",
       quantity: 1,
@@ -173,7 +173,7 @@ function projectToBriefFormValues(project: { id: number; name: string; dueDate?:
         id: "calc-1",
         name: "Master KV creation (PSD, JPEG, INDD, PDF)",
         description: "Master KV creation (PSD, JPEG, INDD, PDF)",
-        tokenPrice: 8,
+        poundPrice: 8,
         assetSpecification: "High-resolution files in JPEG and PSD formats",
         deliveryWeek: "Week 32",
         quantity: 1,
@@ -220,9 +220,9 @@ export default function BriefSinglePage() {
 
   const selectedTemplateName = FORM_TEMPLATE_OPTIONS.find((option) => option.id === briefData.selectedTemplate)?.title || "";
 
-  const tokenEstimate = briefData.assets
+  const poundEstimate = briefData.assets
     .filter((asset) => !asset.isCustom)
-    .reduce((total, asset) => total + asset.tokenPrice * asset.quantity, 0);
+    .reduce((total, asset) => total + asset.poundPrice * asset.quantity, 0);
 
   const hasCustomAssets = briefData.assets.some((asset) => asset.isCustom);
 
@@ -428,7 +428,7 @@ export default function BriefSinglePage() {
               <div className="flex flex-col gap-5">
                 {briefData.assets.map((asset, index) => {
                   const isCustom = asset.isCustom === true;
-                  const totalTokens = !isCustom ? asset.tokenPrice * asset.quantity : 0;
+                  const totalPounds = !isCustom ? asset.poundPrice * asset.quantity : 0;
 
                   return (
                     <div key={asset.id}>
@@ -437,7 +437,7 @@ export default function BriefSinglePage() {
                           <p className="text-sm leading-[18.62px] text-black truncate">{asset.name}</p>
                           {!isCustom && (
                             <p className="text-[16.24px] leading-[14px] text-black">
-                              {asset.tokenPrice} {asset.tokenPrice === 1 ? "token" : "tokens"}
+                              £{asset.poundPrice}
                             </p>
                           )}
                           {isCustom && (
@@ -449,7 +449,7 @@ export default function BriefSinglePage() {
                                   </TooltipTrigger>
                                   <TooltipContent>
                                     <p className="max-w-[300px]">
-                                      IRIS will review this asset and provide token price for it. You will be informed once this is done.
+                                      IRIS will review this asset and provide pound price for it. You will be informed once this is done.
                                     </p>
                                   </TooltipContent>
                                 </Tooltip>
@@ -469,7 +469,7 @@ export default function BriefSinglePage() {
                                     </TooltipTrigger>
                                     <TooltipContent>
                                       <p className="max-w-[300px]">
-                                        IRIS will review this asset and provide token price for it. You will be informed once this is done.
+                                        IRIS will review this asset and provide pound price for it. You will be informed once this is done.
                                       </p>
                                     </TooltipContent>
                                   </Tooltip>
@@ -477,9 +477,9 @@ export default function BriefSinglePage() {
                               )}
                             </div>
                           </div>
-                          {!isCustom && totalTokens > 0 && (
+                          {!isCustom && totalPounds > 0 && (
                             <p className="text-[16.24px] leading-[14px] text-black">
-                              {totalTokens} {totalTokens === 1 ? "token" : "tokens"} total
+                              £{totalPounds} total
                             </p>
                           )}
                         </div>
@@ -514,18 +514,14 @@ export default function BriefSinglePage() {
               </div>
             </section>
 
-            {/* Token Estimate */}
+            {/* Pound Estimate */}
             <div className="flex items-center gap-2 pt-4 pb-2">
               <div className="flex gap-4 items-center pb-2">
                 <span className="h-10 w-10 flex items-center justify-center">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 20 20" fill="none">
-                    <path d="M10.0016 16.6012C13.3865 16.6012 16.1306 15.5303 16.1306 14.2093C16.1306 12.8882 13.3865 11.8173 10.0016 11.8173C6.61662 11.8173 3.87256 12.8882 3.87256 14.2093C3.87256 15.5303 6.61662 16.6012 10.0016 16.6012Z" fill="#03B3E2" />
-                    <path d="M10.0016 7.54461C13.387 7.54461 16.1306 8.61587 16.1306 9.93653C16.1306 11.2572 13.387 12.3284 10.0016 12.3284C6.6161 12.3284 3.87256 11.2572 3.87256 9.93653C3.87256 8.61587 6.6161 7.54461 10.0016 7.54461Z" fill="#03B3E2" />
-                    <path d="M10.0018 8.05164C13.3867 8.05164 16.1308 6.98073 16.1308 5.65972C16.1308 4.33871 13.3867 3.26782 10.0018 3.26782C6.61682 3.26782 3.87276 4.33871 3.87276 5.65972C3.87276 6.98073 6.61682 8.05164 10.0018 8.05164Z" fill="#03B3E2" />
-                  </svg>
+                  <PoundSterling size={40} className="text-[#03B3E2]" />
                 </span>
-                <span className="text-[26px] leading-[37.24px] text-black font-medium">{tokenEstimate}</span>
-                <span className="text-[26px] leading-[37.24px] text-[#848487]">Tokens estimate</span>
+                <span className="text-[26px] leading-[37.24px] text-black font-medium">£{poundEstimate}</span>
+                <span className="text-[26px] leading-[37.24px] text-[#848487]">Pounds estimate</span>
               </div>
               {hasCustomAssets && (
                 <TooltipProvider>
@@ -535,7 +531,7 @@ export default function BriefSinglePage() {
                     </TooltipTrigger>
                     <TooltipContent>
                       <p className="max-w-[300px]">
-                        Your list of assets contains one or more custom assets. IRIS will review it and set the token price. You will be informed once this is done.
+                        Your list of assets contains one or more custom assets. IRIS will review it and set the pound price. You will be informed once this is done.
                       </p>
                     </TooltipContent>
                   </Tooltip>

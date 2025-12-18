@@ -36,7 +36,7 @@ export default function DashboardTopbarRight({
         className="flex items-center gap-1 hover:opacity-70 transition cursor-pointer"
       >
         <Icons.tokens size={18} className="text-[#848487] lg:w-5 lg:h-5" />
-        <span className="text-xs leading-[15.96px] text-[#646464]">{tokenCount} Tokens remaining this quarter</span>
+        <span className="text-xs leading-[15.96px] text-[#646464]">{tokenCount} Budget remaining this quarter</span>
       </button>
       <button
         onClick={() => navigate("/dashboard/profile")}

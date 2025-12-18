@@ -36,13 +36,13 @@ const createBriefArrowIcon = CALCULATOR_ASSETS.createBriefArrowIcon;
 interface AssetItem {
   id: string;
   title: string;
-  tokens: number;
+  pounds: number;
 }
 
 interface SelectedAsset {
   id: string;
   quantity: number;
-  tokens: number;
+  pounds: number;
 }
 
 export default function CalculatorPage() {
@@ -57,26 +57,25 @@ export default function CalculatorPage() {
   const [showAllAssets, setShowAllAssets] = useState(false);
   const [previousTotal, setPreviousTotal] = useState(0);
   const [showCoinAnimation, setShowCoinAnimation] = useState(false);
-  const [displayTokens, setDisplayTokens] = useState(0);
   const [displayPounds, setDisplayPounds] = useState(0);
   const coinAnimationTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   // nav items centralized via DashboardLayout
   const { activeName } = useActiveNav();
 
-  // Available assets with fixed token values
+  // Available assets with fixed pound values
   const availableAssets = useMemo<AssetItem[]>(() => {
     return [
-      { id: "1", title: "Master KV creation", tokens: 30 },
-      { id: "2", title: "Static KV adaptation", tokens: 3 },
-      { id: "3", title: "Status KV adaptation", tokens: 3 },
-      { id: "4", title: "Master KV animation creation", tokens: 100 },
-      { id: "5", title: "Master KV animation adaptation", tokens: 3 },
-      { id: "6", title: "PPT Files", tokens: 30 },
-      { id: "7", title: "Roundel", tokens: 3 },
-      { id: "8", title: "Urgency tag", tokens: 3 },
-      { id: "9", title: "Video creation", tokens: 100 },
-      { id: "10", title: "Video adaptation", tokens: 3 },
+      { id: "1", title: "Master KV creation", pounds: 30 },
+      { id: "2", title: "Static KV adaptation", pounds: 3 },
+      { id: "3", title: "Status KV adaptation", pounds: 3 },
+      { id: "4", title: "Master KV animation creation", pounds: 100 },
+      { id: "5", title: "Master KV animation adaptation", pounds: 3 },
+      { id: "6", title: "PPT Files", pounds: 30 },
+      { id: "7", title: "Roundel", pounds: 3 },
+      { id: "8", title: "Urgency tag", pounds: 3 },
+      { id: "9", title: "Video creation", pounds: 100 },
+      { id: "10", title: "Video adaptation", pounds: 3 },
     ];
   }, []);
 
@@ -178,41 +177,34 @@ export default function CalculatorPage() {
     }
   };
 
-  const totalTokens = selectedAssets.reduce(
-    (sum, asset) => sum + asset.tokens * asset.quantity,
+  const totalPounds = selectedAssets.reduce(
+    (sum, asset) => sum + asset.pounds * asset.quantity,
     0
   );
 
   // Handle coin animation when total changes
   useEffect(() => {
-    if (totalTokens !== previousTotal) {
-      const totalPounds = totalTokens * 4.5;
-      
-      if (previousTotal > 0 && totalTokens > previousTotal) {
+    if (totalPounds !== previousTotal) {
+      if (previousTotal > 0 && totalPounds > previousTotal) {
         // Asset added or quantity increased - show coin animation
         setShowCoinAnimation(true);
-        setDisplayTokens(previousTotal);
-        setDisplayPounds(previousTotal * 4.5);
+        setDisplayPounds(previousTotal);
         
         // Animate numbers from previous to new total
         const duration = 500; // 500ms animation
         const steps = 30;
         const stepDuration = duration / steps;
-        const tokenIncrement = (totalTokens - previousTotal) / steps;
-        const poundIncrement = (totalPounds - previousTotal * 4.5) / steps;
+        const poundIncrement = (totalPounds - previousTotal) / steps;
         let currentStep = 0;
         
         const animateNumbers = () => {
           currentStep++;
-          const newTokenValue = Math.round(previousTotal + tokenIncrement * currentStep);
-          const newPoundValue = Math.round(previousTotal * 4.5 + poundIncrement * currentStep);
-          setDisplayTokens(newTokenValue);
+          const newPoundValue = Math.round(previousTotal + poundIncrement * currentStep);
           setDisplayPounds(newPoundValue);
           
           if (currentStep < steps) {
             setTimeout(animateNumbers, stepDuration);
           } else {
-            setDisplayTokens(totalTokens);
             setDisplayPounds(totalPounds);
             // Hide coin after number animation completes
             if (coinAnimationTimeoutRef.current) {
@@ -228,15 +220,14 @@ export default function CalculatorPage() {
         setTimeout(animateNumbers, 300);
       } else {
         // Asset removed, quantity decreased, or initial state - just update numbers, no coin
-        setDisplayTokens(totalTokens);
         setDisplayPounds(totalPounds);
         setShowCoinAnimation(false);
       }
     }
     
     // Update previous total after handling animation
-    if (totalTokens !== previousTotal) {
-      setPreviousTotal(totalTokens);
+    if (totalPounds !== previousTotal) {
+      setPreviousTotal(totalPounds);
     }
     
     return () => {
@@ -244,7 +235,7 @@ export default function CalculatorPage() {
         clearTimeout(coinAnimationTimeoutRef.current);
       }
     };
-  }, [totalTokens, previousTotal]);
+  }, [totalPounds, previousTotal]);
 
   const assetTypeOptions = [
     "Animated Key Visual",
@@ -352,7 +343,7 @@ export default function CalculatorPage() {
           return {
             id: asset.id,
             title: assetItem?.title || "",
-            tokens: asset.tokens,
+            pounds: asset.pounds,
             quantity: asset.quantity,
           };
         }),
@@ -464,7 +455,7 @@ export default function CalculatorPage() {
                               {asset.title}
                             </p>
                             <p className="text-[10px] leading-[14px] text-black">
-                              {asset.tokens} {asset.tokens === 1 ? "token" : "tokens"}
+                              £{asset.pounds}
                             </p>
                           </div>
                           <div className="flex items-center gap-2 md:gap-4 shrink-0">
@@ -551,7 +542,7 @@ export default function CalculatorPage() {
                     Quantity
                   </p>
                   <p className="text-sm font-bold leading-[18.62px] text-black text-right w-[70px]">
-                    Tokens
+                    Pounds
                   </p>
                 </div>
 
@@ -575,7 +566,7 @@ export default function CalculatorPage() {
                             {asset.quantity}
                           </p>
                           <p className="text-sm leading-[18.62px] text-black text-right w-[70px] font-semibold transition-all duration-200">
-                            {asset.tokens * asset.quantity}
+                            £{asset.pounds * asset.quantity}
                           </p>
                         </div>
                       ))}
@@ -589,7 +580,7 @@ export default function CalculatorPage() {
                     <div className="h-px bg-[#e0e0e0]" />
                     <div className="flex items-center justify-between">
                       <p className="text-sm font-bold leading-[18.62px] text-black">
-                        Total tokens
+                        Total pounds
                       </p>
                       <div className="relative flex items-center gap-2">
                         {showCoinAnimation && (
@@ -598,19 +589,9 @@ export default function CalculatorPage() {
                             className="text-[#ffb546] animate-slide-in-coin"
                           />
                         )}
-                        <TooltipProvider>
-                          <Tooltip>
-                            <TooltipTrigger asChild>
-                              <p className="text-sm font-bold leading-[18.62px] text-black transition-all duration-300 cursor-help">
-                                <span className="inline-block tabular-nums">{displayTokens}</span>
-                                <span className="inline-block tabular-nums text-[#848487] ml-1">(£{displayPounds})</span>
-                              </p>
-                            </TooltipTrigger>
-                            <TooltipContent>
-                              <p>Each token is worth 4.5 pounds</p>
-                            </TooltipContent>
-                          </Tooltip>
-                        </TooltipProvider>
+                        <p className="text-sm font-bold leading-[18.62px] text-black transition-all duration-300">
+                          <span className="inline-block tabular-nums">£{displayPounds}</span>
+                        </p>
                       </div>
                     </div>
                   </>

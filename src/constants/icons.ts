@@ -1,6 +1,6 @@
 import {
   Bell,
-  Coins,
+  PoundSterling,
   User,
   Home,
   FileText,
@@ -16,7 +16,7 @@ import {
 
 export const Icons = {
   notifications: Bell,
-  tokens: Coins,
+  tokens: PoundSterling,
   user: User,
   home: Home,
   briefs: FileText,

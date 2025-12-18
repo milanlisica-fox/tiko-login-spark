@@ -1,9 +1,9 @@
-export type RecommendedDeliverable = { id: string; title: string; tokens: number };
+export type RecommendedDeliverable = { id: string; title: string; pounds: number };
 export const RECOMMENDED_DELIVERABLES: RecommendedDeliverable[] = [
-  { id: "1", title: "Editable Image Files Adapted Under NDA", tokens: 2 },
-  { id: "2", title: "Video File Created Non NDA", tokens: 1 },
-  { id: "3", title: "PDF Files Created Non NDA", tokens: 10 },
-  { id: "4", title: "Non Editable Image Files Created Non NDA", tokens: 2 },
+  { id: "1", title: "Editable Image Files Adapted Under NDA", pounds: 2 },
+  { id: "2", title: "Video File Created Non NDA", pounds: 1 },
+  { id: "3", title: "PDF Files Created Non NDA", pounds: 10 },
+  { id: "4", title: "Non Editable Image Files Created Non NDA", pounds: 2 },
 ];
 
 export type DeliverableVariant = { variant: string; size: string };
