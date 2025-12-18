@@ -403,7 +403,7 @@ const [open, setOpen] = useState(false);
                         <div className="flex items-center justify-between">
                           <div className="flex items-center gap-2">
                             <Wallet size={20} className="text-[#03b3e2]" />
-                            <CardTitle className="text-base font-bold leading-[21.28px] text-black">Wallet</CardTitle>
+                            <CardTitle className="text-base font-bold leading-[21.28px] text-black">Budget</CardTitle>
                           </div>
                           <div className="flex items-center gap-2 bg-[#f1f1f3] rounded-md p-1">
                             <Button
@@ -434,7 +434,7 @@ const [open, setOpen] = useState(false);
                             <>
                               <div className="space-y-4">
                                 <div className="flex items-center justify-between">
-                                  <span className="text-sm text-black">Total Budget {periodLabel}</span>
+                                  <span className="text-sm text-black">Total budget {periodLabel}</span>
                                   <span className="text-lg font-bold text-black">{budgetData.totalBudget.toLocaleString()} tokens</span>
                                 </div>
                                 

@@ -103,8 +103,8 @@ export default function ProjectsPage() {
       owners: ["EF", "GH"],
       notifications: 2,
       notificationActions: [
-        { id: 1, message: "Supply master asset" },
-        { id: 2, message: "Assets ready to review" },
+        { id: 1, message: "Assets ready for Brand review" },
+        { id: 2, message: "Assets ready for Legal review" },
       ],
       dueDate: "Jan 05, 2026",
     },
@@ -145,7 +145,7 @@ export default function ProjectsPage() {
       owners: ["YZ", "AA", "BB"],
       notifications: 1,
       notificationActions: [
-        { id: 1, message: "Supply master asset" },
+        { id: 1, message: "Assets ready for Brand review" },
       ],
       dueDate: "Dec 29, 2025",
     },
@@ -167,9 +167,9 @@ export default function ProjectsPage() {
       owners: ["EE", "FF"],
       notifications: 3,
       notificationActions: [
-        { id: 1, message: "Supply master asset" },
-        { id: 2, message: "Assets ready to review" },
-        { id: 3, message: "Provide additional information" },
+        { id: 1, message: "Assets ready for Brand review" },
+        { id: 2, message: "Draft assets ready for review" },
+        { id: 3, message: "Change request submitted for review" },
       ],
       dueDate: "Dec 15, 2025",
     },
@@ -480,7 +480,14 @@ export default function ProjectsPage() {
                           
                           // If no actions but hasProjectNotification, create default actions
                           if (project.hasProjectNotification && actions.length === 0) {
-                            const defaultMessages = ["Supply master asset", "Assets ready to review", "Provide additional information"];
+                            const defaultMessages = [
+                              "Assets ready for Brand review",
+                              "Assets ready for Legal review",
+                              "Draft assets ready for review",
+                              "Final assets ready for approval",
+                              "Production assets completed",
+                              "Change request submitted for review"
+                            ];
                             actions = Array.from({ length: notificationCount }, (_, i) => ({
                               id: i + 1,
                               message: defaultMessages[i % defaultMessages.length]
@@ -491,7 +498,14 @@ export default function ProjectsPage() {
                           // If actions are fewer than count, pad with defaults
                           // If actions are more than count, limit to count
                           if (actions.length < notificationCount) {
-                            const defaultMessages = ["Supply master asset", "Assets ready to review", "Provide additional information"];
+                            const defaultMessages = [
+                              "Assets ready for Brand review",
+                              "Assets ready for Legal review",
+                              "Draft assets ready for review",
+                              "Final assets ready for approval",
+                              "Production assets completed",
+                              "Change request submitted for review"
+                            ];
                             const additionalActions = Array.from({ length: notificationCount - actions.length }, (_, i) => ({
                               id: actions.length + i + 1,
                               message: defaultMessages[(actions.length + i) % defaultMessages.length]
@@ -517,7 +531,7 @@ export default function ProjectsPage() {
                               </PopoverTrigger>
                               <PopoverContent align="start" sideOffset={8} className="w-80 p-0 bg-white border border-[#e0e0e0] shadow-lg">
                                 <div className="p-4 border-b border-[#e0e0e0]">
-                                  <h3 className="text-base font-bold leading-[21.28px] text-black">Actions required</h3>
+                                  <h3 className="text-base font-bold leading-[21.28px] text-black">Notification</h3>
                                 </div>
                                 <div className="max-h-96 overflow-y-auto">
                                   {actions.length > 0 ? (

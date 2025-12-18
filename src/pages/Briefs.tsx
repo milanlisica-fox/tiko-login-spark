@@ -690,7 +690,7 @@ const createBriefFormDefaults = (): NewBriefFormValues => ({
   assets: [],
   selectedTemplate: "",
   additionalAssetDetails: "",
-  watermarkFiles: false,
+  watermarkFiles: true,
   attachedDocuments: [],
 });
 
