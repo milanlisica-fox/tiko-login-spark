@@ -3146,7 +3146,8 @@ function NewBriefForm({
               <button
                 onClick={() => {
                   setDeliverableSelectionMode("build-your-own");
-                  if (formData.selectedTemplate && formData.selectedTemplate !== "other") {
+                  // Always set template to "other" when switching to build-your-own mode
+                  if (formData.selectedTemplate !== "other") {
                     handleTemplateSelect("other");
                   }
                 }}
