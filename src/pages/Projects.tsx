@@ -92,7 +92,11 @@ export default function ProjectsPage() {
       priority: "High",
       owners: ["AB", "CD"],
       dueDate: "Dec 12, 2025",
-      hasProjectNotification: true,
+      notifications: 2,
+      notificationActions: [
+        { id: 1, message: "Assets ready for Brand review" },
+        { id: 2, message: "Assets ready for Legal review" },
+      ],
     },
     {
       id: 2,
@@ -103,8 +107,8 @@ export default function ProjectsPage() {
       owners: ["EF", "GH"],
       notifications: 2,
       notificationActions: [
-        { id: 1, message: "Assets ready for Brand review" },
-        { id: 2, message: "Assets ready for Legal review" },
+        { id: 1, message: "Production assets completed" },
+        { id: 2, message: "Change request submitted for review" },
       ],
       dueDate: "Jan 05, 2026",
     },
@@ -125,7 +129,11 @@ export default function ProjectsPage() {
       priority: "High",
       owners: ["OP", "QR", "ST"],
       dueDate: "Jan 15, 2026",
-      hasProjectNotification: true,
+      notifications: 2,
+      notificationActions: [
+        { id: 1, message: "Draft assets ready for review" },
+        { id: 2, message: "Final assets ready for approval" },
+      ],
     },
     {
       id: 5,
@@ -143,9 +151,10 @@ export default function ProjectsPage() {
       progress: 100,
       priority: "Low",
       owners: ["YZ", "AA", "BB"],
-      notifications: 1,
+      notifications: 2,
       notificationActions: [
         { id: 1, message: "Assets ready for Brand review" },
+        { id: 2, message: "Assets ready for Legal review" },
       ],
       dueDate: "Dec 29, 2025",
     },
@@ -165,11 +174,12 @@ export default function ProjectsPage() {
       progress: 31,
       priority: "High",
       owners: ["EE", "FF"],
-      notifications: 3,
+      notifications: 4,
       notificationActions: [
-        { id: 1, message: "Assets ready for Brand review" },
-        { id: 2, message: "Draft assets ready for review" },
-        { id: 3, message: "Change request submitted for review" },
+        { id: 1, message: "Draft assets ready for review" },
+        { id: 2, message: "Final assets ready for approval" },
+        { id: 3, message: "Assets ready for Marketing Lead approval" },
+        { id: 4, message: "Assets ready for VP approval" },
       ],
       dueDate: "Dec 15, 2025",
     },
@@ -190,7 +200,11 @@ export default function ProjectsPage() {
       priority: "High",
       owners: ["HH", "II"],
       dueDate: "Jan 08, 2026",
-      hasProjectNotification: true,
+      notifications: 2,
+      notificationActions: [
+        { id: 1, message: "Assets ready for Marketing Lead approval" },
+        { id: 2, message: "Assets ready for VP approval" },
+      ],
     },
     {
       id: 11,
@@ -472,8 +486,9 @@ export default function ProjectsPage() {
                       </div>
                       <div className="flex items-center justify-center" onClick={(e) => e.stopPropagation()}>
                         {((project.notifications && project.notifications > 0) || project.hasProjectNotification) && (() => {
-                          // Calculate notification count
-                          const notificationCount = project.notifications || (project.hasProjectNotification ? 1 : 0);
+                          // Calculate notification count (minimum 2 for projects with notifications)
+                          const baseCount = project.notifications || (project.hasProjectNotification ? 2 : 0);
+                          const notificationCount = baseCount < 2 ? 2 : baseCount;
                           
                           // Get actions or create default ones to match the count
                           let actions = project.notificationActions || [];
@@ -486,7 +501,9 @@ export default function ProjectsPage() {
                               "Draft assets ready for review",
                               "Final assets ready for approval",
                               "Production assets completed",
-                              "Change request submitted for review"
+                              "Change request submitted for review",
+                              "Assets ready for Marketing Lead approval",
+                              "Assets ready for VP approval"
                             ];
                             actions = Array.from({ length: notificationCount }, (_, i) => ({
                               id: i + 1,
@@ -504,7 +521,9 @@ export default function ProjectsPage() {
                               "Draft assets ready for review",
                               "Final assets ready for approval",
                               "Production assets completed",
-                              "Change request submitted for review"
+                              "Change request submitted for review",
+                              "Assets ready for Marketing Lead approval",
+                              "Assets ready for VP approval"
                             ];
                             const additionalActions = Array.from({ length: notificationCount - actions.length }, (_, i) => ({
                               id: actions.length + i + 1,

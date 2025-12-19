@@ -492,61 +492,61 @@ const CALCULATOR_ASSETS_LIST: RecommendedAsset[] = [
     id: "calc-1",
     name: "Master KV creation",
     description: "Master KV creation",
-    poundPrice: 30,
+    poundPrice: 135.06,
   },
   {
     id: "calc-2",
     name: "Static KV adaptation",
     description: "Static KV adaptation",
-    poundPrice: 3,
+    poundPrice: 13.51,
   },
   {
     id: "calc-3",
     name: "Status KV adaptation",
     description: "Status KV adaptation",
-    poundPrice: 3,
+    poundPrice: 13.51,
   },
   {
     id: "calc-4",
     name: "Master KV animation creation",
     description: "Master KV animation creation",
-    poundPrice: 100,
+    poundPrice: 450.20,
   },
   {
     id: "calc-5",
     name: "Master KV animation adaptation",
     description: "Master KV animation adaptation",
-    poundPrice: 3,
+    poundPrice: 13.51,
   },
   {
     id: "calc-6",
     name: "PPT Files",
     description: "PPT Files",
-    poundPrice: 30,
+    poundPrice: 135.06,
   },
   {
     id: "calc-7",
     name: "Roundel",
     description: "Roundel",
-    poundPrice: 3,
+    poundPrice: 13.51,
   },
   {
     id: "calc-8",
     name: "Urgency tag",
     description: "Urgency tag",
-    poundPrice: 3,
+    poundPrice: 13.51,
   },
   {
     id: "calc-9",
     name: "Video creation",
     description: "Video creation",
-    poundPrice: 100,
+    poundPrice: 450.20,
   },
   {
     id: "calc-10",
     name: "Video adaptation",
     description: "Video adaptation",
-    poundPrice: 3,
+    poundPrice: 13.51,
   },
   {
     id: "calc-11",
@@ -2351,9 +2351,11 @@ function NewBriefForm({
   const [deliverableSelectionMode, setDeliverableSelectionMode] = useState<"template" | "build-your-own">(fromCalculator ? "build-your-own" : "template");
   const changeRequestMode = Boolean(isChangeRequest);
   const poundEstimate = useMemo(
-    () => formData.assets
-      .filter((asset) => !asset.isCustom)
-      .reduce((total, asset) => total + asset.poundPrice * asset.quantity, 0),
+    () => Math.round(
+      formData.assets
+        .filter((asset) => !asset.isCustom)
+        .reduce((total, asset) => total + asset.poundPrice * asset.quantity, 0) * 100
+    ) / 100,
     [formData.assets]
   );
 
@@ -2379,7 +2381,7 @@ function NewBriefForm({
         
         const animateNumbers = () => {
           currentStep++;
-          const newPoundValue = Math.round(previousTotal + poundIncrement * currentStep);
+          const newPoundValue = Math.round((previousTotal + poundIncrement * currentStep) * 100) / 100;
           setDisplayPounds(newPoundValue);
           
           if (currentStep < steps) {
@@ -2707,7 +2709,7 @@ function NewBriefForm({
       const isCustom = 'isCustom' in asset && asset.isCustom === true;
       const isWatermarked = asset.id === "calc-11";
       const isChecked = isWatermarked && quantity > 0;
-      const totalPounds = quantity > 0 && selectedAsset && !isCustom ? selectedAsset.poundPrice * (isWatermarked ? 1 : quantity) : 0;
+      const totalPounds = quantity > 0 && selectedAsset && !isCustom ? Math.round(selectedAsset.poundPrice * (isWatermarked ? 1 : quantity) * 100) / 100 : 0;
 
       return (
         <div key={asset.id}>
@@ -2824,7 +2826,7 @@ function NewBriefForm({
               </div>
               {quantity > 0 && !isCustom && (
                 <p className="text-[16.24px] leading-[14px] text-black">
-                  £{totalPounds} total
+                  £{totalPounds.toFixed(2)} total
                 </p>
               )}
             </div>
@@ -3383,7 +3385,7 @@ function NewBriefForm({
                     />
                   )}
                   <span className="text-lg md:text-[26px] leading-[25px] md:leading-[37.24px] text-black font-medium transition-all duration-300 tabular-nums">
-                    £{displayPounds}
+                    £{displayPounds.toFixed(2)}
                   </span>
                 </div>
                 <span className="text-sm md:text-[26px] leading-[18px] md:leading-[37.24px] text-[#848487]">Total estimate</span>

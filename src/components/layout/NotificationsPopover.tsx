@@ -9,7 +9,7 @@ export default function NotificationsPopover() {
         <button className="flex items-center gap-2 relative cursor-pointer">
           <Bell size={24} className="text-[#848487]" />
           <div className="absolute -left-1 -top-1 min-w-[20px] h-5 bg-[#ff4337] border-2 border-[#f7f7f7] rounded-full flex items-center justify-center px-1">
-            <span className="text-[10px] font-bold leading-[14px] text-white">12</span>
+            <span className="text-[10px] font-bold leading-[14px] text-white">15</span>
           </div>
         </button>
       </PopoverTrigger>

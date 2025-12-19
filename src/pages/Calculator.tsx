@@ -66,16 +66,16 @@ export default function CalculatorPage() {
   // Available assets with fixed pound values
   const availableAssets = useMemo<AssetItem[]>(() => {
     return [
-      { id: "1", title: "Master KV creation", pounds: 30 },
-      { id: "2", title: "Static KV adaptation", pounds: 3 },
-      { id: "3", title: "Status KV adaptation", pounds: 3 },
-      { id: "4", title: "Master KV animation creation", pounds: 100 },
-      { id: "5", title: "Master KV animation adaptation", pounds: 3 },
-      { id: "6", title: "PPT Files", pounds: 30 },
-      { id: "7", title: "Roundel", pounds: 3 },
-      { id: "8", title: "Urgency tag", pounds: 3 },
-      { id: "9", title: "Video creation", pounds: 100 },
-      { id: "10", title: "Video adaptation", pounds: 3 },
+      { id: "1", title: "Master KV creation", pounds: 135.06 },
+      { id: "2", title: "Static KV adaptation", pounds: 13.51 },
+      { id: "3", title: "Status KV adaptation", pounds: 13.51 },
+      { id: "4", title: "Master KV animation creation", pounds: 450.20 },
+      { id: "5", title: "Master KV animation adaptation", pounds: 13.51 },
+      { id: "6", title: "PPT Files", pounds: 135.06 },
+      { id: "7", title: "Roundel", pounds: 13.51 },
+      { id: "8", title: "Urgency tag", pounds: 13.51 },
+      { id: "9", title: "Video creation", pounds: 450.20 },
+      { id: "10", title: "Video adaptation", pounds: 13.51 },
     ];
   }, []);
 
@@ -177,10 +177,12 @@ export default function CalculatorPage() {
     }
   };
 
-  const totalPounds = selectedAssets.reduce(
-    (sum, asset) => sum + asset.pounds * asset.quantity,
-    0
-  );
+  const totalPounds = Math.round(
+    selectedAssets.reduce(
+      (sum, asset) => sum + asset.pounds * asset.quantity,
+      0
+    ) * 100
+  ) / 100;
 
   // Handle coin animation when total changes
   useEffect(() => {
@@ -199,7 +201,7 @@ export default function CalculatorPage() {
         
         const animateNumbers = () => {
           currentStep++;
-          const newPoundValue = Math.round(previousTotal + poundIncrement * currentStep);
+          const newPoundValue = Math.round((previousTotal + poundIncrement * currentStep) * 100) / 100;
           setDisplayPounds(newPoundValue);
           
           if (currentStep < steps) {
@@ -455,7 +457,7 @@ export default function CalculatorPage() {
                               {asset.title}
                             </p>
                             <p className="text-[10px] leading-[14px] text-black">
-                              £{asset.pounds}
+                              £{asset.pounds.toFixed(2)}
                             </p>
                           </div>
                           <div className="flex items-center gap-2 md:gap-4 shrink-0">
@@ -566,7 +568,7 @@ export default function CalculatorPage() {
                             {asset.quantity}
                           </p>
                           <p className="text-sm leading-[18.62px] text-black text-right w-[70px] font-semibold transition-all duration-200">
-                            £{asset.pounds * asset.quantity}
+                            £{(asset.pounds * asset.quantity).toFixed(2)}
                           </p>
                         </div>
                       ))}
@@ -590,7 +592,7 @@ export default function CalculatorPage() {
                           />
                         )}
                         <p className="text-sm font-bold leading-[18.62px] text-black transition-all duration-300">
-                          <span className="inline-block tabular-nums">£{displayPounds}</span>
+                          <span className="inline-block tabular-nums">£{displayPounds.toFixed(2)}</span>
                         </p>
                       </div>
                     </div>
