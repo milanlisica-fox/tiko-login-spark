@@ -66,16 +66,16 @@ export default function CalculatorPage() {
   // Available assets with fixed pound values
   const availableAssets = useMemo<AssetItem[]>(() => {
     return [
-      { id: "1", title: "Master KV creation", pounds: 135.06 },
-      { id: "2", title: "Static KV adaptation", pounds: 13.51 },
-      { id: "3", title: "Status KV adaptation", pounds: 13.51 },
-      { id: "4", title: "Master KV animation creation", pounds: 450.20 },
-      { id: "5", title: "Master KV animation adaptation", pounds: 13.51 },
-      { id: "6", title: "PPT Files", pounds: 135.06 },
-      { id: "7", title: "Roundel", pounds: 13.51 },
-      { id: "8", title: "Urgency tag", pounds: 13.51 },
-      { id: "9", title: "Video creation", pounds: 450.20 },
-      { id: "10", title: "Video adaptation", pounds: 13.51 },
+      { id: "1", title: "Master KV creation (non-NDA)", pounds: 135.06 },
+      { id: "2", title: "Static KV adaptation (non-NDA)", pounds: 13.51 },
+      { id: "3", title: "Status KV adaptation (non-NDA)", pounds: 13.51 },
+      { id: "4", title: "Master KV animation creation (non-NDA)", pounds: 450.20 },
+      { id: "5", title: "Master KV animation adaptation (non-NDA)", pounds: 13.51 },
+      { id: "6", title: "PPT Files (non-NDA)", pounds: 135.06 },
+      { id: "7", title: "Roundel (non-NDA)", pounds: 13.51 },
+      { id: "8", title: "Urgency tag (non-NDA)", pounds: 13.51 },
+      { id: "9", title: "Video creation (non-NDA)", pounds: 450.20 },
+      { id: "10", title: "Video adaptation (non-NDA)", pounds: 13.51 },
     ];
   }, []);
 
